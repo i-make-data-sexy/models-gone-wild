@@ -190,6 +190,11 @@
      it than a full paragraph gap would put it. */
   .intro-cue{margin-top:14px;}
 
+  /* Tapered rules either side of three diamonds, the letterpress
+     divider the double rule was standing in for. */
+  .flourish{display:flex;justify-content:center;margin:34px 0 0;color:var(--rule);}
+  .flourish svg{width:min(240px,55%);height:auto;display:block;opacity:.75;}
+
   /* ---------- REGISTRY PANEL ----------
      One container holding the view tabs and the filters, so the two
      read as different things. The tabs sit on the panel's top rule and
@@ -685,6 +690,21 @@
       to touch.
     </p>
     <p class="intro intro-cue">The icons on each card open the story that broke the case and the model's rap sheet.</p>
+
+    <!-- Printer's ornament closing the masthead, in place of the double
+         rule. Drawn rather than typed: the Unicode ornaments (the
+         asterism and the fleurons) are missing from plenty of system
+         fonts and fall back to a blank box, where an SVG renders the
+         same everywhere and takes currentColor. -->
+    <div class="flourish" aria-hidden="true">
+      <svg viewBox="0 0 240 12" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+        <path d="M6 6 L94 4.6 L94 7.4 Z"/>
+        <path d="M234 6 L146 4.6 L146 7.4 Z"/>
+        <path d="M104 2.8 L107.2 6 L104 9.2 L100.8 6 Z"/>
+        <path d="M120 1 L124.5 6 L120 11 L115.5 6 Z"/>
+        <path d="M136 2.8 L139.2 6 L136 9.2 L132.8 6 Z"/>
+      </svg>
+    </div>
   </header>
 
   <!-- Registry panel. The tabs switch the view and the selects narrow it,
