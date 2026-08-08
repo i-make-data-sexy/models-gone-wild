@@ -85,7 +85,7 @@ CRITICAL: view the current file first, then show Annie the proposed block and wa
 sudo cat /etc/nginx/sites-available/annielytics.conf
 ```
 
-Add all three blocks to `annielytics.conf`:
+Add all four blocks to `annielytics.conf`, in this order. They live with the other `/tools/` apps, after the `model-safety` blocks:
 
 ```nginx
 # Send the bare path to the trailing-slash form. Without this, a request
@@ -95,13 +95,21 @@ location = /tools/models-gone-wild {
     return 301 /tools/models-gone-wild/;
 }
 
-# The vendored library is versioned in its filename, so it can cache hard.
-# An exact-match location is evaluated before the prefix location below,
-# so this wins for this one file.
-location = /tools/models-gone-wild/js/html2canvas.min.js {
-    alias /home/anniecushing/apps/models-gone-wild/js/html2canvas.min.js;
+# Repo files that ship with the clone but are not site content. Without
+# this, DEPLOY.md is served publicly and it carries the server path and
+# the host IP. Nginx picks regex locations over prefix ones, so this
+# intercepts before the page block below.
+location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock)$ {
+    return 404;
+}
+
+# Unchanging assets cache hard. Also a regex, so it beats the prefix
+# block below, and the filename character class cannot express ".."
+# so it cannot be walked out of the directory.
+location ~* ^/tools/models-gone-wild/(js|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
+    alias /home/anniecushing/apps/models-gone-wild/$1/$2;
     expires 30d;
-    add_header Cache-Control "public, max-age=2592000, immutable";
+    add_header Cache-Control "public, no-transform";
 }
 
 # The page itself. It carries the case data inline, so a stale copy is a
@@ -109,14 +117,16 @@ location = /tools/models-gone-wild/js/html2canvas.min.js {
 location /tools/models-gone-wild/ {
     alias /home/anniecushing/apps/models-gone-wild/;
     index index.html;
-    try_files $uri $uri/ =404;
     expires -1;
     add_header Cache-Control "no-cache, no-store, must-revalidate";
-    add_header Pragma "no-cache";
 }
 ```
 
 The trailing slashes on both the `location` and the `alias` have to match. Dropping either one produces paths that silently resolve to the wrong place.
+
+`try_files` is deliberately absent. The `alias` plus `index` pair already serves the page, a missing file 404s on its own, and `try_files` combined with `alias` has a long-standing resolution quirk. Adding it back buys nothing.
+
+The clone's `.git` directory and `.gitignore` need no rule here. The config already carries a `location ~ /\.git` block further down, and regex locations outrank the prefix block above.
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
@@ -124,21 +134,23 @@ sudo nginx -t && sudo systemctl reload nginx
 
 ### Step 3. Verify
 
+CRITICAL: verify at the origin, not the public URL. Cloudflare serves a challenge page to scripted requests for HTML, so a public `curl` returns 403 with a Cloudflare body no matter what user-agent it sends. Static assets pass through, which makes the result look even more confusing. A public 403 on the page says nothing about whether the deploy worked.
+
+Run this on the server, which bypasses Cloudflare by talking to nginx directly:
+
 ```bash
-# Page loads
-curl -s -o /dev/null -w "page: %{http_code}\n" \
-  https://www.annielytics.com/tools/models-gone-wild/
-
-# Vendored library loads, which proves the relative path resolved
-curl -s -o /dev/null -w "js: %{http_code}\n" \
-  https://www.annielytics.com/tools/models-gone-wild/js/html2canvas.min.js
-
-# Bare path redirects
-curl -s -o /dev/null -w "redirect: %{http_code}\n" \
-  https://www.annielytics.com/tools/models-gone-wild
+H="Host: www.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
+for f in "" "js/html2canvas.min.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
+  printf "%-28s %s\n" "/$f" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B/$f")"
+done
+printf "%-28s %s\n" "bare path" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B")"
 ```
 
-Expect 200, 200, and 301. Then open the page in a browser and confirm three things by eye. The fonts render as the typewriter and condensed faces rather than a fallback, tapping a case opens its poster, and the download button on an open poster produces a PNG.
+Expected results, in order. The page is 200, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, and the bare path is 301.
+
+Wait a couple of seconds after `systemctl reload nginx` before running this. A reload leaves the old workers draining, so a check fired immediately can still be answered by a worker running the previous config and show a stale result.
+
+Then open the page in a real browser, which is the only way to confirm the last mile past Cloudflare. Check that the fonts render as the typewriter and condensed faces rather than a fallback, that tapping a case opens its poster, and that the download button on an open poster produces a PNG.
 
 ## Updating after the first deploy
 
