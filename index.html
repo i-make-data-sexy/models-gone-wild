@@ -13,6 +13,10 @@
      separate font rather than a filter. Subset to the single
      character with text=, so the download is under 1KB. -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@600&text=%F0%9F%A4%98&display=swap" rel="stylesheet">
+<!-- The fleuron, subset to the one character. Shipping the glyph is
+     what makes it safe to use: U+2766 is missing from a good number
+     of system fonts and would otherwise fall back to a blank box. -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&text=%E2%9D%A6&display=swap" rel="stylesheet">
 <!-- html2canvas powers the "download poster" button. Served from our own
      server rather than a CDN so the feature can't break when an outside
      host does, and so no third-party script runs on annielytics.com.
@@ -190,10 +194,14 @@
      it than a full paragraph gap would put it. */
   .intro-cue{margin-top:14px;}
 
-  /* Tapered rules either side of three diamonds, the letterpress
-     divider the double rule was standing in for. */
-  .flourish{display:flex;justify-content:center;margin:34px 0 0;color:var(--rule);}
-  .flourish svg{width:min(240px,55%);height:auto;display:block;opacity:.75;}
+  /* A single centred fleuron closing the masthead. The fallbacks
+     after the shipped subset are the system fonts that carry U+2766
+     on macOS and Windows. */
+  .flourish{
+    font-family:'Noto Sans Symbols 2','Apple Symbols','Segoe UI Symbol',serif;
+    font-size:30px;line-height:1;text-align:center;
+    color:var(--rule);opacity:.7;margin:34px 0 0;
+  }
 
   /* ---------- REGISTRY PANEL ----------
      One container holding the view tabs and the filters, so the two
@@ -389,8 +397,8 @@
        browsers without color-mix; the color-mix line keeps the rule in
        the text's own hue wherever the term sits. It firms up on hover
        so the cue is still findable once you go looking. */
-    text-decoration-color:rgba(58,54,44,.3);
-    text-decoration-color:color-mix(in srgb, currentColor 30%, transparent);
+    text-decoration-color:rgba(58,54,44,.4);
+    text-decoration-color:color-mix(in srgb, currentColor 40%, transparent);
     text-decoration-thickness:1px;text-underline-offset:3px;
     outline:none;
   }
@@ -691,20 +699,9 @@
     </p>
     <p class="intro intro-cue">The icons on each card open the story that broke the case and the model's rap sheet.</p>
 
-    <!-- Printer's ornament closing the masthead, in place of the double
-         rule. Drawn rather than typed: the Unicode ornaments (the
-         asterism and the fleurons) are missing from plenty of system
-         fonts and fall back to a blank box, where an SVG renders the
-         same everywhere and takes currentColor. -->
-    <div class="flourish" aria-hidden="true">
-      <svg viewBox="0 0 240 12" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-        <path d="M6 6 L94 4.6 L94 7.4 Z"/>
-        <path d="M234 6 L146 4.6 L146 7.4 Z"/>
-        <path d="M104 2.8 L107.2 6 L104 9.2 L100.8 6 Z"/>
-        <path d="M120 1 L124.5 6 L120 11 L115.5 6 Z"/>
-        <path d="M136 2.8 L139.2 6 L136 9.2 L132.8 6 Z"/>
-      </svg>
-    </div>
+    <!-- Printer's ornament closing the masthead, in place of the
+         double rule. A single fleuron, U+2766. -->
+    <p class="flourish" aria-hidden="true">&#10086;</p>
   </header>
 
   <!-- Registry panel. The tabs switch the view and the selects narrow it,
