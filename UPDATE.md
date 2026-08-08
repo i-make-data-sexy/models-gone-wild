@@ -32,7 +32,7 @@ Do not invent facts. Every field has to trace to what I gave you. Flag
 anything you cannot source rather than filling it in plausibly.
 
 After I approve: make the edit, run the checks in UPDATE.md, update the
-"Data current to" line in the footer, commit, push, and deploy. Give me the
+"Last updated" line in the footer, commit, push, and deploy. Give me the
 live URL when it is done.
 ```
 
@@ -80,7 +80,7 @@ Every case is one object in the `CASES` array near the top of the script block i
 |---|---|---|
 | `id` | Internal key. Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase, unique. |
 | `alias` | The large name on the poster and the scatter dot label. | Short. Long names crowd the dot label. |
-| `lab` | The Lab filter chip. | Must match an existing lab's spelling exactly, or you get a second chip for the same lab. |
+| `lab` | An option in the Lab dropdown. | Must match an existing lab's spelling exactly, or you get a second option for the same lab. |
 | `org` | The line under the alias. | Format is `Lab · Model`. |
 | `aka` | The a.k.a. line. | Optional flavor. |
 | `date` | The timeline heading and the footer's "Disclosed". | Format is `Month D, YYYY`. |
@@ -99,11 +99,11 @@ Every case is one object in the `CASES` array near the top of the script block i
 
 ## What updates itself, and what does not
 
-Adding a case updates most of the app automatically. The lab filter chip is generated from the data, the scatter plots the dot from `intent` and `harm`, the timeline sorts by `order`, the class badge and colors follow `cls`, and the "Showing N of N files" count recalculates.
+Adding a case updates most of the app automatically. The Lab dropdown's options are generated from the data, the scatter plots the dot from `intent` and `harm`, the timeline sorts by `order`, the class badge and colors follow `cls`, and the "Showing N of N files" count recalculates. That count only appears while a filter is narrowing the list, so an unfiltered page shows nothing there.
 
-Two things are manual. The footer's `Data current to <date>.` line has to be edited by hand, and the page `<title>` only changes if the app is renamed.
+Two things are manual. The footer's `Last updated: <date>` line has to be edited by hand, and the page `<title>` only changes if the app is renamed.
 
-One thing looks manual and is not. The intro's `<span class="count">2026</span>` holds the year, not a count of cases. The class name is misleading. Leave it alone.
+The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry.
 
 ## Voice
 

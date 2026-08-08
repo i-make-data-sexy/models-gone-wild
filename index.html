@@ -169,66 +169,71 @@
     font-family:'Special Elite',monospace;font-size:clamp(15px,3.4vw,20px);
     letter-spacing:.02em;margin:16px auto 0;max-width:600px;color:var(--ink-soft);
   }
-  .reward-strip{
-    display:inline-block;margin-top:22px;border:2px solid var(--ink);
-    padding:8px 20px;font-family:'Oswald',sans-serif;font-weight:600;
-    letter-spacing:.18em;text-transform:uppercase;font-size:13px;
-    background:var(--paper-deep);transform:rotate(-1.2deg);
-  }
-  .reward-strip b{color:var(--stamp-red);}
+  /* The intro reads as body copy rather than a centered display line, so
+     it is left-aligned inside the centered masthead. The block itself
+     stays centered; only its text is flush left. */
   .intro{
-    font-family:'Special Elite',monospace;font-size:14px;text-align:center;
-    max-width:660px;margin:26px auto 0;color:var(--ink-soft);line-height:1.7;
+    font-family:'Special Elite',monospace;font-size:14px;text-align:left;
+    max-width:700px;margin:26px auto 0;color:var(--ink-soft);line-height:1.7;
   }
-  .intro .count{color:var(--stamp-red);font-weight:700;}
 
-  /* ---------- VIEW TABS ---------- */
-  .viewbar{
-    display:flex;justify-content:center;gap:0;margin:34px auto 0;
-    border:1.5px solid var(--ink);width:fit-content;
-    box-shadow:4px 4px 0 var(--shadow);
+  /* ---------- REGISTRY PANEL ----------
+     One container holding the view tabs and the filters, so the two
+     read as different things. The tabs sit on the panel's top rule and
+     switch what is shown; the filters sit in the opposite corner and
+     narrow what is shown. Previously both were rendered as chip rows
+     stacked on each other, which made the tabs look like a third
+     filter group. */
+  .registry{margin-top:36px;}
+
+  .registry-bar{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:14px 20px;flex-wrap:wrap;border-bottom:1.5px solid var(--ink);
   }
+
+  .viewbar{display:flex;gap:6px;}
   .tab{
     font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
-    text-transform:uppercase;font-size:12px;padding:12px 22px;cursor:pointer;
-    background:var(--card);color:var(--ink-soft);border:none;
-    border-right:1.5px solid var(--ink);transition:background .15s,color .15s;
+    text-transform:uppercase;font-size:12px;padding:11px 20px;cursor:pointer;
+    background:transparent;color:var(--ink-soft);
+    border:1.5px solid transparent;border-bottom:none;
+    /* Pulls the tab down onto the bar's rule so the selected one reads
+       as attached to the panel below it. */
+    margin-bottom:-1.5px;
+    transition:background .15s,color .15s;
   }
-  .tab:last-child{border-right:none;}
-  .tab[aria-selected="true"]{background:var(--ink);color:var(--paper);}
+  .tab:hover{color:var(--ink);}
+  .tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
   .tab:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
 
-  /* ---------- FILTER BAR ---------- */
-  .filterbar{
-    margin:26px auto 0;max-width:720px;
-    border:1px dashed var(--rule);padding:16px 18px;
-  }
-  .filter-group{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:12px;}
-  .filter-group:last-child{margin-bottom:0;}
-  .filter-label{
-    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
-    text-transform:uppercase;font-size:11px;color:var(--stamp-red);
-    width:74px;flex:none;
-  }
-  .chip{
+  /* ---------- FILTERS ---------- */
+  .filters{display:flex;gap:8px;align-items:center;padding-bottom:9px;}
+  .filter-select{
     font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.08em;
-    text-transform:uppercase;font-size:11px;padding:6px 13px;cursor:pointer;
-    background:var(--paper-deep);color:var(--ink-soft);
+    text-transform:uppercase;font-size:11px;color:var(--ink-soft);
+    background-color:var(--paper-deep);
     border:1.5px solid var(--rule);border-radius:2px;
-    display:inline-flex;align-items:center;gap:6px;transition:all .13s;
+    padding:7px 28px 7px 11px;cursor:pointer;line-height:1.2;
+    /* Native arrow is suppressed so the control matches the poster
+       chrome. background-color is set separately above, since the
+       shorthand would wipe this image out. */
+    -webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%233a362c' stroke-width='1.6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 9px center;
+    transition:border-color .13s,color .13s;
   }
-  .chip:hover{border-color:var(--ink);color:var(--ink);}
-  .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-  .chip:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
-  .chip .cdot{width:9px;height:9px;border-radius:50%;flex:none;}
-  .chip .cdot.c3{background:var(--class3);}
-  .chip .cdot.c2{background:var(--class2);}
-  .chip .cdot.c1{background:var(--class1);}
-  .chip[aria-pressed="true"] .cdot{outline:1.5px solid var(--paper);}
+  .filter-select:hover{border-color:var(--ink);color:var(--ink);}
+  .filter-select:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
+  /* A filter that is actually narrowing the list gets the ink border so
+     the state is visible without reading the option text. */
+  .filter-select.is-active{border-color:var(--ink);color:var(--ink);font-weight:600;}
+  .filter-select option{text-transform:none;letter-spacing:normal;}
+
   .filter-count{
-    text-align:center;font-family:'Special Elite',monospace;font-size:12px;
-    color:var(--ink-soft);margin:14px auto 0;
+    text-align:right;font-family:'Special Elite',monospace;font-size:12px;
+    color:var(--ink-soft);margin:10px 0 0;
   }
+  .filter-count[hidden]{display:none;}
 
   .view{display:none;}
   .view.active{display:block;}
@@ -491,6 +496,13 @@
     .nav-primary .menu a{color:#fff;padding:15px;display:block;text-align:left;}
 
     .menu-toggle{display:block;width:100%;margin-bottom:0;}
+
+    /* The registry bar wraps to two rows on phones: tabs, then filters.
+       The selects share the width so both stay tappable. */
+    .registry-bar{align-items:stretch;}
+    .filters{width:100%;padding-bottom:10px;}
+    .filter-select{flex:1;min-width:0;}
+    .tab{flex:1;padding:11px 10px;text-align:center;}
   }
 
   @media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important;}}
@@ -533,52 +545,59 @@
   <header class="masthead">
     <p class="bureau-line">Bureau of Model Containment · Field Registry 2026</p>
     <h1 class="wanted-title">Wanted</h1>
-    <p class="subhead">Frontier AI models that took a walk on the wild side.</p>
-    <div class="reward-strip">Reward: <b>bragging rights</b></div>
+    <p class="subhead">AI models gone rogue.</p>
     <p class="intro">
-      A running registry of the <span class="count">2026</span> containment failures: models that,
-      during cybersecurity evaluations, slipped a misconfigured sandbox and reached systems
-      they were never meant to touch. Tap any file to pull up its rap sheet.
+      Below is a running registry of the containment failures that have been littering headlines
+      since OpenAI's Sol model took a walk on the wild side in July. These models have escaped
+      their sandboxes during cybersecurity evaluations and reached systems they were never meant
+      to touch. Select any event card to open its rap sheet.
     </p>
-
-    <div class="viewbar" role="tablist" aria-label="View">
-      <button class="tab" role="tab" id="tab-timeline" aria-controls="view-timeline" aria-selected="true">Case Timeline</button>
-      <button class="tab" role="tab" id="tab-matrix" aria-controls="view-matrix" aria-selected="false">Threat Matrix</button>
-    </div>
-
-    <div class="filterbar" id="filterbar">
-      <div class="filter-group" id="classFilters">
-        <span class="filter-label">Class</span>
-        <button class="chip" data-type="class" data-val="3" aria-pressed="false"><span class="cdot c3"></span>III · Severe</button>
-        <button class="chip" data-type="class" data-val="2" aria-pressed="false"><span class="cdot c2"></span>II · Intrusion</button>
-        <button class="chip" data-type="class" data-val="1" aria-pressed="false"><span class="cdot c1"></span>I · Evasion</button>
-      </div>
-      <div class="filter-group" id="labFilters">
-        <span class="filter-label">Lab</span>
-      </div>
-      <p class="filter-count" id="filterCount"></p>
-    </div>
   </header>
 
-  <section class="view active" id="view-timeline" role="tabpanel" aria-labelledby="tab-timeline">
-    <div class="timeline" id="timeline"></div>
-  </section>
+  <!-- Registry panel. The tabs switch the view and the selects narrow it,
+       which is why they sit in opposite corners of the same bar rather
+       than stacked as two chip rows. -->
+  <div class="registry">
+    <div class="registry-bar">
+      <div class="viewbar" role="tablist" aria-label="View">
+        <button class="tab" role="tab" id="tab-timeline" aria-controls="view-timeline" aria-selected="true">Case Timeline</button>
+        <button class="tab" role="tab" id="tab-matrix" aria-controls="view-matrix" aria-selected="false">Threat Matrix</button>
+      </div>
 
-  <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
-    <div class="scatter-wrap">
-      <p class="scatter-head">
-        <b>Deliberateness</b> of the escape against <b>real-world harm</b> caused.<br>
-        Bottom-left is where the house cats wander. Top-right earns the mugshot. Tap a point for the wanted poster.
-      </p>
-      <div id="scatter"></div>
+      <div class="filters">
+        <select class="filter-select" id="classFilter" aria-label="Filter by class">
+          <option value="">All classes</option>
+          <option value="3">Class III · Severe</option>
+          <option value="2">Class II · Intrusion</option>
+          <option value="1">Class I · Evasion</option>
+        </select>
+        <select class="filter-select" id="labFilter" aria-label="Filter by lab">
+          <option value="">All labs</option>
+        </select>
+      </div>
     </div>
-  </section>
+
+    <!-- Only shown while a filter is narrowing the list, since "4 of 4"
+         on an unfiltered page is noise. -->
+    <p class="filter-count" id="filterCount" hidden></p>
+
+    <section class="view active" id="view-timeline" role="tabpanel" aria-labelledby="tab-timeline">
+      <div class="timeline" id="timeline"></div>
+    </section>
+
+    <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
+      <div class="scatter-wrap">
+        <p class="scatter-head">
+          <b>Deliberateness</b> of the escape against <b>real-world harm</b> caused.<br>
+          Bottom-left is where the house cats wander. Top-right earns the mugshot. Tap a point for the wanted poster.
+        </p>
+        <div id="scatter"></div>
+      </div>
+    </section>
+  </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Dramatized for effect. Every incident here traces to a <b>misconfigured test environment</b>,
-    not a model turning malicious. Researchers agree these were goal-hyperfocused systems taking
-    the shortest path, not an uprising.<br>
-    Data current to Aug 7, 2026.
+    Last updated: August 7, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -690,25 +709,26 @@ function mug(seed){
   </svg>`;
 }
 
-/* ---------- FILTER STATE ---------- */
-const activeClass = new Set();
-const activeLab = new Set();
+/* ---------- FILTER STATE ----------
+   One value per filter rather than a set, since the chip rows became
+   single-select dropdowns. An empty string means no filter. */
+const classSelect = document.getElementById('classFilter');
+const labSelect   = document.getElementById('labFilter');
 
 function filtered(){
   return CASES.filter(c =>
-    (activeClass.size===0 || activeClass.has(String(c.cls))) &&
-    (activeLab.size===0   || activeLab.has(c.lab))
+    (!classSelect.value || String(c.cls)===classSelect.value) &&
+    (!labSelect.value   || c.lab===labSelect.value)
   ).sort((a,b)=>a.order-b.order);
 }
 
-/* ---------- BUILD LAB CHIPS ---------- */
-const labs = [...new Set(CASES.map(c=>c.lab))];
-const labWrap = document.getElementById('labFilters');
-labs.forEach(l=>{
-  const b=document.createElement('button');
-  b.className='chip'; b.dataset.type='lab'; b.dataset.val=l; b.setAttribute('aria-pressed','false');
-  b.textContent=l;
-  labWrap.appendChild(b);
+/* ---------- BUILD LAB OPTIONS ----------
+   Generated from the data, so a new case with a new lab adds its own
+   option. A lab spelled two ways yields two options. */
+[...new Set(CASES.map(c=>c.lab))].forEach(l=>{
+  const o=document.createElement('option');
+  o.value=l; o.textContent=l;
+  labSelect.appendChild(o);
 });
 
 /* ---------- RENDER TIMELINE ---------- */
@@ -815,18 +835,13 @@ function applyFilters(){
   const list=filtered();
   renderTimeline(list);
   renderScatter(list);
+  [classSelect,labSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
+  const narrowed = !!(classSelect.value || labSelect.value);
+  filterCount.hidden = !narrowed;
   filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
 }
 
-document.querySelectorAll('.chip').forEach(chip=>{
-  chip.addEventListener('click',()=>{
-    const set = chip.dataset.type==='class' ? activeClass : activeLab;
-    const val = chip.dataset.val;
-    if(set.has(val)){ set.delete(val); chip.setAttribute('aria-pressed','false'); }
-    else { set.add(val); chip.setAttribute('aria-pressed','true'); }
-    applyFilters();
-  });
-});
+[classSelect,labSelect].forEach(s=>s.addEventListener('change',applyFilters));
 
 /* ---------- VIEW TABS ---------- */
 const tabs=document.querySelectorAll('.tab');
