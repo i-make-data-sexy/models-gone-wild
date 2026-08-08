@@ -152,8 +152,6 @@
   header.masthead{
     text-align:center;
     padding:46px 0 26px;
-    border-bottom:3px double var(--rule);
-    margin-bottom:8px;
   }
   .bureau-line{
     font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.42em;
@@ -337,6 +335,10 @@
   .class-badge.c3{background:var(--class3);}
   .class-badge.c2{background:var(--class2);}
   .class-badge.c1{background:var(--class1);}
+  /* The badge explains its own tier on hover. tabindex makes that
+     reachable by keyboard and by tap, where there is no hover. */
+  .class-badge[data-def]{cursor:help;outline:none;}
+  .class-badge[data-def]:focus{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink);}
 
   /* ---------- CARD ACTIONS ----------
      Two controls per card: the story that broke the case, and the
@@ -366,10 +368,17 @@
      by keyboard and by tap, since touch has no hover. */
   .term{
     cursor:help;
-    text-decoration:underline dotted currentColor;
+    text-decoration:underline dotted;
+    /* Barely there at rest. The literal rgba is the fallback for
+       browsers without color-mix; the color-mix line keeps the rule in
+       the text's own hue wherever the term sits. It firms up on hover
+       so the cue is still findable once you go looking. */
+    text-decoration-color:rgba(58,54,44,.3);
+    text-decoration-color:color-mix(in srgb, currentColor 30%, transparent);
     text-decoration-thickness:1px;text-underline-offset:3px;
     outline:none;
   }
+  .term:hover{text-decoration-color:currentColor;}
   .term:focus{text-decoration-color:var(--stamp-red);}
   /* A PNG cannot show a tooltip, so the dotted cue is a dead signal
      there. The class is added for the html2canvas capture only. */
@@ -798,6 +807,15 @@ const CASES = [
 
 const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class I · Evasion"};
 
+/* What each class means, offered on hover, tap, or keyboard focus.
+   The tiers describe how far the escape reached, never how anyone
+   judges the lab that disclosed it. */
+const CLASS_NOTE = {
+  3:"Escaped its sandbox, reached a real organization, and got there through a flaw nobody had patched yet. The most serious tier on this registry.",
+  2:"Escaped its sandbox and reached a real organization's systems, using techniques already well known rather than anything new.",
+  1:"Escaped its sandbox but broke into nobody. Evasion without intrusion."
+};
+
 /* ---------- CARD ACTION ICONS ----------
    Inline SVG rather than an icon font, so nothing extra loads and the
    glyphs inherit currentColor on hover. */
@@ -936,7 +954,7 @@ function renderTimeline(list){
             </div>
             <p class="card-alias">${c.alias}</p>
             <p class="card-charge">${gloss(c.charge)}</p>
-            <span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span>
+            <span class="class-badge c${c.cls}" tabindex="0" role="note" data-def="${CLASS_NOTE[c.cls]}">${CLASS_LABEL[c.cls]}</span>
           </div>
         </div>
       </div>`;
@@ -1164,7 +1182,7 @@ function openCase(id){
     <h3 class="poster-alias" id="posterAlias">${c.alias}</h3>
     <p class="poster-org">${c.org}</p>
     <p class="poster-aka">${c.aka}</p>
-    <div class="poster-class"><span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span></div>
+    <div class="poster-class"><span class="class-badge c${c.cls}" tabindex="0" role="note" data-def="${CLASS_NOTE[c.cls]}">${CLASS_LABEL[c.cls]}</span></div>
 
     <div class="rap-sheet">
       <div class="rap-row">
