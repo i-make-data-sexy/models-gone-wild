@@ -459,6 +459,23 @@
      dot after the poster closed and returned focus to it. Keyboard
      users still get the thicker ink stroke above. */
   .pt:focus{outline:none;}
+  /* Axis and quadrant labels explain themselves on hover, tap, or
+     keyboard focus. The dotted rule is the same cue the glossary terms
+     use in prose, at the same weight. */
+  /* Axis labels are marked with an info icon instead of a dotted rule,
+     so the two axes read as explainable without underlining a heading. */
+  .axis-note{cursor:help;outline:none;}
+  .axis-note:hover circle,.axis-note:focus circle{stroke:var(--stamp-red);}
+  .axis-note:hover text,.axis-note:focus text{fill:var(--stamp-red);}
+
+  .svg-note{
+    cursor:help;outline:none;
+    text-decoration:underline dotted;
+    text-decoration-color:rgba(58,54,44,.4);
+    text-decoration-color:color-mix(in srgb, currentColor 40%, transparent);
+    text-decoration-thickness:1px;
+  }
+  .svg-note:focus{text-decoration-color:var(--stamp-red);}
   .pt text{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;fill:var(--ink);}
 
   /* ---------- MODAL / POSTER ---------- */

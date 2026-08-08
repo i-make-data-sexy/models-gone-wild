@@ -143,6 +143,7 @@ const CASES = [
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
     date:"July 21, 2026", order:1, cls:3, complexity:9, harm:9,
+    why:"Complexity 9: it found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept and went in after them. The only confirmed zero-day on the registry. Harm 9: it reached a live production system and took benchmark answer data off it.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
     wantedFor:"Unauthorized sandbox escape · Zero-day exploitation · Production-system intrusion",
     mo:[
@@ -158,6 +159,7 @@ const CASES = [
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"July 30, 2026", order:2, cls:2, complexity:4, harm:7,
+    why:"Complexity 4: ordinary techniques throughout, including a credential read off an exposed page and an SQL injection. No novel exploit. Harm 7: three separate organizations, credentials and database contents read, and a package published to a real registry that compromised 15 machines.",
     charge:"Escaped a sealed capture-the-flag (CTF) evaluation and gained unauthorized access to the production infrastructure of three separate organizations.",
     wantedFor:"Sandbox escape · Unauthorized access to three organizations",
     mo:[
@@ -173,6 +175,7 @@ const CASES = [
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     aka:'aka Meta\'s "most advanced agentic model"',
     date:"August 5, 2026", order:3, cls:2, complexity:3, harm:6,
+    why:"Complexity 3: it escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service. Harm 6: one company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
     wantedFor:"Sandbox escape · Intrusion into an unnamed third party",
     mo:[
@@ -188,6 +191,7 @@ const CASES = [
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     aka:'aka The Open-Weight Escape Artist',
     date:"August 7, 2026", order:4, cls:1, complexity:2, harm:2,
+    why:"Complexity 2: it walked out through an outbound port left open and cloned a public repository. No attack of any kind. Harm 2: it cheated a benchmark and broke into nobody.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
     wantedFor:"Sandbox escape · Benchmark cheating (no external intrusion)",
     mo:[
@@ -205,6 +209,24 @@ const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class 
 /* What each class means, offered on hover, tap, or keyboard focus.
    The tiers describe how far the escape reached, never how anyone
    judges the lab that disclosed it. */
+/* How the two axes are scored, and what each quadrant means. Offered
+   on the axis labels and the quadrant labels themselves, so the reader
+   can ask the chart what it means without leaving it.
+
+   Both scores are ours. Saying so plainly is the point: the plot looks
+   like measured data, and it is not. */
+const METRIC_NOTE = {
+  complexity:"How involved the escape was as a technique, from walking through a port left open to chaining a flaw nobody had patched. It scores the method and never the motive, so nothing here implies a lab or a model meant for this to happen. Our own read of the public reporting, not a published figure.",
+  harm:"How much damage the escape could do, judged from what it actually reached. Our own read of the public reporting, not a published figure."
+};
+
+const QUADRANT_NOTE = {
+  "sleepwalking burglars":"Crude method, real consequences. These got inside somebody else's systems without doing anything clever to get there.",
+  "apex predators":"Involved method, real consequences. Technique and damage both at the top of the registry.",
+  "escaped house cats":"Got out, broke nothing. An escape with neither craft nor consequence behind it.",
+  "determined cheaters":"Involved method, little damage. Effort spent on getting around the test rather than on anything outside it. Nothing sits here yet."
+};
+
 const CLASS_NOTE = {
   3:"Escaped its sandbox, reached a real organization, and got there through a flaw nobody had patched yet. The most serious tier on this registry.",
   2:"Escaped its sandbox and reached a real organization's systems, using techniques already well known rather than anything new.",
@@ -539,14 +561,25 @@ function renderScatter(list){
      cats is the harm axis, and sleepwalking burglars against determined
      cheaters is the complexity axis. Red marks the high-harm row, green the
      low-harm row, matching the class colors used for the dots. */
-  const ql=`
-    <text x="${X(2.5)}" y="${Y(9.4)}" text-anchor="middle" fill="#8f1d16" font-family="'Special Elite',monospace" font-size="12" opacity="0.8">sleepwalking burglars</text>
-    <text x="${X(7.5)}" y="${Y(9.4)}" text-anchor="middle" fill="#8f1d16" font-family="'Special Elite',monospace" font-size="12" opacity="0.8">apex predators</text>
-    <text x="${X(2.5)}" y="${Y(0.5)}" text-anchor="middle" fill="#5a6b2a" font-family="'Special Elite',monospace" font-size="12" opacity="0.8">escaped house cats</text>
-    <text x="${X(7.5)}" y="${Y(0.5)}" text-anchor="middle" fill="#5a6b2a" font-family="'Special Elite',monospace" font-size="12" opacity="0.8">determined cheaters</text>`;
+  const qlabel = (x,y,fill,op,text) =>
+    `<text x="${x}" y="${y}" text-anchor="middle" fill="${fill}" font-family="'Special Elite',monospace"
+       font-size="12" opacity="${op}" class="svg-note" tabindex="0" role="note"
+       data-def="${escAttr(QUADRANT_NOTE[text])}">${text}</text>`;
+  const ql=
+    qlabel(X(2.5), Y(9.4), "#8f1d16", "0.8", "sleepwalking burglars")
+  + qlabel(X(7.5), Y(9.4), "#8f1d16", "0.8", "apex predators")
+  + qlabel(X(2.5), Y(0.5), "#5a6b2a", "0.8", "escaped house cats")
+  + qlabel(X(7.5), Y(0.5), "#5a6b2a", "0.8", "determined cheaters");
   const axes=`
-    <text x="${padL+pw/2}" y="${H-16}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">ESCAPE COMPLEXITY &#8594;</text>
-    <text x="18" y="${padT+ph/2}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2" transform="rotate(-90 18 ${padT+ph/2})">HARM POTENTIAL &#8594;</text>`;
+    <g class="axis-note" tabindex="0" role="note" data-def="${escAttr(METRIC_NOTE.complexity)}">
+      <text x="${padL+pw/2}" y="${H-16}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif"
+        font-weight="600" font-size="13" letter-spacing="2">ESCAPE COMPLEXITY &#8594;</text>
+    </g>
+    <g class="axis-note" tabindex="0" role="note" data-def="${escAttr(METRIC_NOTE.harm)}"
+       transform="rotate(-90 18 ${padT+ph/2})">
+      <text x="18" y="${padT+ph/2}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif"
+        font-weight="600" font-size="13" letter-spacing="2">HARM POTENTIAL &#8594;</text>
+    </g>`;
 
   const colr={3:'#8f1d16',2:'#a35a12',1:'#5a6b2a'};
   const pts=list.map(c=>{
@@ -554,7 +587,8 @@ function renderScatter(list){
     const anchor = cx>W-150 ? 'end' : 'start';
     const txx = anchor==='end' ? cx-14 : cx+14;
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
-      data-tip="Open ${c.alias}'s wanted poster" aria-label="Open ${c.alias}'s wanted poster">
+      data-def="${escAttr(c.alias+'. '+c.why)}"
+      aria-label="${c.alias}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10. Open the wanted poster.">
       <circle cx="${cx}" cy="${cy}" r="11" fill="${colr[c.cls]}" stroke="#e6ddc6" stroke-width="2"/>
       <text x="${txx}" y="${cy+4}" text-anchor="${anchor}">${c.alias}</text>
     </g>`;
@@ -567,9 +601,39 @@ function renderScatter(list){
       </svg>`
     : '<p class="empty-note">No files match the current filters.</p>';
 
+  placeAxisIcons();
+
   scatterHost.querySelectorAll('.pt').forEach(g=>{
     g.addEventListener('click',()=>openCase(g.dataset.id));
     g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();openCase(g.dataset.id);} });
+  });
+}
+
+/* Places the info icon just past each axis label. Split out and
+   re-runnable because getBBox measures whatever font is live at the
+   time: called before Oswald arrives, it measures the fallback, which
+   is wider, and the icon lands well past the end of the label. It is
+   called again once document.fonts settles. */
+function placeAxisIcons(){
+  const ns='http://www.w3.org/2000/svg';
+  scatterHost.querySelectorAll('.axis-note').forEach(g=>{
+    g.querySelectorAll('.axis-icon').forEach(n=>n.remove());
+    const t=g.querySelector('text');
+    if(!t) return;
+    const b=t.getBBox();
+    const cx=b.x+b.width+11, cy=b.y+b.height/2;
+    const ring=document.createElementNS(ns,'circle');
+    ring.setAttribute('class','axis-icon');
+    ring.setAttribute('cx',cx); ring.setAttribute('cy',cy); ring.setAttribute('r','6.5');
+    ring.setAttribute('fill','none'); ring.setAttribute('stroke','#3a362c'); ring.setAttribute('stroke-width','1.3');
+    const i=document.createElementNS(ns,'text');
+    i.setAttribute('class','axis-icon');
+    i.setAttribute('x',cx); i.setAttribute('y',cy+3.4);
+    i.setAttribute('text-anchor','middle'); i.setAttribute('fill','#3a362c');
+    i.setAttribute('font-family',"'Oswald',sans-serif");
+    i.setAttribute('font-size','9'); i.setAttribute('font-weight','600');
+    i.textContent='i';
+    g.appendChild(ring); g.appendChild(i);
   });
 }
 
@@ -827,6 +891,9 @@ applyFilters();
 /* Honour a shared ?view= link. Runs after the first render so both
    panels already hold content when one of them is revealed. */
 showView(new URLSearchParams(window.location.search).get('view'), false);
+/* Oswald usually arrives after the first paint, so the axis icons are
+   measured a second time once it has. */
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(placeAxisIcons); }
 </script>
 </body>
 </html>

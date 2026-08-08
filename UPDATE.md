@@ -89,6 +89,7 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` evasion only. |
 | `complexity` | Scatter x-axis, how involved the escape was as a technique. | `0` to `10`. An editorial judgment of ours. Score the method, never the motive. Nothing here should imply a lab or a model meant for this to happen, which is why the field is not called intent. |
 | `harm` | Scatter y-axis, how much damage the escape could do. | `0` to `10`. An editorial judgment of ours, not a figure from the reporting. |
+| `why` | The datapoint tooltip on the Threat Matrix. | REQUIRED. Justifies both scores in the form `Complexity N: reason. Harm N: reason.` The plot looks like measured data and is not, so every point has to be able to explain itself. |
 | `charge` | The one-sentence summary on the card. | One sentence, 130 to 170 characters. See the note below the table. |
 | `wantedFor` | The offense line. | Separate offenses with ` · `. |
 | `mo` | The modus operandi bullets. | Array of about three strings. |
@@ -113,6 +114,16 @@ python3 scripts/check_charges.py
 ```
 
 `escapedFrom` and `lastSeen` are a pair. The first is the sandbox or harness the model broke out of, and the second is where it actually ended up. Together they read as a from and to. Do not put the same value in both.
+
+### The Threat Matrix explains itself
+
+Three things on that chart carry a definition, offered on hover, tap, or keyboard focus.
+
+Each axis label is marked with an info icon and explains how it is scored, including the plain admission that both scores are ours rather than a published figure. Each quadrant label explains what that corner means. Each datapoint explains its own coordinates from the case's `why` field.
+
+The axis icons are positioned by measuring the label after layout, which is why `placeAxisIcons()` runs a second time once `document.fonts` settles. Measured before Oswald arrives, the label is measured in the fallback font, which is wider, and the icon lands past the end of the label.
+
+Clicking a datapoint still opens its wanted poster. The tooltip explains the score and the `aria-label` announces the action, so the two do not contradict each other.
 
 ## What updates itself, and what does not
 
