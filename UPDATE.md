@@ -120,6 +120,8 @@ The full rules are in `~/.claude/rules/editorial/annielytics-writing-rules.md` a
 
 No em-dashes or en-dashes anywhere. No comma before "because" or "since". Oxford commas throughout. No marketese, and no editorializing about how common or how missed something is.
 
+Punctuation goes outside a closing quote. The quote mark sits closer to the word than the comma or period does, so it is `'hyper-focused', going to` and never `'hyper-focused,' going to`. This holds for single and double quotes alike here, since nothing on the page quotes speech that carries its own punctuation.
+
 Suggestive rather than directive for anything diagnostic. The `caution` field in particular should say what the model did and did not do, not deliver a verdict.
 
 The quadrant labels on the scatter each name a kind of offender rather than an outcome. That rule is recorded in a comment above them. If a label is ever reworded, keep it an actor.
