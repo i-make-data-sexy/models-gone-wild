@@ -79,11 +79,10 @@ Every case is one object in the `CASES` array near the top of the script block i
 | Field | Where it shows | Constraints |
 |---|---|---|
 | `id` | Internal key. Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase, unique. |
-| `alias` | The card title, the large name on the poster, and the scatter dot label. | Short. Use the model name (Sol, Spark, Kimi K3), not a descriptive nickname. Long names crowd the dot label. |
-| `model` | The line under the card title. | The model and version alone. The lab is not repeated here, since the spine carries it. |
+| `alias` | The card title, the large name on the poster, and the scatter dot label. | The model name and nothing else (Sol, Spark, Kimi K3), never a descriptive nickname. This is the only name the card shows; the exact version lives on the poster. Long names crowd the dot label. |
 | `source` | The newspaper icon on the card, linking to the story that broke the case. | `{outlet, url}`. Leave `url` empty and the icon is not rendered at all, so a case with no source degrades cleanly. |
 | `lab` | The vertical spine down the left edge of the card, and an option in the Lab dropdown. | Must match an existing lab's spelling exactly, or you get a second option for the same lab. Keep it short; the spine is the card's height. |
-| `org` | The line under the alias. | Format is `Lab · Model`. |
+| `org` | The line under the alias on the POSTER only. The card does not show it. | Format is `Lab · Model`. This is where the exact version is recorded, e.g. `OpenAI · GPT-5.6`. |
 | `aka` | The a.k.a. line. | Optional flavor. |
 | `date` | The timeline heading and the footer's "Disclosed". | Format is `Month D, YYYY`. |
 | `order` | Timeline position, sorted ascending. Array position is ignored. | Next integer in sequence. |

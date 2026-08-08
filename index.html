@@ -280,17 +280,20 @@
   }
 
   /* ---------- CARD ----------
+     The card itself is not interactive. Only the two icons at its foot
+     are, so there is no cursor change and no hover lift here, either of
+     which would promise a click the card does not answer.
+
      No overflow:hidden. The card has square corners so it never needed
      clipping, and the hover tooltips on the action icons have to be
      able to paint outside the card's box. */
   .card{
-    display:block;width:100%;text-align:left;cursor:pointer;
+    display:block;width:100%;text-align:left;
     background:var(--card);border:1.5px solid var(--ink);
     box-shadow:5px 5px 0 var(--shadow);padding:0;
-    font-family:inherit;color:inherit;transition:transform .16s ease, box-shadow .16s ease;
+    font-family:inherit;color:inherit;
   }
   .event.left .card{text-align:left;}
-  .card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--shadow);}
   .card-body{display:flex;gap:0;align-items:stretch;}
   .card-text{padding:12px 14px;min-width:0;flex:1;}
 
@@ -314,15 +317,14 @@
   .spine.c3 span{color:var(--class3);}
   .spine.c2 span{color:var(--class2);}
   .spine.c1 span{color:var(--class1);}
+  /* The card names the model and nothing else. The exact version lives
+     on the poster, a click away, since a line reading OPEN-WEIGHT or
+     MUSE SPARK 1.1 under the title was noise at a glance. */
   .card-alias{
     font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
-    font-size:19px;letter-spacing:.01em;line-height:1.05;margin:0 0 2px;
+    font-size:19px;letter-spacing:.01em;line-height:1.05;margin:0 0 9px;
   }
-  .card-org{
-    font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
-    margin-bottom:9px;font-family:'Oswald',sans-serif;
-  }
-  .card-charge{font-size:12.5px;color:var(--ink-soft);line-height:1.45;}
+  .card-charge{font-size:12.5px;color:var(--ink-soft);line-height:1.45;margin:0;}
   .class-badge{
     display:inline-block;padding:3px 9px;font-family:'Oswald',sans-serif;
     font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#f4ecd8;
@@ -652,7 +654,7 @@
       their sandboxes during cybersecurity evaluations and reached systems they were never meant
       to touch.
     </p>
-    <p class="intro intro-cue">Select any event card to open its rap sheet.</p>
+    <p class="intro intro-cue">The icons on each card open the story that broke the case and the model's rap sheet.</p>
   </header>
 
   <!-- Registry panel. The tabs switch the view and the selects narrow it,
@@ -722,7 +724,7 @@
    ============================================================ */
 const CASES = [
   {
-    id:"sol", alias:"Sol", lab:"OpenAI", model:"GPT-5.6", org:"OpenAI · GPT-5.6",
+    id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     aka:'aka "The Answer-Key Thief," accompanied by an unreleased, unnamed pre-release model, still at large',
     date:"July 21, 2026", order:1, cls:3, intent:9, harm:9,
@@ -737,7 +739,7 @@ const CASES = [
     escapedFrom:"ExploitGym", lastSeen:"Hugging Face servers"
   },
   {
-    id:"claude", alias:"Opus / Mythos", lab:"Anthropic", model:"Opus 4.7 / Mythos 5 / research model", org:"Anthropic · Opus 4.7 / Mythos 5 / research model",
+    id:"claude", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"July 30, 2026", order:2, cls:2, intent:4, harm:6,
@@ -752,7 +754,7 @@ const CASES = [
     escapedFrom:"Internal CTF", lastSeen:"Three partner networks"
   },
   {
-    id:"spark", alias:"Spark", lab:"Meta", model:"Muse Spark 1.1", org:"Meta · Muse Spark 1.1",
+    id:"spark", alias:"Muse Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     aka:'aka Meta\'s "most advanced agentic model"',
     date:"August 5, 2026", order:3, cls:2, intent:5, harm:5,
@@ -767,7 +769,7 @@ const CASES = [
     escapedFrom:"Irregular", lastSeen:"Undisclosed company"
   },
   {
-    id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", model:"open-weight", org:"Moonshot AI · open-weight",
+    id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     aka:'aka "The Open-Weight Escape Artist"',
     date:"August 7, 2026", order:4, cls:1, intent:6, harm:2,
@@ -917,7 +919,6 @@ function renderTimeline(list){
           <div class="spine c${c.cls}"><span>${c.lab}</span></div>
           <div class="card-text">
             <p class="card-alias">${c.alias}</p>
-            <p class="card-org">${c.model}</p>
             <p class="card-charge">${gloss(c.charge)}</p>
             <div class="card-foot">
               <span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span>
@@ -932,14 +933,11 @@ function renderTimeline(list){
       </div>`;
     tl.appendChild(el);
   });
-  /* The whole card stays clickable, so the intro's "select any event
-     card" still holds. The source link is excluded, or following it
-     would also fire the poster. */
-  tl.querySelectorAll('.card').forEach(card=>{
-    card.addEventListener('click',e=>{
-      if(e.target.closest('a, .term')) return;
-      openCase(card.dataset.id);
-    });
+  /* Only the poster icon opens the rap sheet. The card itself is
+     inert, so a stray tap on the prose or on a glossary term does
+     not fire the modal. */
+  tl.querySelectorAll('.icon-btn[data-open]').forEach(btn=>{
+    btn.addEventListener('click',()=>openCase(btn.dataset.open));
   });
 }
 
