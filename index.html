@@ -295,7 +295,9 @@
   }
   .event.left .card{text-align:left;}
   .card-body{display:flex;gap:0;align-items:stretch;}
-  .card-text{padding:12px 14px;min-width:0;flex:1;}
+  /* position:relative anchors the action circles to this box rather
+     than to the page. */
+  .card-text{position:relative;padding:12px 14px;min-width:0;flex:1;}
 
   /* ---------- LAB SPINE ----------
      The lab reads bottom to top down a paper band, with the class
@@ -323,10 +325,13 @@
   .card-alias{
     font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
     font-size:19px;letter-spacing:.01em;line-height:1.05;margin:0 0 9px;
+    /* Clears the two action circles so a long title wraps rather than
+       running underneath them. */
+    padding-right:62px;
   }
   .card-charge{font-size:12.5px;color:var(--ink-soft);line-height:1.45;margin:0;}
   .class-badge{
-    display:inline-block;padding:3px 9px;font-family:'Oswald',sans-serif;
+    display:inline-block;margin-top:11px;padding:3px 9px;font-family:'Oswald',sans-serif;
     font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#f4ecd8;
   }
   .class-badge.c3{background:var(--class3);}
@@ -334,26 +339,26 @@
   .class-badge.c1{background:var(--class1);}
 
   /* ---------- CARD ACTIONS ----------
-     Two icon controls per card: the story that broke the case, and the
-     wanted poster. Icons rather than labels so the pair stays quiet;
-     the tooltip and the aria-label both spell out what each one does. */
-  .card-foot{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:10px;margin-top:11px;flex-wrap:wrap;
-  }
-  .card-actions{display:flex;gap:7px;}
+     Two controls per card: the story that broke the case, and the
+     wanted poster. Small outlined circles in the top-right corner, so
+     they read as a pair of buttons without the weight the filled
+     squares carried. Icons rather than labels keep the pair quiet; the
+     tooltip and the aria-label both say what each one does. */
+  .card-actions{position:absolute;top:12px;right:12px;display:flex;gap:7px;}
   .icon-btn{
-    position:relative;width:31px;height:31px;flex:none;
+    position:relative;width:22px;height:22px;flex:none;
     display:inline-flex;align-items:center;justify-content:center;
-    background:var(--paper-deep);border:1.5px solid var(--rule);border-radius:2px;
+    background:none;border:1px solid rgba(74,68,56,.5);border-radius:50%;
     color:var(--ink-soft);cursor:pointer;padding:0;
-    transition:background .13s,border-color .13s,color .13s;
+    transition:color .13s,border-color .13s;
   }
-  .icon-btn svg{width:15px;height:15px;display:block;fill:currentColor;}
-  .icon-btn:hover,.icon-btn:focus-visible{
-    background:var(--ink);border-color:var(--ink);color:var(--paper);outline:none;
-  }
-  .icon-btn:focus-visible{box-shadow:0 0 0 2px var(--stamp-red);}
+  .icon-btn svg{width:11px;height:11px;display:block;fill:currentColor;}
+  /* The circle stays small, but the hit area does not. This invisible
+     ring takes it out to 34px so the control is still tappable on a
+     phone at 22px of visible chrome. */
+  .icon-btn::before{content:"";position:absolute;inset:-6px;border-radius:50%;}
+  .icon-btn:hover,.icon-btn:focus-visible{color:var(--stamp-red);border-color:var(--stamp-red);}
+  .icon-btn:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
 
   /* ---------- GLOSSARY TERMS ----------
      A dotted rule in the text's own color, so the cue is present
@@ -467,7 +472,7 @@
     color:var(--ink-soft);margin:6px 24px 0;
   }
   .poster-class{text-align:center;margin:16px 24px 0;}
-  .poster-class .class-badge{font-size:11px;padding:5px 14px;}
+  .poster-class .class-badge{font-size:11px;padding:5px 14px;margin-top:0;}
 
   .rap-sheet{margin:20px 24px 0;border-top:2px solid var(--ink);padding-top:16px;}
   .rap-row{margin-bottom:15px;}
@@ -791,8 +796,8 @@ const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class 
    Inline SVG rather than an icon font, so nothing extra loads and the
    glyphs inherit currentColor on hover. */
 const ICON = {
-  story:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 3H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h13a2 2 0 0 0 2-2V4a1 1 0 0 0-1-1zM5 18V6a1 1 0 0 1 1-1h13v14H6a1 1 0 0 1-1-1zm3-11h9v2H8V7zm0 4h9v1.5H8V11zm0 3.5h6V16H8v-1.5z"/></svg>`,
-  poster:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2H6a2 2 0 0 0-2 2v18l8-3.5 8 3.5V4a2 2 0 0 0-2-2zm0 16.9-6-2.6-6 2.6V4h12v14.9zM12 6a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zm-4 8c0-1.7 2.7-2.6 4-2.6s4 .9 4 2.6v1H8v-1z"/></svg>`
+  story:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.9 12a3.1 3.1 0 0 1 3.1-3.1h4V7H7a5 5 0 0 0 0 10h4v-1.9H7A3.1 3.1 0 0 1 3.9 12zM8 13h8v-2H8v2zm9-6h-4v1.9h4a3.1 3.1 0 0 1 0 6.2h-4V17h4a5 5 0 0 0 0-10z"/></svg>`,
+  poster:`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M9.2 3 7.4 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.4L14.8 3H9.2zm2.8 14.4a4.9 4.9 0 1 1 0-9.8 4.9 4.9 0 0 1 0 9.8z"/></svg>`
 };
 
 /* ---------- GLOSSARY ----------
@@ -918,16 +923,14 @@ function renderTimeline(list){
         <div class="card-body">
           <div class="spine c${c.cls}"><span>${c.lab}</span></div>
           <div class="card-text">
+            <div class="card-actions">
+              ${src}
+              <button class="icon-btn" data-open="${c.id}" aria-haspopup="dialog"
+                      data-tip="Wanted poster" aria-label="Open the wanted poster for ${c.alias}">${ICON.poster}</button>
+            </div>
             <p class="card-alias">${c.alias}</p>
             <p class="card-charge">${gloss(c.charge)}</p>
-            <div class="card-foot">
-              <span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span>
-              <div class="card-actions">
-                ${src}
-                <button class="icon-btn" data-open="${c.id}" aria-haspopup="dialog"
-                        data-tip="Wanted poster" aria-label="Open the wanted poster for ${c.alias}">${ICON.poster}</button>
-              </div>
-            </div>
+            <span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span>
           </div>
         </div>
       </div>`;
