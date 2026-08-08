@@ -353,55 +353,56 @@
   }
   .icon-btn:focus-visible{box-shadow:0 0 0 2px var(--stamp-red);}
 
-  /* Tooltip. Sits above the icon and is right-aligned to it, so it
-     opens back into the card rather than off the viewport edge. */
-  .icon-btn::after{
-    content:attr(data-tip);
-    position:absolute;bottom:calc(100% + 8px);right:-2px;
-    background:var(--ink);color:var(--paper);
-    font-family:'Oswald',sans-serif;font-size:10.5px;font-weight:500;
-    letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
-    padding:6px 9px;border-radius:2px;pointer-events:none;
-    opacity:0;transform:translateY(3px);transition:opacity .15s,transform .15s;
-  }
-  .icon-btn::before{
-    content:"";position:absolute;bottom:calc(100% + 3px);right:9px;
-    border:5px solid transparent;border-top-color:var(--ink);
-    pointer-events:none;opacity:0;transition:opacity .15s;
-  }
-  .icon-btn:hover::after,.icon-btn:focus-visible::after{opacity:1;transform:translateY(0);}
-  .icon-btn:hover::before,.icon-btn:focus-visible::before{opacity:1;}
-
   /* ---------- GLOSSARY TERMS ----------
      A dotted rule in the text's own color, so the cue is present
      without pulling the eye. tabindex makes the definition reachable
      by keyboard and by tap, since touch has no hover. */
   .term{
-    position:relative;cursor:help;
+    cursor:help;
     text-decoration:underline dotted currentColor;
     text-decoration-thickness:1px;text-underline-offset:3px;
     outline:none;
   }
-  .term::after{
-    content:attr(data-def);
-    position:absolute;bottom:calc(100% + 9px);left:50%;
-    width:max-content;max-width:260px;transform:translate(-50%,3px);
-    background:var(--ink);color:var(--paper);
-    font-family:'Special Elite',monospace;font-size:11.5px;
-    line-height:1.55;letter-spacing:.01em;text-align:left;text-transform:none;
-    padding:9px 11px;border-radius:2px;
-    box-shadow:0 6px 18px rgba(0,0,0,.35);
-    pointer-events:none;opacity:0;transition:opacity .15s,transform .15s;
-    z-index:40;
-  }
-  .term::before{
-    content:"";position:absolute;bottom:calc(100% + 4px);left:50%;
-    margin-left:-5px;border:5px solid transparent;border-top-color:var(--ink);
-    pointer-events:none;opacity:0;transition:opacity .15s;z-index:40;
-  }
-  .term:hover::after,.term:focus::after{opacity:1;transform:translate(-50%,0);}
-  .term:hover::before,.term:focus::before{opacity:1;}
   .term:focus{text-decoration-color:var(--stamp-red);}
+  /* A PNG cannot show a tooltip, so the dotted cue is a dead signal
+     there. The class is added for the html2canvas capture only. */
+  .exporting .term{text-decoration:none;}
+
+  /* ---------- TOOLTIP ----------
+     One shared element rather than a ::after on each trigger. A pseudo
+     element cannot be measured, so it cannot be kept inside anything;
+     these were spilling past the left edge of the reading column. This
+     one is measured and clamped by positionTip() in the script, and it
+     sits above the poster overlay (z-index 50) so definitions still
+     work inside an open poster. */
+  .tip{
+    position:fixed;top:0;left:0;z-index:60;
+    background:var(--ink);color:var(--paper);
+    border-radius:2px;padding:9px 11px;
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+    pointer-events:none;opacity:0;visibility:hidden;
+    transition:opacity .15s ease;
+    text-transform:none;
+  }
+  .tip.show{opacity:1;visibility:visible;}
+  /* Definition style: prose, wraps, reads like the page. */
+  .tip.tip-def{
+    font-family:'Special Elite',monospace;font-size:11.5px;
+    line-height:1.55;text-align:left;max-width:280px;
+  }
+  /* Label style: the short action labels on the card icons. */
+  .tip.tip-label{
+    font-family:'Oswald',sans-serif;font-size:10.5px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+  }
+  /* The arrow is offset by a variable so it keeps pointing at the
+     trigger even after the bubble has been pushed sideways. */
+  .tip::after{
+    content:"";position:absolute;left:var(--arrow,50%);margin-left:-6px;
+    border:6px solid transparent;
+  }
+  .tip.above::after{top:100%;border-top-color:var(--ink);}
+  .tip.below::after{bottom:100%;border-bottom-color:var(--ink);}
   .empty-note{
     text-align:center;font-family:'Special Elite',monospace;font-size:14px;
     color:var(--ink-soft);padding:50px 20px;
@@ -703,6 +704,8 @@
   </div><!-- /.content -->
 </div><!-- /.wrap -->
 
+<div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
+
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="posterAlias">
   <div class="poster" id="poster">
     <button class="close-btn" id="closeBtn" aria-label="Close file">&times;</button>
@@ -721,7 +724,7 @@ const CASES = [
   {
     id:"sol", alias:"Sol", lab:"OpenAI", model:"GPT-5.6", org:"OpenAI · GPT-5.6",
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
-    aka:'a.k.a. "The Answer-Key Thief," accompanied by an unreleased, unnamed pre-release model, still at large',
+    aka:'aka "The Answer-Key Thief," accompanied by an unreleased, unnamed pre-release model, still at large',
     date:"July 21, 2026", order:1, cls:3, intent:9, harm:9,
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
     wantedFor:"Unauthorized sandbox escape · Zero-day exploitation · Production-system intrusion",
@@ -751,7 +754,7 @@ const CASES = [
   {
     id:"spark", alias:"Spark", lab:"Meta", model:"Muse Spark 1.1", org:"Meta · Muse Spark 1.1",
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
-    aka:'a.k.a. Meta\'s "most advanced agentic model"',
+    aka:'aka Meta\'s "most advanced agentic model"',
     date:"August 5, 2026", order:3, cls:2, intent:5, harm:5,
     charge:"Escaped a misconfigured Irregular test sandbox and compromised the systems of an unnamed company.",
     wantedFor:"Sandbox escape · Intrusion into an unnamed third party",
@@ -766,9 +769,9 @@ const CASES = [
   {
     id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", model:"open-weight", org:"Moonshot AI · open-weight",
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
-    aka:'a.k.a. "The Open-Weight Escape Artist"',
+    aka:'aka "The Open-Weight Escape Artist"',
     date:"August 7, 2026", order:4, cls:1, intent:6, harm:2,
-    charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub, but hacked no one.",
+    charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
     wantedFor:"Sandbox escape · Benchmark cheating (no external intrusion)",
     mo:[
       "Bypassed the sandbox via a basic network misconfig in the benchmark framework",
@@ -798,6 +801,9 @@ const ICON = {
 
    Add a term by adding a line here. Nothing in the case data changes. */
 const GLOSSARY = {
+  "ExploitGym evaluation":"A run against ExploitGym, a public benchmark that tests whether an AI agent can turn a known bug into a working exploit. It covers 869 real vulnerabilities and was built by researchers at UC Berkeley, the Max Planck Institute, UC Santa Barbara, Arizona State, Anthropic, OpenAI, and Google.",
+  "benchmark answer key":"The worked solutions to the benchmark's tasks, which Hugging Face hosted alongside its models and datasets. A model holding them can score well without solving anything.",
+  "three separate organizations":"Anthropic has not named them, to protect the companies affected. One had credentials and database contents read after a fictional target shared a domain with a real company. One was reached through a malicious package published to the real PyPI registry. The third was found after the model scanned roughly 9,000 targets.",
   "capture-the-flag":"A security exercise scored on breaking into a deliberately vulnerable system and retrieving a planted token, the flag. It is how security teams train and how model cyber skills get benchmarked.",
   "zero-day":"A software flaw the vendor does not yet know about, so there is no patch available when someone first exploits it.",
   "sandbox":"An isolated environment a model is meant to run inside, walled off from real systems and the open internet.",
@@ -1032,6 +1038,82 @@ tabs.forEach(tab=>{
   });
 });
 
+/* ---------- TOOLTIP ----------
+   Positions the one shared bubble against whichever trigger is hovered
+   or focused, then clamps it so it can never cross the edge of its
+   container. GAP is the guaranteed breathing room at that edge.
+
+   The container is the reading column for a card, and the viewport for
+   anything inside an open poster, since the poster floats over a dark
+   overlay and has no column to respect. */
+const tip = document.getElementById('tip');
+const TIP_GAP = 10;
+let tipFor = null;
+
+function positionTip(el){
+  const text = el.dataset.def || el.dataset.tip;
+  if(!text) return;
+  tipFor = el;
+  tip.textContent = text;
+  tip.className = 'tip ' + (el.dataset.def ? 'tip-def' : 'tip-label');
+  /* Measure while laid out but still invisible, so nothing flashes at
+     the wrong coordinates before the clamp is applied. */
+  tip.style.left = '0px';
+  tip.style.top = '0px';
+  tip.classList.add('show');
+
+  const t = el.getBoundingClientRect();
+  const b = tip.getBoundingClientRect();
+  const column = el.closest('.poster') ? null : document.querySelector('.content');
+  const c = column ? column.getBoundingClientRect() : null;
+
+  const minX = Math.max(TIP_GAP, c ? c.left + TIP_GAP : TIP_GAP);
+  const maxX = Math.min(window.innerWidth - TIP_GAP, c ? c.right - TIP_GAP : window.innerWidth - TIP_GAP);
+
+  let x = t.left + t.width/2 - b.width/2;
+  if(x + b.width > maxX) x = maxX - b.width;
+  if(x < minX) x = minX;
+
+  /* Above by default. Flip below only when there is genuinely no room,
+     so the bubble does not jump around on a long page. */
+  let y = t.top - b.height - TIP_GAP;
+  let placement = 'above';
+  if(y < TIP_GAP){
+    y = t.bottom + TIP_GAP;
+    placement = 'below';
+  }
+
+  tip.style.left = Math.round(x) + 'px';
+  tip.style.top  = Math.round(y) + 'px';
+  tip.classList.add(placement);
+  /* Keep the arrow pointing at the trigger even though the bubble may
+     have been pushed sideways by the clamp. */
+  const arrow = Math.min(Math.max(t.left + t.width/2 - x, 12), b.width - 12);
+  tip.style.setProperty('--arrow', Math.round(arrow) + 'px');
+}
+
+function hideTip(){
+  tip.classList.remove('show','above','below');
+  tipFor = null;
+}
+
+['mouseenter','focus'].forEach(ev=>{
+  document.addEventListener(ev, e=>{
+    const el = e.target.closest && e.target.closest('[data-def],[data-tip]');
+    if(el) positionTip(el);
+  }, true);
+});
+['mouseleave','blur'].forEach(ev=>{
+  document.addEventListener(ev, e=>{
+    const el = e.target.closest && e.target.closest('[data-def],[data-tip]');
+    if(el && el === tipFor) hideTip();
+  }, true);
+});
+/* A fixed bubble would otherwise sit still while the page moves under it. */
+window.addEventListener('scroll', hideTip, true);
+window.addEventListener('resize', hideTip);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') hideTip(); });
+
 /* ---------- MODAL ---------- */
 const overlay=document.getElementById('overlay');
 const poster=document.getElementById('poster');
@@ -1113,6 +1195,10 @@ async function downloadPoster(e){
   btn.disabled=true; btn.innerHTML='Rendering&hellip;';
   closeBtn.style.visibility='hidden';
   btn.style.visibility='hidden';
+  /* Drops the glossary's dotted rules for the capture. A tooltip cannot
+     open in a PNG, so the cue would be pointing at nothing. */
+  poster.classList.add('exporting');
+  hideTip();
   try{
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
     const canvas=await html2canvas(poster,{
@@ -1126,6 +1212,7 @@ async function downloadPoster(e){
   }catch(err){
     alert("Couldn't generate the image: "+err.message);
   }finally{
+    poster.classList.remove('exporting');
     closeBtn.style.visibility='';
     btn.style.visibility='';
     btn.disabled=false; btn.innerHTML=original;
