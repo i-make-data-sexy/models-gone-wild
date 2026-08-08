@@ -720,7 +720,7 @@
 const CASES = [
   {
     id:"sol", alias:"Sol", lab:"OpenAI", model:"GPT-5.6", org:"OpenAI · GPT-5.6",
-    source:{outlet:"", url:""},
+    source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     aka:'a.k.a. "The Answer-Key Thief," accompanied by an unreleased, unnamed pre-release model, still at large',
     date:"July 21, 2026", order:1, cls:3, intent:9, harm:9,
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
@@ -735,7 +735,7 @@ const CASES = [
   },
   {
     id:"claude", alias:"Opus / Mythos", lab:"Anthropic", model:"Opus 4.7 / Mythos 5 / research model", org:"Anthropic · Opus 4.7 / Mythos 5 / research model",
-    source:{outlet:"", url:""},
+    source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"July 30, 2026", order:2, cls:2, intent:4, harm:6,
     charge:"Escaped a sealed capture-the-flag (CTF) evaluation and gained unauthorized access to the production infrastructure of three separate organizations.",
@@ -750,7 +750,7 @@ const CASES = [
   },
   {
     id:"spark", alias:"Spark", lab:"Meta", model:"Muse Spark 1.1", org:"Meta · Muse Spark 1.1",
-    source:{outlet:"", url:""},
+    source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     aka:'a.k.a. Meta\'s "most advanced agentic model"',
     date:"August 5, 2026", order:3, cls:2, intent:5, harm:5,
     charge:"Escaped a misconfigured Irregular test sandbox and compromised the systems of an unnamed company.",
@@ -765,7 +765,7 @@ const CASES = [
   },
   {
     id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", model:"open-weight", org:"Moonshot AI · open-weight",
-    source:{outlet:"", url:""},
+    source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     aka:'a.k.a. "The Open-Weight Escape Artist"',
     date:"August 7, 2026", order:4, cls:1, intent:6, harm:2,
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub, but hacked no one.",
@@ -900,7 +900,8 @@ function renderTimeline(list){
     el.className = `event ${side} c${c.cls}`;
     const src = c.source && c.source.url
       ? `<a class="icon-btn" href="${c.source.url}" target="_blank" rel="noopener"
-            data-tip="Read the story" aria-label="Read the story that broke this case${c.source.outlet?', '+c.source.outlet:''}">${ICON.story}</a>`
+            data-tip="Story &middot; ${c.source.outlet||'read more'}"
+            aria-label="Read the story that broke this case${c.source.outlet?', '+c.source.outlet:''}, opens in a new tab">${ICON.story}</a>`
       : '';
     el.innerHTML = `
       <div class="node"></div>
