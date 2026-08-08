@@ -170,12 +170,16 @@
     letter-spacing:.02em;margin:16px auto 0;max-width:600px;color:var(--ink-soft);
   }
   /* The intro reads as body copy rather than a centered display line, so
-     it is left-aligned inside the centered masthead. The block itself
-     stays centered; only its text is flush left. */
+     it is left-aligned inside the centered masthead. No max-width of its
+     own, which lets it run the full 920px of .content and line up with
+     the timeline below it. */
   .intro{
     font-family:'Special Elite',monospace;font-size:14px;text-align:left;
-    max-width:700px;margin:26px auto 0;color:var(--ink-soft);line-height:1.7;
+    margin:26px 0 0;color:var(--ink-soft);line-height:1.7;
   }
+  /* The tap prompt is its own paragraph, tucked closer to the copy above
+     it than a full paragraph gap would put it. */
+  .intro-cue{margin-top:14px;}
 
   /* ---------- REGISTRY PANEL ----------
      One container holding the view tabs and the filters, so the two
@@ -203,8 +207,10 @@
     transition:background .15s,color .15s;
   }
   .tab:hover{color:var(--ink);}
-  .tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-  .tab:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
+  .tab[aria-selected="true"]{background:var(--stamp-red);color:var(--paper);border-color:var(--stamp-red);}
+  /* Ink rather than stamp red, since a red outline on the red selected
+     tab would be invisible. */
+  .tab:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
 
   /* ---------- FILTERS ---------- */
   .filters{display:flex;gap:8px;align-items:center;padding-bottom:9px;}
@@ -214,6 +220,10 @@
     background-color:var(--paper-deep);
     border:1.5px solid var(--rule);border-radius:2px;
     padding:7px 28px 7px 11px;cursor:pointer;line-height:1.2;
+    /* Both selects share one width so the pair reads as symmetric,
+       rather than each sizing to its own longest option. 150px clears
+       the longest entry in either list. */
+    width:150px;
     /* Native arrow is suppressed so the control matches the poster
        chrome. background-color is set separately above, since the
        shorthand would wipe this image out. */
@@ -501,7 +511,9 @@
        The selects share the width so both stay tappable. */
     .registry-bar{align-items:stretch;}
     .filters{width:100%;padding-bottom:10px;}
-    .filter-select{flex:1;min-width:0;}
+    /* width:auto releases the 150px desktop pairing so the two selects
+       split the row instead. They stay equal to each other either way. */
+    .filter-select{flex:1;width:auto;min-width:0;}
     .tab{flex:1;padding:11px 10px;text-align:center;}
   }
 
@@ -545,13 +557,14 @@
   <header class="masthead">
     <p class="bureau-line">Bureau of Model Containment · Field Registry 2026</p>
     <h1 class="wanted-title">Wanted</h1>
-    <p class="subhead">AI models gone rogue.</p>
+    <p class="subhead">AI models gone rogue</p>
     <p class="intro">
       Below is a running registry of the containment failures that have been littering headlines
       since OpenAI's Sol model took a walk on the wild side in July. These models have escaped
       their sandboxes during cybersecurity evaluations and reached systems they were never meant
-      to touch. Select any event card to open its rap sheet.
+      to touch.
     </p>
+    <p class="intro intro-cue">Select any event card to open its rap sheet.</p>
   </header>
 
   <!-- Registry panel. The tabs switch the view and the selects narrow it,
@@ -567,9 +580,9 @@
       <div class="filters">
         <select class="filter-select" id="classFilter" aria-label="Filter by class">
           <option value="">All classes</option>
-          <option value="3">Class III · Severe</option>
-          <option value="2">Class II · Intrusion</option>
-          <option value="1">Class I · Evasion</option>
+          <option value="3">III · Severe</option>
+          <option value="2">II · Intrusion</option>
+          <option value="1">I · Evasion</option>
         </select>
         <select class="filter-select" id="labFilter" aria-label="Filter by lab">
           <option value="">All labs</option>
