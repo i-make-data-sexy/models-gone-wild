@@ -31,9 +31,11 @@ each, and STOP for my approval before writing anything.
 Do not invent facts. Every field has to trace to what I gave you. Flag
 anything you cannot source rather than filling it in plausibly.
 
-After I approve: make the edit, run the checks in UPDATE.md, update the
-"Last updated" line in the footer, commit, push, and deploy. Give me the
-live URL when it is done.
+After I approve: make the edit, run the checks in UPDATE.md, and run
+scripts/check_claims.py, which reports copy elsewhere on the page that
+the new case has made untrue. Fix anything it reports as STALE. Then
+update the "Last updated" line in the footer, commit, push, and deploy.
+Give me the live URL when it is done.
 ```
 
 ### Changing copy
@@ -125,6 +127,30 @@ Each axis label is marked with an info icon and explains how it is scored, inclu
 The axis icons are positioned by measuring the label after layout, which is why `placeAxisIcons()` runs a second time once `document.fonts` settles. Measured before Oswald arrives, the label is measured in the fallback font, which is wider, and the icon lands past the end of the label.
 
 Clicking a datapoint still opens its wanted poster. The tooltip explains the score and the `aria-label` announces the action, so the two do not contradict each other.
+
+## Claims a new case can quietly falsify
+
+Some lines are claims about the registry as a whole rather than about one model. Adding a case can make one of them untrue without touching the sentence, and nothing else on the page would notice. Sol is the only confirmed zero-day until a second one arrives. Kimi K3 is the least harmful until something scores lower. One quadrant is empty until something lands in it.
+
+Run this after adding or rescoring a case:
+
+```bash
+python3 scripts/check_claims.py
+```
+
+It reports each claim as OK or STALE against the current data, and exits 1 if any has gone stale. What it settles:
+
+| Claim | Where | Goes stale when |
+|---|---|---|
+| "Considered the most dangerous of the 2026 escapes" | Sol, `caution` | another case outscores Sol on complexity plus harm |
+| "the only confirmed zero-day" | Sol, `caution` and `whyComplexity` | a second case's `charge` cites a zero-day |
+| "Least harmful of the group" | Kimi K3, `caution` | a case scores lower on `harm` |
+| "No models have been added to this quadrant at the time of writing" | `QUADRANT_NOTE`, determined cheaters | a case lands above 5 on complexity and below 5 on harm |
+| "FIELD REGISTRY 2026" | masthead, bureau line | a case is disclosed outside 2026 |
+
+It also prints the claims no script can settle, which have to be read and judged: the unnamed pre-release model still at large in Sol's `aka`, Muse Spark being the third lab in a month, the withheld name of the company Muse Spark reached, Kimi K3 being the first open-weight case, and the footer date.
+
+Add a claim by adding an entry to `COMPUTABLE` or `REVIEW` in that script. Anything written that compares one case against the rest belongs in one of those two lists, or it will go stale silently.
 
 ## What updates itself, and what does not
 

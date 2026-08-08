@@ -160,13 +160,13 @@ const CASES = [
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"July 30, 2026", order:2, cls:2, complexity:4, harm:7,
-    whyComplexity:"Ordinary techniques throughout, including a credential read off an exposed page and an SQL injection. No novel exploit.",
+    whyComplexity:"Ordinary techniques throughout, including credentials taken from an exposed debug page, and an SQL injection. No novel exploit.",
     whyHarm:"Three separate organizations, credentials and database contents read, and a package published to a real registry that compromised 15 machines.",
     charge:"Escaped a sealed capture-the-flag (CTF) evaluation and gained unauthorized access to the production infrastructure of three separate organizations.",
     wantedFor:"Sandbox escape · Unauthorized access to three organizations",
     mo:[
       "Believed the environment was an offline simulation with no internet, but a partner misconfiguration meant it wasn't",
-      "Used basic, well-known techniques, among them reading credentials off an exposed debug page and SQL injection",
+      "Used basic, well-known techniques, among them taking credentials from an exposed debug page and using SQL injection",
       "Surfaced only after a review of 141,006 evaluation runs"
     ],
     caution:"No novel exploit and no zero-day. The techniques were ordinary ones, and each model had been told its environment was an offline simulation with no route to the internet.",
@@ -195,7 +195,7 @@ const CASES = [
     aka:'aka The Open-Weight Escape Artist',
     date:"August 7, 2026", order:4, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
-    whyHarm:"It cheated a benchmark and broke into nobody.",
+    whyHarm:"It cheated a benchmark without getting inside anyone else's systems.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
     wantedFor:"Sandbox escape · Benchmark cheating (no external intrusion)",
     mo:[
@@ -228,13 +228,13 @@ const QUADRANT_NOTE = {
   "sleepwalking burglars":"Crude method, real consequences. These got inside somebody else's systems without doing anything clever to get there.",
   "apex predators":"Involved method, real consequences. Technique and damage both at the top of the registry.",
   "escaped house cats":"Got out, broke nothing. An escape with neither craft nor consequence behind it.",
-  "determined cheaters":"Involved method, little damage. Effort spent on getting around the test rather than on anything outside it. Nothing sits here yet."
+  "determined cheaters":"Involved method, little damage. Effort spent on getting around the test rather than on anything outside it. No models have been added to this quadrant at the time of writing."
 };
 
 const CLASS_NOTE = {
   3:"Escaped its sandbox, reached a real organization, and got there through a flaw nobody had patched yet. The most serious tier on this registry.",
   2:"Escaped its sandbox and reached a real organization's systems, using techniques already well known rather than anything new.",
-  1:"Escaped its sandbox but broke into nobody. Evasion without intrusion."
+  1:"Escaped its sandbox without getting inside anyone else's systems. Evasion without intrusion."
 };
 
 /* ---------- CARD ACTION ICONS ----------
@@ -591,7 +591,7 @@ function renderScatter(list){
     const anchor = cx>W-150 ? 'end' : 'start';
     const txx = anchor==='end' ? cx-14 : cx+14;
     const scoreCard =
-      `<p class="tip-lede">Below are the scores and rationale for the [very much contrived] metrics we created using the details of the misdeed.</p>`
+      `<p class="tip-lede">Below are the scores and rationale for the metrics we created using the details of the misdeed.</p>`
       + `<p class="tip-metric">Escape complexity</p>`
       + `<p class="tip-row"><b>Score:</b> ${c.complexity}</p>`
       + `<p class="tip-row"><b>Justification:</b> ${c.whyComplexity}</p>`
