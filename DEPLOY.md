@@ -99,7 +99,11 @@ location = /tools/models-gone-wild {
 # this, DEPLOY.md is served publicly and it carries the server path and
 # the host IP. Nginx picks regex locations over prefix ones, so this
 # intercepts before the page block below.
-location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock)$ {
+#
+# .py is in the list because scripts/ ships with the clone. Add the
+# extension here whenever a new kind of tooling file joins the repo,
+# or it will be readable on the live site.
+location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
     return 404;
 }
 
