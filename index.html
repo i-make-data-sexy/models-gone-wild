@@ -629,7 +629,9 @@ function renderScatter(list){
    land in the wrong places. */
 function placeAxisIcons(){
   const ns='http://www.w3.org/2000/svg';
-  const R=4.6, GAP=5;
+  /* Small enough to read as a footnote mark rather than a control,
+     and tucked in close to the word it belongs to. */
+  const R=3.7, GAP=2.5;
   scatterHost.querySelectorAll('.axis-note').forEach(g=>{
     g.querySelectorAll('.axis-icon').forEach(n=>n.remove());
     const label=g.querySelector('.axis-text');
@@ -652,17 +654,17 @@ function placeAxisIcons(){
 
     /* Raised like a superscript, so it reads as a footnote mark rather
        than a character in the label. */
-    const iconY = baseline - 8;
+    const iconY = baseline - 7;
     const ring=document.createElementNS(ns,'circle');
     ring.setAttribute('class','axis-icon');
     ring.setAttribute('cx',iconX); ring.setAttribute('cy',iconY); ring.setAttribute('r',R);
-    ring.setAttribute('fill','none'); ring.setAttribute('stroke','#3a362c'); ring.setAttribute('stroke-width','1.2');
+    ring.setAttribute('fill','none'); ring.setAttribute('stroke','#3a362c'); ring.setAttribute('stroke-width','0.85');
     const i=document.createElementNS(ns,'text');
     i.setAttribute('class','axis-icon');
-    i.setAttribute('x',iconX); i.setAttribute('y',iconY+2.4);
+    i.setAttribute('x',iconX); i.setAttribute('y',iconY+1.9);
     i.setAttribute('text-anchor','middle'); i.setAttribute('fill','#3a362c');
     i.setAttribute('font-family',"'Oswald',sans-serif");
-    i.setAttribute('font-size','6.5'); i.setAttribute('font-weight','600');
+    i.setAttribute('font-size','5.4'); i.setAttribute('font-weight','600');
     i.textContent='i';
     g.appendChild(ring); g.appendChild(i);
   });
