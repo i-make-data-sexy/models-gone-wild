@@ -126,6 +126,8 @@ The trailing slashes on both the `location` and the `alias` have to match. Dropp
 
 `try_files` is deliberately absent. The `alias` plus `index` pair already serves the page, a missing file 404s on its own, and `try_files` combined with `alias` has a long-standing resolution quirk. Adding it back buys nothing.
 
+The `css/` directory needs no rule of its own. The asset regex above covers `js/` and `img/` only, so a request for `css/styles.css` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheet changes whenever the design does, and a hard-cached copy would strand readers on an old one. Do not add `css` to the asset regex without also solving cache-busting.
+
 The clone's `.git` directory and `.gitignore` need no rule here. The config already carries a `location ~ /\.git` block further down, and regex locations outrank the prefix block above.
 
 ```bash

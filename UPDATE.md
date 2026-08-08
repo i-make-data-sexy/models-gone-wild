@@ -151,7 +151,8 @@ Run all four from the repo root. The first three take seconds.
 ```bash
 # 1. No leading-slash paths. Must print nothing. A path starting with a
 #    slash resolves to the site root and 404s under /tools/models-gone-wild/.
-grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html
+#    Both files, since the stylesheet carries url() references too.
+grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/styles.css
 
 # 2. Script block still parses structurally, and every case is well formed.
 python3 - <<'PY'
@@ -217,6 +218,12 @@ curl -sk -H "$H" "$B/" | grep -o "<title>[^<]*</title>"
 ```
 
 Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, which is the only way past Cloudflare.
+
+## Where things live
+
+`index.html` carries the markup and the script, including the `CASES` array. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above.
+
+The stylesheet is linked relatively as `css/styles.css`. A leading slash would resolve to the site root and 404, which is what check 1 guards.
 
 ## Traps
 
