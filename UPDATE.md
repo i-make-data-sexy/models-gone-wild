@@ -89,12 +89,28 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` evasion only. |
 | `complexity` | Scatter x-axis, how involved the escape was as a technique. | `0` to `10`. An editorial judgment of ours. Score the method, never the motive. Nothing here should imply a lab or a model meant for this to happen, which is why the field is not called intent. |
 | `harm` | Scatter y-axis, how much damage the escape could do. | `0` to `10`. An editorial judgment of ours, not a figure from the reporting. |
-| `charge` | The one-sentence summary. | One sentence. |
+| `charge` | The one-sentence summary on the card. | One sentence, 130 to 170 characters. See the note below the table. |
 | `wantedFor` | The offense line. | Separate offenses with ` · `. |
 | `mo` | The modus operandi bullets. | Array of about three strings. |
 | `caution` | The red caution box. | The honest caveat, including what the model did not do. |
 | `escapedFrom` | The rotated ESCAPED stamp. | About 14 characters. The stamp is small. |
 | `lastSeen` | The poster footer. | About 20 characters, or the footer wraps to two lines. |
+
+### Why `charge` has a character range
+
+Every card on the timeline is the same height, and two separate things hold that true.
+
+The CSS floors `.card-charge` at four lines, so a charge that comes in short cannot shrink its card below the ones beside it. That end is handled and asks nothing of the writer.
+
+The other end is not automatic. A charge past roughly 177 characters wraps onto a fifth line at desktop width, and that card then stands taller than every other card on the page. No CSS can prevent that without truncating the sentence, so it is a writing constraint rather than a styling one.
+
+Stay between 130 and 170 characters and both ends are safe. Above 170 there is no margin left for a later reword. Below 130 the floor is carrying the card rather than the sentence, so the card shows dead space under the text.
+
+Count every charge before committing:
+
+```bash
+python3 scripts/check_charges.py
+```
 
 `escapedFrom` and `lastSeen` are a pair. The first is the sandbox or harness the model broke out of, and the second is where it actually ended up. Together they read as a from and to. Do not put the same value in both.
 
@@ -126,7 +142,7 @@ Suggestive rather than directive for anything diagnostic. The `caution` field in
 
 The quadrant labels on the scatter each name a kind of offender rather than an outcome. That rule is recorded in a comment above them. If a label is ever reworded, keep it an actor.
 
-The two tap prompts name what they produce, meaning "its rap sheet" and "the wanted poster". Keep them concrete.
+Nothing on the page tells the reader to tap anything. The controls say what they produce through their own tooltips, meaning "Wanted poster" on a card and "Open X's wanted poster" on a scatter point. Keep those concrete, and do not reintroduce a prose instruction to replace them.
 
 ## Checks before committing
 

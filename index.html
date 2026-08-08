@@ -250,7 +250,16 @@
     transition:border-color .13s,color .13s;
   }
   .filter-select:hover{border-color:var(--ink);color:var(--ink);}
-  .filter-select:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
+  /* No focus ring on the selects. A clicked select keeps focus until
+     something else takes it, so the old red outline sat parked on the
+     control long after the choice was made. Chrome matches
+     :focus-visible on a select even for a mouse click, so scoping it
+     that way did not help.
+
+     A chosen filter still shows its state through .is-active below,
+     which darkens the control and bolds its text, so the control is
+     not silent about being set. */
+  .filter-select:focus{outline:none;}
   /* A filter that is actually narrowing the list gets the ink border so
      the state is visible without reading the option text. */
   .filter-select.is-active{border-color:var(--ink);color:var(--ink);font-weight:600;}
@@ -346,7 +355,14 @@
        running underneath them. */
     padding-right:62px;
   }
-  .card-charge{font-size:12.5px;color:var(--ink-soft);line-height:1.45;margin:0;}
+  .card-charge{
+    font-size:12.5px;color:var(--ink-soft);line-height:1.45;margin:0;
+    /* A floor of four lines, so a charge that wraps short does not
+       shrink its card below the ones beside it. Set in em, so it
+       tracks the font size rather than a pixel guess. Only a floor:
+       narrow screens wrap past four lines and this stops binding. */
+    min-height:calc(4 * 1.45em);
+  }
   .class-badge{
     display:inline-block;margin-top:11px;padding:3px 9px;font-family:'Oswald',sans-serif;
     font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#f4ecd8;
@@ -445,11 +461,6 @@
 
   /* ---------- SCATTER ---------- */
   .scatter-wrap{margin:40px auto 0;max-width:760px;}
-  .scatter-head{
-    text-align:center;font-family:'Special Elite',monospace;font-size:14px;
-    color:var(--ink-soft);margin-bottom:6px;line-height:1.6;
-  }
-  .scatter-head b{color:var(--ink);}
   .scatter-svg{width:100%;height:auto;display:block;margin-top:10px;}
   .pt{cursor:pointer;}
   .pt circle{transition:r .13s, stroke-width .13s;}
@@ -734,11 +745,7 @@
 
     <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
       <div class="scatter-wrap">
-        <p class="scatter-head">
-          <b>Escape complexity</b> against <b>harm potential</b>.<br>
-          Bottom-left is where the house cats wander. Top-right earns the mugshot. Tap a point for the wanted poster.
-        </p>
-        <div id="scatter"></div>
+          <div id="scatter"></div>
       </div>
     </section>
   </div><!-- /.registry -->
@@ -1043,7 +1050,8 @@ function renderScatter(list){
     const cx=X(c.complexity), cy=Y(c.harm);
     const anchor = cx>W-150 ? 'end' : 'start';
     const txx = anchor==='end' ? cx-14 : cx+14;
-    return `<g class="pt" data-id="${c.id}" tabindex="0" role="button" aria-label="${c.alias}, open file">
+    return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
+      data-tip="Open ${c.alias}'s wanted poster" aria-label="Open ${c.alias}'s wanted poster">
       <circle cx="${cx}" cy="${cy}" r="11" fill="${colr[c.cls]}" stroke="#e6ddc6" stroke-width="2"/>
       <text x="${txx}" y="${cy+4}" text-anchor="${anchor}">${c.alias}</text>
     </g>`;
