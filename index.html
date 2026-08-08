@@ -13,10 +13,6 @@
      separate font rather than a filter. Subset to the single
      character with text=, so the download is under 1KB. -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@600&text=%F0%9F%A4%98&display=swap" rel="stylesheet">
-<!-- The fleuron, subset to the one character. Shipping the glyph is
-     what makes it safe to use: U+2766 is missing from a good number
-     of system fonts and would otherwise fall back to a blank box. -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2&text=%E2%9D%A6&display=swap" rel="stylesheet">
 <!-- html2canvas powers the "download poster" button. Served from our own
      server rather than a CDN so the feature can't break when an outside
      host does, and so no third-party script runs on annielytics.com.
@@ -194,13 +190,12 @@
      it than a full paragraph gap would put it. */
   .intro-cue{margin-top:14px;}
 
-  /* A single centred fleuron closing the masthead. The fallbacks
-     after the shipped subset are the system fonts that carry U+2766
-     on macOS and Windows. */
-  .flourish{
-    font-family:'Noto Sans Symbols 2','Apple Symbols','Segoe UI Symbol',serif;
-    font-size:30px;line-height:1;text-align:center;
-    color:var(--rule);opacity:.7;margin:34px 0 0;
+  /* Three stamp-red dots, the quietest divider that still reads as
+     deliberate. */
+  .flourish{display:flex;justify-content:center;gap:15px;margin:34px 0 0;}
+  .flourish span{
+    width:5px;height:5px;border-radius:50%;
+    background:var(--stamp-red);opacity:.7;
   }
 
   /* ---------- REGISTRY PANEL ----------
@@ -699,9 +694,11 @@
     </p>
     <p class="intro intro-cue">The icons on each card open the story that broke the case and the model's rap sheet.</p>
 
-    <!-- Printer's ornament closing the masthead, in place of the
-         double rule. A single fleuron, U+2766. -->
-    <p class="flourish" aria-hidden="true">&#10086;</p>
+    <!-- Three dots closing the masthead, in place of the double
+         rule. Drawn with CSS rather than typed, so the size, spacing,
+         and color are exact and nothing depends on a font carrying an
+         ornament character. -->
+    <div class="flourish" aria-hidden="true"><span></span><span></span><span></span></div>
   </header>
 
   <!-- Registry panel. The tabs switch the view and the selects narrow it,
