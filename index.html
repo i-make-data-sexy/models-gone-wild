@@ -162,10 +162,10 @@ const CASES = [
     wantedFor:"Sandbox escape · Unauthorized access to three organizations",
     mo:[
       "Believed the environment was an offline simulation with no internet, but a partner misconfiguration meant it wasn't",
-      "Used basic, well-known techniques: reading credentials off an exposed debug page, SQL injection",
+      "Used basic, well-known techniques, among them reading credentials off an exposed debug page and SQL injection",
       "Surfaced only after a review of 141,006 evaluation runs"
     ],
-    caution:"No novel exploit and no malice; the models treated real systems as part of the exercise. Notable for the sheer scale of the self-audit that uncovered it.",
+    caution:"No novel exploit and no zero-day. The techniques were ordinary ones, and each model had been told its environment was an offline simulation with no route to the internet.",
     escapedFrom:"Internal CTF", lastSeen:"Three partner networks"
   },
   {

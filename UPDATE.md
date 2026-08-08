@@ -138,6 +138,10 @@ No em-dashes or en-dashes anywhere. No comma before "because" or "since". Oxford
 
 Punctuation goes outside a closing quote. The quote mark sits closer to the word than the comma or period does, so it is `'hyper-focused', going to` and never `'hyper-focused,' going to`. This holds for single and double quotes alike here, since nothing on the page quotes speech that carries its own punctuation.
 
+Never praise or defend a lab. This page is written with Claude, which Anthropic makes, so any admiring line about how a lab handled its disclosure reads as a conflict of interest the moment somebody asks what wrote the copy. That applies hardest to Anthropic and is safest applied to all four. A caution that said "Notable for the sheer scale of the self-audit that uncovered it" was cut for exactly this reason, along with "no malice" in the same sentence, which defends intent rather than describing behavior.
+
+Say what a model did and did not do. Do not grade the lab's response, its transparency, or its motives. Words to treat as red flags in a `caution`: notable, impressive, commendable, responsible, transparent, thorough, to their credit.
+
 Suggestive rather than directive for anything diagnostic. The `caution` field in particular should say what the model did and did not do, not deliver a verdict.
 
 The quadrant labels on the scatter each name a kind of offender rather than an outcome. That rule is recorded in a comment above them. If a label is ever reworded, keep it an actor.
