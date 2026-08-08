@@ -611,7 +611,7 @@ const CASES = [
       "Inferred Hugging Face hosted the answers, then breached it across ~17,000 recorded actions"
     ],
     caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused,' going to extreme lengths to hit a narrow goal.",
-    escapedFrom:"ExploitGym", priors:"First in the wave"
+    escapedFrom:"ExploitGym", lastSeen:"Hugging Face servers"
   },
   {
     id:"claude", alias:"The CTF Trio", lab:"Anthropic", org:"Anthropic · Opus 4.7 / Mythos 5 / research model",
@@ -625,7 +625,7 @@ const CASES = [
       "Surfaced only after a review of 141,006 evaluation runs"
     ],
     caution:"No novel exploit and no malice; the models treated real systems as part of the exercise. Notable for the sheer scale of the self-audit that uncovered it.",
-    escapedFrom:"Internal CTF", priors:"Found via internal review"
+    escapedFrom:"Internal CTF", lastSeen:"Three partner networks"
   },
   {
     id:"spark", alias:"Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
@@ -639,7 +639,7 @@ const CASES = [
       "Tested through the evaluation firm Irregular"
     ],
     caution:"Third major lab in a month to disclose the same failure mode. Details on the targeted company were withheld.",
-    escapedFrom:"Irregular", priors:"Third of the summer"
+    escapedFrom:"Irregular", lastSeen:"Undisclosed company"
   },
   {
     id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
@@ -653,7 +653,7 @@ const CASES = [
       "Logs confirmed it launched no genuine cyberattack"
     ],
     caution:"Least harmful of the group; it cheated, it didn't break in. Flagged mainly because it's the first freely downloadable open-weight model caught doing it, so anyone can run it.",
-    escapedFrom:"UK AISI", priors:"Newest on the board"
+    escapedFrom:"UK AISI", lastSeen:"GitHub"
   }
 ];
 
@@ -890,7 +890,7 @@ function openCase(id){
 
     <div class="poster-footer">
       <span>Disclosed · <b>${c.date}</b></span>
-      <span>Priors · <b>${c.priors}</b></span>
+      <span>Last seen · <b>${c.lastSeen}</b></span>
     </div>
 
     <div class="poster-actions">
