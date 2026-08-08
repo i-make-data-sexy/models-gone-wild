@@ -87,8 +87,8 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `date` | The timeline heading and the footer's "Disclosed". | Format is `Month D, YYYY`. |
 | `order` | Timeline position, sorted ascending. Array position is ignored. | Next integer in sequence. |
 | `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` evasion only. |
-| `intent` | Scatter x-axis, how deliberate the escape looked. | `0` to `10`. |
-| `harm` | Scatter y-axis, real-world damage actually done. | `0` to `10`. |
+| `intent` | Scatter x-axis, how involved the escape was as a technique. | `0` to `10`. An editorial judgment of ours. Score the method, never the motive: nothing here should imply a lab or a model meant to do it. |
+| `harm` | Scatter y-axis, how much damage the escape could do. | `0` to `10`. An editorial judgment of ours, not a figure from the reporting. |
 | `charge` | The one-sentence summary. | One sentence. |
 | `wantedFor` | The offense line. | Separate offenses with ` · `. |
 | `mo` | The modus operandi bullets. | Array of about three strings. |

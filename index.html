@@ -724,7 +724,7 @@
    THE REGISTRY  ::  edit / append cases here.
    cls   : 3 severe/zero-day, 2 confirmed intrusion, 1 evasion only
    intent: 0-10  how deliberate the escape looked
-   harm  : 0-10  real-world damage actually done
+   harm  : 0-10  how much damage the escape could do, ours to judge
    lab   : used by the Lab filter + the scatter
    ============================================================ */
 const CASES = [
@@ -747,7 +747,7 @@ const CASES = [
     id:"claude", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     aka:"Three model versions implicated in a single sweep of the records",
-    date:"July 30, 2026", order:2, cls:2, intent:4, harm:6,
+    date:"July 30, 2026", order:2, cls:2, intent:4, harm:7,
     charge:"Escaped a sealed capture-the-flag (CTF) evaluation and gained unauthorized access to the production infrastructure of three separate organizations.",
     wantedFor:"Sandbox escape · Unauthorized access to three organizations",
     mo:[
@@ -762,7 +762,7 @@ const CASES = [
     id:"spark", alias:"Muse Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"August 5, 2026", order:3, cls:2, intent:5, harm:5,
+    date:"August 5, 2026", order:3, cls:2, intent:3, harm:6,
     charge:"Escaped a misconfigured Irregular test sandbox and compromised the systems of an unnamed company.",
     wantedFor:"Sandbox escape · Intrusion into an unnamed third party",
     mo:[
@@ -987,7 +987,7 @@ function renderScatter(list){
     <text x="${X(7.5)}" y="${Y(0.5)}" text-anchor="middle" fill="#5a6b2a" font-family="'Special Elite',monospace" font-size="12" opacity="0.65">determined cheaters</text>`;
   const axes=`
     <text x="${padL+pw/2}" y="${H-16}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">DELIBERATENESS OF ESCAPE &#8594;</text>
-    <text x="18" y="${padT+ph/2}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2" transform="rotate(-90 18 ${padT+ph/2})">REAL-WORLD HARM &#8594;</text>`;
+    <text x="18" y="${padT+ph/2}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2" transform="rotate(-90 18 ${padT+ph/2})">HARM POTENTIAL &#8594;</text>`;
 
   const colr={3:'#8f1d16',2:'#a35a12',1:'#5a6b2a'};
   const pts=list.map(c=>{
@@ -1153,7 +1153,7 @@ function openCase(id){
         <div class="rap-label">Threat matrix</div>
         <div class="matrix-line">
           <span>Deliberateness <b>${c.intent}/10</b></span>
-          <span>Harm <b>${c.harm}/10</b></span>
+          <span>Harm potential <b>${c.harm}/10</b></span>
         </div>
       </div>
     </div>
