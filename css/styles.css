@@ -446,7 +446,11 @@
   }
   .tip-metric:first-of-type{margin-top:0 !important;}
   .tip-row{font-size:11.5px;line-height:1.5;margin-bottom:2px !important;}
-  .tip-row b{color:#cfc9bd;font-weight:400;}
+  /* Score and Justification, colons included, carry the emphasis.
+     Special Elite ships one weight only, so this is the browser's
+     synthesised bold, which is why the color lifts to full paper
+     too: weight alone is a weak signal in a single-weight face. */
+  .tip-row b{color:var(--paper);font-weight:700;}
 
   /* Label style: the short action labels on the card icons. */
   .tip.tip-label{
