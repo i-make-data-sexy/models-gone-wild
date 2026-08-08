@@ -97,7 +97,7 @@
   }
 
   .nav-primary .menu a{
-    color:#fff;
+    color:antiquewhite;
     text-decoration:none;
     font-family:'Oswald',sans-serif;
     font-size:14px;
@@ -670,7 +670,7 @@
        stack. Do not change to 0; the items spread too far apart. */
     .nav-primary .menu li{margin-bottom:-40px;text-align:center;}
 
-    .nav-primary .menu a{color:#fff;padding:15px;display:block;text-align:left;}
+    .nav-primary .menu a{color:antiquewhite;padding:15px;display:block;text-align:left;}
 
     .menu-toggle{display:block;width:100%;margin-bottom:0;}
 
