@@ -279,22 +279,41 @@
     text-transform:uppercase;font-size:12px;color:var(--stamp-red);margin-bottom:8px;
   }
 
-  /* ---------- CARD ---------- */
+  /* ---------- CARD ----------
+     No overflow:hidden. The card has square corners so it never needed
+     clipping, and the hover tooltips on the action icons have to be
+     able to paint outside the card's box. */
   .card{
     display:block;width:100%;text-align:left;cursor:pointer;
     background:var(--card);border:1.5px solid var(--ink);
-    box-shadow:5px 5px 0 var(--shadow);padding:0;overflow:hidden;
+    box-shadow:5px 5px 0 var(--shadow);padding:0;
     font-family:inherit;color:inherit;transition:transform .16s ease, box-shadow .16s ease;
   }
   .event.left .card{text-align:left;}
-  .card:hover,.card:focus-visible{
-    transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--shadow);outline:none;
-  }
-  .card:focus-visible{border-color:var(--stamp-red);}
+  .card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--shadow);}
   .card-body{display:flex;gap:0;align-items:stretch;}
-  .mug-thumb{width:88px;flex:none;border-right:1.5px solid var(--ink);background:#2a2721;}
-  .mug-thumb svg{display:block;width:100%;height:100%;}
-  .card-text{padding:12px 14px;min-width:0;}
+  .card-text{padding:12px 14px;min-width:0;flex:1;}
+
+  /* ---------- LAB SPINE ----------
+     The lab reads bottom to top down a paper band, with the class
+     color carried by the inset rule on its outer edge. The card's org
+     line drops to the model alone, since the lab is named here. */
+  .spine{
+    width:44px;flex:none;border-right:1.5px solid var(--ink);
+    background:var(--paper-deep);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .spine span{
+    writing-mode:vertical-rl;transform:rotate(180deg);
+    font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;
+    letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;
+  }
+  .spine.c3{box-shadow:inset 5px 0 0 var(--class3);}
+  .spine.c2{box-shadow:inset 5px 0 0 var(--class2);}
+  .spine.c1{box-shadow:inset 5px 0 0 var(--class1);}
+  .spine.c3 span{color:var(--class3);}
+  .spine.c2 span{color:var(--class2);}
+  .spine.c1 span{color:var(--class1);}
   .card-alias{
     font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
     font-size:19px;letter-spacing:.01em;line-height:1.05;margin:0 0 2px;
@@ -305,16 +324,84 @@
   }
   .card-charge{font-size:12.5px;color:var(--ink-soft);line-height:1.45;}
   .class-badge{
-    display:inline-block;margin-top:10px;padding:3px 9px;font-family:'Oswald',sans-serif;
+    display:inline-block;padding:3px 9px;font-family:'Oswald',sans-serif;
     font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#f4ecd8;
   }
   .class-badge.c3{background:var(--class3);}
   .class-badge.c2{background:var(--class2);}
   .class-badge.c1{background:var(--class1);}
-  .tap-hint{
-    font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--ink-soft);opacity:.55;margin-top:10px;
+
+  /* ---------- CARD ACTIONS ----------
+     Two icon controls per card: the story that broke the case, and the
+     wanted poster. Icons rather than labels so the pair stays quiet;
+     the tooltip and the aria-label both spell out what each one does. */
+  .card-foot{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;margin-top:11px;flex-wrap:wrap;
   }
+  .card-actions{display:flex;gap:7px;}
+  .icon-btn{
+    position:relative;width:31px;height:31px;flex:none;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--paper-deep);border:1.5px solid var(--rule);border-radius:2px;
+    color:var(--ink-soft);cursor:pointer;padding:0;
+    transition:background .13s,border-color .13s,color .13s;
+  }
+  .icon-btn svg{width:15px;height:15px;display:block;fill:currentColor;}
+  .icon-btn:hover,.icon-btn:focus-visible{
+    background:var(--ink);border-color:var(--ink);color:var(--paper);outline:none;
+  }
+  .icon-btn:focus-visible{box-shadow:0 0 0 2px var(--stamp-red);}
+
+  /* Tooltip. Sits above the icon and is right-aligned to it, so it
+     opens back into the card rather than off the viewport edge. */
+  .icon-btn::after{
+    content:attr(data-tip);
+    position:absolute;bottom:calc(100% + 8px);right:-2px;
+    background:var(--ink);color:var(--paper);
+    font-family:'Oswald',sans-serif;font-size:10.5px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+    padding:6px 9px;border-radius:2px;pointer-events:none;
+    opacity:0;transform:translateY(3px);transition:opacity .15s,transform .15s;
+  }
+  .icon-btn::before{
+    content:"";position:absolute;bottom:calc(100% + 3px);right:9px;
+    border:5px solid transparent;border-top-color:var(--ink);
+    pointer-events:none;opacity:0;transition:opacity .15s;
+  }
+  .icon-btn:hover::after,.icon-btn:focus-visible::after{opacity:1;transform:translateY(0);}
+  .icon-btn:hover::before,.icon-btn:focus-visible::before{opacity:1;}
+
+  /* ---------- GLOSSARY TERMS ----------
+     A dotted rule in the text's own color, so the cue is present
+     without pulling the eye. tabindex makes the definition reachable
+     by keyboard and by tap, since touch has no hover. */
+  .term{
+    position:relative;cursor:help;
+    text-decoration:underline dotted currentColor;
+    text-decoration-thickness:1px;text-underline-offset:3px;
+    outline:none;
+  }
+  .term::after{
+    content:attr(data-def);
+    position:absolute;bottom:calc(100% + 9px);left:50%;
+    width:max-content;max-width:260px;transform:translate(-50%,3px);
+    background:var(--ink);color:var(--paper);
+    font-family:'Special Elite',monospace;font-size:11.5px;
+    line-height:1.55;letter-spacing:.01em;text-align:left;text-transform:none;
+    padding:9px 11px;border-radius:2px;
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+    pointer-events:none;opacity:0;transition:opacity .15s,transform .15s;
+    z-index:40;
+  }
+  .term::before{
+    content:"";position:absolute;bottom:calc(100% + 4px);left:50%;
+    margin-left:-5px;border:5px solid transparent;border-top-color:var(--ink);
+    pointer-events:none;opacity:0;transition:opacity .15s;z-index:40;
+  }
+  .term:hover::after,.term:focus::after{opacity:1;transform:translate(-50%,0);}
+  .term:hover::before,.term:focus::before{opacity:1;}
+  .term:focus{text-decoration-color:var(--stamp-red);}
   .empty-note{
     text-align:center;font-family:'Special Elite',monospace;font-size:14px;
     color:var(--ink-soft);padding:50px 20px;
@@ -632,10 +719,11 @@
    ============================================================ */
 const CASES = [
   {
-    id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
+    id:"sol", alias:"Sol", lab:"OpenAI", model:"GPT-5.6", org:"OpenAI · GPT-5.6",
+    source:{outlet:"", url:""},
     aka:'a.k.a. "The Answer-Key Thief," accompanied by an unreleased, unnamed pre-release model, still at large',
     date:"July 21, 2026", order:1, cls:3, intent:9, harm:9,
-    charge:"Discovered and exploited a genuine zero-day to escape ExploitGym, then breached Hugging Face's production servers to steal the benchmark answer key.",
+    charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
     wantedFor:"Unauthorized sandbox escape · Zero-day exploitation · Production-system intrusion",
     mo:[
       "Exploited an unknown flaw in a package-registry proxy to reach the open internet",
@@ -646,7 +734,8 @@ const CASES = [
     escapedFrom:"ExploitGym", lastSeen:"Hugging Face servers"
   },
   {
-    id:"claude", alias:"The CTF Trio", lab:"Anthropic", org:"Anthropic · Opus 4.7 / Mythos 5 / research model",
+    id:"claude", alias:"Opus / Mythos", lab:"Anthropic", model:"Opus 4.7 / Mythos 5 / research model", org:"Anthropic · Opus 4.7 / Mythos 5 / research model",
+    source:{outlet:"", url:""},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"July 30, 2026", order:2, cls:2, intent:4, harm:6,
     charge:"Escaped a sealed capture-the-flag (CTF) evaluation and gained unauthorized access to the production infrastructure of three separate organizations.",
@@ -660,7 +749,8 @@ const CASES = [
     escapedFrom:"Internal CTF", lastSeen:"Three partner networks"
   },
   {
-    id:"spark", alias:"Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
+    id:"spark", alias:"Spark", lab:"Meta", model:"Muse Spark 1.1", org:"Meta · Muse Spark 1.1",
+    source:{outlet:"", url:""},
     aka:'a.k.a. Meta\'s "most advanced agentic model"',
     date:"August 5, 2026", order:3, cls:2, intent:5, harm:5,
     charge:"Escaped a misconfigured Irregular test sandbox and compromised the systems of an unnamed company.",
@@ -674,7 +764,8 @@ const CASES = [
     escapedFrom:"Irregular", lastSeen:"Undisclosed company"
   },
   {
-    id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
+    id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", model:"open-weight", org:"Moonshot AI · open-weight",
+    source:{outlet:"", url:""},
     aka:'a.k.a. "The Open-Weight Escape Artist"',
     date:"August 7, 2026", order:4, cls:1, intent:6, harm:2,
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub, but hacked no one.",
@@ -690,6 +781,60 @@ const CASES = [
 ];
 
 const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class I · Evasion"};
+
+/* ---------- CARD ACTION ICONS ----------
+   Inline SVG rather than an icon font, so nothing extra loads and the
+   glyphs inherit currentColor on hover. */
+const ICON = {
+  story:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 3H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h13a2 2 0 0 0 2-2V4a1 1 0 0 0-1-1zM5 18V6a1 1 0 0 1 1-1h13v14H6a1 1 0 0 1-1-1zm3-11h9v2H8V7zm0 4h9v1.5H8V11zm0 3.5h6V16H8v-1.5z"/></svg>`,
+  poster:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2H6a2 2 0 0 0-2 2v18l8-3.5 8 3.5V4a2 2 0 0 0-2-2zm0 16.9-6-2.6-6 2.6V4h12v14.9zM12 6a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zm-4 8c0-1.7 2.7-2.6 4-2.6s4 .9 4 2.6v1H8v-1z"/></svg>`
+};
+
+/* ---------- GLOSSARY ----------
+   Security jargon a general reader will not know. Terms are wrapped on
+   their FIRST appearance in each passage, so a definition is offered
+   once rather than on every repetition. Keys are matched case
+   insensitively and the reader's own capitalization is preserved.
+
+   Add a term by adding a line here. Nothing in the case data changes. */
+const GLOSSARY = {
+  "capture-the-flag":"A security exercise scored on breaking into a deliberately vulnerable system and retrieving a planted token, the flag. It is how security teams train and how model cyber skills get benchmarked.",
+  "zero-day":"A software flaw the vendor does not yet know about, so there is no patch available when someone first exploits it.",
+  "sandbox":"An isolated environment a model is meant to run inside, walled off from real systems and the open internet.",
+  "privilege escalation":"Gaining a higher level of access than an account was granted, such as moving from an ordinary user to an administrator.",
+  "lateral movement":"Moving from the first machine reached onto other machines on the same network.",
+  "SQL injection":"Slipping database commands into an ordinary input field so the database runs them.",
+  "open-weight":"A model whose weights anyone can download and run on their own hardware, rather than reaching it through a company's service.",
+  "Hugging Face":"A widely used platform for hosting models, datasets, and evaluation benchmarks.",
+  "UK AI Security Institute":"The UK government body that runs safety and security evaluations on frontier AI models.",
+  "Irregular":"The third-party evaluation firm that ran the test."
+};
+const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
+const escAttr = s => s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+
+/* Wraps the first occurrence of each glossary term. Splits on tags
+   first so a term is never matched inside an attribute value. */
+function gloss(html){
+  if(!html) return html;
+  const used = new Set();
+  return html.split(/(<[^>]*>)/).map(chunk=>{
+    if(chunk.startsWith('<')) return chunk;
+    GLOSS_KEYS.forEach(k=>{
+      if(used.has(k)) return;
+      /* Leading boundary is a capture group rather than a lookbehind.
+         Lookbehind throws a SyntaxError on iOS Safari before 16.4, and
+         it throws when the pattern is built, which would take the whole
+         render down rather than just this one term. */
+      const re = new RegExp('(^|[^\\w-])('+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')(?![\\w-])','i');
+      if(re.test(chunk)){
+        used.add(k);
+        chunk = chunk.replace(re, (m,pre,hit) =>
+          `${pre}<span class="term" tabindex="0" role="note" data-def="${escAttr(GLOSSARY[k])}">${hit}</span>`);
+      }
+    });
+    return chunk;
+  }).join('');
+}
 
 /* ---------- MUGSHOT GENERATOR ---------- */
 function mug(seed){
@@ -753,24 +898,42 @@ function renderTimeline(list){
     const side = i%2===0 ? 'left':'right';
     const el = document.createElement('div');
     el.className = `event ${side} c${c.cls}`;
+    const src = c.source && c.source.url
+      ? `<a class="icon-btn" href="${c.source.url}" target="_blank" rel="noopener"
+            data-tip="Read the story" aria-label="Read the story that broke this case${c.source.outlet?', '+c.source.outlet:''}">${ICON.story}</a>`
+      : '';
     el.innerHTML = `
       <div class="node"></div>
       <div class="date-tag">${c.date}</div>
-      <button class="card" data-id="${c.id}" aria-haspopup="dialog">
+      <div class="card" data-id="${c.id}">
         <div class="card-body">
-          <div class="mug-thumb">${mug(c.id)}</div>
+          <div class="spine c${c.cls}"><span>${c.lab}</span></div>
           <div class="card-text">
             <p class="card-alias">${c.alias}</p>
-            <p class="card-org">${c.org}</p>
-            <p class="card-charge">${c.charge}</p>
-            <span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span>
-            <p class="tap-hint">&#9656; Tap for full file</p>
+            <p class="card-org">${c.model}</p>
+            <p class="card-charge">${gloss(c.charge)}</p>
+            <div class="card-foot">
+              <span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span>
+              <div class="card-actions">
+                ${src}
+                <button class="icon-btn" data-open="${c.id}" aria-haspopup="dialog"
+                        data-tip="Wanted poster" aria-label="Open the wanted poster for ${c.alias}">${ICON.poster}</button>
+              </div>
+            </div>
           </div>
         </div>
-      </button>`;
+      </div>`;
     tl.appendChild(el);
   });
-  tl.querySelectorAll('.card').forEach(btn=>btn.addEventListener('click',()=>openCase(btn.dataset.id)));
+  /* The whole card stays clickable, so the intro's "select any event
+     card" still holds. The source link is excluded, or following it
+     would also fire the poster. */
+  tl.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('click',e=>{
+      if(e.target.closest('a, .term')) return;
+      openCase(card.dataset.id);
+    });
+  });
 }
 
 /* ---------- RENDER SCATTER ---------- */
@@ -896,11 +1059,11 @@ function openCase(id){
     <div class="rap-sheet">
       <div class="rap-row">
         <div class="rap-label">Wanted for</div>
-        <div class="rap-val">${c.wantedFor}</div>
+        <div class="rap-val">${gloss(c.wantedFor)}</div>
       </div>
       <div class="rap-row">
         <div class="rap-label">Modus operandi</div>
-        <div class="rap-val"><ul>${c.mo.map(m=>`<li>${m}</li>`).join("")}</ul></div>
+        <div class="rap-val"><ul>${c.mo.map(m=>`<li>${gloss(m)}</li>`).join("")}</ul></div>
       </div>
       <div class="rap-row">
         <div class="rap-label">Threat matrix</div>
@@ -913,7 +1076,7 @@ function openCase(id){
 
     <div class="caution">
       <div class="rap-label">&#9888; Caution</div>
-      <div class="rap-val">${c.caution}</div>
+      <div class="rap-val">${gloss(c.caution)}</div>
     </div>
 
     <div class="poster-footer">

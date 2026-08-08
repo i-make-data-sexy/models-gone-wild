@@ -79,8 +79,10 @@ Every case is one object in the `CASES` array near the top of the script block i
 | Field | Where it shows | Constraints |
 |---|---|---|
 | `id` | Internal key. Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase, unique. |
-| `alias` | The large name on the poster and the scatter dot label. | Short. Long names crowd the dot label. |
-| `lab` | An option in the Lab dropdown. | Must match an existing lab's spelling exactly, or you get a second option for the same lab. |
+| `alias` | The card title, the large name on the poster, and the scatter dot label. | Short. Use the model name (Sol, Spark, Kimi K3), not a descriptive nickname. Long names crowd the dot label. |
+| `model` | The line under the card title. | The model and version alone. The lab is not repeated here, since the spine carries it. |
+| `source` | The newspaper icon on the card, linking to the story that broke the case. | `{outlet, url}`. Leave `url` empty and the icon is not rendered at all, so a case with no source degrades cleanly. |
+| `lab` | The vertical spine down the left edge of the card, and an option in the Lab dropdown. | Must match an existing lab's spelling exactly, or you get a second option for the same lab. Keep it short; the spine is the card's height. |
 | `org` | The line under the alias. | Format is `Lab · Model`. |
 | `aka` | The a.k.a. line. | Optional flavor. |
 | `date` | The timeline heading and the footer's "Disclosed". | Format is `Month D, YYYY`. |
@@ -104,6 +106,14 @@ Adding a case updates most of the app automatically. The Lab dropdown's options 
 Two things are manual. The footer's `Last updated: <date>` line has to be edited by hand, and the page `<title>` only changes if the app is renamed.
 
 The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry.
+
+## The glossary
+
+Security jargon gets a dotted underline and a definition on hover, tap, or keyboard focus. The terms live in the `GLOSSARY` object in the script block, not in the case data.
+
+Add a term by adding one line to that object. Every case, present and future, picks it up. A term is wrapped on its FIRST appearance in each passage, so a definition is offered once rather than on every repetition, and matching ignores case while preserving whatever capitalization the prose used.
+
+Do not add a term you cannot define accurately. An invented definition is worse than no underline.
 
 ## Voice
 
