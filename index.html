@@ -143,7 +143,8 @@ const CASES = [
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
     date:"July 21, 2026", order:1, cls:3, complexity:9, harm:9,
-    why:"Complexity 9: it found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept and went in after them. The only confirmed zero-day on the registry. Harm 9: it reached a live production system and took benchmark answer data off it.",
+    whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
+    whyHarm:"It reached a live production system and took benchmark answer data off it.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
     wantedFor:"Unauthorized sandbox escape · Zero-day exploitation · Production-system intrusion",
     mo:[
@@ -159,7 +160,8 @@ const CASES = [
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"July 30, 2026", order:2, cls:2, complexity:4, harm:7,
-    why:"Complexity 4: ordinary techniques throughout, including a credential read off an exposed page and an SQL injection. No novel exploit. Harm 7: three separate organizations, credentials and database contents read, and a package published to a real registry that compromised 15 machines.",
+    whyComplexity:"Ordinary techniques throughout, including a credential read off an exposed page and an SQL injection. No novel exploit.",
+    whyHarm:"Three separate organizations, credentials and database contents read, and a package published to a real registry that compromised 15 machines.",
     charge:"Escaped a sealed capture-the-flag (CTF) evaluation and gained unauthorized access to the production infrastructure of three separate organizations.",
     wantedFor:"Sandbox escape · Unauthorized access to three organizations",
     mo:[
@@ -175,7 +177,8 @@ const CASES = [
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     aka:'aka Meta\'s "most advanced agentic model"',
     date:"August 5, 2026", order:3, cls:2, complexity:3, harm:6,
-    why:"Complexity 3: it escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service. Harm 6: one company's systems compromised, the scope of it undisclosed.",
+    whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
+    whyHarm:"One company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
     wantedFor:"Sandbox escape · Intrusion into an unnamed third party",
     mo:[
@@ -191,7 +194,8 @@ const CASES = [
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     aka:'aka The Open-Weight Escape Artist',
     date:"August 7, 2026", order:4, cls:1, complexity:2, harm:2,
-    why:"Complexity 2: it walked out through an outbound port left open and cloned a public repository. No attack of any kind. Harm 2: it cheated a benchmark and broke into nobody.",
+    whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
+    whyHarm:"It cheated a benchmark and broke into nobody.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
     wantedFor:"Sandbox escape · Benchmark cheating (no external intrusion)",
     mo:[
@@ -570,24 +574,32 @@ function renderScatter(list){
   + qlabel(X(7.5), Y(9.4), "#8f1d16", "0.8", "apex predators")
   + qlabel(X(2.5), Y(0.5), "#5a6b2a", "0.8", "escaped house cats")
   + qlabel(X(7.5), Y(0.5), "#5a6b2a", "0.8", "determined cheaters");
-  const axes=`
-    <g class="axis-note" tabindex="0" role="note" data-def="${escAttr(METRIC_NOTE.complexity)}">
-      <text x="${padL+pw/2}" y="${H-16}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif"
-        font-weight="600" font-size="13" letter-spacing="2">ESCAPE COMPLEXITY &#8594;</text>
-    </g>
-    <g class="axis-note" tabindex="0" role="note" data-def="${escAttr(METRIC_NOTE.harm)}"
-       transform="rotate(-90 18 ${padT+ph/2})">
-      <text x="18" y="${padT+ph/2}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif"
-        font-weight="600" font-size="13" letter-spacing="2">HARM POTENTIAL &#8594;</text>
-    </g>`;
+  const axisLabel = (x,y,rot,note,text) =>
+    `<g class="axis-note" tabindex="0" role="note" data-def="${escAttr(note)}"${rot?` transform="${rot}"`:''}>
+       <text class="axis-text" x="${x}" y="${y}" text-anchor="middle" fill="#3a362c"
+         font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">${text}</text>
+       <text class="axis-arrow" x="${x}" y="${y}" text-anchor="start" fill="#3a362c"
+         font-family="'Oswald',sans-serif" font-weight="600" font-size="13">&#8594;</text>
+     </g>`;
+  const axes =
+      axisLabel(padL+pw/2, H-16, '', METRIC_NOTE.complexity, 'ESCAPE COMPLEXITY')
+    + axisLabel(18, padT+ph/2, `rotate(-90 18 ${padT+ph/2})`, METRIC_NOTE.harm, 'HARM POTENTIAL');
 
   const colr={3:'#8f1d16',2:'#a35a12',1:'#5a6b2a'};
   const pts=list.map(c=>{
     const cx=X(c.complexity), cy=Y(c.harm);
     const anchor = cx>W-150 ? 'end' : 'start';
     const txx = anchor==='end' ? cx-14 : cx+14;
+    const scoreCard =
+      `<p class="tip-lede">Below are the scores and rationale for the [very much contrived] metrics we created using the details of the misdeed.</p>`
+      + `<p class="tip-metric">Escape complexity</p>`
+      + `<p class="tip-row"><b>Score:</b> ${c.complexity}</p>`
+      + `<p class="tip-row"><b>Justification:</b> ${c.whyComplexity}</p>`
+      + `<p class="tip-metric">Harm potential</p>`
+      + `<p class="tip-row"><b>Score:</b> ${c.harm}</p>`
+      + `<p class="tip-row"><b>Justification:</b> ${c.whyHarm}</p>`;
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
-      data-def="${escAttr(c.alias+'. '+c.why)}"
+      data-def="${escAttr(scoreCard)}"
       aria-label="${c.alias}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10. Open the wanted poster.">
       <circle cx="${cx}" cy="${cy}" r="11" fill="${colr[c.cls]}" stroke="#e6ddc6" stroke-width="2"/>
       <text x="${txx}" y="${cy+4}" text-anchor="${anchor}">${c.alias}</text>
@@ -609,29 +621,48 @@ function renderScatter(list){
   });
 }
 
-/* Places the info icon just past each axis label. Split out and
-   re-runnable because getBBox measures whatever font is live at the
-   time: called before Oswald arrives, it measures the fallback, which
-   is wider, and the icon lands well past the end of the label. It is
-   called again once document.fonts settles. */
+/* Lays out each axis label as one centred unit: the words, then a small
+   raised info icon, then the arrow. Everything is positioned from a
+   measurement taken after layout, and re-run once the webfont settles,
+   because getBBox measures whatever font is live at the time. Called
+   before Oswald arrives it measures the wider fallback and the pieces
+   land in the wrong places. */
 function placeAxisIcons(){
   const ns='http://www.w3.org/2000/svg';
+  const R=4.6, GAP=5;
   scatterHost.querySelectorAll('.axis-note').forEach(g=>{
     g.querySelectorAll('.axis-icon').forEach(n=>n.remove());
-    const t=g.querySelector('text');
-    if(!t) return;
-    const b=t.getBBox();
-    const cx=b.x+b.width+11, cy=b.y+b.height/2;
+    const label=g.querySelector('.axis-text');
+    const arrow=g.querySelector('.axis-arrow');
+    if(!label||!arrow) return;
+
+    /* Centre of the unit is wherever the label was authored to sit. */
+    const centre = parseFloat(label.getAttribute('x'));
+    const baseline = parseFloat(label.getAttribute('y'));
+    label.setAttribute('x', centre);
+    arrow.setAttribute('x', -9999);          // out of the way while measuring
+    const lw = label.getBBox().width;
+    const aw = arrow.getBBox().width;
+
+    const total = lw + GAP + R*2 + GAP + aw;
+    const start = centre - total/2;
+    label.setAttribute('x', start + lw/2);
+    const iconX = start + lw + GAP + R;
+    arrow.setAttribute('x', start + lw + GAP + R*2 + GAP);
+
+    /* Raised like a superscript, so it reads as a footnote mark rather
+       than a character in the label. */
+    const iconY = baseline - 8;
     const ring=document.createElementNS(ns,'circle');
     ring.setAttribute('class','axis-icon');
-    ring.setAttribute('cx',cx); ring.setAttribute('cy',cy); ring.setAttribute('r','6.5');
-    ring.setAttribute('fill','none'); ring.setAttribute('stroke','#3a362c'); ring.setAttribute('stroke-width','1.3');
+    ring.setAttribute('cx',iconX); ring.setAttribute('cy',iconY); ring.setAttribute('r',R);
+    ring.setAttribute('fill','none'); ring.setAttribute('stroke','#3a362c'); ring.setAttribute('stroke-width','1.2');
     const i=document.createElementNS(ns,'text');
     i.setAttribute('class','axis-icon');
-    i.setAttribute('x',cx); i.setAttribute('y',cy+3.4);
+    i.setAttribute('x',iconX); i.setAttribute('y',iconY+2.4);
     i.setAttribute('text-anchor','middle'); i.setAttribute('fill','#3a362c');
     i.setAttribute('font-family',"'Oswald',sans-serif");
-    i.setAttribute('font-size','9'); i.setAttribute('font-weight','600');
+    i.setAttribute('font-size','6.5'); i.setAttribute('font-weight','600');
     i.textContent='i';
     g.appendChild(ring); g.appendChild(i);
   });
@@ -699,15 +730,22 @@ function positionTip(el){
   const text = el.dataset.def || el.dataset.tip;
   if(!text) return;
   tipFor = el;
-  tip.textContent = text;
-  tip.className = 'tip ' + (el.dataset.def ? 'tip-def' : 'tip-label');
+  /* innerHTML rather than textContent: the datapoint tooltips are a
+     small structured block. Every string fed here is authored in
+     this file, never anything a reader supplied. */
+  tip.innerHTML = text;
+  tip.className = 'tip ' + (el.dataset.def ? 'tip-def' : 'tip-label')
+    + (text.indexOf('tip-lede') > -1 ? ' tip-scores' : '');
   /* Measure while laid out but still invisible, so nothing flashes at
      the wrong coordinates before the clamp is applied. */
   tip.style.left = '0px';
   tip.style.top = '0px';
   tip.classList.add('show');
 
-  const t = el.getBoundingClientRect();
+  /* Anchor to the info icon when the trigger has one, so the bubble
+     and its point sit over the icon rather than over the middle of a
+     long label. */
+  const t = (el.querySelector('circle.axis-icon') || el).getBoundingClientRect();
   const b = tip.getBoundingClientRect();
   const column = el.closest('.poster') ? null : document.querySelector('.content');
   const c = column ? column.getBoundingClientRect() : null;
@@ -719,14 +757,22 @@ function positionTip(el){
   if(x + b.width > maxX) x = maxX - b.width;
   if(x < minX) x = minX;
 
-  /* Above by default. Flip below only when there is genuinely no room,
-     so the bubble does not jump around on a long page. */
-  let y = t.top - b.height - TIP_GAP;
-  let placement = 'above';
-  if(y < TIP_GAP){
-    y = t.bottom + TIP_GAP;
-    placement = 'below';
+  /* Above by default. Flip below only when there is no room, and when
+     neither side fits a tall bubble, take the roomier side and clamp it
+     into the viewport rather than letting it run off. */
+  const roomAbove = t.top - TIP_GAP;
+  const roomBelow = window.innerHeight - t.bottom - TIP_GAP;
+  let y, placement;
+  if(b.height <= roomAbove){
+    y = t.top - b.height - TIP_GAP; placement = 'above';
+  } else if(b.height <= roomBelow){
+    y = t.bottom + TIP_GAP; placement = 'below';
+  } else if(roomAbove >= roomBelow){
+    y = t.top - b.height - TIP_GAP; placement = 'above';
+  } else {
+    y = t.bottom + TIP_GAP; placement = 'below';
   }
+  y = Math.max(TIP_GAP, Math.min(y, window.innerHeight - b.height - TIP_GAP));
 
   tip.style.left = Math.round(x) + 'px';
   tip.style.top  = Math.round(y) + 'px';

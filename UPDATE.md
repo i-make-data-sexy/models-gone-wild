@@ -89,7 +89,8 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` evasion only. |
 | `complexity` | Scatter x-axis, how involved the escape was as a technique. | `0` to `10`. An editorial judgment of ours. Score the method, never the motive. Nothing here should imply a lab or a model meant for this to happen, which is why the field is not called intent. |
 | `harm` | Scatter y-axis, how much damage the escape could do. | `0` to `10`. An editorial judgment of ours, not a figure from the reporting. |
-| `why` | The datapoint tooltip on the Threat Matrix. | REQUIRED. Justifies both scores in the form `Complexity N: reason. Harm N: reason.` The plot looks like measured data and is not, so every point has to be able to explain itself. |
+| `whyComplexity` | The Escape complexity justification in the datapoint tooltip. | REQUIRED. One or two sentences on why that score. |
+| `whyHarm` | The Harm potential justification in the datapoint tooltip. | REQUIRED. One or two sentences on why that score. The plot looks like measured data and is not, so every point has to explain itself. |
 | `charge` | The one-sentence summary on the card. | One sentence, 130 to 170 characters. See the note below the table. |
 | `wantedFor` | The offense line. | Separate offenses with ` · `. |
 | `mo` | The modus operandi bullets. | Array of about three strings. |
