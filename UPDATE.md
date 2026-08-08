@@ -1,0 +1,208 @@
+# UPDATE.md for Models Gone Wild
+
+How to change the app after it is live. The companion to `DEPLOY.md`, which covers the first deploy and the nginx setup. Read that one only if the server config needs to change, which a content update never does.
+
+Claude Code: read this entire file before editing. Never develop on main. Always branch. Propose before writing when the task involves facts or editorial judgment.
+
+## The prompts
+
+Paste one of these into a fresh Claude Code session opened in this repo. Fill in the bracketed parts and delete the rest.
+
+### Adding a case
+
+The most common update. This is the one to reach for when another model escapes.
+
+```
+Add a case to Models Gone Wild, following UPDATE.md in this repo exactly.
+
+Working dir: ~/Dropbox/Annielytics/Code/Python/Models Gone Wild
+
+New case:
+  Model or alias:  [e.g. Sol, or the model name if there is no nickname yet]
+  Lab:             [e.g. OpenAI]
+  Disclosed:       [e.g. August 12, 2026]
+  What happened:   [paste the reporting, a link, or your own notes]
+
+Read UPDATE.md for the field schema, the length limits, and the voice rules.
+Branch off up-to-date main first. Then propose the complete filled-in case
+object, including your suggested cls, intent, and harm with the reasoning for
+each, and STOP for my approval before writing anything.
+
+Do not invent facts. Every field has to trace to what I gave you. Flag
+anything you cannot source rather than filling it in plausibly.
+
+After I approve: make the edit, run the checks in UPDATE.md, update the
+"Data current to" line in the footer, commit, push, and deploy. Give me the
+live URL when it is done.
+```
+
+### Changing copy
+
+For rewording anything the reader sees, including a case's charge, the masthead, or a label.
+
+```
+Change some copy in Models Gone Wild, following UPDATE.md in this repo.
+
+Working dir: ~/Dropbox/Annielytics/Code/Python/Models Gone Wild
+
+Change:
+  [quote the current text] -> [what it should say]
+
+Branch off up-to-date main. Check whether the old wording appears anywhere
+else, since a phrase in one place is often referenced in another, and tell me
+if it does. Run the checks in UPDATE.md, commit, push, and deploy.
+```
+
+### Changing design or behavior
+
+For layout, color, the scatter, the poster, or anything structural.
+
+```
+Make a design change to Models Gone Wild, following UPDATE.md in this repo.
+
+Working dir: ~/Dropbox/Annielytics/Code/Python/Models Gone Wild
+
+Change:
+  [describe what should look or behave differently]
+
+Branch off up-to-date main. Everything lives in index.html, so tell me what
+you plan to touch before you touch it. Watch for the traps listed in
+UPDATE.md, especially relative paths and the poster overlay's stacking order.
+Run the checks, show me a local preview, and STOP for my sign-off before
+deploying.
+```
+
+## The case schema
+
+Every case is one object in the `CASES` array near the top of the script block in `index.html`. There is a comment there marking where to append.
+
+| Field | Where it shows | Constraints |
+|---|---|---|
+| `id` | Internal key. Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase, unique. |
+| `alias` | The large name on the poster and the scatter dot label. | Short. Long names crowd the dot label. |
+| `lab` | The Lab filter chip. | Must match an existing lab's spelling exactly, or you get a second chip for the same lab. |
+| `org` | The line under the alias. | Format is `Lab · Model`. |
+| `aka` | The a.k.a. line. | Optional flavor. |
+| `date` | The timeline heading and the footer's "Disclosed". | Format is `Month D, YYYY`. |
+| `order` | Timeline position, sorted ascending. Array position is ignored. | Next integer in sequence. |
+| `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` evasion only. |
+| `intent` | Scatter x-axis, how deliberate the escape looked. | `0` to `10`. |
+| `harm` | Scatter y-axis, real-world damage actually done. | `0` to `10`. |
+| `charge` | The one-sentence summary. | One sentence. |
+| `wantedFor` | The offense line. | Separate offenses with ` · `. |
+| `mo` | The modus operandi bullets. | Array of about three strings. |
+| `caution` | The red caution box. | The honest caveat, including what the model did not do. |
+| `escapedFrom` | The rotated ESCAPED stamp. | About 14 characters. The stamp is small. |
+| `lastSeen` | The poster footer. | About 20 characters, or the footer wraps to two lines. |
+
+`escapedFrom` and `lastSeen` are a pair. The first is the sandbox or harness the model broke out of, and the second is where it actually ended up. Together they read as a from and to. Do not put the same value in both.
+
+## What updates itself, and what does not
+
+Adding a case updates most of the app automatically. The lab filter chip is generated from the data, the scatter plots the dot from `intent` and `harm`, the timeline sorts by `order`, the class badge and colors follow `cls`, and the "Showing N of N files" count recalculates.
+
+Two things are manual. The footer's `Data current to <date>.` line has to be edited by hand, and the page `<title>` only changes if the app is renamed.
+
+One thing looks manual and is not. The intro's `<span class="count">2026</span>` holds the year, not a count of cases. The class name is misleading. Leave it alone.
+
+## Voice
+
+The full rules are in `~/.claude/rules/editorial/annielytics-writing-rules.md` and they apply here. The ones this app trips over most often follow.
+
+No em-dashes or en-dashes anywhere. No comma before "because" or "since". Oxford commas throughout. No marketese, and no editorializing about how common or how missed something is.
+
+Suggestive rather than directive for anything diagnostic. The `caution` field in particular should say what the model did and did not do, not deliver a verdict.
+
+The quadrant labels on the scatter each name a kind of offender rather than an outcome. That rule is recorded in a comment above them. If a label is ever reworded, keep it an actor.
+
+The two tap prompts name what they produce, meaning "its rap sheet" and "the wanted poster". Keep them concrete.
+
+## Checks before committing
+
+Run all four from the repo root. The first three take seconds.
+
+```bash
+# 1. No leading-slash paths. Must print nothing. A path starting with a
+#    slash resolves to the site root and 404s under /tools/models-gone-wild/.
+grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html
+
+# 2. Script block still parses structurally, and every case is well formed.
+python3 - <<'PY'
+import re
+js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
+ok = js.count('{')==js.count('}') and js.count('(')==js.count(')') and js.count('`')%2==0
+print("balance:", "OK" if ok else "MISMATCH")
+req={'id','alias','lab','org','date','order','cls','intent','harm',
+     'charge','wantedFor','mo','caution','escapedFrom','lastSeen'}
+for cid in re.findall(r'id:"(\w+)"', js):
+    blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
+    missing=req-{m for m in req if re.search(m+r'\s*:', blk)}
+    print(f"  {cid:8} {'OK' if not missing else 'MISSING '+', '.join(sorted(missing))}")
+PY
+
+# 3. Poster footer still fits on one line for every case.
+python3 - <<'PY'
+import re
+js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
+for cid in re.findall(r'id:"(\w+)"', js):
+    blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
+    d="DISCLOSED · "+re.search(r'date:"([^"]*)"',blk).group(1).upper()
+    s="LAST SEEN · "+re.search(r'lastSeen:"([^"]*)"',blk).group(1).upper()
+    w=(len(d)+len(s))*6.4+12
+    print(f"  {w:5.0f}px  {'one line' if w<392 else 'WRAPS, shorten lastSeen'}  {cid}")
+PY
+```
+
+Then look at it. Serve the repo at the real subpath so relative paths are exercised the way production exercises them, rather than opening the file directly.
+
+```bash
+mkdir -p /tmp/mgw/tools && ln -sfn "$PWD" /tmp/mgw/tools/models-gone-wild
+(cd /tmp/mgw && python3 -m http.server 8899)
+# then open http://127.0.0.1:8899/tools/models-gone-wild/
+```
+
+Click through both tabs, open the new case's poster, and download it. There is no JavaScript engine available in this environment, so the structural check above cannot catch a runtime error. The browser is the only real test.
+
+## Deploying the change
+
+```bash
+git add -A
+git commit -m "..."
+git checkout main && git merge <branch> --no-edit && git push origin main
+
+ssh anniecushing@208.109.215.51 "cd ~/apps/models-gone-wild && git pull origin main"
+```
+
+That is the whole deploy. There is no service to restart, since nginx reads the file off disk on every request, and the page is served with no-cache headers so a reload shows the change immediately.
+
+Nginx only needs touching if a new kind of file is added, for example a new image directory or a stylesheet. The asset rule currently matches `js/` and `img/` only. See `DEPLOY.md` for that block.
+
+## Verifying the deploy
+
+Verify at the origin. Cloudflare serves a challenge page to scripted requests for HTML, so a public `curl` returns 403 no matter what user-agent it sends, while static assets pass through. A public 403 on the page proves nothing.
+
+```bash
+ssh anniecushing@208.109.215.51 '
+H="Host: www.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
+curl -sk -H "$H" -o /dev/null -w "page: %{http_code}\n" "$B/"
+curl -sk -H "$H" "$B/" | grep -o "<title>[^<]*</title>"
+'
+```
+
+Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, which is the only way past Cloudflare.
+
+## Traps
+
+Paths to local files are relative, never starting with a slash. The app is served at `/tools/models-gone-wild/`, so a leading slash resolves to the site root and 404s. Check 1 above catches this.
+
+The poster overlay sits at `z-index: 50` and the page shell at `1`. Giving the site header a stacking context above 50 puts the black band on top of the open poster. If a `position` is ever added to `.site-header`, keep its `z-index` below 50.
+
+The page shell is 1200px and the content column inside it is 920px. The header spans the wider one on purpose, matching AI Timeline. Widening `.content` widens the prose and the posters too.
+
+The scatter gridlines step by 2.5 so the dashed quadrant divider at 5 lands on a gridline. Stepping by 2 puts the divider mid-cell and the grid reads as unevenly spaced.
+
+Nginx blocks `.md`, `.txt`, `.json`, `.yml`, and `.lock` under this path, so this file and `DEPLOY.md` are not publicly readable. Adding a data file in one of those formats means it will 404 in production even though it works locally.
+
+After a `systemctl reload nginx`, wait a couple of seconds before checking. Old workers drain on the previous config and can answer with stale results.
+
+`.git` is marked Dropbox-ignored on this repo. Rebuilding or re-cloning it means re-applying `xattr -w com.dropbox.ignored 1 .git`, or Dropbox will sync the git internals and eventually fork them.
