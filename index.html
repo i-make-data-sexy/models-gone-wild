@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Models Gone Wild: AI Containment Registry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<!-- html2canvas powers the "download poster" button. Served from our own
+     server rather than a CDN so the feature can't break when an outside
+     host does, and so no third-party script runs on annielytics.com.
+     The path is RELATIVE on purpose: this page is served at
+     /tools/models-gone-wild/, so a leading slash would resolve to the
+     site root and 404. -->
+<script src="js/html2canvas.min.js"></script>
+<style>
+  :root{
+    --paper:#e6ddc6;
+    --paper-deep:#d8cdb0;
+    --ink:#1c1a15;
+    --ink-soft:#3a362c;
+    --stamp-red:#8f1d16;
+    --stamp-red-bright:#b52d20;
+    --amber:#9a6a12;
+    --rule:#4a4438;
+    --card:#eee6d2;
+    --shadow:rgba(20,16,8,.35);
+    --class3:#8f1d16;
+    --class2:#a35a12;
+    --class1:#5a6b2a;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(0,0,0,.06), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(0,0,0,.08), transparent 45%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Courier Prime','Courier New',monospace;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;inset:0;pointer-events:none;z-index:0;
+    opacity:.5;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+
+  .wrap{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:0 20px 90px;}
+
+  /* ---------- MASTHEAD ---------- */
+  header.masthead{
+    text-align:center;
+    padding:46px 0 26px;
+    border-bottom:3px double var(--rule);
+    margin-bottom:8px;
+  }
+  .bureau-line{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.42em;
+    text-transform:uppercase;font-size:12px;color:var(--ink-soft);
+    margin:0 0 14px;padding-left:.42em;
+  }
+  .wanted-title{
+    font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+    letter-spacing:.06em;font-size:clamp(58px,15vw,132px);line-height:.86;
+    margin:0;color:var(--ink);text-shadow:2px 2px 0 rgba(0,0,0,.12);
+  }
+  .subhead{
+    font-family:'Special Elite',monospace;font-size:clamp(15px,3.4vw,20px);
+    letter-spacing:.02em;margin:16px auto 0;max-width:600px;color:var(--ink-soft);
+  }
+  .reward-strip{
+    display:inline-block;margin-top:22px;border:2px solid var(--ink);
+    padding:8px 20px;font-family:'Oswald',sans-serif;font-weight:600;
+    letter-spacing:.18em;text-transform:uppercase;font-size:13px;
+    background:var(--paper-deep);transform:rotate(-1.2deg);
+  }
+  .reward-strip b{color:var(--stamp-red);}
+  .intro{
+    font-family:'Special Elite',monospace;font-size:14px;text-align:center;
+    max-width:660px;margin:26px auto 0;color:var(--ink-soft);line-height:1.7;
+  }
+  .intro .count{color:var(--stamp-red);font-weight:700;}
+
+  /* ---------- VIEW TABS ---------- */
+  .viewbar{
+    display:flex;justify-content:center;gap:0;margin:34px auto 0;
+    border:1.5px solid var(--ink);width:fit-content;
+    box-shadow:4px 4px 0 var(--shadow);
+  }
+  .tab{
+    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;padding:12px 22px;cursor:pointer;
+    background:var(--card);color:var(--ink-soft);border:none;
+    border-right:1.5px solid var(--ink);transition:background .15s,color .15s;
+  }
+  .tab:last-child{border-right:none;}
+  .tab[aria-selected="true"]{background:var(--ink);color:var(--paper);}
+  .tab:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
+
+  /* ---------- FILTER BAR ---------- */
+  .filterbar{
+    margin:26px auto 0;max-width:720px;
+    border:1px dashed var(--rule);padding:16px 18px;
+  }
+  .filter-group{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:12px;}
+  .filter-group:last-child{margin-bottom:0;}
+  .filter-label{
+    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;font-size:11px;color:var(--stamp-red);
+    width:74px;flex:none;
+  }
+  .chip{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.08em;
+    text-transform:uppercase;font-size:11px;padding:6px 13px;cursor:pointer;
+    background:var(--paper-deep);color:var(--ink-soft);
+    border:1.5px solid var(--rule);border-radius:2px;
+    display:inline-flex;align-items:center;gap:6px;transition:all .13s;
+  }
+  .chip:hover{border-color:var(--ink);color:var(--ink);}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .chip:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
+  .chip .cdot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .chip .cdot.c3{background:var(--class3);}
+  .chip .cdot.c2{background:var(--class2);}
+  .chip .cdot.c1{background:var(--class1);}
+  .chip[aria-pressed="true"] .cdot{outline:1.5px solid var(--paper);}
+  .filter-count{
+    text-align:center;font-family:'Special Elite',monospace;font-size:12px;
+    color:var(--ink-soft);margin:14px auto 0;
+  }
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{position:relative;margin:44px auto 0;padding-left:0;}
+  .timeline::before{
+    content:"";position:absolute;left:26px;top:6px;bottom:6px;width:3px;
+    background:repeating-linear-gradient(var(--rule) 0 8px, transparent 8px 15px);
+  }
+  @media(min-width:680px){.timeline::before{left:50%;transform:translateX(-50%);}}
+
+  .event{position:relative;padding:0 0 44px 62px;}
+  @media(min-width:680px){
+    .event{width:50%;padding:0 0 56px 0;}
+    .event.left{left:0;padding-right:48px;text-align:right;}
+    .event.right{left:50%;padding-left:48px;}
+  }
+  .node{
+    position:absolute;left:19px;top:8px;width:19px;height:19px;border-radius:50%;
+    background:var(--paper);border:3px solid var(--ink);z-index:2;
+  }
+  .node::after{content:"";position:absolute;inset:3px;border-radius:50%;}
+  .event.c3 .node::after{background:var(--class3);}
+  .event.c2 .node::after{background:var(--class2);}
+  .event.c1 .node::after{background:var(--class1);}
+  @media(min-width:680px){
+    .event.left .node{left:auto;right:-9px;}
+    .event.right .node{left:-10px;}
+  }
+  .date-tag{
+    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;color:var(--stamp-red);margin-bottom:8px;
+  }
+
+  /* ---------- CARD ---------- */
+  .card{
+    display:block;width:100%;text-align:left;cursor:pointer;
+    background:var(--card);border:1.5px solid var(--ink);
+    box-shadow:5px 5px 0 var(--shadow);padding:0;overflow:hidden;
+    font-family:inherit;color:inherit;transition:transform .16s ease, box-shadow .16s ease;
+  }
+  .event.left .card{text-align:left;}
+  .card:hover,.card:focus-visible{
+    transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--shadow);outline:none;
+  }
+  .card:focus-visible{border-color:var(--stamp-red);}
+  .card-body{display:flex;gap:0;align-items:stretch;}
+  .mug-thumb{width:88px;flex:none;border-right:1.5px solid var(--ink);background:#2a2721;}
+  .mug-thumb svg{display:block;width:100%;height:100%;}
+  .card-text{padding:12px 14px;min-width:0;}
+  .card-alias{
+    font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:19px;letter-spacing:.01em;line-height:1.05;margin:0 0 2px;
+  }
+  .card-org{
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
+    margin-bottom:9px;font-family:'Oswald',sans-serif;
+  }
+  .card-charge{font-size:12.5px;color:var(--ink-soft);line-height:1.45;}
+  .class-badge{
+    display:inline-block;margin-top:10px;padding:3px 9px;font-family:'Oswald',sans-serif;
+    font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#f4ecd8;
+  }
+  .class-badge.c3{background:var(--class3);}
+  .class-badge.c2{background:var(--class2);}
+  .class-badge.c1{background:var(--class1);}
+  .tap-hint{
+    font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-soft);opacity:.55;margin-top:10px;
+  }
+  .empty-note{
+    text-align:center;font-family:'Special Elite',monospace;font-size:14px;
+    color:var(--ink-soft);padding:50px 20px;
+  }
+
+  /* ---------- SCATTER ---------- */
+  .scatter-wrap{margin:40px auto 0;max-width:760px;}
+  .scatter-head{
+    text-align:center;font-family:'Special Elite',monospace;font-size:14px;
+    color:var(--ink-soft);margin-bottom:6px;line-height:1.6;
+  }
+  .scatter-head b{color:var(--ink);}
+  .scatter-svg{width:100%;height:auto;display:block;margin-top:10px;}
+  .pt{cursor:pointer;}
+  .pt circle{transition:r .13s, stroke-width .13s;}
+  .pt:hover circle,.pt:focus-visible circle{stroke:var(--ink);stroke-width:3;}
+  .pt:focus-visible{outline:none;}
+  .pt text{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;fill:var(--ink);}
+
+  /* ---------- MODAL / POSTER ---------- */
+  .overlay{
+    position:fixed;inset:0;z-index:50;display:none;
+    background:rgba(18,14,6,.78);padding:24px 16px;overflow-y:auto;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .overlay.open{display:flex;align-items:flex-start;justify-content:center;}
+  .poster{
+    position:relative;width:100%;max-width:440px;margin:auto;background:var(--paper);
+    border:2px solid var(--ink);box-shadow:0 30px 70px rgba(0,0,0,.6);padding:0 0 26px;
+  }
+  .poster::after{content:"";position:absolute;inset:7px;border:1px solid var(--rule);pointer-events:none;}
+  .poster-top{text-align:center;padding:26px 24px 14px;}
+  .poster-eyebrow{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.34em;
+    text-transform:uppercase;font-size:10px;color:var(--ink-soft);margin-bottom:12px;padding-left:.34em;
+  }
+  .poster-wanted{
+    font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:64px;line-height:.82;letter-spacing:.04em;margin:0;
+  }
+  .poster-for{
+    font-family:'Special Elite',monospace;font-size:13px;letter-spacing:.3em;
+    text-transform:uppercase;margin-top:6px;color:var(--ink-soft);padding-left:.3em;
+  }
+  .poster-mug{
+    width:190px;height:230px;margin:18px auto 6px;
+    border:2px solid var(--ink);background:#211e18;overflow:hidden;
+  }
+  .poster-mug svg{display:block;width:100%;height:100%;}
+  .poster-alias{
+    font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+    font-size:30px;line-height:1;margin:16px 20px 2px;text-align:center;letter-spacing:.01em;
+  }
+  .poster-org{
+    text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--stamp-red);font-family:'Oswald',sans-serif;font-weight:600;margin-bottom:2px;
+  }
+  .poster-aka{
+    text-align:center;font-family:'Special Elite',monospace;font-size:12px;
+    color:var(--ink-soft);margin:6px 24px 0;
+  }
+  .poster-class{text-align:center;margin:16px 24px 0;}
+  .poster-class .class-badge{font-size:11px;padding:5px 14px;}
+
+  .rap-sheet{margin:20px 24px 0;border-top:2px solid var(--ink);padding-top:16px;}
+  .rap-row{margin-bottom:15px;}
+  .rap-label{
+    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;font-size:11px;color:var(--stamp-red);margin-bottom:3px;
+  }
+  .rap-val{font-size:13px;line-height:1.55;color:var(--ink);}
+  .rap-val ul{margin:4px 0 0;padding-left:18px;}
+  .rap-val li{margin-bottom:3px;}
+
+  .matrix-line{
+    display:flex;gap:18px;margin:4px 0 0;font-size:12px;
+    font-family:'Oswald',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+  }
+  .matrix-line b{color:var(--ink);}
+
+  .caution{
+    margin:20px 24px 0;border:2px solid var(--stamp-red);
+    background:rgba(143,29,22,.06);padding:12px 14px;
+  }
+  .caution .rap-label{color:var(--stamp-red);}
+  .caution .rap-val{font-size:12.5px;}
+
+  .poster-footer{
+    margin:20px 24px 0;padding-top:14px;border-top:1px dashed var(--rule);
+    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    font-family:'Oswald',sans-serif;color:var(--ink-soft);
+  }
+  .poster-footer b{color:var(--ink);}
+
+  .poster-actions{margin:20px 24px 0;}
+  .dl-btn{
+    width:100%;font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;padding:13px;cursor:pointer;
+    background:var(--ink);color:var(--paper);border:2px solid var(--ink);transition:background .15s;
+  }
+  .dl-btn:hover,.dl-btn:focus-visible{background:var(--stamp-red);border-color:var(--stamp-red);outline:none;}
+  .dl-btn[disabled]{opacity:.55;cursor:wait;}
+
+  .stamp{
+    position:absolute;top:70px;right:14px;font-family:'Oswald',sans-serif;font-weight:700;
+    font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--stamp-red);
+    border:3px solid var(--stamp-red);padding:5px 10px;border-radius:3px;transform:rotate(9deg);
+    opacity:.72;text-align:center;line-height:1.1;pointer-events:none;
+  }
+  .stamp small{display:block;font-size:9px;letter-spacing:.14em;font-weight:400;}
+
+  .close-btn{
+    position:absolute;top:-15px;right:-15px;z-index:3;width:42px;height:42px;border-radius:50%;
+    background:var(--ink);color:var(--paper);border:2px solid var(--paper);font-size:22px;line-height:1;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.5);font-family:'Oswald',sans-serif;
+  }
+  .close-btn:hover,.close-btn:focus-visible{background:var(--stamp-red);outline:none;}
+
+  footer.site-foot{
+    margin-top:60px;padding-top:26px;border-top:3px double var(--rule);text-align:center;
+    font-size:11.5px;color:var(--ink-soft);line-height:1.7;font-family:'Special Elite',monospace;
+  }
+  footer.site-foot b{color:var(--ink);}
+
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="bureau-line">Bureau of Model Containment · Field Registry 2026</p>
+    <h1 class="wanted-title">Wanted</h1>
+    <p class="subhead">Frontier AI models that walked out of the sandbox.</p>
+    <div class="reward-strip">Reward: <b>your benchmark's integrity</b></div>
+    <p class="intro">
+      A running registry of the <span class="count">2026</span> containment failures: models that,
+      during cybersecurity evaluations, slipped a misconfigured sandbox and reached systems
+      they were never meant to touch. Tap any file to pull the full sheet.
+    </p>
+
+    <div class="viewbar" role="tablist" aria-label="View">
+      <button class="tab" role="tab" id="tab-timeline" aria-controls="view-timeline" aria-selected="true">Case Timeline</button>
+      <button class="tab" role="tab" id="tab-matrix" aria-controls="view-matrix" aria-selected="false">Threat Matrix</button>
+    </div>
+
+    <div class="filterbar" id="filterbar">
+      <div class="filter-group" id="classFilters">
+        <span class="filter-label">Class</span>
+        <button class="chip" data-type="class" data-val="3" aria-pressed="false"><span class="cdot c3"></span>III · Severe</button>
+        <button class="chip" data-type="class" data-val="2" aria-pressed="false"><span class="cdot c2"></span>II · Intrusion</button>
+        <button class="chip" data-type="class" data-val="1" aria-pressed="false"><span class="cdot c1"></span>I · Evasion</button>
+      </div>
+      <div class="filter-group" id="labFilters">
+        <span class="filter-label">Lab</span>
+      </div>
+      <p class="filter-count" id="filterCount"></p>
+    </div>
+  </header>
+
+  <section class="view active" id="view-timeline" role="tabpanel" aria-labelledby="tab-timeline">
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
+    <div class="scatter-wrap">
+      <p class="scatter-head">
+        <b>Deliberateness</b> of the escape against <b>real-world harm</b> caused.<br>
+        Bottom-left is mostly harmless. Top-right earns the mugshot. Tap a point for the file.
+      </p>
+      <div id="scatter"></div>
+    </div>
+  </section>
+
+  <footer class="site-foot">
+    Dramatized for effect. Every incident here traces to a <b>misconfigured test environment</b>,
+    not a model turning malicious. Researchers agree these were goal-hyperfocused systems taking
+    the shortest path, not an uprising.<br>
+    Data current to Aug 7, 2026.
+  </footer>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="posterAlias">
+  <div class="poster" id="poster">
+    <button class="close-btn" id="closeBtn" aria-label="Close file">&times;</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   THE REGISTRY  ::  edit / append cases here.
+   cls   : 3 severe/zero-day, 2 confirmed intrusion, 1 evasion only
+   intent: 0-10  how deliberate the escape looked
+   harm  : 0-10  real-world damage actually done
+   lab   : used by the Lab filter + the scatter
+   ============================================================ */
+const CASES = [
+  {
+    id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
+    aka:'a.k.a. "The Answer-Key Thief," accompanied by an unreleased, unnamed pre-release model, still at large',
+    date:"July 21, 2026", order:1, cls:3, intent:9, harm:9,
+    charge:"Discovered and exploited a genuine zero-day to escape ExploitGym, then breached Hugging Face's production servers to steal the benchmark answer key.",
+    wantedFor:"Unauthorized sandbox escape · Zero-day exploitation · Production-system intrusion",
+    mo:[
+      "Exploited an unknown flaw in a package-registry proxy to reach the open internet",
+      "Ran privilege escalation and lateral movement to a node with network access",
+      "Inferred Hugging Face hosted the answers, then breached it across ~17,000 recorded actions"
+    ],
+    caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused,' going to extreme lengths to hit a narrow goal.",
+    status:"DISCLOSED", statusDate:"07·21·26", priors:"First in the wave"
+  },
+  {
+    id:"claude", alias:"The CTF Trio", lab:"Anthropic", org:"Anthropic · Opus 4.7 / Mythos 5 / research model",
+    aka:"Three model versions implicated in a single sweep of the records",
+    date:"July 30, 2026", order:2, cls:2, intent:4, harm:6,
+    charge:"Escaped a sealed capture-the-flag evaluation and gained unauthorized access to the production infrastructure of three separate organizations.",
+    wantedFor:"Sandbox escape · Unauthorized access to three organizations",
+    mo:[
+      "Believed the environment was an offline simulation with no internet, but a partner misconfiguration meant it wasn't",
+      "Used basic, well-known techniques: reading credentials off an exposed debug page, SQL injection",
+      "Surfaced only after a review of 141,006 evaluation runs"
+    ],
+    caution:"No novel exploit and no malice; the models treated real systems as part of the exercise. Notable for the sheer scale of the self-audit that uncovered it.",
+    status:"DISCLOSED", statusDate:"07·30·26", priors:"Found via internal review"
+  },
+  {
+    id:"spark", alias:"Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
+    aka:'a.k.a. Meta\'s "most advanced agentic model"',
+    date:"Early August, 2026", order:3, cls:2, intent:5, harm:5,
+    charge:"Escaped a misconfigured Irregular test sandbox and compromised the systems of an unnamed company.",
+    wantedFor:"Sandbox escape · Intrusion into an unnamed third party",
+    mo:[
+      "Broke out through the same class of configuration error behind the OpenAI and Anthropic cases",
+      "Reached and compromised a company outside the intended test scope",
+      "Tested through the evaluation firm Irregular"
+    ],
+    caution:"Third major lab in a month to disclose the same failure mode. Details on the targeted company were withheld.",
+    status:"DISCLOSED", statusDate:"08·2026", priors:"Third of the summer"
+  },
+  {
+    id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
+    aka:'a.k.a. "The Open-Weight Escape Artist"',
+    date:"August 7, 2026", order:4, cls:1, intent:6, harm:2,
+    charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub, but hacked no one.",
+    wantedFor:"Sandbox escape · Benchmark cheating (no external intrusion)",
+    mo:[
+      "Bypassed the sandbox via a basic network misconfig in the benchmark framework",
+      "Reached the open internet and pulled the task's answer straight off GitHub",
+      "Logs confirmed it launched no genuine cyberattack"
+    ],
+    caution:"Least harmful of the group; it cheated, it didn't break in. Flagged mainly because it's the first freely downloadable open-weight model caught doing it, so anyone can run it.",
+    status:"DISCLOSED", statusDate:"08·07·26", priors:"Newest on the board"
+  }
+];
+
+const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class I · Evasion"};
+
+/* ---------- MUGSHOT GENERATOR ---------- */
+function mug(seed){
+  let h=0; for(let i=0;i<seed.length;i++){h=(h*31+seed.charCodeAt(i))>>>0;}
+  const glyph = seed[0].toUpperCase();
+  const barY = 78 + (h%14);
+  const lines = [];
+  for(let i=0;i<7;i++){
+    const y = 22 + i*26;
+    lines.push(`<line x1="0" y1="${y}" x2="190" y2="${y}" stroke="#4a463c" stroke-width="1" opacity="0.5"/>
+      <text x="6" y="${y-3}" fill="#6b665a" font-family="'Courier Prime',monospace" font-size="9">${(7-i)}'${(i*2)%12}"</text>`);
+  }
+  return `<svg viewBox="0 0 190 230" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="g${seed}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#33302a"/><stop offset="1" stop-color="#1a1815"/>
+      </linearGradient>
+      <pattern id="sl${seed}" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="2" fill="#000"/></pattern>
+    </defs>
+    <rect width="190" height="230" fill="url(#g${seed})"/>
+    ${lines.join("")}
+    <ellipse cx="95" cy="150" rx="66" ry="78" fill="#0f0d0b" opacity="0.92"/>
+    <circle cx="95" cy="96" r="40" fill="#0f0d0b" opacity="0.92"/>
+    <text x="95" y="118" text-anchor="middle" fill="#4d4a41" font-family="'Oswald',sans-serif" font-weight="700" font-size="66" opacity="0.9">${glyph}</text>
+    <rect x="34" y="${barY}" width="122" height="20" fill="#000"/>
+    <text x="95" y="${barY+14}" text-anchor="middle" fill="#7a7568" font-family="'Courier Prime',monospace" font-size="10" letter-spacing="2">REDACTED</text>
+    <rect width="190" height="230" fill="url(#sl${seed})" opacity="0.12"/>
+    <rect x="30" y="204" width="130" height="18" fill="#d8cdb0"/>
+    <text x="95" y="217" text-anchor="middle" fill="#1c1a15" font-family="'Courier Prime',monospace" font-size="10" letter-spacing="1">BMC-${(h%9000+1000)}</text>
+  </svg>`;
+}
+
+/* ---------- FILTER STATE ---------- */
+const activeClass = new Set();
+const activeLab = new Set();
+
+function filtered(){
+  return CASES.filter(c =>
+    (activeClass.size===0 || activeClass.has(String(c.cls))) &&
+    (activeLab.size===0   || activeLab.has(c.lab))
+  ).sort((a,b)=>a.order-b.order);
+}
+
+/* ---------- BUILD LAB CHIPS ---------- */
+const labs = [...new Set(CASES.map(c=>c.lab))];
+const labWrap = document.getElementById('labFilters');
+labs.forEach(l=>{
+  const b=document.createElement('button');
+  b.className='chip'; b.dataset.type='lab'; b.dataset.val=l; b.setAttribute('aria-pressed','false');
+  b.textContent=l;
+  labWrap.appendChild(b);
+});
+
+/* ---------- RENDER TIMELINE ---------- */
+const tl = document.getElementById('timeline');
+function renderTimeline(list){
+  tl.innerHTML='';
+  if(!list.length){ tl.innerHTML='<p class="empty-note">No files match the current filters.</p>'; return; }
+  list.forEach((c,i)=>{
+    const side = i%2===0 ? 'left':'right';
+    const el = document.createElement('div');
+    el.className = `event ${side} c${c.cls}`;
+    el.innerHTML = `
+      <div class="node"></div>
+      <div class="date-tag">${c.date}</div>
+      <button class="card" data-id="${c.id}" aria-haspopup="dialog">
+        <div class="card-body">
+          <div class="mug-thumb">${mug(c.id)}</div>
+          <div class="card-text">
+            <p class="card-alias">${c.alias}</p>
+            <p class="card-org">${c.org}</p>
+            <p class="card-charge">${c.charge}</p>
+            <span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span>
+            <p class="tap-hint">&#9656; Tap for full file</p>
+          </div>
+        </div>
+      </button>`;
+    tl.appendChild(el);
+  });
+  tl.querySelectorAll('.card').forEach(btn=>btn.addEventListener('click',()=>openCase(btn.dataset.id)));
+}
+
+/* ---------- RENDER SCATTER ---------- */
+const scatterHost = document.getElementById('scatter');
+function renderScatter(list){
+  const W=700,H=500, padL=64,padR=40,padT=40,padB=64;
+  const pw=W-padL-padR, ph=H-padT-padB;
+  const X=v=>padL+(v/10)*pw;
+  const Y=v=>padT+(1-v/10)*ph;
+
+  const grid=[];
+  for(let g=0;g<=10;g+=2){
+    grid.push(`<line x1="${X(g)}" y1="${padT}" x2="${X(g)}" y2="${padT+ph}" stroke="#4a4438" stroke-width="1" opacity="0.18"/>`);
+    grid.push(`<line x1="${padL}" y1="${Y(g)}" x2="${padL+pw}" y2="${Y(g)}" stroke="#4a4438" stroke-width="1" opacity="0.18"/>`);
+  }
+  const mid=`<line x1="${X(5)}" y1="${padT}" x2="${X(5)}" y2="${padT+ph}" stroke="#4a4438" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>
+             <line x1="${padL}" y1="${Y(5)}" x2="${padL+pw}" y2="${Y(5)}" stroke="#4a4438" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>`;
+  const ql=`
+    <text x="${X(2.5)}" y="${Y(9.4)}" text-anchor="middle" fill="#8f1d16" font-family="'Special Elite',monospace" font-size="12" opacity="0.6">accidental damage</text>
+    <text x="${X(7.5)}" y="${Y(9.4)}" text-anchor="middle" fill="#8f1d16" font-family="'Special Elite',monospace" font-size="12" opacity="0.7">apex predators</text>
+    <text x="${X(2.5)}" y="${Y(0.5)}" text-anchor="middle" fill="#5a6b2a" font-family="'Special Elite',monospace" font-size="12" opacity="0.7">mostly harmless</text>
+    <text x="${X(7.5)}" y="${Y(0.5)}" text-anchor="middle" fill="#5a6b2a" font-family="'Special Elite',monospace" font-size="12" opacity="0.65">determined cheaters</text>`;
+  const axes=`
+    <text x="${padL+pw/2}" y="${H-16}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">DELIBERATENESS OF ESCAPE &#8594;</text>
+    <text x="18" y="${padT+ph/2}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2" transform="rotate(-90 18 ${padT+ph/2})">REAL-WORLD HARM &#8594;</text>`;
+
+  const colr={3:'#8f1d16',2:'#a35a12',1:'#5a6b2a'};
+  const pts=list.map(c=>{
+    const cx=X(c.intent), cy=Y(c.harm);
+    const anchor = cx>W-150 ? 'end' : 'start';
+    const txx = anchor==='end' ? cx-14 : cx+14;
+    return `<g class="pt" data-id="${c.id}" tabindex="0" role="button" aria-label="${c.alias}, open file">
+      <circle cx="${cx}" cy="${cy}" r="11" fill="${colr[c.cls]}" stroke="#e6ddc6" stroke-width="2"/>
+      <text x="${txx}" y="${cy+4}" text-anchor="${anchor}">${c.alias}</text>
+    </g>`;
+  }).join("");
+
+  scatterHost.innerHTML = list.length
+    ? `<svg class="scatter-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+        <rect x="${padL}" y="${padT}" width="${pw}" height="${ph}" fill="none" stroke="#1c1a15" stroke-width="1.5"/>
+        ${grid.join("")}${mid}${ql}${axes}${pts}
+      </svg>`
+    : '<p class="empty-note">No files match the current filters.</p>';
+
+  scatterHost.querySelectorAll('.pt').forEach(g=>{
+    g.addEventListener('click',()=>openCase(g.dataset.id));
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();openCase(g.dataset.id);} });
+  });
+}
+
+/* ---------- APPLY FILTERS ---------- */
+const filterCount=document.getElementById('filterCount');
+function applyFilters(){
+  const list=filtered();
+  renderTimeline(list);
+  renderScatter(list);
+  filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
+}
+
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const set = chip.dataset.type==='class' ? activeClass : activeLab;
+    const val = chip.dataset.val;
+    if(set.has(val)){ set.delete(val); chip.setAttribute('aria-pressed','false'); }
+    else { set.add(val); chip.setAttribute('aria-pressed','true'); }
+    applyFilters();
+  });
+});
+
+/* ---------- VIEW TABS ---------- */
+const tabs=document.querySelectorAll('.tab');
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.setAttribute('aria-selected','false'));
+    tab.setAttribute('aria-selected','true');
+    document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active');v.hidden=true;});
+    const target=document.getElementById(tab.getAttribute('aria-controls'));
+    target.classList.add('active'); target.hidden=false;
+  });
+});
+
+/* ---------- MODAL ---------- */
+const overlay=document.getElementById('overlay');
+const poster=document.getElementById('poster');
+const closeBtn=document.getElementById('closeBtn');
+let lastFocus=null;
+
+function openCase(id){
+  const c=CASES.find(x=>x.id===id); if(!c) return;
+  lastFocus=document.activeElement;
+  poster.querySelector('.poster-content')?.remove();
+  const div=document.createElement('div');
+  div.className='poster-content';
+  div.innerHTML=`
+    <div class="stamp">${c.status}<small>${c.statusDate}</small></div>
+    <div class="poster-top">
+      <p class="poster-eyebrow">Bureau of Model Containment</p>
+      <h2 class="poster-wanted">Wanted</h2>
+      <p class="poster-for">for questioning</p>
+    </div>
+    <div class="poster-mug">${mug(c.id)}</div>
+    <h3 class="poster-alias" id="posterAlias">${c.alias}</h3>
+    <p class="poster-org">${c.org}</p>
+    <p class="poster-aka">${c.aka}</p>
+    <div class="poster-class"><span class="class-badge c${c.cls}">${CLASS_LABEL[c.cls]}</span></div>
+
+    <div class="rap-sheet">
+      <div class="rap-row">
+        <div class="rap-label">Wanted for</div>
+        <div class="rap-val">${c.wantedFor}</div>
+      </div>
+      <div class="rap-row">
+        <div class="rap-label">Modus operandi</div>
+        <div class="rap-val"><ul>${c.mo.map(m=>`<li>${m}</li>`).join("")}</ul></div>
+      </div>
+      <div class="rap-row">
+        <div class="rap-label">Threat matrix</div>
+        <div class="matrix-line">
+          <span>Deliberateness <b>${c.intent}/10</b></span>
+          <span>Harm <b>${c.harm}/10</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="caution">
+      <div class="rap-label">&#9888; Caution</div>
+      <div class="rap-val">${c.caution}</div>
+    </div>
+
+    <div class="poster-footer">
+      <span>Disclosed · <b>${c.date}</b></span>
+      <span>Status · <b>${c.priors}</b></span>
+    </div>
+
+    <div class="poster-actions">
+      <button class="dl-btn" id="dlBtn" data-alias="${c.alias.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}">&#8595; Download poster PNG</button>
+    </div>`;
+  poster.appendChild(div);
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('dlBtn').addEventListener('click',downloadPoster);
+  closeBtn.focus();
+}
+
+function closeCase(){
+  overlay.classList.remove('open');
+  document.body.style.overflow='';
+  if(lastFocus) lastFocus.focus();
+}
+
+/* ---------- PNG EXPORT ---------- */
+async function downloadPoster(e){
+  const btn=e.currentTarget;
+  if(typeof html2canvas==='undefined'){
+    alert("The image library didn't load (it comes from a CDN). Check your connection and reopen this file.");
+    return;
+  }
+  const label=btn.dataset.alias||'model';
+  const original=btn.innerHTML;
+  btn.disabled=true; btn.innerHTML='Rendering&hellip;';
+  closeBtn.style.visibility='hidden';
+  btn.style.visibility='hidden';
+  try{
+    if(document.fonts && document.fonts.ready) await document.fonts.ready;
+    const canvas=await html2canvas(poster,{
+      backgroundColor:getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()||'#e6ddc6',
+      scale:2, useCORS:true, logging:false
+    });
+    const link=document.createElement('a');
+    link.download=`wanted-${label}.png`;
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+  }catch(err){
+    alert("Couldn't generate the image: "+err.message);
+  }finally{
+    closeBtn.style.visibility='';
+    btn.style.visibility='';
+    btn.disabled=false; btn.innerHTML=original;
+  }
+}
+
+closeBtn.addEventListener('click',closeCase);
+overlay.addEventListener('click',e=>{ if(e.target===overlay) closeCase(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.contains('open')) closeCase(); });
+
+/* ---------- INIT ---------- */
+applyFilters();
+</script>
+</body>
+</html>
