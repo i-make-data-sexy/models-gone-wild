@@ -55,6 +55,90 @@
 
   .wrap{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:0 20px 90px;}
 
+  /* ---------- SITE HEADER (Annielytics v2) ----------
+     Ported from the canonical v2 mobile-header spec. The header sits
+     INSIDE .wrap, so box-shadow projects the black band out to the
+     viewport edges and clip-path crops that projection to the header's
+     own height. The mobile menu below flows naturally as a flex-column
+     child, never absolutely positioned, which is what keeps it from
+     being clipped behind the band on iOS. */
+  .hidden{display:none;}
+
+  .site-header{
+    background-color:#000;
+    z-index:999;
+    padding:15px 0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    box-shadow:0 0 0 100vmax #000;
+    clip-path:inset(0 -100vmax);
+  }
+
+  .title-area{display:flex;align-items:center;padding:0;}
+  .header-logo{display:block;max-width:100%;height:auto;}
+
+  .nav-primary{position:relative;}
+
+  .nav-primary .menu{
+    position:relative;
+    list-style:none;
+    padding:0;
+    margin:0;
+    display:flex;
+    gap:30px;
+    justify-content:flex-end;
+    line-height:1;
+    float:right;
+  }
+
+  .nav-primary .menu a{
+    color:#fff;
+    text-decoration:none;
+    font-family:'Oswald',sans-serif;
+    font-size:14px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+
+  /* Sweep-right hover underline, desktop only. currentColor makes the
+     rule track the color transition, and content-box pins it to the
+     text rather than the padding box. */
+  @media (min-width:501px){
+    .nav-primary .menu a{
+      background-image:linear-gradient(currentColor,currentColor);
+      background-repeat:no-repeat;
+      background-position:0 100%;
+      background-size:0% 1px;
+      background-origin:content-box;
+      background-clip:content-box;
+      transition:background-size .3s ease,color .3s ease;
+    }
+    .nav-primary .menu a:hover,
+    .nav-primary .menu a:focus-visible{
+      background-size:100% 1px;
+      color:#4ea3e0;
+      text-decoration:none;
+    }
+  }
+
+  .menu-toggle{
+    display:none;
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    letter-spacing:.14em;
+    font-size:14px;
+    color:#fff;
+    background:transparent;
+    border:none;
+    padding:12px 0;
+    cursor:pointer;
+    text-align:center;
+  }
+
+  .nav-primary .menu.visible{padding:0 20px 20px 0;}
+
   /* ---------- MASTHEAD ---------- */
   header.masthead{
     text-align:center;
@@ -333,11 +417,103 @@
   }
   footer.site-foot b{color:var(--ink);}
 
+  /* ---------- SITE HEADER RESPONSIVE (Annielytics v2) ----------
+     Tablet stacks the logo over a centered inline nav and hides the
+     MENU button. Mobile stacks the logo over a full-width MENU button
+     with the drawer expanding beneath it. Every padding value below is
+     from the canonical v2 spec and is load-bearing; do not trim them. */
+  @media only screen and (max-width:1023px) and (min-width:801px){
+    .site-header{flex-direction:column;justify-content:center;align-items:center;gap:8px;}
+    .title-area{justify-content:center;}
+    .nav-primary{width:100%;}
+    .nav-primary .menu{float:none;justify-content:center;margin:0 auto;}
+    .menu-toggle{display:none!important;}
+    .nav-primary .menu a{font-size:14px;}
+  }
+
+  @media only screen and (max-width:800px){
+    .site-header{
+      flex-direction:column;
+      align-items:stretch;
+      gap:0;
+      padding:20px 0 20px;
+    }
+
+    .header-logo{margin:0 auto;}
+
+    .title-area{
+      width:100%;
+      justify-content:center;
+      text-align:center;
+      padding:15px 0;
+    }
+
+    /* No position:absolute here. There is no positioned ancestor in the
+       v2 structure, so absolute would pin the drawer to the viewport and
+       clip it behind the black band on iOS. */
+    .nav-primary{width:100%;padding:0;}
+
+    .nav-primary .menu{
+      display:none;
+      width:100%;
+      padding:0;
+      margin:0;
+    }
+
+    .nav-primary .menu.visible{
+      display:flex;
+      flex-direction:column;
+      padding:0 0 20px 0;
+      background-color:#000;
+      width:100%;
+      box-sizing:border-box;
+      letter-spacing:.5px;
+      float:none;
+    }
+
+    /* The -40px pairs with the 15px link padding to give a compact
+       stack. Do not change to 0; the items spread too far apart. */
+    .nav-primary .menu li{margin-bottom:-40px;text-align:center;}
+
+    .nav-primary .menu a{color:#fff;padding:15px;display:block;text-align:left;}
+
+    .menu-toggle{display:block;width:100%;margin-bottom:0;}
+  }
+
   @media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important;}}
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <!-- Annielytics site header (v2). The checkbox hack drives the mobile
+       drawer: the <label for> toggles the linked checkbox and a single
+       change listener at the bottom of this file flips a .visible class
+       on the menu. Do NOT add a click handler to .menu-toggle, since
+       calling preventDefault on a label's click cancels the toggle and
+       breaks the menu on iPhone Safari. The logo path is relative
+       because the app is served at /tools/models-gone-wild/. -->
+  <header class="site-header">
+    <div class="title-area">
+      <a href="https://www.annielytics.com/">
+        <img class="header-logo" src="img/annielytics-logo.png" alt="Annielytics Logo" width="360" height="67">
+      </a>
+    </div>
+
+    <input type="checkbox" id="menu-toggle-checkbox" class="hidden">
+    <label for="menu-toggle-checkbox" class="menu-toggle" aria-expanded="false">MENU</label>
+
+    <nav class="nav-primary">
+      <ul class="menu">
+        <li><a href="https://www.annielytics.com/about/">About</a></li>
+        <li><a href="https://www.annielytics.com/tools/">Tools</a></li>
+        <li><a href="https://www.annielytics.com/blog/">Blog</a></li>
+        <li><a href="https://www.annielytics.com/tips/">Tips</a></li>
+        <li><a href="https://www.annielytics.com/portfolio/">Portfolio</a></li>
+        <li><a href="https://www.annielytics.com/contact/">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <header class="masthead">
     <p class="bureau-line">Bureau of Model Containment · Field Registry 2026</p>
@@ -418,7 +594,7 @@ const CASES = [
       "Inferred Hugging Face hosted the answers, then breached it across ~17,000 recorded actions"
     ],
     caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused,' going to extreme lengths to hit a narrow goal.",
-    status:"DISCLOSED", statusDate:"07·21·26", priors:"First in the wave"
+    escapedFrom:"ExploitGym", priors:"First in the wave"
   },
   {
     id:"claude", alias:"The CTF Trio", lab:"Anthropic", org:"Anthropic · Opus 4.7 / Mythos 5 / research model",
@@ -432,12 +608,12 @@ const CASES = [
       "Surfaced only after a review of 141,006 evaluation runs"
     ],
     caution:"No novel exploit and no malice; the models treated real systems as part of the exercise. Notable for the sheer scale of the self-audit that uncovered it.",
-    status:"DISCLOSED", statusDate:"07·30·26", priors:"Found via internal review"
+    escapedFrom:"Internal CTF", priors:"Found via internal review"
   },
   {
     id:"spark", alias:"Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
     aka:'a.k.a. Meta\'s "most advanced agentic model"',
-    date:"Early August, 2026", order:3, cls:2, intent:5, harm:5,
+    date:"August 5, 2026", order:3, cls:2, intent:5, harm:5,
     charge:"Escaped a misconfigured Irregular test sandbox and compromised the systems of an unnamed company.",
     wantedFor:"Sandbox escape · Intrusion into an unnamed third party",
     mo:[
@@ -446,7 +622,7 @@ const CASES = [
       "Tested through the evaluation firm Irregular"
     ],
     caution:"Third major lab in a month to disclose the same failure mode. Details on the targeted company were withheld.",
-    status:"DISCLOSED", statusDate:"08·2026", priors:"Third of the summer"
+    escapedFrom:"Irregular", priors:"Third of the summer"
   },
   {
     id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
@@ -460,7 +636,7 @@ const CASES = [
       "Logs confirmed it launched no genuine cyberattack"
     ],
     caution:"Least harmful of the group; it cheated, it didn't break in. Flagged mainly because it's the first freely downloadable open-weight model caught doing it, so anyone can run it.",
-    status:"DISCLOSED", statusDate:"08·07·26", priors:"Newest on the board"
+    escapedFrom:"UK AISI", priors:"Newest on the board"
   }
 ];
 
@@ -639,7 +815,7 @@ function openCase(id){
   const div=document.createElement('div');
   div.className='poster-content';
   div.innerHTML=`
-    <div class="stamp">${c.status}<small>${c.statusDate}</small></div>
+    <div class="stamp">Escaped<small>${c.escapedFrom}</small></div>
     <div class="poster-top">
       <p class="poster-eyebrow">Bureau of Model Containment</p>
       <h2 class="poster-wanted">Wanted</h2>
@@ -676,7 +852,7 @@ function openCase(id){
 
     <div class="poster-footer">
       <span>Disclosed · <b>${c.date}</b></span>
-      <span>Status · <b>${c.priors}</b></span>
+      <span>Priors · <b>${c.priors}</b></span>
     </div>
 
     <div class="poster-actions">
@@ -729,6 +905,24 @@ async function downloadPoster(e){
 closeBtn.addEventListener('click',closeCase);
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeCase(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.contains('open')) closeCase(); });
+
+/* ---------- SITE HEADER MOBILE MENU ----------
+   One change listener on the checkbox, and nothing else. The <label>
+   toggles the checkbox natively, so there is deliberately no click
+   handler on .menu-toggle; adding one and calling preventDefault
+   cancels the label's default behavior and breaks the drawer on
+   iPhone Safari. */
+(function(){
+  const checkbox = document.getElementById('menu-toggle-checkbox');
+  const menu = document.querySelector('.nav-primary .menu');
+  const toggle = document.querySelector('.menu-toggle');
+  if(!checkbox || !menu) return;
+  checkbox.addEventListener('change', function(){
+    if(this.checked) menu.classList.add('visible');
+    else menu.classList.remove('visible');
+    if(toggle) toggle.setAttribute('aria-expanded', this.checked ? 'true' : 'false');
+  });
+})();
 
 /* ---------- INIT ---------- */
 applyFilters();
