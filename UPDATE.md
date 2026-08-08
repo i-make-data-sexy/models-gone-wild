@@ -25,7 +25,7 @@ New case:
 
 Read UPDATE.md for the field schema, the length limits, and the voice rules.
 Branch off up-to-date main first. Then propose the complete filled-in case
-object, including your suggested cls, intent, and harm with the reasoning for
+object, including your suggested cls, complexity, and harm with the reasoning for
 each, and STOP for my approval before writing anything.
 
 Do not invent facts. Every field has to trace to what I gave you. Flag
@@ -87,7 +87,7 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `date` | The timeline heading and the footer's "Disclosed". | Format is `Month D, YYYY`. |
 | `order` | Timeline position, sorted ascending. Array position is ignored. | Next integer in sequence. |
 | `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` evasion only. |
-| `intent` | Scatter x-axis, how involved the escape was as a technique. | `0` to `10`. An editorial judgment of ours. Score the method, never the motive: nothing here should imply a lab or a model meant to do it. |
+| `complexity` | Scatter x-axis, how involved the escape was as a technique. | `0` to `10`. An editorial judgment of ours. Score the method, never the motive. Nothing here should imply a lab or a model meant for this to happen, which is why the field is not called intent. |
 | `harm` | Scatter y-axis, how much damage the escape could do. | `0` to `10`. An editorial judgment of ours, not a figure from the reporting. |
 | `charge` | The one-sentence summary. | One sentence. |
 | `wantedFor` | The offense line. | Separate offenses with ` · `. |
@@ -100,7 +100,7 @@ Every case is one object in the `CASES` array near the top of the script block i
 
 ## What updates itself, and what does not
 
-Adding a case updates most of the app automatically. The Lab dropdown's options are generated from the data, the scatter plots the dot from `intent` and `harm`, the timeline sorts by `order`, the class badge and colors follow `cls`, and the "Showing N of N files" count recalculates. That count only appears while a filter is narrowing the list, so an unfiltered page shows nothing there.
+Adding a case updates most of the app automatically. The Lab dropdown's options are generated from the data, the scatter plots the dot from `complexity` and `harm`, the timeline sorts by `order`, the class badge and colors follow `cls`, and the "Showing N of N files" count recalculates. That count only appears while a filter is narrowing the list, so an unfiltered page shows nothing there.
 
 Two things are manual. The footer's `Last updated: <date>` line has to be edited by hand, and the page `<title>` only changes if the app is renamed.
 
@@ -143,7 +143,7 @@ import re
 js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
 ok = js.count('{')==js.count('}') and js.count('(')==js.count(')') and js.count('`')%2==0
 print("balance:", "OK" if ok else "MISMATCH")
-req={'id','alias','lab','org','date','order','cls','intent','harm',
+req={'id','alias','lab','org','date','order','cls','complexity','harm',
      'charge','wantedFor','mo','caution','escapedFrom','lastSeen'}
 for cid in re.findall(r'id:"(\w+)"', js):
     blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)

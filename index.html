@@ -426,7 +426,12 @@
   .pt{cursor:pointer;}
   .pt circle{transition:r .13s, stroke-width .13s;}
   .pt:hover circle,.pt:focus-visible circle{stroke:var(--ink);stroke-width:3;}
-  .pt:focus-visible{outline:none;}
+  /* Suppress the browser's ring on :focus, not just :focus-visible. A
+     click leaves the group focused without matching :focus-visible, so
+     the old rule never fired and the white and blue UA ring sat on the
+     dot after the poster closed and returned focus to it. Keyboard
+     users still get the thicker ink stroke above. */
+  .pt:focus{outline:none;}
   .pt text{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;fill:var(--ink);}
 
   /* ---------- MODAL / POSTER ---------- */
@@ -696,7 +701,7 @@
     <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
       <div class="scatter-wrap">
         <p class="scatter-head">
-          <b>Deliberateness</b> of the escape against <b>real-world harm</b> caused.<br>
+          <b>Escape complexity</b> against <b>harm potential</b>.<br>
           Bottom-left is where the house cats wander. Top-right earns the mugshot. Tap a point for the wanted poster.
         </p>
         <div id="scatter"></div>
@@ -723,7 +728,8 @@
 /* ============================================================
    THE REGISTRY  ::  edit / append cases here.
    cls   : 3 severe/zero-day, 2 confirmed intrusion, 1 evasion only
-   intent: 0-10  how deliberate the escape looked
+   complexity: 0-10  how involved the escape was as a technique.
+              Scores the method, never the motive.
    harm  : 0-10  how much damage the escape could do, ours to judge
    lab   : used by the Lab filter + the scatter
    ============================================================ */
@@ -731,8 +737,8 @@ const CASES = [
   {
     id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
-    aka:'aka "The Answer-Key Thief", accompanied by an unreleased, unnamed pre-release model, still at large',
-    date:"July 21, 2026", order:1, cls:3, intent:9, harm:9,
+    aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
+    date:"July 21, 2026", order:1, cls:3, complexity:9, harm:9,
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
     wantedFor:"Unauthorized sandbox escape · Zero-day exploitation · Production-system intrusion",
     mo:[
@@ -747,7 +753,7 @@ const CASES = [
     id:"claude", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     aka:"Three model versions implicated in a single sweep of the records",
-    date:"July 30, 2026", order:2, cls:2, intent:4, harm:7,
+    date:"July 30, 2026", order:2, cls:2, complexity:4, harm:7,
     charge:"Escaped a sealed capture-the-flag (CTF) evaluation and gained unauthorized access to the production infrastructure of three separate organizations.",
     wantedFor:"Sandbox escape · Unauthorized access to three organizations",
     mo:[
@@ -762,7 +768,7 @@ const CASES = [
     id:"spark", alias:"Muse Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"August 5, 2026", order:3, cls:2, intent:3, harm:6,
+    date:"August 5, 2026", order:3, cls:2, complexity:3, harm:6,
     charge:"Escaped a misconfigured Irregular test sandbox and compromised the systems of an unnamed company.",
     wantedFor:"Sandbox escape · Intrusion into an unnamed third party",
     mo:[
@@ -776,8 +782,8 @@ const CASES = [
   {
     id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
-    aka:'aka "The Open-Weight Escape Artist"',
-    date:"August 7, 2026", order:4, cls:1, intent:6, harm:2,
+    aka:'aka The Open-Weight Escape Artist',
+    date:"August 7, 2026", order:4, cls:1, complexity:2, harm:2,
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
     wantedFor:"Sandbox escape · Benchmark cheating (no external intrusion)",
     mo:[
@@ -971,14 +977,14 @@ function renderScatter(list){
      outcome, so the four read as a criminal typology and match the
      wanted-poster voice. Keep that rule when editing.
 
-       high harm, low intent  -> sleepwalking burglars
-       high harm, high intent -> apex predators
-       low harm,  low intent  -> escaped house cats
-       low harm,  high intent -> determined cheaters
+       high harm, low complexity  -> sleepwalking burglars
+       high harm, high complexity -> apex predators
+       low harm,  low complexity  -> escaped house cats
+       low harm,  high complexity -> determined cheaters
 
      They pair on both diagonals. Apex predators against escaped house
      cats is the harm axis, and sleepwalking burglars against determined
-     cheaters is the intent axis. Red marks the high-harm row, green the
+     cheaters is the complexity axis. Red marks the high-harm row, green the
      low-harm row, matching the class colors used for the dots. */
   const ql=`
     <text x="${X(2.5)}" y="${Y(9.4)}" text-anchor="middle" fill="#8f1d16" font-family="'Special Elite',monospace" font-size="12" opacity="0.6">sleepwalking burglars</text>
@@ -986,12 +992,12 @@ function renderScatter(list){
     <text x="${X(2.5)}" y="${Y(0.5)}" text-anchor="middle" fill="#5a6b2a" font-family="'Special Elite',monospace" font-size="12" opacity="0.7">escaped house cats</text>
     <text x="${X(7.5)}" y="${Y(0.5)}" text-anchor="middle" fill="#5a6b2a" font-family="'Special Elite',monospace" font-size="12" opacity="0.65">determined cheaters</text>`;
   const axes=`
-    <text x="${padL+pw/2}" y="${H-16}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">DELIBERATENESS OF ESCAPE &#8594;</text>
+    <text x="${padL+pw/2}" y="${H-16}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">ESCAPE COMPLEXITY &#8594;</text>
     <text x="18" y="${padT+ph/2}" text-anchor="middle" fill="#3a362c" font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2" transform="rotate(-90 18 ${padT+ph/2})">HARM POTENTIAL &#8594;</text>`;
 
   const colr={3:'#8f1d16',2:'#a35a12',1:'#5a6b2a'};
   const pts=list.map(c=>{
-    const cx=X(c.intent), cy=Y(c.harm);
+    const cx=X(c.complexity), cy=Y(c.harm);
     const anchor = cx>W-150 ? 'end' : 'start';
     const txx = anchor==='end' ? cx-14 : cx+14;
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button" aria-label="${c.alias}, open file">
@@ -1027,16 +1033,36 @@ function applyFilters(){
 
 [classSelect,labSelect].forEach(s=>s.addEventListener('change',applyFilters));
 
-/* ---------- VIEW TABS ---------- */
+/* ---------- VIEW TABS ----------
+   The chosen view is mirrored into a ?view= parameter so a link to the
+   Threat Matrix opens on the Threat Matrix. Timeline is the default and
+   carries no parameter, which keeps the bare URL clean.
+
+   replaceState rather than pushState: this is a view toggle, not a
+   navigation, and pushing would stack an entry per switch so the back
+   button walked through them instead of leaving the page. */
 const tabs=document.querySelectorAll('.tab');
-tabs.forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    tabs.forEach(t=>t.setAttribute('aria-selected','false'));
-    tab.setAttribute('aria-selected','true');
-    document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active');v.hidden=true;});
-    const target=document.getElementById(tab.getAttribute('aria-controls'));
-    target.classList.add('active'); target.hidden=false;
+const VIEWS=['timeline','matrix'];
+
+function showView(name, syncUrl){
+  if(VIEWS.indexOf(name)===-1) name='timeline';
+  tabs.forEach(t=>t.setAttribute('aria-selected', t.id==='tab-'+name ? 'true':'false'));
+  document.querySelectorAll('.view').forEach(v=>{
+    const on = v.id==='view-'+name;
+    v.classList.toggle('active', on);
+    v.hidden = !on;
   });
+  if(syncUrl && window.history && history.replaceState){
+    /* Built from the live URL so the app's subpath is preserved. */
+    const url=new URL(window.location.href);
+    if(name==='timeline') url.searchParams.delete('view');
+    else url.searchParams.set('view', name);
+    history.replaceState(null,'',url);
+  }
+}
+
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>showView(tab.id.replace('tab-',''), true));
 });
 
 /* ---------- TOOLTIP ----------
@@ -1152,7 +1178,7 @@ function openCase(id){
       <div class="rap-row">
         <div class="rap-label">Threat matrix</div>
         <div class="matrix-line">
-          <span>Deliberateness <b>${c.intent}/10</b></span>
+          <span>Complexity <b>${c.complexity}/10</b></span>
           <span>Harm potential <b>${c.harm}/10</b></span>
         </div>
       </div>
@@ -1244,6 +1270,9 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.
 
 /* ---------- INIT ---------- */
 applyFilters();
+/* Honour a shared ?view= link. Runs after the first render so both
+   panels already hold content when one of them is revealed. */
+showView(new URLSearchParams(window.location.search).get('view'), false);
 </script>
 </body>
 </html>
