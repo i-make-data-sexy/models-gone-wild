@@ -7,6 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<!-- Noto Emoji is the MONOCHROME emoji family, so the glyph inherits
+     color the way text does. Color emoji fonts carry their own
+     palette and ignore CSS color entirely, which is why this is a
+     separate font rather than a filter. Subset to the single
+     character with text=, so the download is under 1KB. -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@600&text=%F0%9F%A4%98&display=swap" rel="stylesheet">
 <!-- html2canvas powers the "download poster" button. Served from our own
      server rather than a CDN so the feature can't break when an outside
      host does, and so no third-party script runs on annielytics.com.
@@ -167,6 +173,11 @@
     font-family:'Special Elite',monospace;font-size:clamp(15px,3.4vw,20px);
     letter-spacing:.02em;margin:16px auto 0;max-width:600px;color:var(--ink-soft);
   }
+  /* Monochrome, so it takes the subhead's ink rather than the
+     system palette. Nudged down slightly since the glyph sits high
+     on its baseline next to Special Elite. */
+  .horns{font-family:'Noto Emoji',sans-serif;font-weight:600;font-size:.95em;
+         color:inherit;vertical-align:-.08em;}
   /* The intro reads as body copy rather than a centered display line, so
      it is left-aligned inside the centered masthead. No max-width of its
      own, which lets it run the full 920px of .content and line up with
@@ -666,7 +677,7 @@
   <header class="masthead">
     <p class="bureau-line">Bureau of Model Containment · Field Registry 2026</p>
     <h1 class="wanted-title">Wanted</h1>
-    <p class="subhead">AI models gone rogue</p>
+    <p class="subhead">AI models gone rogue <span class="horns">🤘</span></p>
     <p class="intro">
       Below is a running registry of the containment failures that have been littering headlines
       since OpenAI's Sol model took a walk on the wild side in July. These models have escaped
