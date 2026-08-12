@@ -114,12 +114,12 @@
     <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
       <div class="scatter-wrap">
           <div id="scatter"></div>
-          <!-- Says what the two dot styles mean. The dot colour is the
-               class, which the cards already explain, so the legend
-               covers only the fill. -->
+          <!-- Says what the two dot colours mean. Kept in step with
+               DISC_FILL in the script; changing one means changing the
+               other. -->
           <p class="scatter-legend">
-            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#3a362c" stroke="#e6ddc6" stroke-width="2"/></svg>Self-reported</span>
-            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#e6ddc6" stroke="#3a362c" stroke-width="3.5"/></svg>Tipped off</span>
+            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#5a6b2a" stroke="#e6ddc6" stroke-width="2"/></svg>Self-reported</span>
+            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#8f1d16" stroke="#e6ddc6" stroke-width="2"/></svg>Tipped off</span>
           </p>
       </div>
     </section>
@@ -150,12 +150,12 @@
    lab   : used by the Lab filter + the scatter
    disclosedBy: who put the case in public view, and nothing else.
               kind is "self" when the lab that built the model
-              announced it, "tip" when somebody else did. The test is
-              who went public, never who found it, since those come
-              apart: Irregular found the Meta case and told Meta, and
-              Meta announced it, so that one is "self". `who` is the
-              party that announced, which is not always the lab and is
-              not the outlet in `source` either.
+              announced it. It is "tip" when somebody else did.
+              The test is who went public, never who found it, since
+              those two come apart. Irregular found the Meta case and
+              told Meta. Meta then announced it, so that one is "self".
+              `who` is the party that announced, which is not always
+              the lab and is not the outlet in `source` either.
    ============================================================ */
 const CASES = [
   {
@@ -240,12 +240,18 @@ const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class 
    the page does not do that. */
 const DISCLOSURE_LABEL = {self:"Self-reported", tip:"Tipped off"};
 
+/* Dot fills on the Threat Matrix. Literal hex rather than the CSS
+   variables, since these are written into SVG presentation attributes
+   where var() is not reliably supported. They match --class1 and
+   --class3 so the chart stays inside the page's palette. */
+const DISC_FILL = {self:"#5a6b2a", tip:"#8f1d16"};
+
 /* Offered on hover, tap, or keyboard focus, the same way the class
    badge explains its tier. Says what the tag counts, so a reader does
    not take it for a finding about who caught the model. */
 const DISCLOSURE_NOTE = {
-  self:"The lab that built the model is the one that made the case public. It says who announced it and not who found it, so a lab that was told by an outside tester and then announced it still counts here.",
-  tip:"Somebody other than the lab that built the model made the case public, in these instances a security firm or a publication."
+  self:"The lab that built the model is the one that made the case public. The tag records who announced it and not who found it. A lab that an outside tester told, and that then announced it, still counts here.",
+  tip:"Somebody other than the lab that built the model made the case public. That could be a security firm, an evaluator, or a publication working from its own sources."
 };
 
 /* What each class means, offered on hover, tap, or keyboard focus.
@@ -618,8 +624,11 @@ function renderScatter(list){
 
      They pair on both diagonals. Apex predators against escaped house
      cats is the harm axis, and sleepwalking burglars against determined
-     cheaters is the complexity axis. Red marks the high-harm row, green the
-     low-harm row, matching the class colors used for the dots. */
+     cheaters is the complexity axis. Red marks the high-harm row and
+     green the low-harm row. That red and green are the same pair the
+     dots use for the disclosure route is a coincidence of the palette
+     rather than a link between the two, so read the labels by their
+     position and the dots by the legend. */
   const qlabel = (x,y,fill,op,text) =>
     `<text x="${x}" y="${y}" text-anchor="middle" fill="${fill}" font-family="'Special Elite',monospace"
        font-size="12" opacity="${op}" class="svg-note" tabindex="0" role="note"
@@ -640,7 +649,6 @@ function renderScatter(list){
       axisLabel(padL+pw/2, H-16, '', METRIC_NOTE.complexity, 'ESCAPE COMPLEXITY')
     + axisLabel(18, padT+ph/2, `rotate(-90 18 ${padT+ph/2})`, METRIC_NOTE.harm, 'HARM POTENTIAL');
 
-  const colr={3:'#8f1d16',2:'#a35a12',1:'#5a6b2a'};
   const pts=list.map(c=>{
     const cx=X(c.complexity), cy=Y(c.harm);
     const anchor = cx>W-150 ? 'end' : 'start';
@@ -653,20 +661,20 @@ function renderScatter(list){
       + `<p class="tip-metric">Harm potential</p>`
       + `<p class="tip-row"><b>Score:</b> ${c.harm}</p>`
       + `<p class="tip-row"><b>Justification:</b> ${c.whyHarm}</p>`;
-    /* Colour already carries the class, so the disclosure route rides
-       on fill instead. A self-reported case is the solid dot the chart
-       has always drawn. A tipped-off case is hollowed out, keeping the
-       class colour on its ring so the dot still reads as its tier.
-       Both are the same size, since a difference in weight would rank
-       one route above the other. */
+    /* Fill carries the disclosure route on this chart, green for
+       self-reported and red for tipped off. Both dots keep the same
+       radius and the same 2px paper ring, so neither route reads as
+       larger or heavier than the other. An earlier version hollowed the
+       tipped dot out instead, which pushed its ring 1.5px past every
+       other node and made one case look bigger than the rest.
+
+       The class is not on this chart. It rides the card badge and the
+       poster, and the quadrant labels carry the harm reading. */
     const tipped = c.disclosedBy && c.disclosedBy.kind==='tip';
-    /* Literal #e6ddc6 rather than var(--paper), matching every other
-       colour in this SVG. var() in an SVG presentation attribute is not
-       reliably supported, and the dots would lose their fill where it
-       is not. */
-    const disc = tipped
-      ? `class="tip-dot" fill="#e6ddc6" stroke="${colr[c.cls]}" stroke-width="3.5"`
-      : `fill="${colr[c.cls]}" stroke="#e6ddc6" stroke-width="2"`;
+    /* Literal hex rather than var(), matching every other colour in
+       this SVG. var() in an SVG presentation attribute is not reliably
+       supported, and the dots would lose their fill where it is not. */
+    const disc = `fill="${tipped ? DISC_FILL.tip : DISC_FILL.self}" stroke="#e6ddc6" stroke-width="2"`;
     const discSay = tipped ? ' Tipped off.' : ' Self-reported.';
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
       data-def="${escAttr(scoreCard)}"

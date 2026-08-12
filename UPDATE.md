@@ -103,13 +103,15 @@ Every case is one object in the `CASES` array near the top of the script block i
 
 ### How to decide `disclosedBy.kind`
 
-The test is who put the case in public view, and nothing else. `self` when the lab that built the model announced it, `tip` when anybody else did, whether that is a security firm, an evaluator, an institute, or a publication working from its own sources.
+The test is who put the case in public view, and nothing else. Use `self` when the lab that built the model announced it. Use `tip` when anybody else did, whether that is a security firm, an evaluator, an institute, or a publication working from its own sources.
 
-Who found it does not enter into it, and the two come apart often enough to matter. Irregular found the Meta case and notified Meta, then Meta announced it, so Muse Spark is `self`. Frontier Security found the Kimi K3 escape in its own testing and posted it, with no announcement from Moonshot, so that one is `tip`.
+Who found it does not enter into it, and the two come apart often enough to matter. Irregular found the Meta case and notified Meta. Meta then announced it, so Muse Spark is `self`. Frontier Security found the Kimi K3 escape in its own testing and posted it. Moonshot never announced it, so that one is `tip`.
 
 Read the source article and find the sentence that says who said it first. If that sentence names the lab, it is `self`.
 
-The chip is deliberately unstyled beyond an outline, and both routes look identical. Do not add a color, an ordering, or a tally that reads as a scoreboard. The page records who announced a case and lets the reader draw the conclusion, which is the same rule the `caution` field follows.
+The card chip is an outline in ink for both routes, so it stays quieter than the class badge beside it. The Threat Matrix is the one place the two routes are colored apart, green for self-reported and red for tipped off, with both dots at the same radius and the same 2px ring. Keep the sizes equal there. An earlier version hollowed the tipped dot out instead, and its thicker ring pushed it past every other node, which read as one case being bigger rather than differently sourced.
+
+Do not add an ordering or a tally on top of that. A count of who self-reported is a claim about the registry as a whole, so it would need a `COMPUTABLE` entry in `check_claims.py` or it goes stale the moment a case is added.
 
 ### Why `charge` has a character range
 

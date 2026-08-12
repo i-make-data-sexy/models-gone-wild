@@ -366,11 +366,11 @@
      quieter than the class badge beside it and never competes with the
      tier for attention.
 
-     Both routes get identical styling. Tinting self-reported green and
-     tipped-off red would be the page grading a lab's conduct, which it
-     does not do, so the two differ only in their words. */
+     margin-left:auto pins it to the right edge of the card, opposite
+     the class badge. If the row wraps on a narrow card, the chip keeps
+     its right alignment on the line below. */
   .disc-chip{
-    display:inline-block;padding:2px 8px;font-family:'Oswald',sans-serif;
+    display:inline-block;margin-left:auto;padding:2px 8px;font-family:'Oswald',sans-serif;
     font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
     color:var(--ink-soft);border:1.5px solid var(--rule);border-radius:2px;
     cursor:help;outline:none;
@@ -497,13 +497,8 @@
   .pt{cursor:pointer;}
   .pt circle{transition:r .13s, stroke-width .13s;}
   .pt:hover circle,.pt:focus-visible circle{stroke:var(--ink);stroke-width:3;}
-  /* A hollow dot already carries a 3.5 ring, so the shared hover width
-     of 3 above would thin it on hover rather than thicken it. This puts
-     the grow back. */
-  .pt:hover circle.tip-dot,.pt:focus-visible circle.tip-dot{stroke-width:4.5;}
 
-  /* Legend for the two dot fills. Colour is the class, which the cards
-     explain, so only the fill is spelled out here. */
+  /* Legend for the two dot fills. */
   .scatter-legend{
     display:flex;justify-content:center;flex-wrap:wrap;gap:8px 22px;
     margin:14px 0 0;font-family:'Oswald',sans-serif;font-weight:500;
