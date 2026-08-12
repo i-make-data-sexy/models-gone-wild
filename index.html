@@ -95,6 +95,11 @@
         <select class="filter-select" id="labFilter" aria-label="Filter by lab">
           <option value="">All labs</option>
         </select>
+        <select class="filter-select" id="disclosureFilter" aria-label="Filter by who made the case public">
+          <option value="">All disclosures</option>
+          <option value="self">Self-reported</option>
+          <option value="tip">Tipped off</option>
+        </select>
       </div>
     </div>
 
@@ -109,12 +114,19 @@
     <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
       <div class="scatter-wrap">
           <div id="scatter"></div>
+          <!-- Says what the two dot styles mean. The dot colour is the
+               class, which the cards already explain, so the legend
+               covers only the fill. -->
+          <p class="scatter-legend">
+            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#3a362c" stroke="#e6ddc6" stroke-width="2"/></svg>Self-reported</span>
+            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#e6ddc6" stroke="#3a362c" stroke-width="3.5"/></svg>Tipped off</span>
+          </p>
       </div>
     </section>
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: August 7, 2026
+    Last updated: August 11, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -136,11 +148,20 @@
               Scores the method, never the motive.
    harm  : 0-10  how much damage the escape could do, ours to judge
    lab   : used by the Lab filter + the scatter
+   disclosedBy: who put the case in public view, and nothing else.
+              kind is "self" when the lab that built the model
+              announced it, "tip" when somebody else did. The test is
+              who went public, never who found it, since those come
+              apart: Irregular found the Meta case and told Meta, and
+              Meta announced it, so that one is "self". `who` is the
+              party that announced, which is not always the lab and is
+              not the outlet in `source` either.
    ============================================================ */
 const CASES = [
   {
     id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
+    disclosedBy:{who:"OpenAI", kind:"self"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
     date:"July 21, 2026", order:1, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
@@ -158,6 +179,7 @@ const CASES = [
   {
     id:"claude", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
+    disclosedBy:{who:"Anthropic", kind:"self"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"July 30, 2026", order:2, cls:2, complexity:4, harm:7,
     whyComplexity:"Ordinary techniques throughout, including credentials taken from an exposed debug page, and an SQL injection. No novel exploit.",
@@ -175,6 +197,7 @@ const CASES = [
   {
     id:"spark", alias:"Muse Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
+    disclosedBy:{who:"Meta", kind:"self"},
     aka:'aka Meta\'s "most advanced agentic model"',
     date:"August 5, 2026", order:3, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
@@ -192,6 +215,7 @@ const CASES = [
   {
     id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
+    disclosedBy:{who:"Frontier Security", kind:"tip"},
     aka:'aka The Open-Weight Escape Artist',
     date:"August 7, 2026", order:4, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
@@ -209,6 +233,20 @@ const CASES = [
 ];
 
 const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class I · Evasion"};
+
+/* How each disclosure route is labelled on the card chip, in the
+   filter, and under the scatter. Both chips get identical styling on
+   purpose. Colouring one of them approvingly would grade the lab, and
+   the page does not do that. */
+const DISCLOSURE_LABEL = {self:"Self-reported", tip:"Tipped off"};
+
+/* Offered on hover, tap, or keyboard focus, the same way the class
+   badge explains its tier. Says what the tag counts, so a reader does
+   not take it for a finding about who caught the model. */
+const DISCLOSURE_NOTE = {
+  self:"The lab that built the model is the one that made the case public. It says who announced it and not who found it, so a lab that was told by an outside tester and then announced it still counts here.",
+  tip:"Somebody other than the lab that built the model made the case public, in these instances a security firm or a publication."
+};
 
 /* What each class means, offered on hover, tap, or keyboard focus.
    The tiers describe how far the escape reached, never how anyone
@@ -470,11 +508,13 @@ function mug(seed){
    single-select dropdowns. An empty string means no filter. */
 const classSelect = document.getElementById('classFilter');
 const labSelect   = document.getElementById('labFilter');
+const discSelect  = document.getElementById('disclosureFilter');
 
 function filtered(){
   return CASES.filter(c =>
     (!classSelect.value || String(c.cls)===classSelect.value) &&
-    (!labSelect.value   || c.lab===labSelect.value)
+    (!labSelect.value   || c.lab===labSelect.value) &&
+    (!discSelect.value  || (c.disclosedBy && c.disclosedBy.kind===discSelect.value))
   ).sort((a,b)=>a.order-b.order);
 }
 
@@ -486,6 +526,18 @@ function filtered(){
   o.value=l; o.textContent=l;
   labSelect.appendChild(o);
 });
+
+/* Builds the disclosure chip that sits beside the class badge. The
+   chip carries the category only, never the party's name, which is too
+   long for the card and lives on the poster instead. A case without a
+   disclosedBy renders no chip at all, the way a case without a source
+   URL renders no story icon. */
+function discChip(c){
+  const d = c.disclosedBy;
+  if(!d || !DISCLOSURE_LABEL[d.kind]) return '';
+  return `<span class="disc-chip d-${d.kind}" tabindex="0" role="note"
+     data-def="${escAttr(DISCLOSURE_NOTE[d.kind])}">${DISCLOSURE_LABEL[d.kind]}</span>`;
+}
 
 /* ---------- RENDER TIMELINE ---------- */
 const tl = document.getElementById('timeline');
@@ -515,7 +567,10 @@ function renderTimeline(list){
             </div>
             <p class="card-alias">${c.alias}</p>
             <p class="card-charge">${gloss(c.charge)}</p>
-            <span class="class-badge c${c.cls}" tabindex="0" role="note" data-def="${CLASS_NOTE[c.cls]}">${CLASS_LABEL[c.cls]}</span>
+            <div class="card-tags">
+              <span class="class-badge c${c.cls}" tabindex="0" role="note" data-def="${CLASS_NOTE[c.cls]}">${CLASS_LABEL[c.cls]}</span>
+              ${discChip(c)}
+            </div>
           </div>
         </div>
       </div>`;
@@ -598,10 +653,25 @@ function renderScatter(list){
       + `<p class="tip-metric">Harm potential</p>`
       + `<p class="tip-row"><b>Score:</b> ${c.harm}</p>`
       + `<p class="tip-row"><b>Justification:</b> ${c.whyHarm}</p>`;
+    /* Colour already carries the class, so the disclosure route rides
+       on fill instead. A self-reported case is the solid dot the chart
+       has always drawn. A tipped-off case is hollowed out, keeping the
+       class colour on its ring so the dot still reads as its tier.
+       Both are the same size, since a difference in weight would rank
+       one route above the other. */
+    const tipped = c.disclosedBy && c.disclosedBy.kind==='tip';
+    /* Literal #e6ddc6 rather than var(--paper), matching every other
+       colour in this SVG. var() in an SVG presentation attribute is not
+       reliably supported, and the dots would lose their fill where it
+       is not. */
+    const disc = tipped
+      ? `class="tip-dot" fill="#e6ddc6" stroke="${colr[c.cls]}" stroke-width="3.5"`
+      : `fill="${colr[c.cls]}" stroke="#e6ddc6" stroke-width="2"`;
+    const discSay = tipped ? ' Tipped off.' : ' Self-reported.';
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
       data-def="${escAttr(scoreCard)}"
-      aria-label="${c.alias}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10. Open the wanted poster.">
-      <circle cx="${cx}" cy="${cy}" r="11" fill="${colr[c.cls]}" stroke="#e6ddc6" stroke-width="2"/>
+      aria-label="${c.alias}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10.${discSay} Open the wanted poster.">
+      <circle cx="${cx}" cy="${cy}" r="11" ${disc}/>
       <text x="${txx}" y="${cy+4}" text-anchor="${anchor}">${c.alias}</text>
     </g>`;
   }).join("");
@@ -676,13 +746,13 @@ function applyFilters(){
   const list=filtered();
   renderTimeline(list);
   renderScatter(list);
-  [classSelect,labSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
-  const narrowed = !!(classSelect.value || labSelect.value);
+  [classSelect,labSelect,discSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
+  const narrowed = !!(classSelect.value || labSelect.value || discSelect.value);
   filterCount.hidden = !narrowed;
   filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
 }
 
-[classSelect,labSelect].forEach(s=>s.addEventListener('change',applyFilters));
+[classSelect,labSelect,discSelect].forEach(s=>s.addEventListener('change',applyFilters));
 
 /* ---------- VIEW TABS ----------
    The chosen view is mirrored into a ?view= parameter so a link to the
@@ -837,6 +907,10 @@ function openCase(id){
         <div class="rap-label">Wanted for</div>
         <div class="rap-val">${gloss(c.wantedFor)}</div>
       </div>
+      ${c.disclosedBy ? `<div class="rap-row">
+        <div class="rap-label">Disclosed by</div>
+        <div class="rap-val">${c.disclosedBy.who}</div>
+      </div>` : ''}
       <div class="rap-row">
         <div class="rap-label">Modus operandi</div>
         <div class="rap-val"><ul>${c.mo.map(m=>`<li>${gloss(m)}</li>`).join("")}</ul></div>

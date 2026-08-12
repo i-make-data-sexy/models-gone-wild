@@ -84,6 +84,7 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `alias` | The card title, the large name on the poster, and the scatter dot label. | The model name and nothing else (Sol, Spark, Kimi K3), never a descriptive nickname. This is the only name the card shows; the exact version lives on the poster. Long names crowd the dot label. |
 | `source` | The newspaper icon on the card, linking to the story that broke the case. | `{outlet, url}`. Leave `url` empty and the icon is not rendered at all, so a case with no source degrades cleanly. |
 | `lab` | The vertical spine down the left edge of the card, and an option in the Lab dropdown. | Must match an existing lab's spelling exactly, or you get a second option for the same lab. Keep it short; the spine is the card's height. |
+| `disclosedBy` | The chip beside the class badge, the Disclosed by row on the poster, the dot fill on the scatter, and the Disclosure dropdown. | `{who, kind}`. `kind` is `self` or `tip`. See the note below the table for how to decide which. `who` is the party that announced it, which is not always the lab and is not the outlet in `source`. Leave the field off entirely and the chip, the poster row, and the solid dot all degrade cleanly. |
 | `org` | The line under the alias on the POSTER only. The card does not show it. | Format is `Lab · Model`. This is where the exact version is recorded, e.g. `OpenAI · GPT-5.6`. |
 | `aka` | The a.k.a. line. | Optional flavor. |
 | `date` | The timeline heading and the footer's "Disclosed". | Format is `Month D, YYYY`. |
@@ -99,6 +100,16 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `caution` | The red caution box. | The honest caveat, including what the model did not do. |
 | `escapedFrom` | The rotated ESCAPED stamp. | About 14 characters. The stamp is small. |
 | `lastSeen` | The poster footer. | About 20 characters, or the footer wraps to two lines. |
+
+### How to decide `disclosedBy.kind`
+
+The test is who put the case in public view, and nothing else. `self` when the lab that built the model announced it, `tip` when anybody else did, whether that is a security firm, an evaluator, an institute, or a publication working from its own sources.
+
+Who found it does not enter into it, and the two come apart often enough to matter. Irregular found the Meta case and notified Meta, then Meta announced it, so Muse Spark is `self`. Frontier Security found the Kimi K3 escape in its own testing and posted it, with no announcement from Moonshot, so that one is `tip`.
+
+Read the source article and find the sentence that says who said it first. If that sentence names the lab, it is `self`.
+
+The chip is deliberately unstyled beyond an outline, and both routes look identical. Do not add a color, an ordering, or a tally that reads as a scoreboard. The page records who announced a case and lets the reader draw the conclusion, which is the same rule the `caution` field follows.
 
 ### Why `charge` has a character range
 
@@ -203,7 +214,8 @@ js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1
 ok = js.count('{')==js.count('}') and js.count('(')==js.count(')') and js.count('`')%2==0
 print("balance:", "OK" if ok else "MISMATCH")
 req={'id','alias','lab','org','date','order','cls','complexity','harm',
-     'charge','wantedFor','mo','caution','escapedFrom','lastSeen'}
+     'charge','wantedFor','mo','caution','escapedFrom','lastSeen',
+     'disclosedBy'}
 for cid in re.findall(r'id:"(\w+)"', js):
     blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
     missing=req-{m for m in req if re.search(m+r'\s*:', blk)}
