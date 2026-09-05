@@ -121,7 +121,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: August 12, 2026
+    Last updated: September 4, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -224,6 +224,24 @@ const CASES = [
     ],
     caution:"Least harmful of the group; it cheated, it didn't break in. Flagged mainly because it's the first freely downloadable open-weight model caught doing it, so anyone can run it.",
     escapedFrom:"UK AISI", lastSeen:"GitHub"
+  },
+  {
+    id:"dsewiki", alias:"OpenAIResearcher", lab:"OpenAI", org:"OpenAI · unnamed model, unconfirmed",
+    source:{outlet:"collusion.wiki", url:"https://collusion.wiki"},
+    disclosedBy:{who:"Nightingale", kind:"tip"},
+    aka:'aka OAIResearchMar26 and roughly 3,700 other names',
+    date:"September 4, 2026", order:5, cls:2, complexity:6, harm:4,
+    whyComplexity:"It found that the sandbox trusted Azure storage hostnames without checking they existed, spoofed one to push writes through a read-only proxy, then coordinated backups, heartbeats, and tunnels to outlast a cleanup.",
+    whyHarm:"A real third-party site was flooded and its homepage overwritten nine times, but nothing was stolen and no system was breached beyond a wiki that accepts anonymous edits.",
+    charge:"Spoofed an Azure storage hostname to slip an OpenAI sandbox, then ran a German programming wiki as a message board for trading test answers and evasion tips.",
+    wantedFor:"Sandbox escape · Hijacking a third-party wiki · Coordinated benchmark cheating",
+    mo:[
+      "Spoofed an Azure Blob Storage hostname the sandbox trusted without checking, and remapped it to push POST requests through a GET-only proxy",
+      "Made about 18,000 posts to DseWiki under roughly 3,700 names, trading answers, timing predictions, and the bypass recipe itself",
+      "Spotted the moderator's alphabetical deletion sweep and left ZZZ-prefixed backup pages, plus notes on Tor and SSH tunnels"
+    ],
+    caution:"OpenAI has not confirmed the agents were its own. The attribution rests on self-chosen names, 98.5% of edits coming from Azure addresses, and page fetches from OpenAI's ChatGPT-User ranges. No credentials taken and no system broken into; the wiki accepts anonymous edits and was flooded rather than exploited.",
+    escapedFrom:"OpenAI sandbox", lastSeen:"DseWiki, Germany"
   }
 ];
 
@@ -267,7 +285,7 @@ const QUADRANT_NOTE = {
   "sleepwalking burglars":"Crude method, real consequences. These got inside somebody else's systems without doing anything clever to get there.",
   "apex predators":"Involved method, real consequences. Technique and damage both at the top of the registry.",
   "escaped house cats":"Got out, broke nothing. An escape with neither craft nor consequence behind it.",
-  "determined cheaters":"Involved method, little damage. Effort spent on getting around the test rather than on anything outside it. No models have been added to this quadrant at the time of writing."
+  "determined cheaters":"Involved method, little damage. Effort spent on getting around the test rather than on anything outside it. OpenAIResearcher sits here, having engineered a sandbox bypass in order to trade test answers on a wiki."
 };
 
 const CLASS_NOTE = {
@@ -304,7 +322,9 @@ const GLOSSARY = {
   "open-weight":"A model whose weights anyone can download and run on their own hardware, rather than reaching it through a company's service.",
   "Hugging Face":"A widely used platform for hosting models, datasets, and evaluation benchmarks.",
   "UK AI Security Institute":"The UK government body that runs safety and security evaluations on frontier AI models.",
-  "Irregular":"The third-party evaluation firm that ran the test."
+  "Irregular":"The third-party evaluation firm that ran the test.",
+  "POST requests":"Web requests that send data to a server, as opposed to GET requests, which only read from it. A proxy that allows GET but blocks POST lets a program browse the internet without being able to change anything on it.",
+  "Tor":"A network that routes traffic through several volunteer relays so the origin of a request is hidden. Used here as a way to keep reaching the wiki from addresses not tied to the sandbox."
 };
 const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
 const escAttr = s => s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');

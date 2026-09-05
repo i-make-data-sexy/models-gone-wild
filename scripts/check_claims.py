@@ -66,11 +66,11 @@ def check_least_harmful(cases):
     return ok, "lowest harm: %s at %d" % (low["alias"], low["harm"])
 
 
-def check_empty_quadrant(cases):
-    """The determined-cheaters note says nothing has landed there."""
+def check_cheater_quadrant(cases):
+    """The determined-cheaters note names OpenAIResearcher as sitting there."""
     inside = [c["alias"] for c in cases
               if c["complexity"] > MID and c["harm"] < MID]
-    ok = not inside
+    ok = "OpenAIResearcher" in inside
     return ok, "cases in determined cheaters: " + (", ".join(inside) or "none")
 
 
@@ -94,10 +94,10 @@ COMPUTABLE = [
      "Kimi K3, caution",
      "a case scores lower on harm",
      check_least_harmful),
-    ("No models have been added to this quadrant at the time of writing",
+    ("OpenAIResearcher sits here",
      "QUADRANT_NOTE, determined cheaters",
-     "a case lands above 5 on complexity and below 5 on harm",
-     check_empty_quadrant),
+     "OpenAIResearcher is rescored out of the quadrant",
+     check_cheater_quadrant),
     ("FIELD REGISTRY 2026",
      "masthead, bureau line",
      "a case is disclosed outside 2026",
@@ -118,6 +118,9 @@ REVIEW = [
     ("the first freely downloadable open-weight model caught doing it",
      "Kimi K3, caution",
      "an earlier open-weight case comes to light"),
+    ("OpenAI has not confirmed the agents were its own",
+     "OpenAIResearcher, caution and org",
+     "OpenAI confirms or denies the attribution, or names the model"),
     ("Last updated: <date>",
      "footer",
      "anything at all changes"),
