@@ -75,7 +75,7 @@ def check_cheater_quadrant(cases):
 
 
 def check_registry_year(cases):
-    """The masthead reads FIELD REGISTRY 2026."""
+    """The masthead reads FIELD REGISTRY 2026. Keyed to the escape year."""
     years = sorted({c["date"].split()[-1] for c in cases})
     ok = years == ["2026"]
     return ok, "years represented: " + ", ".join(years)
@@ -100,7 +100,7 @@ COMPUTABLE = [
      check_cheater_quadrant),
     ("FIELD REGISTRY 2026",
      "masthead, bureau line",
-     "a case is disclosed outside 2026",
+     "a case escapes outside 2026",
      check_registry_year),
 ]
 

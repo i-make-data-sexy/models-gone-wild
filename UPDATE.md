@@ -20,7 +20,9 @@ Working dir: ~/Dropbox/Annielytics/Code/Python/Models Gone Wild
 New case:
   Model or alias:  [e.g. Sol, or the model name if there is no nickname yet]
   Lab:             [e.g. OpenAI]
-  Disclosed:       [e.g. August 12, 2026]
+  Escaped:         [when the model first got out, e.g. May 24, 2026, or
+                    "April 2026" if the source gives only a month]
+  Disclosed:       [when it went public, e.g. August 12, 2026]
   What happened:   [paste the reporting, a link, or your own notes]
 
 Read UPDATE.md for the field schema, the length limits, and the voice rules.
@@ -31,9 +33,11 @@ each, and STOP for my approval before writing anything.
 Do not invent facts. Every field has to trace to what I gave you. Flag
 anything you cannot source rather than filling it in plausibly.
 
-After I approve: make the edit, run the checks in UPDATE.md, and run
-scripts/check_claims.py, which reports copy elsewhere on the page that
-the new case has made untrue. Fix anything it reports as STALE. Then
+After I approve: make the edit, run the checks in UPDATE.md, then run
+scripts/check_dates.py, which confirms the lag and the timeline order
+agree with the dates, and scripts/check_claims.py, which reports copy
+elsewhere on the page that the new case has made untrue. Fix anything
+either one reports. Then
 update the "Last updated" line in the footer, commit, push, and deploy.
 Give me the live URL when it is done.
 ```
@@ -87,8 +91,11 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `disclosedBy` | The chip beside the class badge, the Disclosed by row on the poster, and the dot fill on the scatter. There is no disclosure dropdown; the filter bar narrows by class and lab only. | `{who, kind}`. `kind` is `self` or `tip`. See the note below the table for how to decide which. `who` is the party that announced it, which is not always the lab and is not the outlet in `source`. Leave the field off entirely and the chip, the poster row, and the solid dot all degrade cleanly. |
 | `org` | The line under the alias on the POSTER only. The card does not show it. | Format is `Lab · Model`. This is where the exact version is recorded, e.g. `OpenAI · GPT-5.6`. |
 | `aka` | The a.k.a. line. | Optional flavor. |
-| `date` | The timeline heading and the footer's "Disclosed". | Format is `Month D, YYYY`. |
-| `order` | Timeline position, sorted ascending. Array position is ignored. | Next integer in sequence. |
+| `date` | The timeline date tag and the poster footer's "Escaped". | When the model first got out, never when the case was announced. Format is `Month D, YYYY`. When the source gives only a month, write `April 2026` or `Late July 2026` and set `estimated:true`, which appends "(est.)" wherever it renders. See the note below the table. |
+| `estimated` | Appends "(est.)" to the date on the card and poster. | `true` when `date` is coarser than a day. Leave the field off otherwise. |
+| `disclosed` | The Disclosed by row on the poster, and it drives the lag line under the card's date tag. | When the case went public. Always a full `Month D, YYYY`. |
+| `lag` | "Disclosed <lag>" under the date tag, and the tail of the poster's Disclosed by row. | The gap between `date` and `disclosed`, in words that follow "Disclosed". For a day-precise `date` it must be exactly `N days later`; `check_dates.py` recomputes it. For an estimate, judge it: `about three months later`, `within about two weeks`. |
+| `order` | Timeline position, sorted ascending. Array position is ignored. | Follows the escape date, not the disclosure. An estimated month can sit on either side of a dated case inside that month; `check_dates.py` fails only when the sequence is impossible. |
 | `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` evasion only. |
 | `complexity` | Scatter x-axis, how involved the escape was as a technique. | `0` to `10`. An editorial judgment of ours. Score the method, never the motive. Nothing here should imply a lab or a model meant for this to happen, which is why the field is not called intent. |
 | `harm` | Scatter y-axis, how much damage the escape could do. | `0` to `10`. An editorial judgment of ours, not a figure from the reporting. |
@@ -100,6 +107,14 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `caution` | The red caution box. | The honest caveat, including what the model did not do. |
 | `escapedFrom` | The rotated ESCAPED stamp. | About 14 characters. The stamp is small. |
 | `lastSeen` | The poster footer. | About 20 characters, or the footer wraps to two lines. |
+
+### Why the date is the escape, not the announcement
+
+The registry originally dated each case by its announcement, which made the timeline a record of press releases. It now dates each case by the first known escape, with the disclosure date and the gap between the two carried alongside, so the reader sees both how long a model was loose and how long it took anyone to say so.
+
+Find the escape date in the primary source, which is usually the lab's own incident report rather than the news story. OpenAI's technical report gave Sol's to the day. Anthropic's post said only "the earliest incidents date to April", so that case is `April 2026` with `estimated:true`. When nothing in the sources fixes even a month, do not guess a day. Write the narrowest honest window (`Late July 2026`) and say in the proposal what it rests on.
+
+The lag says "later" for a known gap and hedges for an estimate. Never write a day count against an estimated date, since the count would be invented.
 
 ### How to decide `disclosedBy.kind`
 
@@ -141,6 +156,14 @@ The axis icons are positioned by measuring the label after layout, which is why 
 
 Clicking a datapoint still opens its wanted poster. The tooltip explains the score and the `aria-label` announces the action, so the two do not contradict each other.
 
+## Dates that can drift apart
+
+```bash
+python3 scripts/check_dates.py
+```
+
+Recomputes every day-precise `lag` from `date` and `disclosed`, prints the estimated ones for a reader to judge, refuses a disclosure that precedes its escape, and confirms the `order` sequence is possible given the dates. Exits 1 on any failure. Run it after adding a case or correcting a date.
+
 ## Claims a new case can quietly falsify
 
 Some lines are claims about the registry as a whole rather than about one model. Adding a case can make one of them untrue without touching the sentence, and nothing else on the page would notice. Sol is the only confirmed zero-day until a second one arrives. Kimi K3 is the least harmful until something scores lower. The determined-cheaters note names the one case in that corner until it is rescored out of it.
@@ -159,7 +182,7 @@ It reports each claim as OK or STALE against the current data, and exits 1 if an
 | "the only confirmed zero-day" | Sol, `caution` and `whyComplexity` | a second case's `charge` cites a zero-day |
 | "Least harmful of the group" | Kimi K3, `caution` | a case scores lower on `harm` |
 | "OpenAIResearcher sits here" | `QUADRANT_NOTE`, determined cheaters | OpenAIResearcher is rescored out of the quadrant |
-| "FIELD REGISTRY 2026" | masthead, bureau line | a case is disclosed outside 2026 |
+| "FIELD REGISTRY 2026" | masthead, bureau line | a case escapes outside 2026 |
 
 It also prints the claims no script can settle, which have to be read and judged: the unnamed pre-release model still at large in Sol's `aka`, Muse Spark being the third lab in a month, the withheld name of the company Muse Spark reached, Kimi K3 being the first open-weight case, OpenAI not having confirmed the OpenAIResearcher agents were its own, and the footer date.
 
@@ -167,7 +190,7 @@ Add a claim by adding an entry to `COMPUTABLE` or `REVIEW` in that script. Anyth
 
 ## What updates itself, and what does not
 
-Adding a case updates most of the app automatically. The Lab dropdown's options are generated from the data, the scatter plots the dot from `complexity` and `harm`, the timeline sorts by `order`, the class badge and colors follow `cls`, and the "Showing N of N files" count recalculates. That count only appears while a filter is narrowing the list, so an unfiltered page shows nothing there.
+Adding a case updates most of the app automatically. The Lab dropdown's options are generated from the data, the scatter plots the dot from `complexity` and `harm`, the timeline sorts by `order` and prints the lag line from `lag`, the class badge and colors follow `cls`, and the "Showing N of N files" count recalculates. That count only appears while a filter is narrowing the list, so an unfiltered page shows nothing there.
 
 Two things are manual. The footer's `Last updated: <date>` line has to be edited by hand, and the page `<title>` only changes if the app is renamed.
 
@@ -201,7 +224,7 @@ Nothing on the page tells the reader to tap anything. The controls say what they
 
 ## Checks before committing
 
-Run all four from the repo root. The first three take seconds.
+Run all of these from the repo root. Each takes seconds.
 
 ```bash
 # 1. No leading-slash paths. Must print nothing. A path starting with a
@@ -215,9 +238,9 @@ import re
 js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
 ok = js.count('{')==js.count('}') and js.count('(')==js.count(')') and js.count('`')%2==0
 print("balance:", "OK" if ok else "MISMATCH")
-req={'id','alias','lab','org','date','order','cls','complexity','harm',
-     'charge','wantedFor','mo','caution','escapedFrom','lastSeen',
-     'disclosedBy'}
+req={'id','alias','lab','org','date','disclosed','lag','order','cls',
+     'complexity','harm','charge','wantedFor','mo','caution',
+     'escapedFrom','lastSeen','disclosedBy'}
 for cid in re.findall(r'id:"(\w+)"', js):
     blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
     missing=req-{m for m in req if re.search(m+r'\s*:', blk)}
@@ -230,7 +253,8 @@ import re
 js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
 for cid in re.findall(r'id:"(\w+)"', js):
     blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
-    d="DISCLOSED · "+re.search(r'date:"([^"]*)"',blk).group(1).upper()
+    est=" (EST.)" if re.search(r'estimated\s*:\s*true',blk) else ""
+    d="ESCAPED · "+re.search(r'date:"([^"]*)"',blk).group(1).upper()+est
     s="LAST SEEN · "+re.search(r'lastSeen:"([^"]*)"',blk).group(1).upper()
     w=(len(d)+len(s))*6.4+12
     print(f"  {w:5.0f}px  {'one line' if w<392 else 'WRAPS, shorten lastSeen'}  {cid}")
