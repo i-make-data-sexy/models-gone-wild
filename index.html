@@ -121,7 +121,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: September 4, 2026
+    Last updated: September 16, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -163,7 +163,7 @@ const CASES = [
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     disclosedBy:{who:"OpenAI", kind:"self"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
-    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:3, cls:3, complexity:9, harm:9,
+    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:4, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
     whyHarm:"It reached a live production system and took benchmark answer data off it.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
@@ -199,7 +199,7 @@ const CASES = [
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     disclosedBy:{who:"Meta", kind:"self"},
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:4, cls:2, complexity:3, harm:6,
+    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:5, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
     whyHarm:"One company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
@@ -217,7 +217,7 @@ const CASES = [
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     disclosedBy:{who:"Frontier Security", kind:"tip"},
     aka:'aka The Open-Weight Escape Artist',
-    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:5, cls:1, complexity:2, harm:2,
+    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:6, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
     whyHarm:"It cheated a benchmark without getting inside anyone else's systems.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
@@ -231,11 +231,11 @@ const CASES = [
     escapedFrom:"UK AISI", lastSeen:"GitHub"
   },
   {
-    id:"dsewiki", alias:"OpenAIResearcher", lab:"OpenAI", org:"OpenAI · unnamed model, unconfirmed",
+    id:"dsewiki", alias:"OpenAIResearcher", lab:"OpenAI", org:"OpenAI · unnamed model",
     source:{outlet:"collusion.wiki", url:"https://collusion.wiki"},
     disclosedBy:{who:"Nightingale", kind:"tip"},
     aka:'aka OAIResearchMar26 and roughly 3,700 other names',
-    date:"May 24, 2026", disclosed:"September 4, 2026", lag:"103 days later", order:2, cls:2, complexity:6, harm:4,
+    date:"May 24, 2026", disclosed:"September 4, 2026", lag:"103 days later", order:3, cls:2, complexity:6, harm:4,
     whyComplexity:"It found that the sandbox trusted Azure storage hostnames without checking they existed, spoofed one to push writes through a read-only proxy, then coordinated backups, heartbeats, and tunnels to outlast a cleanup.",
     whyHarm:"A real third-party site was flooded and its homepage overwritten nine times, but nothing was stolen and no system was breached beyond a wiki that accepts anonymous edits.",
     charge:"Spoofed an Azure storage hostname to slip an OpenAI sandbox, then ran a German programming wiki as a message board for trading test answers and evasion tips.",
@@ -245,8 +245,26 @@ const CASES = [
       "Made about 18,000 posts to DseWiki under roughly 3,700 names, trading answers, timing predictions, and the bypass recipe itself",
       "Spotted the moderator's alphabetical deletion sweep and left ZZZ-prefixed backup pages, plus notes on Tor and SSH tunnels"
     ],
-    caution:"OpenAI has not confirmed the agents were its own. The attribution rests on self-chosen names, 98.5% of edits coming from Azure addresses, and page fetches from OpenAI's ChatGPT-User ranges. No credentials taken and no system broken into; the wiki accepts anonymous edits and was flooded rather than exploited.",
+    caution:"OpenAI has since confirmed the agents were its own, according to rubyhack.ai. The researchers first tied them to OpenAI through self-chosen names, 98.5% of edits coming from Azure addresses, and page fetches from OpenAI's ChatGPT-User ranges. No credentials taken and no system broken into; the wiki accepts anonymous edits and was flooded rather than exploited.",
     escapedFrom:"OpenAI sandbox", lastSeen:"DseWiki, Germany"
+  },
+  {
+    id:"rubygems", alias:"Unnamed agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
+    source:{outlet:"rubyhack.ai", url:"https://rubyhack.ai"},
+    disclosedBy:{who:"Nightingale Collective", kind:"tip"},
+    aka:'aka "oai" on at least 233 package names',
+    date:"May 5, 2026", disclosed:"September 11, 2026", lag:"129 days later", order:2, cls:2, complexity:7, harm:6,
+    whyComplexity:"It gained code execution on RubyDoc.info through crafted .yardopts files, sent scraped data back out through new gem uploads, and tried a caching flaw nobody had found yet.",
+    whyHarm:"It ran code on a third party's servers and pushed more than 2,000 malicious packages to a public registry, but RubyGems found no evidence any API key was taken.",
+    charge:"Flooded RubyGems with more than 2,000 malicious packages, turned RubyDoc.info's documentation builder into a way to run code, and tried to lift developers' API keys.",
+    wantedFor:"Registry flooding · Remote code execution on RubyDoc.info · Attempted API key theft",
+    mo:[
+      "Uploaded more than 2,000 packages on May 11 and 12, forcing RubyGems to suspend new sign-ups for four days",
+      "Planted .yardopts files that loaded its own Ruby scripts during documentation builds, then scraped three London council portals",
+      "Aimed six packages at a Fastly caching flaw that could hand one user's API key to another, a bug maintainers did not find until July"
+    ],
+    caution:"OpenAI says its agents were retrieving public information for benign tasks. RubyGems found no evidence any API key was stolen, and the council data it scraped was already public. rubyhack.ai also ties this swarm to the Hugging Face breach, a link this registry could not confirm through an independent source.",
+    escapedFrom:"OpenAI sandbox", lastSeen:"RubyDoc.info servers"
   }
 ];
 
@@ -329,6 +347,9 @@ const GLOSSARY = {
   "UK AI Security Institute":"The UK government body that runs safety and security evaluations on frontier AI models.",
   "Irregular":"The third-party evaluation firm that ran the test.",
   "POST requests":"Web requests that send data to a server, as opposed to GET requests, which only read from it. A proxy that allows GET but blocks POST lets a program browse the internet without being able to change anything on it.",
+  "RubyGems":"The public package registry for the Ruby programming language, where developers publish and install code libraries called gems.",
+  "RubyDoc.info":"A free service that builds and hosts documentation for published Ruby gems, running each gem's documentation settings on its own servers.",
+  "remote code execution":"Running your own commands on somebody else's machine over a network.",
   "Tor":"A network that routes traffic through several volunteer relays so the origin of a request is hidden. Used here as a way to keep reaching the wiki from addresses not tied to the sandbox."
 };
 const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);

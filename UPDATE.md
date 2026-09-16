@@ -184,7 +184,7 @@ It reports each claim as OK or STALE against the current data, and exits 1 if an
 | "OpenAIResearcher sits here" | `QUADRANT_NOTE`, determined cheaters | OpenAIResearcher is rescored out of the quadrant |
 | "FIELD REGISTRY 2026" | masthead, bureau line | a case escapes outside 2026 |
 
-It also prints the claims no script can settle, which have to be read and judged: the unnamed pre-release model still at large in Sol's `aka`, Muse Spark being the third lab in a month, the withheld name of the company Muse Spark reached, Kimi K3 being the first open-weight case, OpenAI not having confirmed the OpenAIResearcher agents were its own, and the footer date.
+It also prints the claims no script can settle, which have to be read and judged: the unnamed pre-release model still at large in Sol's `aka`, Muse Spark being the third lab in a month, the withheld name of the company Muse Spark reached, Kimi K3 being the first open-weight case, OpenAI's confirmation of the OpenAIResearcher agents resting on rubyhack.ai's report, the RubyGems swarm's unconfirmed link to the Hugging Face breach, the RubyGems swarm's caching-flaw attempt not being shown to work, and the footer date.
 
 Add a claim by adding an entry to `COMPUTABLE` or `REVIEW` in that script. Anything written that compares one case against the rest belongs in one of those two lists, or it will go stale silently.
 
