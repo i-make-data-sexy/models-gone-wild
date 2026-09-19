@@ -249,7 +249,7 @@ const CASES = [
     escapedFrom:"OpenAI sandbox", lastSeen:"DseWiki, Germany"
   },
   {
-    id:"rubygems", alias:"Unnamed agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
+    id:"rubygems", alias:"Unnamed agent", scatterLabel:"Unnamed OpenAI agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"rubyhack.ai", url:"https://rubyhack.ai"},
     disclosedBy:{who:"Nightingale Collective", kind:"tip"},
     aka:'aka "oai" on at least 233 package names',
@@ -716,7 +716,12 @@ function renderScatter(list){
        built as a string before it is anywhere the browser could measure
        it. 7px per character is generous for Oswald 600 at 13px, which
        errs toward flipping a label that would only just have fitted. */
-    const labelW = c.alias.length * 7;
+    /* The dot label is the alias unless a case carries a scatterLabel.
+       An alias like "Unnamed agent" identifies the case on its card,
+       where the lab already runs down the spine, but on this chart
+       there is no spine and the label has to stand alone. */
+    const label = c.scatterLabel || c.alias;
+    const labelW = label.length * 7;
     /* Two cases on the same harm row can sit close enough that the left
        one's label runs across the right one's dot, which is what Muse
        Spark and Gemini do at a harm of 6. The left label then flips to
@@ -757,9 +762,9 @@ function renderScatter(list){
     const discSay = tipped ? ' Tipped off.' : ' Self-reported.';
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
       data-def="${escAttr(scoreCard)}"
-      aria-label="${c.alias}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10.${discSay} Open the wanted poster.">
+      aria-label="${label}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10.${discSay} Open the wanted poster.">
       <circle cx="${cx}" cy="${cy}" r="11" ${disc}/>
-      <text x="${txx}" y="${cy+4}" text-anchor="${anchor}">${c.alias}</text>
+      <text x="${txx}" y="${cy+4}" text-anchor="${anchor}">${label}</text>
     </g>`;
   }).join("");
 
