@@ -712,7 +712,25 @@ function renderScatter(list){
 
   const pts=list.map(c=>{
     const cx=X(c.complexity), cy=Y(c.harm);
-    const anchor = cx>W-150 ? 'end' : 'start';
+    /* Label width is estimated rather than measured, since this SVG is
+       built as a string before it is anywhere the browser could measure
+       it. 7px per character is generous for Oswald 600 at 13px, which
+       errs toward flipping a label that would only just have fitted. */
+    const labelW = c.alias.length * 7;
+    /* Two cases on the same harm row can sit close enough that the left
+       one's label runs across the right one's dot, which is what Muse
+       Spark and Gemini do at a harm of 6. The left label then flips to
+       the far side of its own node, so the pair reads outward from each
+       other rather than into each other. Measured against the filtered
+       list rather than every case, so a label flips back once the
+       neighbour crowding it is filtered away. */
+    const crowded = list.some(o => o.id !== c.id && o.harm === c.harm
+      && o.complexity > c.complexity
+      && X(o.complexity) - cx < labelW + 28);
+    /* Flipping needs somewhere to flip to. Without this a long alias on
+       a low-complexity node would run off the left edge of the plot. */
+    const roomLeft = cx - 14 - labelW > 4;
+    const anchor = (cx>W-150 || (crowded && roomLeft)) ? 'end' : 'start';
     const txx = anchor==='end' ? cx-14 : cx+14;
     const scoreCard =
       `<p class="tip-lede">Below are the scores and rationale for the metrics we created using the details of the misdeed.</p>`
