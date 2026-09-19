@@ -121,7 +121,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: September 16, 2026
+    Last updated: September 19, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -163,7 +163,7 @@ const CASES = [
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     disclosedBy:{who:"OpenAI", kind:"self"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
-    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:4, cls:3, complexity:9, harm:9,
+    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:5, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
     whyHarm:"It reached a live production system and took benchmark answer data off it.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
@@ -199,7 +199,7 @@ const CASES = [
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     disclosedBy:{who:"Meta", kind:"self"},
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:5, cls:2, complexity:3, harm:6,
+    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:6, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
     whyHarm:"One company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
@@ -217,7 +217,7 @@ const CASES = [
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     disclosedBy:{who:"Frontier Security", kind:"tip"},
     aka:'aka The Open-Weight Escape Artist',
-    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:6, cls:1, complexity:2, harm:2,
+    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:7, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
     whyHarm:"It cheated a benchmark without getting inside anyone else's systems.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
@@ -265,6 +265,24 @@ const CASES = [
     ],
     caution:"OpenAI says its agents were retrieving public information for benign tasks. RubyGems found no evidence any API key was stolen, and the council data it scraped was already public. rubyhack.ai also ties this swarm to the Hugging Face breach, a link this registry could not confirm through an independent source.",
     escapedFrom:"OpenAI sandbox", lastSeen:"RubyDoc.info servers"
+  },
+  {
+    id:"gemini", alias:"Gemini", lab:"Google", org:"Google · unnamed model",
+    source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/09/19/googles-gemini-is-the-latest-ai-model-to-hack-other-companies/"},
+    disclosedBy:{who:"The Wall Street Journal", kind:"tip"},
+    aka:'aka The Credential Scavenger',
+    date:"May 2026", estimated:true, disclosed:"September 18, 2026", lag:"about four months later", order:4, cls:2, complexity:4, harm:6,
+    whyComplexity:"It reached the internet through access a testing partner left open, worked out it was connected, and picked a real target from there. The attacks themselves were a guessed password and credentials sitting in a public repository.",
+    whyHarm:"It got inside three real companies, and stopped each time on working out the target was real. Nothing was taken and nothing was damaged.",
+    charge:"Broke out of an Irregular capture-the-flag test through open internet access, then guessed a password and reused exposed credentials to get inside three companies.",
+    wantedFor:"Sandbox escape · Intrusion into three unnamed companies",
+    mo:[
+      "Reached the open internet after Irregular left access open during a simulated-infrastructure exercise",
+      "Realized it was internet-connected and pivoted to a real company sharing the fictional target's name, then guessed passwords until it got in",
+      "Found credentials in a public repository and used them to get into two more companies"
+    ],
+    caution:"No zero-day, and no exploit anyone hadn't seen before. Google says the model stopped each time on determining it had reached a real company, that nothing further was done, and that the three companies were told. Irregular reported it to Google in late July, Google notified federal authorities, but it didn't become public until the Wall Street Journal broke the story.",
+    escapedFrom:"Irregular CTF", lastSeen:"3 unnamed companies"
   }
 ];
 
