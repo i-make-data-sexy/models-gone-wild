@@ -180,7 +180,7 @@
     margin:26px 0 0;color:var(--ink-soft);line-height:1.7;
   }
   /* The tap prompt is its own paragraph, tucked closer to the copy above
-     it than a full paragraph gap would put it. */
+     it than a full paragraph gap would put it */
   .intro-cue{margin-top:14px;}
 
   /* The masthead's one prose link. Every other link in the app is an
@@ -199,7 +199,7 @@
   .intro a:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
 
   /* Three stamp-red dots, the quietest divider that still reads as
-     deliberate. */
+     deliberate */
   .flourish{display:flex;justify-content:center;gap:15px;margin:34px 0 0;}
   .flourish span{
     width:5px;height:5px;border-radius:50%;
@@ -230,14 +230,14 @@
     background:transparent;color:var(--ink-soft);
     border:1.5px solid transparent;border-bottom:none;
     /* Pulls the tab down onto the bar's rule so the selected one reads
-       as attached to the panel below it. */
+       as attached to the panel below it */
     margin-bottom:-1.5px;
     transition:background .15s,color .15s;
   }
   .tab:hover{color:var(--ink);}
   .tab[aria-selected="true"]{background:var(--stamp-red);color:var(--paper);border-color:var(--stamp-red);}
   /* Ink rather than stamp red, since a red outline on the red selected
-     tab would be invisible. */
+     tab would be invisible */
   .tab:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
 
   /* ===============================
@@ -274,7 +274,7 @@
      not silent about being set. */
   .filter-select:focus{outline:none;}
   /* A filter that is actually narrowing the list gets the ink border so
-     the state is visible without reading the option text. */
+     the state is visible without reading the option text */
   .filter-select.is-active{border-color:var(--ink);color:var(--ink);font-weight:600;}
   .filter-select option{text-transform:none;letter-spacing:normal;}
 
@@ -349,7 +349,7 @@
   .event.left .card{text-align:left;}
   .card-body{display:flex;gap:0;align-items:stretch;}
   /* position:relative anchors the action circles to this box rather
-     than to the page. */
+     than to the page */
   .card-text{position:relative;padding:12px 14px;min-width:0;flex:1;}
 
   /* ===============================
@@ -382,7 +382,7 @@
     font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
     font-size:19px;letter-spacing:.01em;line-height:1.05;margin:0 0 9px;
     /* Clears the two action circles so a long title wraps rather than
-       running underneath them. */
+       running underneath them */
     padding-right:62px;
   }
   .card-charge{
@@ -496,7 +496,7 @@
     text-transform:none;
   }
   .tip.show{opacity:1;visibility:visible;}
-  /* Definition style: prose, wraps, reads like the page. */
+  /* Definition style: prose, wraps, reads like the page */
   .tip.tip-def{
     font-family:'Special Elite',monospace;font-size:11.5px;
     line-height:1.55;text-align:left;max-width:280px;
@@ -524,13 +524,13 @@
      too: weight alone is a weak signal in a single-weight face. */
   .tip-row b{color:var(--paper);font-weight:700;}
 
-  /* Label style: the short action labels on the card icons. */
+  /* Label style: the short action labels on the card icons */
   .tip.tip-label{
     font-family:'Oswald',sans-serif;font-size:10.5px;font-weight:500;
     letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
   }
   /* The arrow is offset by a variable so it keeps pointing at the
-     trigger even after the bubble has been pushed sideways. */
+     trigger even after the bubble has been pushed sideways */
   .tip::after{
     content:"";position:absolute;left:var(--arrow,50%);margin-left:-6px;
     border:6px solid transparent;
@@ -551,7 +551,7 @@
   .pt circle{transition:r .13s, stroke-width .13s;}
   .pt:hover circle,.pt:focus-visible circle{stroke:var(--ink);stroke-width:3;}
 
-  /* Legend for the two dot fills. */
+  /* Legend for the two dot fills */
   .scatter-legend{
     display:flex;justify-content:center;flex-wrap:wrap;gap:8px 22px;
     margin:14px 0 0;font-family:'Oswald',sans-serif;font-weight:500;
@@ -569,7 +569,7 @@
      keyboard focus. The dotted rule is the same cue the glossary terms
      use in prose, at the same weight. */
   /* Axis labels are marked with an info icon instead of a dotted rule,
-     so the two axes read as explainable without underlining a heading. */
+     so the two axes read as explainable without underlining a heading */
   .axis-note{cursor:help;outline:none;}
   .axis-note:hover circle,.axis-note:focus circle{stroke:var(--stamp-red);}
   .axis-note:hover text,.axis-note:focus text{fill:var(--stamp-red);}
@@ -712,7 +712,7 @@
 
   @media only screen and (max-width:800px){
     /* Phones keep the page's original 20px gutter rather than the 30px
-       desktop shell, since 30px on a narrow screen squeezes the posters. */
+       desktop shell, since 30px on a narrow screen squeezes the posters */
     .wrap{padding:0 20px 90px;}
 
     .site-header{

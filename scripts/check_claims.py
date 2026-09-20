@@ -18,7 +18,7 @@ import re
 import sys
 
 SRC = "index.html"
-MID = 5          # the dashed quadrant dividers sit at 5 on both axes
+MID = 5          # The dashed quadrant dividers sit at 5 on both axes
 
 
 # ========================================================================

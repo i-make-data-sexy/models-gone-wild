@@ -13,9 +13,10 @@
      separate font rather than a filter. Subset to the single
      character with text=, so the download is under 1KB. -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@600&text=%F0%9F%A4%98&display=swap" rel="stylesheet">
-<!-- html2canvas powers the "download poster" button. Served from our own
-     server rather than a CDN so the feature can't break when an outside
-     host does, and so no third-party script runs on annielytics.com.
+<!-- The html2canvas library powers the "download poster" button. Served
+     from our own server rather than a CDN so the feature can't break when
+     an outside host does, and so no third-party script runs on
+     annielytics.com.
      The path is RELATIVE on purpose: this page is served at
      /tools/models-gone-wild/, so a leading slash would resolve to the
      site root and 404. -->
@@ -99,7 +100,7 @@
     </div>
 
     <!-- Only shown while a filter is narrowing the list, since "4 of 4"
-         on an unfiltered page is noise. -->
+         on an unfiltered page is noise -->
     <p class="filter-count" id="filterCount" hidden></p>
 
     <section class="view active" id="view-timeline" role="tabpanel" aria-labelledby="tab-timeline">

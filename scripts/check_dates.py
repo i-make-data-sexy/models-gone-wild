@@ -101,8 +101,8 @@ def main():
     seq = sorted(cases, key=lambda c: c["order"])
     for a, b in zip(seq, seq[1:]):
         wa, wb = window(a), window(b)
-        # a precedes b in the timeline. That is only impossible when the
-        # earliest b could be is still before the latest a could be.
+        # Case a precedes case b in the timeline. That is only impossible
+        # when the earliest b could be is still before the latest a could be.
         ok = wa and wb and wa[0] <= wb[1]
         print(f"  {'OK  ' if ok else 'FAIL'}   {a['id']} ({a['date']}) before {b['id']} ({b['date']})")
         bad += not ok
