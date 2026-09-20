@@ -25,7 +25,14 @@ MID = 5          # The dashed quadrant dividers sit at 5 on both axes
 #   Parsing
 # ========================================================================
 
-def load_cases(text):
+def load_cases(text: str) -> list:
+    """
+    Pulls every case out of the registry script embedded in the page
+    Args:
+        text (str): The full contents of index.html
+    Returns:
+        list: One dict per case with its id, alias, lab, date, charge, caution, complexity, and harm
+    """
     js = re.search(r"<script>(.*?)</script>", text, re.S).group(1)
     cases = []
     for cid in re.findall(r'id:"(\w+)"', js):
@@ -49,15 +56,27 @@ def load_cases(text):
 #   Computable
 # ========================================================================
 
-def check_only_zero_day(cases):
-    """Sol's caution and its complexity note both claim sole possession."""
+def check_only_zero_day(cases: list) -> tuple:
+    """
+    Confirms no more than one case cites a zero-day, the sole-possession claim in Sol's caution and complexity note
+    Args:
+        cases (list): The cases returned by load_cases
+    Returns:
+        tuple: Whether the claim holds, and a line naming the cases whose charge cites a zero-day
+    """
     hits = [c["alias"] for c in cases if "zero-day" in c["charge"].lower()]
     ok = len(hits) <= 1
     return ok, "cases whose charge cites a zero-day: " + (", ".join(hits) or "none")
 
 
-def check_most_dangerous(cases):
-    """Sol's caution calls it the most dangerous escape on the registry."""
+def check_most_dangerous(cases: list) -> tuple:
+    """
+    Confirms Sol still has the highest complexity plus harm, as its caution calls it the most dangerous escape on the registry
+    Args:
+        cases (list): The cases returned by load_cases
+    Returns:
+        tuple: Whether the claim holds, and a line naming the top-scoring case and its combined score
+    """
     ranked = sorted(cases, key=lambda c: c["complexity"] + c["harm"], reverse=True)
     top = ranked[0]
     ok = top["id"] == "sol"
@@ -65,23 +84,41 @@ def check_most_dangerous(cases):
         top["alias"], top["complexity"] + top["harm"])
 
 
-def check_least_harmful(cases):
-    """Kimi's caution calls it the least harmful of the group."""
+def check_least_harmful(cases: list) -> tuple:
+    """
+    Confirms Kimi still scores lowest on harm, as its caution calls it the least harmful of the group
+    Args:
+        cases (list): The cases returned by load_cases
+    Returns:
+        tuple: Whether the claim holds, and a line naming the lowest-harm case and its score, with complexity breaking ties
+    """
     low = min(cases, key=lambda c: (c["harm"], c["complexity"]))
     ok = low["id"] == "kimi"
     return ok, "lowest harm: %s at %d" % (low["alias"], low["harm"])
 
 
-def check_cheater_quadrant(cases):
-    """The determined-cheaters note names OpenAIResearcher as sitting there."""
+def check_cheater_quadrant(cases: list) -> tuple:
+    """
+    Confirms OpenAIResearcher still sits in the determined-cheaters quadrant its note places it in
+    Args:
+        cases (list): The cases returned by load_cases
+    Returns:
+        tuple: Whether the claim holds, and a line listing every case in the high-complexity, low-harm quadrant
+    """
     inside = [c["alias"] for c in cases
               if c["complexity"] > MID and c["harm"] < MID]
     ok = "OpenAIResearcher" in inside
     return ok, "cases in determined cheaters: " + (", ".join(inside) or "none")
 
 
-def check_registry_year(cases):
-    """The masthead reads FIELD REGISTRY 2026. Keyed to the escape year."""
+def check_registry_year(cases: list) -> tuple:
+    """
+    Confirms every escape falls in 2026, the year the FIELD REGISTRY 2026 masthead is keyed to
+    Args:
+        cases (list): The cases returned by load_cases
+    Returns:
+        tuple: Whether the claim holds, and a line listing the escape years represented
+    """
     years = sorted({c["date"].split()[-1] for c in cases})
     ok = years == ["2026"]
     return ok, "years represented: " + ", ".join(years)
@@ -145,7 +182,14 @@ REVIEW = [
 ]
 
 
-def main():
+def main() -> int:
+    """
+    Runs every computable claim check against the registry and prints the review-only reminders
+    Args:
+        None
+    Returns:
+        int: 1 if any computable claim has gone stale, 0 otherwise
+    """
     cases = load_cases(open(SRC).read())
     stale = 0
 

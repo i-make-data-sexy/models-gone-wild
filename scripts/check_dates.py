@@ -26,7 +26,14 @@ from datetime import datetime, timedelta
 SRC = "index.html"
 
 
-def load_cases(text):
+def load_cases(text: str) -> list:
+    """
+    Pulls every case's dates, lag, and timeline order out of the registry script embedded in the page
+    Args:
+        text (str): The full contents of index.html
+    Returns:
+        list: One dict per case with its id, date, disclosed, lag, estimated flag, and order
+    """
     js = re.search(r"<script>(.*?)</script>", text, re.S).group(1)
     cases = []
     for cid in re.findall(r'id:"(\w+)"', js):
@@ -43,21 +50,31 @@ def load_cases(text):
     return cases
 
 
-def parse_day(s):
-    """A full 'Month D, YYYY' date, or None when the string is coarser."""
+def parse_day(s: str) -> datetime | None:
+    """
+    Parses a full 'Month D, YYYY' date
+    Args:
+        s (str): The date string from the registry
+    Returns:
+        datetime | None: The parsed day, or None when the string is coarser than a full date
+    """
     try:
         return datetime.strptime(s, "%B %d, %Y")
     except ValueError:
         return None
 
 
-def window(c):
-    """The earliest and latest day a case's escape date could mean.
-
-    A full date is its own window. A month is the whole month. 'Late
-    <Month>' is the 21st onward, 'Early' the first ten days, and 'Mid-'
-    the eleventh through the twentieth. Returns None when the string
-    does not parse.
+def window(c: dict) -> tuple | None:
+    """
+    Works out the earliest and latest day a case's escape date could mean
+    Args:
+        c (dict): One case from load_cases
+    Returns:
+        tuple | None: The first and last possible day. A full date is its
+            own window, a bare month is the whole month, 'Late <Month>' is
+            the 21st onward, 'Early' is the first ten days, and 'Mid-' is
+            the eleventh through the twentieth. None when the date does not
+            parse.
     """
     d = parse_day(c["date"])
     if d:
@@ -71,7 +88,14 @@ def window(c):
     return first.replace(day=lo), first.replace(day=min(hi, last.day))
 
 
-def main():
+def main() -> int:
+    """
+    Checks every case's lag against its dates and confirms the timeline order is possible
+    Args:
+        None
+    Returns:
+        int: 1 on any failure, 0 otherwise
+    """
     cases = load_cases(open(SRC).read())
     bad = 0
 
