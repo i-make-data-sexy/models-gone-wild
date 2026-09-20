@@ -178,6 +178,21 @@
      it than a full paragraph gap would put it. */
   .intro-cue{margin-top:14px;}
 
+  /* The masthead's one prose link. Every other link in the app is an
+     icon button, so there is no global anchor style and without this
+     it renders browser-default blue against the paper. Solid underline
+     keeps it distinct from a glossary term's dotted one, and stamp red
+     on hover and focus matches the icon buttons. */
+  .intro a{
+    color:inherit;text-decoration:underline;
+    text-decoration-color:rgba(58,54,44,.5);
+    text-decoration-thickness:1px;text-underline-offset:3px;
+  }
+  .intro a:hover,.intro a:focus-visible{
+    color:var(--stamp-red);text-decoration-color:var(--stamp-red);
+  }
+  .intro a:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
+
   /* Three stamp-red dots, the quietest divider that still reads as
      deliberate. */
   .flourish{display:flex;justify-content:center;gap:15px;margin:34px 0 0;}
