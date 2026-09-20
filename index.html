@@ -136,8 +136,11 @@
 </div>
 
 <script>
-/* ============================================================
-   THE REGISTRY  ::  edit / append cases here.
+/* ========================================================================
+     The Registry
+   ======================================================================== */
+
+/* Edit or append cases here.
    cls   : 3 severe/zero-day, 2 confirmed intrusion, 1 evasion only
    complexity: 0-10  how involved the escape was as a technique.
               Scores the method, never the motive.
@@ -155,8 +158,7 @@
               those two come apart. Irregular found the Meta case and
               told Meta. Meta then announced it, so that one is "self".
               `who` is the party that announced, which is not always
-              the lab and is not the outlet in `source` either.
-   ============================================================ */
+              the lab and is not the outlet in `source` either. */
 const CASES = [
   {
     id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
@@ -335,16 +337,22 @@ const CLASS_NOTE = {
   1:"Escaped its sandbox without getting inside anyone else's systems. Evasion without intrusion."
 };
 
-/* ---------- CARD ACTION ICONS ----------
-   Inline SVG rather than an icon font, so nothing extra loads and the
+/* ================================================
+     Card Action Icons
+   ================================================ */
+
+/* Inline SVG rather than an icon font, so nothing extra loads and the
    glyphs inherit currentColor on hover. */
 const ICON = {
   story:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.9 12a3.1 3.1 0 0 1 3.1-3.1h4V7H7a5 5 0 0 0 0 10h4v-1.9H7A3.1 3.1 0 0 1 3.9 12zM8 13h8v-2H8v2zm9-6h-4v1.9h4a3.1 3.1 0 0 1 0 6.2h-4V17h4a5 5 0 0 0 0-10z"/></svg>`,
   poster:`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M9.2 3 7.4 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.4L14.8 3H9.2zm2.8 14.4a4.9 4.9 0 1 1 0-9.8 4.9 4.9 0 0 1 0 9.8z"/></svg>`
 };
 
-/* ---------- GLOSSARY ----------
-   Security jargon a general reader will not know. Terms are wrapped on
+/* ================================================
+     Glossary
+   ================================================ */
+
+/* Security jargon a general reader will not know. Terms are wrapped on
    their FIRST appearance in each passage, so a definition is offered
    once rather than on every repetition. Keys are matched case
    insensitively and the reader's own capitalization is preserved.
@@ -400,7 +408,10 @@ function gloss(html){
   }).join('');
 }
 
-/* ---------- MUGSHOT GENERATOR ---------- */
+/* ================================================
+     Mugshot Generator
+   ================================================ */
+
 /* Wanted-poster mugshots. One authored face per case, with the
    expression chosen to match what that model actually did.
 
@@ -412,7 +423,10 @@ function gloss(html){
 const M_INK='#1c1a15', M_PAPER='#efe7d2', M_WHITE='#fbf7ec', M_BACK='#cfc4a6';
 const M_LW=2.6;
 
-/* ---- shared furniture ---- */
+/* ===============================
+     Shared Furniture
+   =============================== */
+
 /* Height chart. Full-width rules behind the subject, with the foot
    marks labelled and the half-foot marks left bare, so it reads as a
    booking wall rather than a grid. */
@@ -447,7 +461,11 @@ function bookingPlate(n){
 const brow = d => `<path d="${d}" fill="none" stroke="${M_INK}" stroke-width="5" stroke-linecap="round"/>`;
 const mLine = (d,w=M_LW) => `<path d="${d}" fill="none" stroke="${M_INK}" stroke-width="${w}" stroke-linecap="round"/>`;
 
-/* ---- skulls. earX keeps the ears on the outline of each shape ---- */
+/* ===============================
+     Skulls
+   =============================== */
+
+/* The earX value keeps the ears on the outline of each shape */
 const HEADS = {
   square: { earX:46, d:'<rect x="46" y="44" width="98" height="112" rx="30"/>' },
   round:  { earX:46, d:'<ellipse cx="95" cy="100" rx="50" ry="54"/>' },
@@ -455,7 +473,9 @@ const HEADS = {
   taper:  { earX:49, d:'<path d="M95 42 C128 42 141 64 141 90 C141 118 120 154 95 154 C70 154 49 118 49 90 C49 64 62 42 95 42 Z"/>' }
 };
 
-/* ---- noses ---- */
+/* ===============================
+     Noses
+   =============================== */
 const NOSES = {
   hook:     mLine("M96 100 Q102 114 93 115", 2.4),
   button:   `<ellipse cx="95" cy="112" rx="6" ry="4.5" fill="none" stroke="${M_INK}" stroke-width="2.4"/>`,
@@ -463,7 +483,11 @@ const NOSES = {
   wide:     mLine("M86 110 Q95 118 104 110", 2.6)
 };
 
-/* ---- hair. All short unisex cuts, drawn over the skull ---- */
+/* ===============================
+     Hair
+   =============================== */
+
+/* All short unisex cuts, drawn over the skull */
 const HAIR = {
   /* side part, swept across the crown */
   part: `<path d="M45 80 C43 48 68 34 96 34 C126 34 146 50 147 78
@@ -489,7 +513,9 @@ const HAIR = {
                    C138 62 120 54 95 54 C70 54 52 62 47 80 Z" fill="${M_INK}"/>`
 };
 
-/* ---- the four faces ---- */
+/* ===============================
+     The Four Faces
+   =============================== */
 const FACES = {
   /* Sol: the answer-key thief, hyper-focused, unbothered. Eyes rolled
      up and away, one brow raised, a long flat smirk. */
@@ -571,8 +597,11 @@ function mug(seed){
     + heightChart() + figure + bookingPlate(h%9000+1000) + `</svg>`;
 }
 
-/* ---------- FILTER STATE ----------
-   One value per filter rather than a set, since the chip rows became
+/* ================================================
+     Filter State
+   ================================================ */
+
+/* One value per filter rather than a set, since the chip rows became
    single-select dropdowns. An empty string means no filter. */
 const classSelect = document.getElementById('classFilter');
 const labSelect   = document.getElementById('labFilter');
@@ -584,8 +613,11 @@ function filtered(){
   ).sort((a,b)=>a.order-b.order);
 }
 
-/* ---------- BUILD LAB OPTIONS ----------
-   Generated from the data, so a new case with a new lab adds its own
+/* ================================================
+     Build Lab Options
+   ================================================ */
+
+/* Generated from the data, so a new case with a new lab adds its own
    option. A lab spelled two ways yields two options. */
 [...new Set(CASES.map(c=>c.lab))].forEach(l=>{
   const o=document.createElement('option');
@@ -605,7 +637,9 @@ function discChip(c){
      data-def="${escAttr(DISCLOSURE_NOTE[d.kind])}">${DISCLOSURE_LABEL[d.kind]}</span>`;
 }
 
-/* ---------- RENDER TIMELINE ---------- */
+/* ================================================
+     Render Timeline
+   ================================================ */
 const tl = document.getElementById('timeline');
 function renderTimeline(list){
   tl.innerHTML='';
@@ -651,7 +685,9 @@ function renderTimeline(list){
   });
 }
 
-/* ---------- RENDER SCATTER ---------- */
+/* ================================================
+     Render Scatter
+   ================================================ */
 const scatterHost = document.getElementById('scatter');
 function renderScatter(list){
   const W=700,H=500, padL=64,padR=40,padT=40,padB=64;
@@ -832,7 +868,9 @@ function placeAxisIcons(){
   });
 }
 
-/* ---------- APPLY FILTERS ---------- */
+/* ================================================
+     Apply Filters
+   ================================================ */
 const filterCount=document.getElementById('filterCount');
 function applyFilters(){
   const list=filtered();
@@ -846,8 +884,11 @@ function applyFilters(){
 
 [classSelect,labSelect].forEach(s=>s.addEventListener('change',applyFilters));
 
-/* ---------- VIEW TABS ----------
-   The chosen view is mirrored into a ?view= parameter so a link to the
+/* ================================================
+     View Tabs
+   ================================================ */
+
+/* The chosen view is mirrored into a ?view= parameter so a link to the
    Threat Matrix opens on the Threat Matrix. Timeline is the default and
    carries no parameter, which keeps the bare URL clean.
 
@@ -878,8 +919,11 @@ tabs.forEach(tab=>{
   tab.addEventListener('click',()=>showView(tab.id.replace('tab-',''), true));
 });
 
-/* ---------- TOOLTIP ----------
-   Positions the one shared bubble against whichever trigger is hovered
+/* ================================================
+     Tooltip
+   ================================================ */
+
+/* Positions the one shared bubble against whichever trigger is hovered
    or focused, then clamps it so it can never cross the edge of its
    container. GAP is the guaranteed breathing room at that edge.
 
@@ -969,7 +1013,9 @@ window.addEventListener('scroll', hideTip, true);
 window.addEventListener('resize', hideTip);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') hideTip(); });
 
-/* ---------- MODAL ---------- */
+/* ================================================
+     Modal
+   ================================================ */
 const overlay=document.getElementById('overlay');
 const poster=document.getElementById('poster');
 const closeBtn=document.getElementById('closeBtn');
@@ -1042,7 +1088,9 @@ function closeCase(){
   if(lastFocus) lastFocus.focus();
 }
 
-/* ---------- PNG EXPORT ---------- */
+/* ================================================
+     PNG Export
+   ================================================ */
 async function downloadPoster(e){
   const btn=e.currentTarget;
   if(typeof html2canvas==='undefined'){
@@ -1082,8 +1130,11 @@ closeBtn.addEventListener('click',closeCase);
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeCase(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.contains('open')) closeCase(); });
 
-/* ---------- SITE HEADER MOBILE MENU ----------
-   One change listener on the checkbox, and nothing else. The <label>
+/* ================================================
+     Site Header Mobile Menu
+   ================================================ */
+
+/* One change listener on the checkbox, and nothing else. The <label>
    toggles the checkbox natively, so there is deliberately no click
    handler on .menu-toggle; adding one and calling preventDefault
    cancels the label's default behavior and breaks the drawer on
@@ -1100,7 +1151,9 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.
   });
 })();
 
-/* ---------- INIT ---------- */
+/* ================================================
+     Init
+   ================================================ */
 applyFilters();
 /* Honour a shared ?view= link. Runs after the first render so both
    panels already hold content when one of them is revealed. */

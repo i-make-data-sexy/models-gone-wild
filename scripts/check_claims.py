@@ -21,7 +21,10 @@ SRC = "index.html"
 MID = 5          # the dashed quadrant dividers sit at 5 on both axes
 
 
-# ---------------------------------------------------------------- parsing
+# ========================================================================
+#   Parsing
+# ========================================================================
+
 def load_cases(text):
     js = re.search(r"<script>(.*?)</script>", text, re.S).group(1)
     cases = []
@@ -42,7 +45,10 @@ def load_cases(text):
     return cases
 
 
-# ------------------------------------------------------------ computable
+# ========================================================================
+#   Computable
+# ========================================================================
+
 def check_only_zero_day(cases):
     """Sol's caution and its complexity note both claim sole possession."""
     hits = [c["alias"] for c in cases if "zero-day" in c["charge"].lower()]

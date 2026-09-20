@@ -56,8 +56,11 @@
      spans the wider shell above it, which is why the two are separate. */
   .content{max-width:920px;margin:0 auto;}
 
-  /* ---------- SITE HEADER (Annielytics v2) ----------
-     Ported from the canonical v2 mobile-header spec. The header sits
+  /* ===============================
+       Site Header (Annielytics v2)
+     =============================== */
+
+  /* Ported from the canonical v2 mobile-header spec. The header sits
      INSIDE .wrap, so box-shadow projects the black band out to the
      viewport edges and clip-path crops that projection to the header's
      own height. The mobile menu below flows naturally as a flex-column
@@ -142,7 +145,9 @@
 
   .nav-primary .menu.visible{padding:0 20px 20px 0;}
 
-  /* ---------- MASTHEAD ---------- */
+  /* ===============================
+       Masthead
+     =============================== */
   header.masthead{
     text-align:center;
     padding:46px 0 26px;
@@ -201,8 +206,11 @@
     background:var(--stamp-red);opacity:.7;
   }
 
-  /* ---------- REGISTRY PANEL ----------
-     One container holding the view tabs and the filters, so the two
+  /* ===============================
+       Registry Panel
+     =============================== */
+
+  /* One container holding the view tabs and the filters, so the two
      read as different things. The tabs sit on the panel's top rule and
      switch what is shown; the filters sit in the opposite corner and
      narrow what is shown. Previously both were rendered as chip rows
@@ -232,7 +240,9 @@
      tab would be invisible. */
   .tab:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
 
-  /* ---------- FILTERS ---------- */
+  /* ===============================
+       Filters
+     =============================== */
   .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-bottom:9px;}
   .filter-select{
     font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.08em;
@@ -277,7 +287,9 @@
   .view{display:none;}
   .view.active{display:block;}
 
-  /* ---------- TIMELINE ---------- */
+  /* ===============================
+       Timeline
+     =============================== */
   .timeline{position:relative;margin:44px auto 0;padding-left:0;}
   .timeline::before{
     content:"";position:absolute;left:26px;top:6px;bottom:6px;width:3px;
@@ -317,8 +329,11 @@
     margin:-5px 0 8px;
   }
 
-  /* ---------- CARD ----------
-     The card itself is not interactive. Only the two icons at its foot
+  /* ===============================
+       Card
+     =============================== */
+
+  /* The card itself is not interactive. Only the two icons at its foot
      are, so there is no cursor change and no hover lift here, either of
      which would promise a click the card does not answer.
 
@@ -337,8 +352,11 @@
      than to the page. */
   .card-text{position:relative;padding:12px 14px;min-width:0;flex:1;}
 
-  /* ---------- LAB SPINE ----------
-     The lab reads bottom to top down a paper band, with the class
+  /* ===============================
+       Lab Spine
+     =============================== */
+
+  /* The lab reads bottom to top down a paper band, with the class
      color carried by the inset rule on its outer edge. The card's org
      line drops to the model alone, since the lab is named here. */
   .spine{
@@ -408,8 +426,11 @@
   .class-badge[data-def]{cursor:help;outline:none;}
   .class-badge[data-def]:focus{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink);}
 
-  /* ---------- CARD ACTIONS ----------
-     Two controls per card: the story that broke the case, and the
+  /* ===============================
+       Card Actions
+     =============================== */
+
+  /* Two controls per card: the story that broke the case, and the
      wanted poster. Small outlined circles in the top-right corner, so
      they read as a pair of buttons without the weight the filled
      squares carried. Icons rather than labels keep the pair quiet; the
@@ -430,8 +451,11 @@
   .icon-btn:hover,.icon-btn:focus-visible{color:var(--stamp-red);border-color:var(--stamp-red);}
   .icon-btn:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
 
-  /* ---------- GLOSSARY TERMS ----------
-     A dotted rule in the text's own color, so the cue is present
+  /* ===============================
+       Glossary Terms
+     =============================== */
+
+  /* A dotted rule in the text's own color, so the cue is present
      without pulling the eye. tabindex makes the definition reachable
      by keyboard and by tap, since touch has no hover. */
   .term{
@@ -452,8 +476,11 @@
      there. The class is added for the html2canvas capture only. */
   .exporting .term{text-decoration:none;}
 
-  /* ---------- TOOLTIP ----------
-     One shared element rather than a ::after on each trigger. A pseudo
+  /* ===============================
+       Tooltip
+     =============================== */
+
+  /* One shared element rather than a ::after on each trigger. A pseudo
      element cannot be measured, so it cannot be kept inside anything;
      these were spilling past the left edge of the reading column. This
      one is measured and clamped by positionTip() in the script, and it
@@ -515,7 +542,9 @@
     color:var(--ink-soft);padding:50px 20px;
   }
 
-  /* ---------- SCATTER ---------- */
+  /* ===============================
+       Scatter
+     =============================== */
   .scatter-wrap{margin:40px auto 0;max-width:760px;}
   .scatter-svg{width:100%;height:auto;display:block;margin-top:10px;}
   .pt{cursor:pointer;}
@@ -555,7 +584,9 @@
   .svg-note:focus{text-decoration-color:var(--stamp-red);}
   .pt text{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;fill:var(--ink);}
 
-  /* ---------- MODAL / POSTER ---------- */
+  /* ===============================
+       Modal / Poster
+     =============================== */
   .overlay{
     position:fixed;inset:0;z-index:50;display:none;
     background:rgba(18,14,6,.78);padding:24px 16px;overflow-y:auto;
@@ -662,8 +693,11 @@
   }
   footer.site-foot b{color:var(--ink);}
 
-  /* ---------- SITE HEADER RESPONSIVE (Annielytics v2) ----------
-     Tablet stacks the logo over a centered inline nav and hides the
+  /* ===============================
+       Site Header Responsive (Annielytics v2)
+     =============================== */
+
+  /* Tablet stacks the logo over a centered inline nav and hides the
      MENU button. Mobile stacks the logo over a full-width MENU button
      with the drawer expanding beneath it. Every padding value below is
      from the canonical v2 spec and is load-bearing; do not trim them. */
