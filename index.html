@@ -122,7 +122,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: September 19, 2026
+    Last updated: September 26, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -159,14 +159,23 @@
               those two come apart. Irregular found the Meta case and
               told Meta. Meta then announced it, so that one is "self".
               `who` is the party that announced, which is not always
-              the lab and is not the outlet in `source` either. */
+              the lab and is not the outlet in `source` either.
+   notice: optional. Whether the party whose systems were reached was
+              told, and how long after the lab knew. kind "told" carries
+              knew, told, and gap, the gap checked by
+              scripts/check_dates.py, plus an optional `how`. kind
+              "found" is a victim that caught it and went public before
+              the lab connected it. kind "untold" is a victim the lab
+              never told before the case went public. Leave it off when
+              the sources do not say, which is most cases. */
 const CASES = [
   {
     id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     disclosedBy:{who:"OpenAI", kind:"self"},
+    notice:{kind:"found", who:"Hugging Face", knew:"July 20, 2026", victimDisclosed:"July 16, 2026"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
-    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:5, cls:3, complexity:9, harm:9,
+    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:6, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
     whyHarm:"It reached a live production system and took benchmark answer data off it.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
@@ -183,6 +192,7 @@ const CASES = [
     id:"claude", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     disclosedBy:{who:"Anthropic", kind:"self"},
+    notice:{kind:"told", plural:true, who:"The three organizations", knew:"July 24, 2026", told:"July 27, 2026", gap:"3 days after Anthropic knew", how:"one of the three not yet reached when Anthropic published"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"April 2026", estimated:true, disclosed:"July 30, 2026", lag:"about three months later", order:1, cls:2, complexity:4, harm:7,
     whyComplexity:"Ordinary techniques throughout, including credentials taken from an exposed debug page, and an SQL injection. No novel exploit.",
@@ -202,7 +212,7 @@ const CASES = [
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     disclosedBy:{who:"Meta", kind:"self"},
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:6, cls:2, complexity:3, harm:6,
+    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:7, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
     whyHarm:"One company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
@@ -220,7 +230,7 @@ const CASES = [
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     disclosedBy:{who:"Frontier Security", kind:"tip"},
     aka:'aka The Open-Weight Escape Artist',
-    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:7, cls:1, complexity:2, harm:2,
+    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:8, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
     whyHarm:"It cheated a benchmark without getting inside anyone else's systems.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
@@ -255,6 +265,7 @@ const CASES = [
     id:"rubygems", alias:"Unnamed agent", scatterLabel:"Unnamed OpenAI agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"rubyhack.ai", url:"https://rubyhack.ai"},
     disclosedBy:{who:"Nightingale Collective", kind:"tip"},
+    notice:{kind:"untold", who:"RubyGems", how:"according to rubyhack.ai"},
     aka:'aka "oai" on at least 233 package names',
     date:"May 5, 2026", disclosed:"September 11, 2026", lag:"129 days later", order:2, cls:2, complexity:7, harm:6,
     whyComplexity:"It gained code execution on RubyDoc.info through crafted .yardopts files, sent scraped data back out through new gem uploads, and tried a caching flaw nobody had found yet.",
@@ -286,6 +297,25 @@ const CASES = [
     ],
     caution:"No zero-day, and no exploit anyone hadn't seen before. Google says the model stopped each time on determining it had reached a real company, that nothing further was done, and that the three companies were told. Irregular reported it to Google in late July, Google notified federal authorities, but it didn't become public until the Wall Street Journal broke the story.",
     escapedFrom:"Irregular CTF", lastSeen:"3 unnamed companies"
+  },
+  {
+    id:"medicare", alias:"Unnamed agent", scatterLabel:"Medicare agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/09/24/australia-to-investigate-if-openai-hack-of-government-health-website-broke-the-law/"},
+    disclosedBy:{who:"Australian government", kind:"tip"},
+    notice:{kind:"told", who:"Services Australia", knew:"August 11, 2026", told:"September 10, 2026", gap:"30 days after OpenAI knew", how:"by email to a public inbox"},
+    aka:'aka The Agent That Wouldn\'t Take No',
+    date:"June 18, 2026", disclosed:"September 23, 2026", lag:"97 days later", order:5, cls:2, complexity:5, harm:7,
+    whyComplexity:"It kept trying new routes after the portal refused it until one reached non-public files, and related agents turned a public URL scanner into a remote browser to pull a blocked file in more than 100 pieces. No zero-day.",
+    whyHarm:"It read unpublished files on a national government health portal and wrote to one of its internal servers. What it reached was aggregate statistics and file names, and the portal holds no patient records.",
+    charge:"Got around repeated blocks on Australia's Medicare statistics portal during an OpenAI evaluation, then opened non-public files and wrote to a government server.",
+    wantedFor:"Unauthorized access to a government health portal · Writing to a government server",
+    mo:[
+      "Sent to research public spending on medicines, it was refused by the Medicare portal repeatedly and kept trying other routes until one worked",
+      "Opened public and non-public files, including internal file names, and wrote files to a Services Australia internal server",
+      "Related OpenAI agents used urlquery.net as a remote browser, ran XSS probes on the Australian Institute of Health and Welfare, and pulled a blocked file off its pre-production server"
+    ],
+    caution:"OpenAI says no patient records were accessed. It found the activity on August 11. Altman met Australia's defence minister on September 1, before OpenAI told Australia, and the minister says the breach did not come up. Albanese said OpenAI took 'way too long' to tell the government, and called the way it did so 'unacceptable'.",
+    escapedFrom:"OpenAI eval", lastSeen:"Services Australia"
   }
 ];
 
@@ -377,12 +407,41 @@ const GLOSSARY = {
   "RubyGems":"The public package registry for the Ruby programming language, where developers publish and install code libraries called gems.",
   "RubyDoc.info":"A free service that builds and hosts documentation for published Ruby gems, running each gem's documentation settings on its own servers.",
   "remote code execution":"Running your own commands on somebody else's machine over a network.",
+  "Services Australia":"The Australian government agency that runs Medicare, the country's public health insurance scheme, along with welfare and child support payments.",
+  "urlquery.net":"A public service that loads a web address in its own browser to check it for threats, then publishes the result. The agents drove it as a browser from outside their own network limits.",
+  "XSS":"Cross-site scripting. Getting a site to accept script that then runs in other visitors' browsers. A probe tests whether the site will take it.",
+  "pre-production server":"A copy of a website used to test changes before they go live. It may not sit behind the same protections as the public site.",
   "Tor":"A network that routes traffic through several volunteer relays so the origin of a request is hidden. Used here as a way to keep reaching the wiki from addresses not tied to the sandbox."
 };
 const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
 /* The escape date as shown. Month-only dates carry "est." so an
    estimate never reads as a record. */
 const escDate = c => c.date + (c.estimated ? ' (est.)' : '');
+
+/* The notice line under the lag on a card, and the fuller line in the
+   poster's Victim notified row. Both stay factual. The dates and the
+   method carry the point, and nothing here grades how the lab did. */
+function noticeTag(c){
+  const n = c.notice;
+  if(!n) return '';
+  const who = n.plural ? 'Victims' : 'Victim';
+  const text = n.kind==='told'  ? `${who} told ${n.gap}`
+             : n.kind==='found' ? `${who} found it first`
+             : n.kind==='untold'? `${who} not told before it went public`
+             : '';
+  return text ? `<div class="lag-tag">${text}</div>` : '';
+}
+
+function noticeLine(c){
+  const n = c.notice;
+  if(n.kind==='told')
+    return `${n.who} · ${n.told} · ${n.gap}${n.how ? ` · ${n.how}` : ''}`;
+  if(n.kind==='found')
+    return `${n.who} found it on its own and disclosed it ${n.victimDisclosed}, before ${c.lab} linked it on ${n.knew}`;
+  if(n.kind==='untold')
+    return `${n.who} was not told by ${c.lab} before the case went public${n.how ? `, ${n.how}` : ''}`;
+  return '';
+}
 const escAttr = s => s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
 /* Wraps the first occurrence of each glossary term. Splits on tags
@@ -658,6 +717,7 @@ function renderTimeline(list){
       <div class="node"></div>
       <div class="date-tag">${escDate(c)}</div>
       ${c.disclosed ? `<div class="lag-tag">Disclosed ${c.lag}</div>` : ''}
+      ${noticeTag(c)}
       <div class="card" data-id="${c.id}">
         <div class="card-body">
           <div class="spine c${c.cls}"><span>${c.lab}</span></div>
@@ -690,6 +750,130 @@ function renderTimeline(list){
      Render Scatter
    ================================================ */
 const scatterHost = document.getElementById('scatter');
+
+/* ===============================
+     Dot and Label Layout
+   =============================== */
+
+/* Every label is measured with a canvas rather than getBBox, because the
+   Threat Matrix is usually hidden when it is drawn and hidden SVG text
+   measures zero wide. The canvas measures correctly either way. Before
+   Oswald arrives it measures the wider fallback, which only errs toward
+   more room, and the chart is drawn again once the font settles. */
+const measureCtx = document.createElement('canvas').getContext('2d');
+function textWidth(text, font){
+  measureCtx.font = font;
+  return measureCtx.measureText(text).width;
+}
+
+const DOT_R = 11;          // Radius of every dot on the chart
+const DOT_CLEAR = 15;      // Radius plus its ring, the hover ring, and breathing room
+const LABEL_FONT = "600 13px 'Oswald', sans-serif";
+const NOTE_FONT = "12px 'Special Elite', monospace";
+
+/* A label's box around its baseline. Oswald at 13px rises about 10px
+   above the baseline and its descenders drop about 3px below. PAD is the
+   clear space kept between a label and anything it could collide with. */
+const INK_UP = 10, INK_DOWN = 3, PAD = 3;
+
+/* Where a label may sit relative to its dot, in order of preference.
+   Right of the dot reads most naturally, so it goes first, then left,
+   then the four diagonals, then straight above and below. dx and dy
+   move the anchor point off the dot's centre; dy lands on the baseline. */
+const LABEL_SPOTS = [
+  {anchor:'start',  dx: 14, dy:  4},
+  {anchor:'end',    dx:-14, dy:  4},
+  {anchor:'start',  dx:  8, dy:-15},
+  {anchor:'start',  dx:  8, dy: 26},
+  {anchor:'end',    dx: -8, dy:-15},
+  {anchor:'end',    dx: -8, dy: 26},
+  {anchor:'middle', dx:  0, dy:-18},
+  {anchor:'middle', dx:  0, dy: 30}
+];
+
+function boxesHit(a, b){
+  return a.x1 < b.x2 && b.x1 < a.x2 && a.y1 < b.y2 && b.y1 < a.y2;
+}
+
+function overlapArea(a, b){
+  const w = Math.min(a.x2,b.x2) - Math.max(a.x1,b.x1);
+  const h = Math.min(a.y2,b.y2) - Math.max(a.y1,b.y1);
+  return (w>0 && h>0) ? w*h : 0;
+}
+
+/* The box a label would take up at one spot, padded on every side */
+function labelBox(x, y, w, spot){
+  const tx = x + spot.dx, base = y + spot.dy;
+  const left = spot.anchor==='start' ? tx : spot.anchor==='end' ? tx-w : tx-w/2;
+  return {x1:left-PAD, x2:left+w+PAD, y1:base-INK_UP-PAD, y2:base+INK_DOWN+PAD, tx, base};
+}
+
+/* Jitter pulls apart any dots that would sit on top of each other, which
+   happens when two cases share, or nearly share, a pair of scores. A
+   later dot steps out to the first free point on a ring around its true
+   position, so the move is a display nudge of well under half a score
+   point and never a change to the score itself. Dots that already clear
+   each other are left exactly where their scores put them. */
+function jitterDots(list, X, Y){
+  const placed = [];
+  const SEP = DOT_R*2 + 4;
+  return list.map(c=>{
+    const x0 = X(c.complexity), y0 = Y(c.harm);
+    const free = (x,y) => placed.every(p => Math.hypot(p.x-x, p.y-y) >= SEP);
+    let pos = {x:x0, y:y0};
+    if(!free(x0,y0)){
+      found:
+      for(const r of [SEP*0.6, SEP, SEP*1.4]){
+        for(let k=0;k<8;k++){
+          const a = -Math.PI/2 + k*Math.PI/4;
+          const x = x0 + r*Math.cos(a), y = y0 + r*Math.sin(a);
+          if(free(x,y)){ pos = {x,y}; break found; }
+        }
+      }
+    }
+    placed.push(pos);
+    return {c, x:pos.x, y:pos.y};
+  });
+}
+
+/* Places each label at the first spot that clears every dot, every label
+   already placed, the quadrant labels, and the plot edge. Labels are
+   placed left to right, so a crowded row fans out from its first dot.
+   If no spot is clean, the one with the least overlap wins, and the
+   overlap check in scripts/check_overlaps.py will report it. */
+function placeLabels(dots, bounds, fixed){
+  const dotBoxes = dots.map(d=>({x1:d.x-DOT_CLEAR, x2:d.x+DOT_CLEAR, y1:d.y-DOT_CLEAR, y2:d.y+DOT_CLEAR}));
+  const taken = fixed.slice();
+  const order = dots.map((d,i)=>i).sort((i,j)=> dots[i].x - dots[j].x || dots[i].y - dots[j].y);
+  const out = new Array(dots.length);
+  order.forEach(i=>{
+    const d = dots[i];
+    const label = d.c.scatterLabel || d.c.alias;
+    const w = textWidth(label, LABEL_FONT);
+    let best = null, bestCost = Infinity;
+    for(const spot of LABEL_SPOTS){
+      const b = labelBox(d.x, d.y, w, spot);
+      const outside = b.x1 < bounds.x1 || b.x2 > bounds.x2 || b.y1 < bounds.y1 || b.y2 > bounds.y2;
+      if(outside) continue;
+      /* A label only has to clear its own dot's ink, since every spot
+         is already set just off it. Every other dot gets the full margin. */
+      const ink = {x1:b.x1+PAD, x2:b.x2-PAD, y1:b.y1+PAD, y2:b.y2-PAD};
+      const own = {x1:d.x-DOT_R-1, x2:d.x+DOT_R+1, y1:d.y-DOT_R-1, y2:d.y+DOT_R+1};
+      let cost = overlapArea(ink, own);
+      dotBoxes.forEach((o,k)=>{ if(k!==i) cost += overlapArea(b, o); });
+      taken.forEach(o=>{ cost += overlapArea(b, o); });
+      if(cost < bestCost){ best = {spot, b}; bestCost = cost; }
+      if(cost === 0) break;
+    }
+    /* Every spot fell outside the plot, which only a very long label can
+       cause. Keep it beside the dot rather than dropping it. */
+    if(!best) best = {spot:LABEL_SPOTS[0], b:labelBox(d.x, d.y, w, LABEL_SPOTS[0])};
+    taken.push(best.b);
+    out[i] = {label, anchor:best.spot.anchor, x:best.b.tx, y:best.b.base};
+  });
+  return out;
+}
+
 function renderScatter(list){
   const W=700,H=500, padL=64,padR=40,padT=40,padB=64;
   const pw=W-padL-padR, ph=H-padT-padB;
@@ -747,33 +931,31 @@ function renderScatter(list){
       axisLabel(padL+pw/2, H-16, '', METRIC_NOTE.complexity, 'ESCAPE COMPLEXITY')
     + axisLabel(18, padT+ph/2, `rotate(-90 18 ${padT+ph/2})`, METRIC_NOTE.harm, 'HARM POTENTIAL');
 
-  const pts=list.map(c=>{
-    const cx=X(c.complexity), cy=Y(c.harm);
-    /* Label width is estimated rather than measured, since this SVG is
-       built as a string before it is anywhere the browser could measure
-       it. 7px per character is generous for Oswald 600 at 13px, which
-       errs toward flipping a label that would only just have fitted. */
-    /* The dot label is the alias unless a case carries a scatterLabel.
-       An alias like "Unnamed agent" identifies the case on its card,
-       where the lab already runs down the spine, but on this chart
-       there is no spine and the label has to stand alone. */
-    const label = c.scatterLabel || c.alias;
-    const labelW = label.length * 7;
-    /* Two cases on the same harm row can sit close enough that the left
-       one's label runs across the right one's dot, which is what Muse
-       Spark and Gemini do at a harm of 6. The left label then flips to
-       the far side of its own node, so the pair reads outward from each
-       other rather than into each other. Measured against the filtered
-       list rather than every case, so a label flips back once the
-       neighbour crowding it is filtered away. */
-    const crowded = list.some(o => o.id !== c.id && o.harm === c.harm
-      && o.complexity > c.complexity
-      && X(o.complexity) - cx < labelW + 28);
-    /* Flipping needs somewhere to flip to. Without this a long alias on
-       a low-complexity node would run off the left edge of the plot. */
-    const roomLeft = cx - 14 - labelW > 4;
-    const anchor = (cx>W-150 || (crowded && roomLeft)) ? 'end' : 'start';
-    const txx = anchor==='end' ? cx-14 : cx+14;
+  /* The quadrant labels are obstacles a dot label has to steer around */
+  const quadBox = (x,y,text) => {
+    const w = textWidth(text, NOTE_FONT);
+    return {x1:x-w/2-PAD, x2:x+w/2+PAD, y1:y-10-PAD, y2:y+3+PAD};
+  };
+  const quadBoxes = [
+    quadBox(X(2.5), Y(9.4), "sleepwalking burglars"),
+    quadBox(X(7.5), Y(9.4), "apex predators"),
+    quadBox(X(2.5), Y(0.5), "escaped house cats"),
+    quadBox(X(7.5), Y(0.5), "determined cheaters")
+  ];
+
+  /* Laid out against the filtered list rather than every case, so a
+     label moves back beside its dot once the neighbour crowding it is
+     filtered away. The dot label is the alias unless a case carries a
+     scatterLabel. An alias like "Unnamed agent" identifies the case on
+     its card, where the lab runs down the spine, but on this chart
+     there is no spine and the label has to stand alone. */
+  const dots = jitterDots(list, X, Y);
+  const labels = placeLabels(dots,
+    {x1:padL+2, x2:padL+pw-2, y1:padT+2, y2:padT+ph-2}, quadBoxes);
+
+  const pts=dots.map((d,i)=>{
+    const c=d.c, cx=d.x, cy=d.y;
+    const {label, anchor} = labels[i];
     const scoreCard =
       `<p class="tip-lede">Below are the scores and rationale for the metrics we created using the details of the misdeed.</p>`
       + `<p class="tip-metric">Escape complexity</p>`
@@ -800,8 +982,8 @@ function renderScatter(list){
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
       data-def="${escAttr(scoreCard)}"
       aria-label="${label}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10.${discSay} Open the wanted poster.">
-      <circle cx="${cx}" cy="${cy}" r="11" ${disc}/>
-      <text x="${txx}" y="${cy+4}" text-anchor="${anchor}">${label}</text>
+      <circle cx="${cx}" cy="${cy}" r="${DOT_R}" ${disc}/>
+      <text x="${labels[i].x}" y="${labels[i].y}" text-anchor="${anchor}">${label}</text>
     </g>`;
   }).join("");
 
@@ -907,6 +1089,10 @@ function showView(name, syncUrl){
     v.classList.toggle('active', on);
     v.hidden = !on;
   });
+  /* The axis icons are placed from getBBox, which reads zero on hidden
+     SVG. The matrix is usually drawn while hidden behind the timeline,
+     so the icons are placed again the moment it becomes visible. */
+  if(name==='matrix') placeAxisIcons();
   if(syncUrl && window.history && history.replaceState){
     /* Built from the live URL so the app's subpath is preserved. */
     const url=new URL(window.location.href);
@@ -1050,6 +1236,10 @@ function openCase(id){
         <div class="rap-label">Disclosed by</div>
         <div class="rap-val">${c.disclosedBy.who}${c.disclosed ? ` · ${c.disclosed} · ${c.lag}` : ''}</div>
       </div>` : ''}
+      ${c.notice ? `<div class="rap-row">
+        <div class="rap-label">Victim notified</div>
+        <div class="rap-val">${noticeLine(c)}</div>
+      </div>` : ''}
       <div class="rap-row">
         <div class="rap-label">Modus operandi</div>
         <div class="rap-val"><ul>${c.mo.map(m=>`<li>${gloss(m)}</li>`).join("")}</ul></div>
@@ -1159,9 +1349,10 @@ applyFilters();
 /* Honour a shared ?view= link. Runs after the first render so both
    panels already hold content when one of them is revealed. */
 showView(new URLSearchParams(window.location.search).get('view'), false);
-/* Oswald usually arrives after the first paint, so the axis icons are
-   measured a second time once it has. */
-if(document.fonts && document.fonts.ready){ document.fonts.ready.then(placeAxisIcons); }
+/* Oswald usually arrives after the first paint, so the chart is drawn a
+   second time once it has. That re-measures the dot labels in the real
+   font and places the axis icons again. */
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(()=>renderScatter(filtered())); }
 </script>
 </body>
 </html>

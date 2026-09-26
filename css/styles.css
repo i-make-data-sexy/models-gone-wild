@@ -551,11 +551,25 @@
   .pt circle{transition:r .13s, stroke-width .13s;}
   .pt:hover circle,.pt:focus-visible circle{stroke:var(--ink);stroke-width:3;}
 
-  /* Legend for the two dot fills */
+  /* Legend for the two dot fills. Below the chart on narrow screens.
+     The plot inside the SVG is not centred in it: 64 units of padding
+     on the left make room for the harm axis, against 40 on the right. So
+     the legend is nudged right by half the 24-unit difference, 12 of 700,
+     to line up with the plot rather than with the SVG around it. */
   .scatter-legend{
     display:flex;justify-content:center;flex-wrap:wrap;gap:8px 22px;
-    margin:14px 0 0;font-family:'Oswald',sans-serif;font-weight:500;
+    margin:14px 0 0;padding-left:3.43%;font-family:'Oswald',sans-serif;font-weight:500;
     font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
+  }
+  /* On wider screens the legend stands to the right of the plot, stacked,
+     and the wrap widens to make room for it so the plot keeps its size */
+  @media (min-width:801px){
+    .scatter-wrap{display:flex;align-items:center;gap:6px;max-width:900px;}
+    #scatter{flex:1 1 auto;min-width:0;}
+    .scatter-legend{
+      flex:none;flex-direction:column;align-items:flex-start;
+      justify-content:center;gap:12px;margin:0;padding-left:0;
+    }
   }
   .legend-item{display:inline-flex;align-items:center;gap:7px;}
   .legend-dot{width:14px;height:14px;flex:none;}

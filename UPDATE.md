@@ -36,8 +36,9 @@ anything you cannot source rather than filling it in plausibly.
 After I approve: make the edit, run the checks in UPDATE.md, then run
 scripts/check_dates.py, which confirms the lag and the timeline order
 agree with the dates, and scripts/check_claims.py, which reports copy
-elsewhere on the page that the new case has made untrue. Fix anything
-either one reports. Then
+elsewhere on the page that the new case has made untrue, and
+scripts/check_overlaps.py, which reports anything drawn on top of
+something else on the Threat Matrix. Fix anything they report. Then
 update the "Last updated" line in the footer, commit, push, and deploy.
 Give me the live URL when it is done.
 ```
@@ -86,10 +87,11 @@ Every case is one object in the `CASES` array near the top of the script block i
 |---|---|---|
 | `id` | Internal key. Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase, unique. |
 | `alias` | The card title, the large name on the poster, and the scatter dot label. | The model name and nothing else (Sol, Spark, Kimi K3), never a descriptive nickname. This is the only name the card shows; the exact version lives on the poster. Long names crowd the dot label. |
-| `scatterLabel` | The dot label on the Threat Matrix, in place of `alias`. Optional, and the chart falls back to `alias` when it is absent. | For a case whose `alias` does not say whose model it was. `Unnamed agent` identifies the RubyGems swarm on its card, where the lab runs down the spine, but the chart has no spine, so it labels that dot `Unnamed OpenAI agent`. Keep it short. The chart flips a label to the left of its dot when a neighbour on the same harm row crowds it, but nothing stops a very long one running past the plot edge. |
+| `scatterLabel` | The dot label on the Threat Matrix, in place of `alias`. Optional, and the chart falls back to `alias` when it is absent. | For a case whose `alias` does not say whose model it was. `Unnamed agent` identifies the RubyGems swarm on its card, where the lab runs down the spine, but the chart has no spine, so it labels that dot `Unnamed OpenAI agent`. Keep it short. The chart moves a label to whichever side of its dot is clear, and `check_overlaps.py` reports any label that still collides or runs past the plot edge. |
 | `source` | The newspaper icon on the card, linking to the story that broke the case. | `{outlet, url}`. Leave `url` empty and the icon is not rendered at all, so a case with no source degrades cleanly. |
 | `lab` | The vertical spine down the left edge of the card, and an option in the Lab dropdown. | Must match an existing lab's spelling exactly, or you get a second option for the same lab. Keep it short; the spine is the card's height. |
 | `disclosedBy` | The chip beside the class badge, the Disclosed by row on the poster, and the dot fill on the scatter. There is no disclosure dropdown; the filter bar narrows by class and lab only. | `{who, kind}`. `kind` is `self` or `tip`. See the note below the table for how to decide which. `who` is the party that announced it, which is not always the lab and is not the outlet in `source`. Leave the field off entirely and the chip, the poster row, and the solid dot all degrade cleanly. |
+| `notice` | A second line under the lag on the card, and the Victim notified row on the poster. | Optional, and most cases leave it off. `{kind, who, ...}`. `told` carries `knew`, `told`, and `gap` ("30 days after OpenAI knew", recomputed by `check_dates.py`) plus an optional `how`, and `plural:true` when there were several victims. `found` is a victim that caught it and went public before the lab connected it, with `knew` and `victimDisclosed`. `untold` is a victim the lab never told before the case went public, with an optional `how` for attribution. Only what the sources state; a guessed date is worse than no line. |
 | `org` | The line under the alias on the POSTER only. The card does not show it. | Format is `Lab · Model`. This is where the exact version is recorded, e.g. `OpenAI · GPT-5.6`. |
 | `aka` | The a.k.a. line. | Optional flavor. |
 | `date` | The timeline date tag and the poster footer's "Escaped". | When the model first got out, never when the case was announced. Format is `Month D, YYYY`. When the source gives only a month, write `April 2026` or `Late July 2026` and set `estimated:true`, which appends "(est.)" wherever it renders. See the note below the table. |
@@ -153,7 +155,19 @@ Three things on that chart carry a definition, offered on hover, tap, or keyboar
 
 Each axis label is marked with an info icon and explains how it is scored, including the plain admission that both scores are ours rather than a published figure. Each quadrant label explains what that corner means. Each datapoint explains its own coordinates from the case's `why` field.
 
-The axis icons are positioned by measuring the label after layout, which is why `placeAxisIcons()` runs a second time once `document.fonts` settles. Measured before Oswald arrives, the label is measured in the fallback font, which is wider, and the icon lands past the end of the label.
+The axis icons are positioned by measuring the label with `getBBox`, which reads zero while the Threat Matrix is hidden behind the timeline. So `placeAxisIcons()` runs again whenever the matrix is revealed, and the whole chart is drawn again once `document.fonts` settles. Measured while hidden, the icon lands on top of the title; measured before Oswald arrives, it lands past the end of it.
+
+### Nothing on the chart may overlap
+
+Dot labels are placed by `placeLabels()`, which tries the right of the dot first, then the left, the four diagonals, and straight above and below, and takes the first spot that clears every dot, every other label, the quadrant labels, and the plot edge. Widths come from a canvas, so they measure correctly while the chart is hidden. Dots that would sit on top of each other are nudged apart by `jitterDots()`, which moves only the drawing and never the score.
+
+Check it after adding or rescoring a case, or after any change to the chart:
+
+```bash
+python3 scripts/check_overlaps.py --shot /tmp/matrix.png
+```
+
+It renders the real page in headless Chrome, runs every combination of the Class and Lab filters, and measures each dot, dot label, quadrant label, and axis title by its ink. Anything drawn over anything else is reported with the size of the overlap, and the run exits 1. `--shot` saves a picture of the unfiltered chart. It needs Google Chrome in `/Applications`, or a `CHROME` environment variable pointing at a Chrome binary.
 
 Clicking a datapoint still opens its wanted poster. The tooltip explains the score and the `aria-label` announces the action, so the two do not contradict each other.
 
@@ -302,7 +316,7 @@ Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, wh
 
 ## Where things live
 
-`index.html` carries the markup and the script, including the `CASES` array. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above.
+`index.html` carries the markup and the script, including the `CASES` array. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, and `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix.
 
 The stylesheet is linked relatively as `css/styles.css`. A leading slash would resolve to the site root and 404, which is what check 1 guards.
 

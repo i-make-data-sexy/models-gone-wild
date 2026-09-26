@@ -17,6 +17,11 @@ either side of a dated case inside that month; the check only fails
 when the sequence cannot be true. It also fails if a case is disclosed
 before it could have escaped.
 
+Where a case carries a `notice`, its dates are checked too. A "told"
+notice must run escape, lab knew, victim told, and its gap must be
+"<N> days after <lab> knew" for the exact count. A "found" notice must
+have the victim going public before the lab knew.
+
 Exit status is 1 on any failure, 0 otherwise.
 """
 import re
@@ -32,15 +37,19 @@ def load_cases(text: str) -> list:
     Args:
         text (str): The full contents of index.html
     Returns:
-        list: One dict per case with its id, date, disclosed, lag, estimated flag, and order
+        list: One dict per case with its id, lab, date, disclosed, lag, estimated flag, order, and notice (a dict, empty when absent)
     """
     js = re.search(r"<script>(.*?)</script>", text, re.S).group(1)
     cases = []
     for cid in re.findall(r'id:"(\w+)"', js):
         blk = re.search(r'\{\s*id:"' + cid + r'".*?\n  \}', js, re.S).group(0)
         get = lambda k: (re.search(k + r':"([^"]*)"', blk) or [None, ""])[1]
+        found = re.search(r"notice:\{([^}]*)\}", blk)
+        notice = dict(re.findall(r'(\w+):"([^"]*)"', found.group(1))) if found else {}
         cases.append({
             "id": cid,
+            "lab": get("lab"),
+            "notice": notice,
             "date": get("date"),
             "disclosed": get("disclosed"),
             "lag": get("lag"),
@@ -130,6 +139,35 @@ def main() -> int:
         ok = wa and wb and wa[0] <= wb[1]
         print(f"  {'OK  ' if ok else 'FAIL'}   {a['id']} ({a['date']}) before {b['id']} ({b['date']})")
         bad += not ok
+
+    print("\nVictim notice against the other dates")
+    for c in cases:
+        n = c["notice"]
+        if not n:
+            continue
+        kind, esc = n.get("kind"), window(c)
+        knew = parse_day(n.get("knew", ""))
+        if kind == "told":
+            told = parse_day(n.get("told", ""))
+            if not (knew and told):
+                print(f"  FAIL   {c['id']:10} a told notice needs full knew and told dates")
+                bad += 1
+                continue
+            want = f"{(told - knew).days} days after {c['lab']} knew"
+            ok = told >= knew and n.get("gap") == want and (esc is None or esc[0] <= knew)
+            print(f"  {'OK  ' if ok else 'FAIL'}   {c['id']:10} knew {n['knew']} -> told {n['told']}  ::  {n.get('gap')!r}"
+                  + ("" if ok else f"  (expected {want!r}, after the escape)"))
+            bad += not ok
+        elif kind == "found":
+            pub = parse_day(n.get("victimDisclosed", ""))
+            ok = bool(pub and knew and pub < knew)
+            print(f"  {'OK  ' if ok else 'FAIL'}   {c['id']:10} victim went public {n.get('victimDisclosed')} before the lab knew {n.get('knew')}")
+            bad += not ok
+        elif kind == "untold":
+            print(f"  READ   {c['id']:10} {n.get('who')} not told before the case went public")
+        else:
+            print(f"  FAIL   {c['id']:10} unknown notice kind {kind!r}")
+            bad += 1
 
     print("\n" + ("dates OK" if not bad else f"{bad} problem(s)"))
     return 1 if bad else 0
