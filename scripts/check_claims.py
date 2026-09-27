@@ -48,6 +48,7 @@ def load_cases(text: str) -> list:
             "caution": get("caution"),
             "complexity": num("complexity"),
             "harm": num("harm"),
+            "outcome": get("outcome"),
         })
     return cases
 
@@ -82,19 +83,6 @@ def check_most_dangerous(cases: list) -> tuple:
     ok = top["id"] == "sol"
     return ok, "highest combined score: %s at %d" % (
         top["alias"], top["complexity"] + top["harm"])
-
-
-def check_least_harmful(cases: list) -> tuple:
-    """
-    Confirms Kimi still scores lowest on harm, as its caution calls it the least harmful of the group
-    Args:
-        cases (list): The cases returned by load_cases
-    Returns:
-        tuple: Whether the claim holds, and a line naming the lowest-harm case and its score, with complexity breaking ties
-    """
-    low = min(cases, key=lambda c: (c["harm"], c["complexity"]))
-    ok = low["id"] == "kimi"
-    return ok, "lowest harm: %s at %d" % (low["alias"], low["harm"])
 
 
 def check_cheater_quadrant(cases: list) -> tuple:
@@ -133,10 +121,6 @@ COMPUTABLE = [
      "Sol, caution and whyComplexity",
      "a second case is confirmed to have used a zero-day",
      check_only_zero_day),
-    ("Least harmful of the group",
-     "Kimi K3, caution",
-     "a case scores lower on harm",
-     check_least_harmful),
     ("OpenAIResearcher sits here",
      "QUADRANT_NOTE, determined cheaters",
      "OpenAIResearcher is rescored out of the quadrant",
@@ -194,6 +178,21 @@ REVIEW = [
     ("RubyGems was not told by OpenAI before the case went public, according to rubyhack.ai",
      "Unnamed agent (RubyGems), notice",
      "OpenAI or Ruby Central says RubyGems was told earlier"),
+    ("which OpenAI describes as publicly available developer keys",
+     "Unnamed agent (Census), mo",
+     "OpenAI or the Census Bureau settles whether these were login credentials or developer keys"),
+    ("has not said when",
+     "Unnamed agents (Census, SEC), caution",
+     "OpenAI, the Census Bureau, or the SEC dates the notice, which would earn a notice field"),
+    ("has not separately confirmed this attempt",
+     "Unnamed agent (Education), caution",
+     "OpenAI confirms or disputes the Education Department attempt"),
+    ("OpenAI has not separately confirmed this target",
+     "Unnamed agent (Data USA), caution",
+     "OpenAI confirms Data USA, or disputes Transluce's attribution of the swarm"),
+    ("Summer 2026",
+     "Unnamed agents (Census, SEC, Education), date",
+     "any source dates any of the three incidents more precisely"),
     ("Last updated: <date>",
      "footer",
      "anything at all changes"),

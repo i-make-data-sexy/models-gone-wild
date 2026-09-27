@@ -82,12 +82,17 @@ def window(c: dict) -> tuple | None:
         tuple | None: The first and last possible day. A full date is its
             own window, a bare month is the whole month, 'Late <Month>' is
             the 21st onward, 'Early' is the first ten days, and 'Mid-' is
-            the eleventh through the twentieth. None when the date does not
-            parse.
+            the eleventh through the twentieth. 'Summer <year>' runs June 1
+            through September 22, the widest reading of a news report's
+            "this summer". None when the date does not parse.
     """
     d = parse_day(c["date"])
     if d:
         return d, d
+    s = re.match(r"Summer (\d{4})$", c["date"])
+    if s:
+        y = int(s.group(1))
+        return datetime(y, 6, 1), datetime(y, 9, 22)
     m = re.match(r"(Late |Early |Mid-)?(\w+) (\d{4})$", c["date"])
     if not m:
         return None

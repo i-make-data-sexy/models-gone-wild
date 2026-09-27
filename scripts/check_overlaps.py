@@ -5,7 +5,7 @@ something else.
 The other checks read the case data as text. This one renders the real
 page in headless Chrome, so it sees what a reader sees: where each dot
 landed, where its label went, and whether the axis icons sit clear of
-their titles. It runs every combination of the Class and Lab filters,
+their titles. It runs every combination of the Class, Lab, and Outcome filters,
 since a label can collide in one filtered view and not in another.
 
 Text is measured by its ink rather than its line box. The line box of
@@ -131,8 +131,9 @@ frame.addEventListener('load', async ()=>{
   const win = frame.contentWindow, doc = frame.contentDocument;
   if(doc.fonts) await doc.fonts.ready;
   const cls = doc.getElementById('classFilter'), lab = doc.getElementById('labFilter');
-  const set = (c,l)=>{
-    cls.value = c; lab.value = l;
+  const out = doc.getElementById('outcomeFilter');
+  const set = (c,l,o)=>{
+    cls.value = c; lab.value = l; if(out) out.value = o || '';
     cls.dispatchEvent(new win.Event('change'));
     // Revealing the matrix is what places the axis icons, so click the
     // tab after every filter change, the way a reader's view is built.
@@ -140,13 +141,16 @@ frame.addEventListener('load', async ()=>{
     doc.getElementById('tab-matrix').click();
   };
   const results = [];
+  const outs = out ? [...out.options].map(o=>o.value) : [''];
   for(const c of [...cls.options].map(o=>o.value)){
     for(const l of [...lab.options].map(o=>o.value)){
-      set(c,l);
-      results.push({classFilter:c||'all', labFilter:l||'all', ...measure(doc)});
+      for(const o of outs){
+        set(c,l,o);
+        results.push({classFilter:c||'all', labFilter:l||'all', outcomeFilter:o||'all', ...measure(doc)});
+      }
     }
   }
-  set('','');
+  set('','','');
   if(shot) doc.getElementById('scatter').scrollIntoView({block:'center'});
   document.getElementById('out').textContent = JSON.stringify(results);
 });
@@ -247,7 +251,7 @@ def main() -> int:
 
     bad = 0
     for r in results:
-        view = f"class {r['classFilter']}, lab {r['labFilter']}"
+        view = f"class {r['classFilter']}, lab {r['labFilter']}, outcome {r.get('outcomeFilter', 'all')}"
         if r["hits"]:
             bad += 1
             print(f"  OVERLAP  {view}  ({r['items']} items)")

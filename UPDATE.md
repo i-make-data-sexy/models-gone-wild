@@ -92,9 +92,10 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `lab` | The vertical spine down the left edge of the card, and an option in the Lab dropdown. | Must match an existing lab's spelling exactly, or you get a second option for the same lab. Keep it short; the spine is the card's height. |
 | `disclosedBy` | The chip beside the class badge, the Disclosed by row on the poster, and the dot fill on the scatter. There is no disclosure dropdown; the filter bar narrows by class and lab only. | `{who, kind}`. `kind` is `self` or `tip`. See the note below the table for how to decide which. `who` is the party that announced it, which is not always the lab and is not the outlet in `source`. Leave the field off entirely and the chip, the poster row, and the solid dot all degrade cleanly. |
 | `notice` | A second line under the lag on the card, and the Victim notified row on the poster. | Optional, and most cases leave it off. `{kind, who, ...}`. `told` carries `knew`, `told`, and `gap` ("30 days after OpenAI knew", recomputed by `check_dates.py`) plus an optional `how`, and `plural:true` when there were several victims. `found` is a victim that caught it and went public before the lab connected it, with `knew` and `victimDisclosed`. `untold` is a victim the lab never told before the case went public, with an optional `how` for attribution. Only what the sources state; a guessed date is worse than no line. |
+| `outcome` | The Outcome row on the poster, the Outcome filter, and the Threat Matrix tooltip and screen-reader label. The cards do not show it. | `success` or `attempt`. REQUIRED. `success` when the model got what it went after on somebody else's systems; `attempt` when it tried and did not get in. It scores the intrusion, not the escape, so a model that reached the open web and then failed to break into its target is an `attempt`. A failed attempt usually belongs in class `1` since it got inside nobody's systems. |
 | `org` | The line under the alias on the POSTER only. The card does not show it. | Format is `Lab · Model`. This is where the exact version is recorded, e.g. `OpenAI · GPT-5.6`. |
 | `aka` | The a.k.a. line. | Optional flavor. |
-| `date` | The timeline date tag and the poster footer's "Escaped". | When the model first got out, never when the case was announced. Format is `Month D, YYYY`. When the source gives only a month, write `April 2026` or `Late July 2026` and set `estimated:true`, which appends "(est.)" wherever it renders. See the note below the table. |
+| `date` | The timeline date tag and the poster footer's "Escaped". | When the model first got out, never when the case was announced. Format is `Month D, YYYY`. When the source gives only a month, write `April 2026` or `Late July 2026` and set `estimated:true`. When it gives only a season, write `Summer 2026`, which `check_dates.py` reads as June 1 through September 22, which appends "(est.)" wherever it renders. See the note below the table. |
 | `estimated` | Appends "(est.)" to the date on the card and poster. | `true` when `date` is coarser than a day. Leave the field off otherwise. |
 | `disclosed` | The Disclosed by row on the poster, and it drives the lag line under the card's date tag. | When the case went public. Always a full `Month D, YYYY`. |
 | `lag` | "Disclosed <lag>" under the date tag, and the tail of the poster's Disclosed by row. | The gap between `date` and `disclosed`, in words that follow "Disclosed". For a day-precise `date` it must be exactly `N days later`; `check_dates.py` recomputes it. For an estimate, judge it: `about three months later`, `within about two weeks`. |
@@ -159,7 +160,7 @@ The axis icons are positioned by measuring the label with `getBBox`, which reads
 
 ### Nothing on the chart may overlap
 
-Dot labels are placed by `placeLabels()`, which tries the right of the dot first, then the left, the four diagonals, and straight above and below, and takes the first spot that clears every dot, every other label, the quadrant labels, and the plot edge. Widths come from a canvas, so they measure correctly while the chart is hidden. Dots that would sit on top of each other are nudged apart by `jitterDots()`, which moves only the drawing and never the score.
+Dot labels are placed by `placeLabels()`, which tries the right of the dot first, then the left, the four diagonals, and straight above and below, and takes the first spot that clears every dot, every other label, the quadrant labels, and the plot edge. Widths come from a canvas, so they measure correctly while the chart is hidden. Dots that would sit on top of each other, or on a quadrant label, are nudged apart by `jitterDots()`, which moves only the drawing and never the score.
 
 Check it after adding or rescoring a case, or after any change to the chart:
 
@@ -167,7 +168,7 @@ Check it after adding or rescoring a case, or after any change to the chart:
 python3 scripts/check_overlaps.py --shot /tmp/matrix.png
 ```
 
-It renders the real page in headless Chrome, runs every combination of the Class and Lab filters, and measures each dot, dot label, quadrant label, and axis title by its ink. Anything drawn over anything else is reported with the size of the overlap, and the run exits 1. `--shot` saves a picture of the unfiltered chart. It needs Google Chrome in `/Applications`, or a `CHROME` environment variable pointing at a Chrome binary.
+It renders the real page in headless Chrome, runs every combination of the Class, Lab, and Outcome filters, and measures each dot, dot label, quadrant label, and axis title by its ink. Anything drawn over anything else is reported with the size of the overlap, and the run exits 1. `--shot` saves a picture of the unfiltered chart. It needs Google Chrome in `/Applications`, or a `CHROME` environment variable pointing at a Chrome binary.
 
 Clicking a datapoint still opens its wanted poster. The tooltip explains the score and the `aria-label` announces the action, so the two do not contradict each other.
 
@@ -181,7 +182,7 @@ Recomputes every day-precise `lag` from `date` and `disclosed`, prints the estim
 
 ## Claims a new case can quietly falsify
 
-Some lines are claims about the registry as a whole rather than about one model. Adding a case can make one of them untrue without touching the sentence, and nothing else on the page would notice. Sol is the only confirmed zero-day until a second one arrives. Kimi K3 is the least harmful until something scores lower. The determined-cheaters note names the one case in that corner until it is rescored out of it.
+Some lines are claims about the registry as a whole rather than about one model. Adding a case can make one of them untrue without touching the sentence, and nothing else on the page would notice. Sol is the only confirmed zero-day until a second one arrives. The determined-cheaters note names the one case in that corner until it is rescored out of it.
 
 Run this after adding or rescoring a case:
 
@@ -195,7 +196,6 @@ It reports each claim as OK or STALE against the current data, and exits 1 if an
 |---|---|---|
 | "Considered the most dangerous of the 2026 escapes" | Sol, `caution` | another case outscores Sol on complexity plus harm |
 | "the only confirmed zero-day" | Sol, `caution` and `whyComplexity` | a second case's `charge` cites a zero-day |
-| "Least harmful of the group" | Kimi K3, `caution` | a case scores lower on `harm` |
 | "OpenAIResearcher sits here" | `QUADRANT_NOTE`, determined cheaters | OpenAIResearcher is rescored out of the quadrant |
 | "FIELD REGISTRY 2026" | masthead, bureau line | a case escapes outside 2026 |
 
@@ -209,7 +209,7 @@ Adding a case updates most of the app automatically. The Lab dropdown's options 
 
 Two things are manual. The footer's `Last updated: <date>` line has to be edited by hand, and the page `<title>` only changes if the app is renamed.
 
-The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry.
+The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry. The Outcome dropdown is hard-coded the same way, with a matching `OUTCOME_LABEL` entry per value.
 
 ## The glossary
 
@@ -255,7 +255,7 @@ ok = js.count('{')==js.count('}') and js.count('(')==js.count(')') and js.count(
 print("balance:", "OK" if ok else "MISMATCH")
 req={'id','alias','lab','org','date','disclosed','lag','order','cls',
      'complexity','harm','charge','wantedFor','mo','caution',
-     'escapedFrom','lastSeen','disclosedBy'}
+     'escapedFrom','lastSeen','disclosedBy','outcome'}
 for cid in re.findall(r'id:"(\w+)"', js):
     blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
     missing=req-{m for m in req if re.search(m+r'\s*:', blk)}

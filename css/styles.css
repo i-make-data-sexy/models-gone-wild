@@ -418,6 +418,7 @@
     cursor:help;outline:none;
   }
   .disc-chip:focus{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink);}
+
   .class-badge.c3{background:var(--class3);}
   .class-badge.c2{background:var(--class2);}
   .class-badge.c1{background:var(--class1);}

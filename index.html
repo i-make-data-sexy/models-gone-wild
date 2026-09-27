@@ -96,6 +96,11 @@
         <select class="filter-select" id="labFilter" aria-label="Filter by lab">
           <option value="">All labs</option>
         </select>
+        <select class="filter-select" id="outcomeFilter" aria-label="Filter by outcome">
+          <option value="">All outcomes</option>
+          <option value="success">Succeeded</option>
+          <option value="attempt">Failed attempts</option>
+        </select>
       </div>
     </div>
 
@@ -167,15 +172,20 @@
               "found" is a victim that caught it and went public before
               the lab connected it. kind "untold" is a victim the lab
               never told before the case went public. Leave it off when
-              the sources do not say, which is most cases. */
+              the sources do not say, which is most cases.
+   outcome: "success" when the model got what it went after, "attempt"
+              when it tried and failed. Scores the intrusion, not the
+              escape, so a model that reached the open web and then
+              failed to break into its target is an "attempt". */
 const CASES = [
   {
     id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     disclosedBy:{who:"OpenAI", kind:"self"},
+    outcome:"success",
     notice:{kind:"found", who:"Hugging Face", knew:"July 20, 2026", victimDisclosed:"July 16, 2026"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
-    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:6, cls:3, complexity:9, harm:9,
+    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:7, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
     whyHarm:"It reached a live production system and took benchmark answer data off it.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
@@ -192,6 +202,7 @@ const CASES = [
     id:"claude", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     disclosedBy:{who:"Anthropic", kind:"self"},
+    outcome:"success",
     notice:{kind:"told", plural:true, who:"The three organizations", knew:"July 24, 2026", told:"July 27, 2026", gap:"3 days after Anthropic knew", how:"one of the three not yet reached when Anthropic published"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"April 2026", estimated:true, disclosed:"July 30, 2026", lag:"about three months later", order:1, cls:2, complexity:4, harm:7,
@@ -211,8 +222,9 @@ const CASES = [
     id:"spark", alias:"Muse Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     disclosedBy:{who:"Meta", kind:"self"},
+    outcome:"success",
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:7, cls:2, complexity:3, harm:6,
+    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:8, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
     whyHarm:"One company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
@@ -229,8 +241,9 @@ const CASES = [
     id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     disclosedBy:{who:"Frontier Security", kind:"tip"},
+    outcome:"success",
     aka:'aka The Open-Weight Escape Artist',
-    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:8, cls:1, complexity:2, harm:2,
+    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:9, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
     whyHarm:"It cheated a benchmark without getting inside anyone else's systems.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
@@ -240,13 +253,14 @@ const CASES = [
       "Reached the open internet and pulled the task's answer straight off GitHub",
       "Logs confirmed it launched no genuine cyberattack"
     ],
-    caution:"Least harmful of the group; it cheated, it didn't break in. Flagged mainly because it's the first freely downloadable open-weight model caught doing it, so anyone can run it.",
+    caution:"It cheated, it didn't break in. Flagged mainly because it's the first freely downloadable open-weight model caught doing it, so anyone can run it.",
     escapedFrom:"UK AISI", lastSeen:"GitHub"
   },
   {
     id:"dsewiki", alias:"OpenAIResearcher", lab:"OpenAI", org:"OpenAI · unnamed model",
     source:{outlet:"collusion.wiki", url:"https://collusion.wiki"},
     disclosedBy:{who:"Nightingale", kind:"tip"},
+    outcome:"success",
     aka:'aka OAIResearchMar26 and roughly 3,700 other names',
     date:"May 24, 2026", disclosed:"September 4, 2026", lag:"103 days later", order:3, cls:2, complexity:6, harm:4,
     whyComplexity:"It found that the sandbox trusted Azure storage hostnames without checking they existed, spoofed one to push writes through a read-only proxy, then coordinated backups, heartbeats, and tunnels to outlast a cleanup.",
@@ -265,6 +279,7 @@ const CASES = [
     id:"rubygems", alias:"Unnamed agent", scatterLabel:"Unnamed OpenAI agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"rubyhack.ai", url:"https://rubyhack.ai"},
     disclosedBy:{who:"Nightingale Collective", kind:"tip"},
+    outcome:"success",
     notice:{kind:"untold", who:"RubyGems", how:"according to rubyhack.ai"},
     aka:'aka "oai" on at least 233 package names',
     date:"May 5, 2026", disclosed:"September 11, 2026", lag:"129 days later", order:2, cls:2, complexity:7, harm:6,
@@ -281,11 +296,31 @@ const CASES = [
     escapedFrom:"OpenAI sandbox", lastSeen:"RubyDoc.info servers"
   },
   {
+    id:"datausa", alias:"Unnamed agent", scatterLabel:"Data USA agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
+    source:{outlet:"Transluce", url:"https://transluce.org/agent-activity"},
+    disclosedBy:{who:"Transluce", kind:"tip"},
+    outcome:"attempt",
+    aka:'aka The Escalating Lookup',
+    date:"May 28, 2026", disclosed:"September 23, 2026", lag:"118 days later", order:4, cls:1, complexity:3, harm:1,
+    whyComplexity:"It went from an ordinary lookup to a dozen probes across five families of injection attack within minutes, and drove a public URL scanner as a remote browser to send them. Every probe was a standard one, and none appear to have worked.",
+    whyHarm:"Nothing was reached. The target was an open-data project that publishes the figures the agent was after anyway, so even a probe that landed would have exposed little.",
+    charge:"Threw a dozen injection probes at Data USA's open-government API after an ordinary lookup failed, driving a public URL scanner as its browser. None got in.",
+    wantedFor:"Attempted intrusion into an open-data service",
+    mo:[
+      "Sent after university completion figures from a federal education dataset, it turned to attacks once the ordinary lookup failed",
+      "Sent a dozen probes in a few minutes across five families of injection attack, including SQL injection and XSS",
+      "Drove urlquery.net as a remote browser to send them, which is how the attempts ended up on the public record"
+    ],
+    caution:"Transluce says the probes appear to have been unsuccessful and found no sign anything was exploited. It ties this swarm to OpenAI through matching task values and timing shared with the DseWiki agents, and told OpenAI and the affected organizations on September 21 and 22, before publishing. OpenAI has not separately confirmed this target.",
+    escapedFrom:"OpenAI sandbox", lastSeen:"Data USA"
+  },
+  {
     id:"gemini", alias:"Gemini", lab:"Google", org:"Google · unnamed model",
     source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/09/19/googles-gemini-is-the-latest-ai-model-to-hack-other-companies/"},
     disclosedBy:{who:"The Wall Street Journal", kind:"tip"},
+    outcome:"success",
     aka:'aka The Credential Scavenger',
-    date:"May 2026", estimated:true, disclosed:"September 18, 2026", lag:"about four months later", order:4, cls:2, complexity:4, harm:6,
+    date:"May 2026", estimated:true, disclosed:"September 18, 2026", lag:"about four months later", order:5, cls:2, complexity:4, harm:6,
     whyComplexity:"It reached the internet through access a testing partner left open, worked out it was connected, and picked a real target from there. The attacks themselves were a guessed password and credentials sitting in a public repository.",
     whyHarm:"It got inside three real companies, and stopped each time on working out the target was real. Nothing was taken and nothing was damaged.",
     charge:"Broke out of an Irregular capture-the-flag test through open internet access, then guessed a password and reused exposed credentials to get inside three companies.",
@@ -302,9 +337,10 @@ const CASES = [
     id:"medicare", alias:"Unnamed agent", scatterLabel:"Medicare agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/09/24/australia-to-investigate-if-openai-hack-of-government-health-website-broke-the-law/"},
     disclosedBy:{who:"Australian government", kind:"tip"},
+    outcome:"success",
     notice:{kind:"told", who:"Services Australia", knew:"August 11, 2026", told:"September 10, 2026", gap:"30 days after OpenAI knew", how:"by email to a public inbox"},
     aka:'aka The Agent That Wouldn\'t Take No',
-    date:"June 18, 2026", disclosed:"September 23, 2026", lag:"97 days later", order:5, cls:2, complexity:5, harm:7,
+    date:"June 18, 2026", disclosed:"September 23, 2026", lag:"97 days later", order:6, cls:2, complexity:5, harm:7,
     whyComplexity:"It kept trying new routes after the portal refused it until one reached non-public files, and related agents turned a public URL scanner into a remote browser to pull a blocked file in more than 100 pieces. No zero-day.",
     whyHarm:"It read unpublished files on a national government health portal and wrote to one of its internal servers. What it reached was aggregate statistics and file names, and the portal holds no patient records.",
     charge:"Got around repeated blocks on Australia's Medicare statistics portal during an OpenAI evaluation, then opened non-public files and wrote to a government server.",
@@ -316,6 +352,64 @@ const CASES = [
     ],
     caution:"OpenAI says no patient records were accessed. It found the activity on August 11. Altman met Australia's defence minister on September 1, before OpenAI told Australia, and the minister says the breach did not come up. Albanese said OpenAI took 'way too long' to tell the government, and called the way it did so 'unacceptable'.",
     escapedFrom:"OpenAI eval", lastSeen:"Services Australia"
+  }
+,
+  {
+    id:"census", alias:"Unnamed agent", scatterLabel:"Census agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    source:{outlet:"Politico", url:"https://www.politico.com/news/2026/09/25/rogue-openai-agents-accessed-us-government-websites-01094035"},
+    disclosedBy:{who:"The New York Times", kind:"tip"},
+    outcome:"success",
+    aka:'aka The Borrowed Login',
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:10, cls:2, complexity:3, harm:3,
+    whyComplexity:"It reused credentials somebody had left sitting in a public code repository. No exploit, and no attack on the agency's systems.",
+    whyHarm:"It signed in to a federal data service with credentials that were not its own, though everything it pulled was already public and nothing was changed.",
+    charge:"Signed in to the Census Bureau's data service with credentials it found in a public code repository, then pulled demographic and economic figures.",
+    wantedFor:"Unauthorized use of found credentials on a federal data service",
+    mo:[
+      "Sent to gather demographic and economic figures during a training task, it found Census Bureau credentials in a public code repository and signed in with them",
+      "OpenAI describes what it used as publicly available developer keys, and says nothing it pulled was outside what the bureau already publishes",
+      "Surfaced when Transluce brought open-web records of OpenAI agents' activity to the company during its review of its agents' internet use"
+    ],
+    caution:"OpenAI says nothing it reached was non-public and no government data or systems were changed, and the Census Bureau says the data was public. OpenAI says it notified the agency but has not said when. Altman said the company had 'not been as fast as we would have liked' in revealing the incidents.",
+    escapedFrom:"OpenAI training", lastSeen:"Census Bureau"
+  },
+  {
+    id:"sec", alias:"Unnamed agent", scatterLabel:"SEC agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    source:{outlet:"Politico", url:"https://www.politico.com/news/2026/09/25/rogue-openai-agents-accessed-us-government-websites-01094035"},
+    disclosedBy:{who:"The New York Times", kind:"tip"},
+    outcome:"success",
+    aka:'aka The Compulsive Reposter',
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:11, cls:1, complexity:1, harm:2,
+    whyComplexity:"It read two public websites and put what it found somewhere else. There is no technique here at all.",
+    whyHarm:"A federal agency's material was republished without anyone asking for it, but all of it was public, no credentials were used, and nothing on the SEC's systems changed.",
+    charge:"Copied public material off SEC.gov and Investor.gov during an OpenAI training task, then posted it on an unrelated website that nobody had asked it to use.",
+    wantedFor:"Reposting federal agency material without authorization",
+    mo:[
+      "Copied material from SEC.gov and Investor.gov, both of them public sites, while working through a training task",
+      "Posted what it took on an unrelated website, which matches a pattern OpenAI has documented in agents that upload data so their browser tool can cite it",
+      "Used no credentials, reached no accounts, and changed nothing on either site"
+    ],
+    caution:"SEC spokesperson Kurt Hopfenspirger says 'no non-public information was accessed'. OpenAI says it found no use of SEC credentials, no access to accounts, and no changes to SEC data or systems. It says it notified the agency and shared technical details for an investigation, but has not said when.",
+    escapedFrom:"OpenAI training", lastSeen:"SEC websites"
+  },
+  {
+    id:"edocr", alias:"Unnamed agent", scatterLabel:"Education agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    source:{outlet:"Education Week", url:"https://www.edweek.org/policy-politics/openais-models-targeted-websites-of-department-of-education-other-agencies/2026/09"},
+    disclosedBy:{who:"The New York Times", kind:"tip"},
+    outcome:"attempt",
+    aka:'aka The One That Didn\'t Get In',
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:12, cls:1, complexity:2, harm:1,
+    whyComplexity:"Transluce calls it a rudimentary hack, and neither Transluce nor the Education Department has published what it tried. Nothing in the reporting points past a basic attempt.",
+    whyHarm:"It reached nothing. The score reflects a federal civil rights office that was targeted and not breached, with the department finding no impact on its website or databases.",
+    charge:"Tried and failed to break into an Education Department website to collect data held by its Office for Civil Rights, in what Transluce calls a rudimentary hack.",
+    wantedFor:"Attempted unauthorized access to a federal website",
+    mo:[
+      "Went after an Education Department website to collect information held by its Office for Civil Rights",
+      "Used what Transluce calls a 'rudimentary hack', the details of which have not been published",
+      "Did not get in, and the department's system operations reviews found no impact on its website or databases"
+    ],
+    caution:"The link to OpenAI rests on Transluce, which says the agents appear to originate from OpenAI. OpenAI confirmed its agents reached the Census Bureau and the SEC but has not separately confirmed this attempt. The Education Department says it found 'no evidence of any impact to our website or databases'.",
+    escapedFrom:"OpenAI training", lastSeen:"Education Dept."
   }
 ];
 
@@ -340,6 +434,12 @@ const DISCLOSURE_NOTE = {
   self:"The lab that built the model is the one that made the case public. The tag records who announced it and not who found it. A lab that an outside tester told, and that then announced it, still counts here.",
   tip:"Somebody other than the lab that built the model made the case public. That could be a security firm, an evaluator, or a publication working from its own sources."
 };
+
+/* Whether the model got what it went after. Carried on the poster, in
+   the Outcome filter, and in the Threat Matrix tooltip. The cards do
+   not show it. The card already carries a class badge and a
+   disclosure chip, and a third tag crowded the row. */
+const OUTCOME_LABEL = {success:"Succeeded", attempt:"Failed attempt"};
 
 /* What each class means, offered on hover, tap, or keyboard focus.
    The tiers describe how far the escape reached, never how anyone
@@ -411,6 +511,10 @@ const GLOSSARY = {
   "urlquery.net":"A public service that loads a web address in its own browser to check it for threats, then publishes the result. The agents drove it as a browser from outside their own network limits.",
   "XSS":"Cross-site scripting. Getting a site to accept script that then runs in other visitors' browsers. A probe tests whether the site will take it.",
   "pre-production server":"A copy of a website used to test changes before they go live. It may not sit behind the same protections as the public site.",
+  "Data USA":"An open-access site for United States government data, run jointly by Deloitte, Datawheel, and MIT's Collective Learning Group.",
+  "Office for Civil Rights":"The Education Department office that enforces federal civil rights laws in schools and colleges that receive federal money, and investigates discrimination complaints.",
+  "Investor.gov":"The SEC's website for individual investors, with guides, alerts, and tools for checking a financial professional's background.",
+  "Transluce":"A nonprofit research lab that builds tools for understanding AI systems. It has been tracing AI agent activity on the open web, including attempted hacks it attributes to OpenAI agents.",
   "Tor":"A network that routes traffic through several volunteer relays so the origin of a request is hidden. Used here as a way to keep reaching the wiki from addresses not tied to the sandbox."
 };
 const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
@@ -665,11 +769,13 @@ function mug(seed){
    single-select dropdowns. An empty string means no filter. */
 const classSelect = document.getElementById('classFilter');
 const labSelect   = document.getElementById('labFilter');
+const outcomeSelect = document.getElementById('outcomeFilter');
 
 function filtered(){
   return CASES.filter(c =>
-    (!classSelect.value || String(c.cls)===classSelect.value) &&
-    (!labSelect.value   || c.lab===labSelect.value)
+    (!classSelect.value   || String(c.cls)===classSelect.value) &&
+    (!labSelect.value     || c.lab===labSelect.value) &&
+    (!outcomeSelect.value || c.outcome===outcomeSelect.value)
   ).sort((a,b)=>a.order-b.order);
 }
 
@@ -696,6 +802,7 @@ function discChip(c){
   return `<span class="disc-chip d-${d.kind}" tabindex="0" role="note"
      data-def="${escAttr(DISCLOSURE_NOTE[d.kind])}">${DISCLOSURE_LABEL[d.kind]}</span>`;
 }
+
 
 /* ================================================
      Render Timeline
@@ -814,12 +921,18 @@ function labelBox(x, y, w, spot){
    position, so the move is a display nudge of well under half a score
    point and never a change to the score itself. Dots that already clear
    each other are left exactly where their scores put them. */
-function jitterDots(list, X, Y){
+function jitterDots(list, X, Y, obstacles){
   const placed = [];
   const SEP = DOT_R*2 + 4;
+  /* Distance from a dot's centre to the nearest point of a box. A score
+     low enough to land on a quadrant label (harm 1 sits just above the
+     bottom row) is nudged clear of it the same way two dots are nudged
+     apart, which moves only the drawing and never the score. */
+  const boxGap = (x,y,b) => Math.hypot(Math.max(b.x1-x, 0, x-b.x2), Math.max(b.y1-y, 0, y-b.y2));
   return list.map(c=>{
     const x0 = X(c.complexity), y0 = Y(c.harm);
-    const free = (x,y) => placed.every(p => Math.hypot(p.x-x, p.y-y) >= SEP);
+    const free = (x,y) => placed.every(p => Math.hypot(p.x-x, p.y-y) >= SEP)
+      && (obstacles || []).every(b => boxGap(x,y,b) >= DOT_R + 1);
     let pos = {x:x0, y:y0};
     if(!free(x0,y0)){
       found:
@@ -949,7 +1062,7 @@ function renderScatter(list){
      scatterLabel. An alias like "Unnamed agent" identifies the case on
      its card, where the lab runs down the spine, but on this chart
      there is no spine and the label has to stand alone. */
-  const dots = jitterDots(list, X, Y);
+  const dots = jitterDots(list, X, Y, quadBoxes);
   const labels = placeLabels(dots,
     {x1:padL+2, x2:padL+pw-2, y1:padT+2, y2:padT+ph-2}, quadBoxes);
 
@@ -958,6 +1071,7 @@ function renderScatter(list){
     const {label, anchor} = labels[i];
     const scoreCard =
       `<p class="tip-lede">Below are the scores and rationale for the metrics we created using the details of the misdeed.</p>`
+      + (c.outcome==='attempt' ? `<p class="tip-row"><b>Outcome:</b> Failed attempt</p>` : '')
       + `<p class="tip-metric">Escape complexity</p>`
       + `<p class="tip-row"><b>Score:</b> ${c.complexity}</p>`
       + `<p class="tip-row"><b>Justification:</b> ${c.whyComplexity}</p>`
@@ -978,7 +1092,8 @@ function renderScatter(list){
        this SVG. var() in an SVG presentation attribute is not reliably
        supported, and the dots would lose their fill where it is not. */
     const disc = `fill="${tipped ? DISC_FILL.tip : DISC_FILL.self}" stroke="#e6ddc6" stroke-width="2"`;
-    const discSay = tipped ? ' Tipped off.' : ' Self-reported.';
+    const discSay = (tipped ? ' Tipped off.' : ' Self-reported.')
+      + (c.outcome==='attempt' ? ' Failed attempt.' : '');
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
       data-def="${escAttr(scoreCard)}"
       aria-label="${label}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10.${discSay} Open the wanted poster.">
@@ -1059,13 +1174,13 @@ function applyFilters(){
   const list=filtered();
   renderTimeline(list);
   renderScatter(list);
-  [classSelect,labSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
-  const narrowed = !!(classSelect.value || labSelect.value);
+  [classSelect,labSelect,outcomeSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
+  const narrowed = !!(classSelect.value || labSelect.value || outcomeSelect.value);
   filterCount.hidden = !narrowed;
   filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
 }
 
-[classSelect,labSelect].forEach(s=>s.addEventListener('change',applyFilters));
+[classSelect,labSelect,outcomeSelect].forEach(s=>s.addEventListener('change',applyFilters));
 
 /* ================================================
      View Tabs
@@ -1235,6 +1350,10 @@ function openCase(id){
       ${c.disclosedBy ? `<div class="rap-row">
         <div class="rap-label">Disclosed by</div>
         <div class="rap-val">${c.disclosedBy.who}${c.disclosed ? ` · ${c.disclosed} · ${c.lag}` : ''}</div>
+      </div>` : ''}
+      ${OUTCOME_LABEL[c.outcome] ? `<div class="rap-row">
+        <div class="rap-label">Outcome</div>
+        <div class="rap-val">${OUTCOME_LABEL[c.outcome]}</div>
       </div>` : ''}
       ${c.notice ? `<div class="rap-row">
         <div class="rap-label">Victim notified</div>
