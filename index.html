@@ -84,6 +84,7 @@
       <div class="viewbar" role="tablist" aria-label="View">
         <button class="tab" role="tab" id="tab-timeline" aria-controls="view-timeline" aria-selected="true">Case Timeline</button>
         <button class="tab" role="tab" id="tab-matrix" aria-controls="view-matrix" aria-selected="false">Threat Matrix</button>
+        <button class="tab" role="tab" id="tab-labs" aria-controls="view-labs" aria-selected="false">Cases by Lab</button>
       </div>
 
       <div class="filters">
@@ -121,6 +122,20 @@
           <p class="scatter-legend">
             <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#5a6b2a" stroke="#e6ddc6" stroke-width="2"/></svg>Self-reported</span>
             <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#8f1d16" stroke="#e6ddc6" stroke-width="2"/></svg>Tipped off</span>
+          </p>
+      </div>
+    </section>
+
+    <section class="view" id="view-labs" role="tabpanel" aria-labelledby="tab-labs" hidden>
+      <div class="scatter-wrap">
+          <div id="labChart"></div>
+          <!-- Same two routes and the same two fills as the Threat
+               Matrix legend, drawn as squares since the marks here are
+               bar segments rather than dots. Kept in step with
+               DISC_FILL in the script. -->
+          <p class="scatter-legend">
+            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" fill="#5a6b2a"/></svg>Self-reported</span>
+            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" fill="#8f1d16"/></svg>Tipped off</span>
           </p>
       </div>
     </section>
@@ -1231,6 +1246,99 @@ function placeAxisIcons(){
 }
 
 /* ================================================
+     Render Lab Chart
+   ================================================ */
+const labHost = document.getElementById('labChart');
+
+/* One bar per lab, one segment per case. Segments run oldest to newest
+   from left to right, ordered by `order`, which is the escape sequence
+   the timeline uses. That copes with month-only and seasonal dates that
+   would not sort as text. Fill is the disclosure route, the same pair
+   of colours the Threat Matrix dots use.
+
+   The scale comes from every case on record rather than the filtered
+   list, so a segment keeps its width when a filter is applied and two
+   filtered views can be compared by eye. Labs with nothing left after
+   filtering drop out instead of drawing an empty row. */
+function renderLabChart(list){
+  if(!list.length){
+    labHost.innerHTML = '<p class="empty-note">No files match the current filters.</p>';
+    return;
+  }
+
+  /* Group the filtered cases by lab. Busiest lab on top, and a tie goes
+     to the lab whose first case came earlier. */
+  const byLab = new Map();
+  list.slice().sort((a,b)=>a.order-b.order).forEach(c=>{
+    if(!byLab.has(c.lab)) byLab.set(c.lab, []);
+    byLab.get(c.lab).push(c);
+  });
+  const rows = [...byLab.entries()].sort((a,b)=>
+    b[1].length - a[1].length || a[1][0].order - b[1][0].order);
+
+  const allCounts = {};
+  CASES.forEach(c=>{ allCounts[c.lab] = (allCounts[c.lab]||0) + 1; });
+  const maxAll = Math.max(...Object.values(allCounts));
+
+  /* The left margin fits the longest lab name in the real font */
+  const labelW = Math.max(...rows.map(([lab])=>textWidth(lab, LABEL_FONT)));
+  const ROW = 46, BAR = 26, GAP_SEG = 2;
+  const W = 700, padL = Math.ceil(labelW) + 18, padR = 40, padT = 12, padB = 58;
+  const pw = W - padL - padR;
+  const H = padT + rows.length*ROW + padB;
+  const unit = pw / maxAll;
+  const X = n => padL + n*unit;
+
+  /* Whole-number ticks only, since half a case means nothing. The step
+     widens as the busiest lab grows so the labels never crowd. */
+  const step = maxAll > 24 ? 5 : maxAll > 12 ? 2 : 1;
+  let grid = '';
+  for(let n=0; n<=maxAll; n+=step){
+    grid += `<line x1="${X(n)}" y1="${padT}" x2="${X(n)}" y2="${padT+rows.length*ROW}" stroke="#4a4438" stroke-width="1" opacity="${n===0?0.6:0.18}"/>`
+          + `<text x="${X(n)}" y="${padT+rows.length*ROW+18}" text-anchor="middle" fill="#3a362c"
+               font-family="'Oswald',sans-serif" font-size="12">${n}</text>`;
+  }
+  const axis = `<text x="${padL+pw/2}" y="${H-14}" text-anchor="middle" fill="#3a362c"
+      font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">CASES, OLDEST TO NEWEST &#8594;</text>`;
+
+  const bars = rows.map(([lab, cases], r)=>{
+    const y = padT + r*ROW + (ROW-BAR)/2;
+    const tipped = cases.filter(c=>c.disclosedBy && c.disclosedBy.kind==='tip').length;
+    const segs = cases.map((c,k)=>{
+      const route = c.disclosedBy && c.disclosedBy.kind==='tip' ? 'tip' : 'self';
+      const name = c.scatterLabel || c.alias;
+      const card = `<p class="tip-metric">${name}</p>`
+        + `<p class="tip-row"><b>Escaped:</b> ${escDate(c)}</p>`
+        + `<p class="tip-row"><b>Disclosure:</b> ${DISCLOSURE_LABEL[route]}</p>`
+        + `<p class="tip-row">Select to open the wanted poster.</p>`;
+      /* Each segment is inset by half the gap on both sides, so the
+         paper shows between neighbours and every case reads as its own
+         mark rather than part of one long block. Literal hex, as on the
+         Threat Matrix, since var() is unreliable in SVG attributes. */
+      return `<g class="seg" data-id="${c.id}" tabindex="0" role="button"
+          data-def="${escAttr(card)}"
+          aria-label="${name}, ${lab}, escaped ${escDate(c)}, ${DISCLOSURE_LABEL[route]}. Open the wanted poster.">
+          <rect x="${X(k)+GAP_SEG/2}" y="${y}" width="${Math.max(unit-GAP_SEG, 1)}" height="${BAR}" fill="${DISC_FILL[route]}"/>
+        </g>`;
+    }).join('');
+    return `<text class="lab-name" x="${padL-10}" y="${y+BAR/2+4.5}" text-anchor="end">${lab}</text>
+      ${segs}
+      <text class="lab-total" x="${X(cases.length)+8}" y="${y+BAR/2+4.5}"
+        aria-label="${cases.length} ${cases.length===1?'case':'cases'}, ${tipped} tipped off">${cases.length}</text>`;
+  }).join('');
+
+  labHost.innerHTML =
+    `<svg class="scatter-svg lab-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      ${grid}${bars}${axis}
+    </svg>`;
+
+  labHost.querySelectorAll('.seg').forEach(g=>{
+    g.addEventListener('click',()=>openCase(g.dataset.id));
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();openCase(g.dataset.id);} });
+  });
+}
+
+/* ================================================
      Apply Filters
    ================================================ */
 const filterCount=document.getElementById('filterCount');
@@ -1238,6 +1346,7 @@ function applyFilters(){
   const list=filtered();
   renderTimeline(list);
   renderScatter(list);
+  renderLabChart(list);
   [classSelect,labSelect,outcomeSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
   const narrowed = !!(classSelect.value || labSelect.value || outcomeSelect.value);
   filterCount.hidden = !narrowed;
@@ -1258,7 +1367,7 @@ function applyFilters(){
    navigation, and pushing would stack an entry per switch so the back
    button walked through them instead of leaving the page. */
 const tabs=document.querySelectorAll('.tab');
-const VIEWS=['timeline','matrix'];
+const VIEWS=['timeline','matrix','labs'];
 
 function showView(name, syncUrl){
   if(VIEWS.indexOf(name)===-1) name='timeline';
@@ -1532,10 +1641,10 @@ applyFilters();
 /* Honour a shared ?view= link. Runs after the first render so both
    panels already hold content when one of them is revealed. */
 showView(new URLSearchParams(window.location.search).get('view'), false);
-/* Oswald usually arrives after the first paint, so the chart is drawn a
-   second time once it has. That re-measures the dot labels in the real
-   font and places the axis icons again. */
-if(document.fonts && document.fonts.ready){ document.fonts.ready.then(()=>renderScatter(filtered())); }
+/* Oswald usually arrives after the first paint, so the charts are drawn
+   a second time once it has. That re-measures the dot labels and the
+   lab names in the real font and places the axis icons again. */
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(()=>{ renderScatter(filtered()); renderLabChart(filtered()); }); }
 </script>
 </body>
 </html>

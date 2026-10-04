@@ -566,7 +566,7 @@
      and the wrap widens to make room for it so the plot keeps its size */
   @media (min-width:801px){
     .scatter-wrap{display:flex;align-items:center;gap:6px;max-width:900px;}
-    #scatter{flex:1 1 auto;min-width:0;}
+    #scatter,#labChart{flex:1 1 auto;min-width:0;}
     .scatter-legend{
       flex:none;flex-direction:column;align-items:flex-start;
       justify-content:center;gap:12px;margin:0;padding-left:0;
@@ -598,6 +598,18 @@
   }
   .svg-note:focus{text-decoration-color:var(--stamp-red);}
   .pt text{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;fill:var(--ink);}
+
+  /* ===============================
+       Cases by Lab
+     =============================== */
+  /* Each segment opens its case's wanted poster. The ink stroke on
+     hover and keyboard focus is the same cue the Threat Matrix dots
+     use, and the browser ring is suppressed for the same reason. */
+  .seg{cursor:pointer;outline:none;}
+  .seg rect{transition:stroke-width .13s;}
+  .seg:hover rect,.seg:focus-visible rect{stroke:var(--ink);stroke-width:2.5;}
+  .lab-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;fill:var(--ink);}
+  .lab-total{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;fill:var(--ink-soft);}
 
   /* ===============================
        Modal / Poster
