@@ -349,21 +349,27 @@
   .filter-select.is-active{border-color:var(--ink);color:var(--ink);font-weight:600;}
   .filter-select option{text-transform:none;letter-spacing:normal;}
 
-  /* A full-width solid stamp-red button, so it reads as an action rather
-     than a link. It rests at 80% opacity, which softens the red against
-     the card, and comes up to full strength on hover or focus. The extra
-     top margin sets it apart from the Outcome select above it. */
+  /* A full-width stamp-red button, so it reads as an action rather than
+     a link. It rests at 80% strength, which softens the red against the
+     card. On hover or focus a full-strength fill sweeps in from the left,
+     the same background-size sweep Cloud Kingdom uses on its links, here
+     at full height instead of a 1px underline. The 80% lives in the
+     background color rather than opacity, since opacity would also dim
+     the sweep and the text. */
   .options-clear{
-    display:block;width:100%;margin:12px 0 0;padding:8px 11px;
+    display:block;width:100%;margin:22px 0 0;padding:8px 11px;
     font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
     text-transform:uppercase;font-size:11px;line-height:1.2;
-    color:var(--paper);background:var(--stamp-red);
+    color:var(--paper);background-color:rgba(143,29,22,.8);
+    background-image:linear-gradient(var(--stamp-red),var(--stamp-red));
+    background-repeat:no-repeat;background-position:left center;
+    background-size:0% 100%;background-origin:border-box;
     border:1.5px solid var(--stamp-red);border-radius:2px;
-    text-decoration:none;cursor:pointer;opacity:.8;
-    transition:opacity .15s;
+    text-decoration:none;cursor:pointer;
+    transition:background-size .3s ease;
   }
   .options-clear[hidden]{display:none;}
-  .options-clear:hover,.options-clear:focus-visible{opacity:1;}
+  .options-clear:hover,.options-clear:focus-visible{background-size:100% 100%;}
   /* Ink rather than stamp red, since a red outline on the red fill
      would be invisible */
   .options-clear:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
