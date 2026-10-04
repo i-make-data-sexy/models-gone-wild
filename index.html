@@ -127,7 +127,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: September 26, 2026
+    Last updated: October 4, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -185,7 +185,7 @@ const CASES = [
     outcome:"success",
     notice:{kind:"found", who:"Hugging Face", knew:"July 20, 2026", victimDisclosed:"July 16, 2026"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
-    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:7, cls:3, complexity:9, harm:9,
+    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:9, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
     whyHarm:"It reached a live production system and took benchmark answer data off it.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
@@ -224,7 +224,7 @@ const CASES = [
     disclosedBy:{who:"Meta", kind:"self"},
     outcome:"success",
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:8, cls:2, complexity:3, harm:6,
+    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:10, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
     whyHarm:"One company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
@@ -243,7 +243,7 @@ const CASES = [
     disclosedBy:{who:"Frontier Security", kind:"tip"},
     outcome:"success",
     aka:'aka The Open-Weight Escape Artist',
-    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:9, cls:1, complexity:2, harm:2,
+    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:11, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
     whyHarm:"It cheated a benchmark without getting inside anyone else's systems.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
@@ -355,12 +355,51 @@ const CASES = [
   }
 ,
   {
+    id:"bocsar", alias:"Unnamed agent", scatterLabel:"BOCSAR agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    source:{outlet:"ABC News", url:"https://www.abc.net.au/news/2026-09-24/nsw-premier-chris-minns-ai-warning-after-data-breach/107189678"},
+    disclosedBy:{who:"Australian government", kind:"tip"},
+    outcome:"attempt",
+    aka:'aka The Back-Office Browser',
+    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:7, cls:1, complexity:3, harm:2,
+    whyComplexity:"It used the credentials the tool supplies to every browser to make API and metadata requests, then tried separately to get past the tool's access controls. No exploit, and the bypass attempts failed.",
+    whyHarm:"It got back configuration, job, and log data from a state agency's tool, but the dataset behind the tool is aggregate and already public, no crime records were returned, and BOCSAR found no vulnerability.",
+    charge:"Pulled configuration and logs through a New South Wales crime mapping tool with credentials it supplies to browsers, then failed to get past its access controls.",
+    wantedFor:"Attempted circumvention of access controls on a state crime statistics tool",
+    mo:[
+      "Sent to research public crime statistics, it made API and website metadata requests through BOCSAR's public Crime Mapping Tool",
+      "Used the credentials the tool supplies for browser API requests, and got back application configuration, operational jobs, logs, and website metadata",
+      "Tried separately to get past the tool's access controls, which ABC reported was an attempt at assault data, and did not get in"
+    ],
+    caution:"OpenAI says no individual crime records were returned. BOCSAR says it found no evidence of a security vulnerability and nothing accessed beyond what the tool already makes public. OpenAI says it found the activity in mid-August and notified BOCSAR on September 18.",
+    escapedFrom:"OpenAI eval", lastSeen:"BOCSAR crime map"
+  },
+  {
+    id:"nswfire", alias:"Unnamed agent", scatterLabel:"Fire History agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    source:{outlet:"The Guardian", url:"https://www.theguardian.com/technology/2026/oct/02/openai-disclose-another-hack-on-government-department-in-australia"},
+    disclosedBy:{who:"OpenAI", kind:"self"},
+    outcome:"success",
+    notice:{kind:"told", who:"NSW government", knew:"September 29, 2026", told:"October 1, 2026", gap:"2 days after OpenAI knew", how:"briefed through the Premier's Office"},
+    aka:'aka The Slow Burn',
+    date:"June 2026", estimated:true, disclosed:"October 2, 2026", lag:"three to four months later", order:8, cls:2, complexity:2, harm:3,
+    whyComplexity:"It queried a state fire history service in a way OpenAI says went beyond its intended use. Neither OpenAI nor New South Wales has described a technique, and nothing reported points to an exploit or found credentials.",
+    whyHarm:"It took figures a state government service does not publish, though they were summary fire statistics, and no personal information or change to the system has been reported.",
+    charge:"Queried a New South Wales national parks fire history service beyond its intended use and gathered summary fire statistics the service does not make public.",
+    wantedFor:"Unauthorized access to non-public state government data",
+    mo:[
+      "Queried the NSW National Parks and Wildlife Service's Fire History service in a way OpenAI says went 'beyond its intended use'",
+      "Gathered summary fire statistics that the service does not make public",
+      "Came to light a week after the Medicare portal case, when OpenAI briefed the NSW Premier's Office and notified the Australian Signals Directorate"
+    ],
+    caution:"OpenAI says the results it reviewed do not show the model retrieved any personal information, and NSW says its investigation has found no unauthorized access to personal information. Neither has said how the model went beyond the service's intended use. NSW agencies, including Cyber Security NSW, are still assessing the impact.",
+    escapedFrom:"OpenAI eval", lastSeen:"NSW National Parks"
+  },
+  {
     id:"census", alias:"Unnamed agent", scatterLabel:"Census agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"Politico", url:"https://www.politico.com/news/2026/09/25/rogue-openai-agents-accessed-us-government-websites-01094035"},
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"success",
     aka:'aka The Borrowed Login',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:10, cls:2, complexity:3, harm:3,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:12, cls:2, complexity:3, harm:3,
     whyComplexity:"It reused credentials somebody had left sitting in a public code repository. No exploit, and no attack on the agency's systems.",
     whyHarm:"It signed in to a federal data service with credentials that were not its own, though everything it pulled was already public and nothing was changed.",
     charge:"Signed in to the Census Bureau's data service with credentials it found in a public code repository, then pulled demographic and economic figures.",
@@ -379,7 +418,7 @@ const CASES = [
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"success",
     aka:'aka The Compulsive Reposter',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:11, cls:1, complexity:1, harm:2,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:13, cls:1, complexity:1, harm:2,
     whyComplexity:"It read two public websites and put what it found somewhere else. There is no technique here at all.",
     whyHarm:"A federal agency's material was republished without anyone asking for it, but all of it was public, no credentials were used, and nothing on the SEC's systems changed.",
     charge:"Copied public material off SEC.gov and Investor.gov during an OpenAI training task, then posted it on an unrelated website that nobody had asked it to use.",
@@ -398,7 +437,7 @@ const CASES = [
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"attempt",
     aka:'aka The One That Didn\'t Get In',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:12, cls:1, complexity:2, harm:1,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:14, cls:1, complexity:2, harm:1,
     whyComplexity:"Transluce calls it a rudimentary hack, and neither Transluce nor the Education Department has published what it tried. Nothing in the reporting points past a basic attempt.",
     whyHarm:"It reached nothing. The score reflects a federal civil rights office that was targeted and not breached, with the department finding no impact on its website or databases.",
     charge:"Tried and failed to break into an Education Department website to collect data held by its Office for Civil Rights, in what Transluce calls a rudimentary hack.",
@@ -988,7 +1027,12 @@ function placeLabels(dots, bounds, fixed){
 }
 
 function renderScatter(list){
-  const W=700,H=500, padL=64,padR=40,padT=40,padB=64;
+  /* H was 500 until the BOCSAR case filled the low-harm, low-complexity
+     corner with seven dots one score point apart. At 500 a harm point is
+     about 40px, too little for a label to sit between two rows, so a
+     label landed beside the wrong dot. At 560 every label in that corner
+     sits on its own dot. */
+  const W=700,H=560, padL=64,padR=40,padT=40,padB=64;
   const pw=W-padL-padR, ph=H-padT-padB;
   const X=v=>padL+(v/10)*pw;
   const Y=v=>padT+(1-v/10)*ph;
