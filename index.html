@@ -957,6 +957,38 @@ const NOTE_FONT = "12px 'Special Elite', monospace";
    clear space kept between a label and anything it could collide with. */
 const INK_UP = 10, INK_DOWN = 3, PAD = 3;
 
+/* ===============================
+     Axis Spacing Tokens
+   =============================== */
+
+/* Every chart takes its axis-title spacing from here, so a new chart
+   lands on the same margins without anyone measuring by eye. Values are
+   SVG viewBox units. They live in the script rather than as CSS
+   variables because they feed SVG attributes and layout arithmetic,
+   where var() does not reach.
+
+   GAP is measured from whatever sits directly against the title: the
+   plot edge on a chart with no tick labels, or the bottom of the tick
+   labels on one that has them. Measuring from the plot edge alone is
+   what left the bar chart's title crowded under its tick numbers while
+   the scatter's floated clear. */
+const AXIS = {
+  GAP: 38,     // Clear space between the axis furniture and the title's ink
+  CAP: INK_UP, // How far the 13px Oswald title rises above its baseline
+  TICK: 18,    // Plot edge to the baseline of the tick labels
+  EDGE: 16     // Clear space between a title and the edge of the SVG
+};
+
+/* The margin a chart needs on the side carrying an axis title, so the
+   title sits GAP clear of the furniture and EDGE clear of the SVG edge.
+   Pass true when tick labels sit between the plot and the title. */
+const axisMargin = ticks => (ticks ? AXIS.TICK : 0) + AXIS.GAP + AXIS.CAP + AXIS.EDGE;
+
+/* Where an axis title's baseline goes, given the plot edge it belongs
+   to. For a rotated y-axis title this is an x position, since the ink
+   rises leftward from the baseline once the text is turned. */
+const axisTitleAt = (plotEdge, ticks) => plotEdge + (ticks ? AXIS.TICK : 0) + AXIS.GAP + AXIS.CAP;
+
 /* Where a label may sit relative to its dot, in order of preference.
    Right of the dot reads most naturally, so it goes first, then left,
    then the four diagonals, then straight above and below. dx and dy
@@ -1067,7 +1099,7 @@ function renderScatter(list){
      about 40px, too little for a label to sit between two rows, so a
      label landed beside the wrong dot. At 560 every label in that corner
      sits on its own dot. */
-  const W=700,H=560, padL=64,padR=40,padT=40,padB=64;
+  const W=700,H=560, padL=axisMargin(false),padR=40,padT=40,padB=axisMargin(false);
   const pw=W-padL-padR, ph=H-padT-padB;
   const X=v=>padL+(v/10)*pw;
   const Y=v=>padT+(1-v/10)*ph;
@@ -1119,9 +1151,13 @@ function renderScatter(list){
        <text class="axis-arrow" x="${x}" y="${y}" text-anchor="start" fill="#3a362c"
          font-family="'Oswald',sans-serif" font-weight="600" font-size="13">&#8594;</text>
      </g>`;
+  /* The y title mirrors the x title. Its baseline sits GAP plus the
+     cap height in from the plot edge, so its ink clears the plot by
+     exactly what the x title's does. */
+  const yTitleX = padL - AXIS.GAP;
   const axes =
-      axisLabel(padL+pw/2, H-16, '', METRIC_NOTE.complexity, 'ESCAPE COMPLEXITY')
-    + axisLabel(18, padT+ph/2, `rotate(-90 18 ${padT+ph/2})`, METRIC_NOTE.harm, 'HARM POTENTIAL');
+      axisLabel(padL+pw/2, axisTitleAt(padT+ph, false), '', METRIC_NOTE.complexity, 'ESCAPE COMPLEXITY')
+    + axisLabel(yTitleX, padT+ph/2, `rotate(-90 ${yTitleX} ${padT+ph/2})`, METRIC_NOTE.harm, 'HARM POTENTIAL');
 
   /* The quadrant labels are obstacles a dot label has to steer around */
   const quadBox = (x,y,text) => {
@@ -1283,7 +1319,7 @@ function renderLabChart(list){
   /* The left margin fits the longest lab name in the real font */
   const labelW = Math.max(...rows.map(([lab])=>textWidth(lab, LABEL_FONT)));
   const ROW = 46, BAR = 26, GAP_SEG = 2;
-  const W = 700, padL = Math.ceil(labelW) + 18, padR = 40, padT = 12, padB = 58;
+  const W = 700, padL = Math.ceil(labelW) + 18, padR = 40, padT = 12, padB = axisMargin(true);
   const pw = W - padL - padR;
   const H = padT + rows.length*ROW + padB;
   const unit = pw / maxAll;
@@ -1295,10 +1331,10 @@ function renderLabChart(list){
   let grid = '';
   for(let n=0; n<=maxAll; n+=step){
     grid += `<line x1="${X(n)}" y1="${padT}" x2="${X(n)}" y2="${padT+rows.length*ROW}" stroke="#4a4438" stroke-width="1" opacity="${n===0?0.6:0.18}"/>`
-          + `<text x="${X(n)}" y="${padT+rows.length*ROW+18}" text-anchor="middle" fill="#3a362c"
+          + `<text x="${X(n)}" y="${padT+rows.length*ROW+AXIS.TICK}" text-anchor="middle" fill="#3a362c"
                font-family="'Oswald',sans-serif" font-size="12">${n}</text>`;
   }
-  const axis = `<text x="${padL+pw/2}" y="${H-14}" text-anchor="middle" fill="#3a362c"
+  const axis = `<text x="${padL+pw/2}" y="${axisTitleAt(padT+rows.length*ROW, true)}" text-anchor="middle" fill="#3a362c"
       font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">CASES, OLDEST TO NEWEST &#8594;</text>`;
 
   const bars = rows.map(([lab, cases], r)=>{
