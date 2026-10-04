@@ -87,22 +87,61 @@
         <button class="tab" role="tab" id="tab-labs" aria-controls="view-labs" aria-selected="false">Cases by Lab</button>
       </div>
 
-      <div class="filters">
-        <select class="filter-select" id="classFilter" aria-label="Filter by class">
-          <option value="">All classes</option>
-          <option value="1">I · Evasion</option>
-          <option value="2">II · Intrusion</option>
-          <option value="3">III · Severe</option>
-        </select>
-        <select class="filter-select" id="labFilter" aria-label="Filter by lab">
-          <option value="">All labs</option>
-        </select>
-        <select class="filter-select" id="outcomeFilter" aria-label="Filter by outcome">
-          <option value="">All outcomes</option>
-          <option value="success">Succeeded</option>
-          <option value="attempt">Failed attempts</option>
-        </select>
-      </div>
+      <!-- The three filters, collapsed behind one sliders button, the
+           same pattern as the options menu in Treks and the City. A
+           filter that is narrowing the list never hides in here: the
+           button carries a red dot and the count line below says how
+           many files are showing. The outside-click, Escape, and close
+           button handlers live in the Options Menu section of the
+           script. -->
+      <details class="options-menu" id="optionsMenu">
+        <summary class="options-button" aria-label="Filter options" title="Filter options">
+          <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+            <circle cx="8" cy="6" r="2.5" class="line-icon-knob"/>
+            <circle cx="17" cy="12" r="2.5" class="line-icon-knob"/>
+            <circle cx="10" cy="18" r="2.5" class="line-icon-knob"/>
+          </svg>
+          <span class="options-dot" id="optionsDot" aria-hidden="true" hidden></span>
+        </summary>
+
+        <div class="options-panel">
+          <div class="options-panel-header">
+            <p class="options-heading">Filters</p>
+            <button type="button" class="options-close" id="optionsClose" aria-label="Close filter options">
+              <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+          </div>
+
+          <label class="options-field">
+            <span class="options-label">Class</span>
+            <select class="filter-select" id="classFilter">
+              <option value="">All classes</option>
+              <option value="1">I · Evasion</option>
+              <option value="2">II · Intrusion</option>
+              <option value="3">III · Severe</option>
+            </select>
+          </label>
+          <label class="options-field">
+            <span class="options-label">Lab</span>
+            <select class="filter-select" id="labFilter">
+              <option value="">All labs</option>
+            </select>
+          </label>
+          <label class="options-field">
+            <span class="options-label">Outcome</span>
+            <select class="filter-select" id="outcomeFilter">
+              <option value="">All outcomes</option>
+              <option value="success">Succeeded</option>
+              <option value="attempt">Failed attempts</option>
+            </select>
+          </label>
+
+          <!-- Only shown while a filter is set, since clearing nothing
+               is not an action -->
+          <button type="button" class="options-clear" id="optionsClear" hidden>Clear filters</button>
+        </div>
+      </details>
     </div>
 
     <!-- Only shown while a filter is narrowing the list, since "4 of 4"
@@ -1387,9 +1426,49 @@ function applyFilters(){
   const narrowed = !!(classSelect.value || labSelect.value || outcomeSelect.value);
   filterCount.hidden = !narrowed;
   filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
+  /* The filters live behind the options button now, so the button's
+     dot is what says one is set while the menu is closed */
+  optionsDot.hidden = !narrowed;
+  optionsClear.hidden = !narrowed;
 }
 
 [classSelect,labSelect,outcomeSelect].forEach(s=>s.addEventListener('change',applyFilters));
+
+/* ================================================
+     Options Menu
+   ================================================ */
+
+/* A bare <details> opens and closes on its own button but ignores an
+   outside click and Escape, so both are wired here, plus the panel's
+   own close button and the Clear filters button. */
+const optionsMenu  = document.getElementById('optionsMenu');
+const optionsDot   = document.getElementById('optionsDot');
+const optionsClear = document.getElementById('optionsClear');
+
+function closeOptions(returnFocus){
+  optionsMenu.open = false;
+  if(returnFocus) optionsMenu.querySelector('summary').focus();
+}
+
+document.addEventListener('click', e=>{
+  if(optionsMenu.open && !optionsMenu.contains(e.target)) closeOptions(false);
+});
+
+/* Skipped while a case poster is open, since that Escape belongs to
+   the poster */
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape' && optionsMenu.open && !overlay.classList.contains('open')) closeOptions(true);
+});
+
+document.getElementById('optionsClear').addEventListener('click', ()=>{
+  [classSelect,labSelect,outcomeSelect].forEach(s=>{ s.value=''; });
+  applyFilters();
+  /* The button hides itself once nothing is set, so focus moves to the
+     first select rather than falling back to the page */
+  classSelect.focus();
+});
+
+document.getElementById('optionsClose').addEventListener('click', ()=>closeOptions(true));
 
 /* ================================================
      View Tabs

@@ -241,19 +241,90 @@
   .tab:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
 
   /* ===============================
-       Filters
+       Options Menu
      =============================== */
-  .filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-bottom:9px;}
+
+  /* The three filters sit behind one sliders button in the bar's right
+     corner, the same pattern as the options menu in Treks and the City.
+     The bar anchors the panel, so it opens under the bar at its right
+     edge rather than under the 36px button. */
+  .registry-bar{position:relative;}
+  .options-menu{flex:none;padding-bottom:7px;}
+
+  /* Paper-deep square at rest, stamp red while open, matching the
+     selected tab. The knobs take the button's own fill so each rail
+     reads as passing behind its knob rather than through it. */
+  .options-button{
+    --options-knob-fill:var(--paper-deep);
+    position:relative;display:flex;align-items:center;justify-content:center;
+    width:36px;height:36px;box-sizing:border-box;
+    border:1.5px solid var(--rule);border-radius:2px;
+    background:var(--paper-deep);color:var(--ink-soft);
+    list-style:none;cursor:pointer;
+    transition:background-color .15s,border-color .15s,color .15s;
+  }
+  .options-button::-webkit-details-marker{display:none;}
+  .options-button svg{width:20px;height:20px;}
+  .options-button:hover{border-color:var(--ink);color:var(--ink);}
+  .options-menu[open] .options-button{
+    --options-knob-fill:var(--stamp-red);
+    background:var(--stamp-red);border-color:var(--stamp-red);color:var(--paper);
+  }
+  .options-button:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+
+  .line-icon{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .line-icon-knob{fill:var(--options-knob-fill,var(--paper));}
+
+  /* A filter is set. Ringed in paper so it reads on both the resting
+     tan and the open red. */
+  .options-dot{
+    position:absolute;top:-5px;right:-5px;width:11px;height:11px;
+    box-sizing:border-box;border:2px solid var(--paper);border-radius:50%;
+    background:var(--stamp-red);
+  }
+  .options-dot[hidden]{display:none;}
+
+  /* Floats over the views like the case tooltips do, so the timeline
+     stays put while a filter is chosen */
+  .options-panel{
+    position:absolute;z-index:40;top:calc(100% + 8px);right:0;
+    width:min(260px,100%);box-sizing:border-box;padding:6px 16px 16px;
+    background:var(--card);border:1.5px solid var(--ink);
+    box-shadow:5px 5px 0 var(--shadow);
+  }
+
+  .options-panel-header{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .options-heading{
+    margin:10px 0 8px;font-family:'Oswald',sans-serif;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--stamp-red);
+  }
+
+  /* Clicking outside or on the button already closes the panel, but
+     neither is obvious on sight. A small muted x says so plainly. */
+  .options-close{
+    display:flex;align-items:center;justify-content:center;
+    width:26px;height:26px;padding:0;border:none;border-radius:50%;
+    background:var(--paper-deep);color:var(--ink-soft);cursor:pointer;
+    transition:background-color .15s,color .15s;
+  }
+  .options-close svg{width:12px;height:12px;}
+  .options-close:hover,.options-close:focus-visible{background:var(--rule);color:var(--paper);}
+  .options-close:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+
+  .options-field{display:block;margin:0 0 12px;}
+  .options-label{
+    display:block;margin:0 0 4px;font-family:'Special Elite',monospace;
+    font-size:12px;color:var(--ink-soft);
+  }
+
   .filter-select{
     font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.08em;
     text-transform:uppercase;font-size:11px;color:var(--ink-soft);
     background-color:var(--paper-deep);
     border:1.5px solid var(--rule);border-radius:2px;
-    padding:7px 28px 7px 11px;cursor:pointer;line-height:1.2;
-    /* All three selects share one width so the row reads as even,
-       rather than each sizing to its own longest option. 150px clears
-       the longest entry in any of the three lists. */
-    width:150px;
+    padding:8px 28px 8px 11px;cursor:pointer;line-height:1.2;
+    /* Each select fills the panel, so the three stack evenly */
+    width:100%;
     /* Native arrow is suppressed so the control matches the poster
        chrome. background-color is set separately above, since the
        shorthand would wipe this image out. */
@@ -277,6 +348,15 @@
      the state is visible without reading the option text */
   .filter-select.is-active{border-color:var(--ink);color:var(--ink);font-weight:600;}
   .filter-select option{text-transform:none;letter-spacing:normal;}
+
+  .options-clear{
+    display:block;margin:4px 0 0;padding:0;border:none;background:none;cursor:pointer;
+    font-family:'Special Elite',monospace;font-size:12px;color:var(--stamp-red);
+    text-decoration:underline;text-underline-offset:3px;
+  }
+  .options-clear[hidden]{display:none;}
+  .options-clear:hover{color:var(--stamp-red-bright);}
+  .options-clear:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
 
   .filter-count{
     text-align:right;font-family:'Special Elite',monospace;font-size:12px;
@@ -789,16 +869,12 @@
 
     .menu-toggle{display:block;width:100%;margin-bottom:0;}
 
-    /* The registry bar wraps to two rows on phones: tabs, then filters.
-       The selects share the width so both stay tappable. */
-    .registry-bar{align-items:stretch;}
-    .filters{width:100%;padding-bottom:10px;}
-    /* width:auto releases the 150px desktop sizing so the selects split
-       the row instead. Two per row rather than three, since three at a
-       phone width leaves each too narrow to read its own longest
-       option. The third wraps to a second row and fills it. */
-    .filter-select{flex:1 1 calc(50% - 4px);width:auto;min-width:0;}
-    .tab{flex:1;padding:11px 10px;text-align:center;}
+    /* Tabs and the options button share one row on phones. The tabs
+       split what is left after the button, with tighter tracking so
+       Cases by Lab still fits on one line. */
+    .registry-bar{flex-wrap:nowrap;gap:8px;}
+    .viewbar{flex:1;min-width:0;gap:4px;}
+    .tab{flex:1;padding:11px 4px;text-align:center;letter-spacing:.06em;font-size:11px;}
   }
 
   @media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important;}}
