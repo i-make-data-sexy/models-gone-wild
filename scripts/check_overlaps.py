@@ -32,8 +32,13 @@ import tempfile
 import threading
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CHROME = os.environ.get(
-    "CHROME", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+# The Mac path first, then the names Chrome goes by on Linux, which is
+# where the cloud scout runs
+CHROME = os.environ.get("CHROME") or next(
+    (p for p in ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"]
+     + [shutil.which(n) for n in ("google-chrome", "chromium", "chromium-browser")]
+     if p and os.path.exists(p)),
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 SUBPATH = "tools/models-gone-wild"
 
 

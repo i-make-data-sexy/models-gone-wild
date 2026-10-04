@@ -335,3 +335,9 @@ Nginx blocks `.md`, `.txt`, `.json`, `.yml`, and `.lock` under this path, so thi
 After a `systemctl reload nginx`, wait a couple of seconds before checking. Old workers drain on the previous config and can answer with stale results.
 
 `.git` is marked Dropbox-ignored on this repo. Rebuilding or re-cloning it means re-applying `xattr -w com.dropbox.ignored 1 .git`, or Dropbox will sync the git internals and eventually fork them.
+
+## The scout
+
+A daily cloud routine searches for new cases and emails Annie a proposal for each, which she answers by replying with letters (`1 a, 2 b`). Its runbook is `scout/SCOUT.md`. It stages cases on `candidate/<id>` and `update/<id>` branches and keeps its record of stories already seen on the `scout-state` branch (`scout/seen.json`, managed with `scripts/scout_seen.py`). It never merges or deploys; publishing a staged case is the usual merge and deploy above, run from Claude Code.
+
+The routine reads the add-case skill from `.claude/skills/models-gone-wild-add-case/` in this repo, since a cloud session cannot see `~/.claude/skills/`. Keep that copy in step with the one on Annie's Mac.

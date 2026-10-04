@@ -1,0 +1,103 @@
+{
+  "stories": [
+    {
+      "url": "https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html",
+      "title": "The Hacker News",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://infosecurity-magazine.com/news/anthropic-claude-breached-three",
+      "title": "Infosecurity Magazine",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://calcalistech.com/ctechnews/article/jbl2ysnq5",
+      "title": "Calcalist CTech",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight",
+      "title": "The Next Web",
+      "case": "kimi",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://collusion.wiki/",
+      "title": "collusion.wiki",
+      "case": "dsewiki",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://rubyhack.ai/",
+      "title": "rubyhack.ai",
+      "case": "rubygems",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://transluce.org/agent-activity",
+      "title": "Transluce",
+      "case": "datausa",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://techcrunch.com/2026/09/19/googles-gemini-is-the-latest-ai-model-to-hack-other-companies",
+      "title": "TechCrunch",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://techcrunch.com/2026/09/24/australia-to-investigate-if-openai-hack-of-government-health-website-broke-the-law",
+      "title": "TechCrunch",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://abc.net.au/news/2026-09-24/nsw-premier-chris-minns-ai-warning-after-data-breach/107189678",
+      "title": "ABC News",
+      "case": "bocsar",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://abc.net.au/news/2026-09-29/openai-apologises-medicare-shelves-chatgpt-astra-launch/107207156",
+      "title": "ABC News",
+      "case": "vahi",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://theguardian.com/technology/2026/oct/02/openai-disclose-another-hack-on-government-department-in-australia",
+      "title": "The Guardian",
+      "case": "nswfire",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://politico.com/news/2026/09/25/rogue-openai-agents-accessed-us-government-websites-01094035",
+      "title": "Politico",
+      "case": "census,sec",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://edweek.org/policy-politics/openais-models-targeted-websites-of-department-of-education-other-agencies/2026/09",
+      "title": "Education Week",
+      "case": "edocr",
+      "status": "case",
+      "first_seen": "2026-10-04"
+    }
+  ],
+  "runs": []
+}
