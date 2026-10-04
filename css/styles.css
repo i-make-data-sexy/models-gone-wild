@@ -349,6 +349,36 @@
   .filter-select.is-active{border-color:var(--ink);color:var(--ink);font-weight:600;}
   .filter-select option{text-transform:none;letter-spacing:normal;}
 
+  /* The Lab multi-select. Its summary borrows .filter-select so the
+     closed control matches the two selects around it; these rules only
+     undo what a <summary> brings with it. */
+  .multi-select summary{display:block;list-style:none;}
+  .multi-select summary::-webkit-details-marker{display:none;}
+  /* Flips the arrow while the list is open */
+  .multi-select[open] summary{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 6l4-4 4 4' fill='none' stroke='%233a362c' stroke-width='1.6'/%3E%3C/svg%3E");
+    border-color:var(--ink);
+  }
+  .multi-select summary:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+
+  /* Unfolds in place under the summary. Scrolls on its own past about
+     eight labs so a long list never pushes Clear filters off screen. */
+  .multi-select-list{
+    margin-top:4px;padding:6px 0;max-height:236px;overflow-y:auto;
+    background:var(--paper);border:1.5px solid var(--ink);border-radius:2px;
+  }
+  .multi-select-option{
+    display:flex;align-items:center;gap:9px;padding:6px 11px;cursor:pointer;
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.08em;
+    text-transform:uppercase;font-size:11px;color:var(--ink-soft);
+  }
+  .multi-select-option:hover{background:var(--paper-deep);color:var(--ink);}
+  .multi-select-option input{
+    margin:0;width:14px;height:14px;flex:none;cursor:pointer;
+    accent-color:var(--stamp-red);
+  }
+  .multi-select-option:has(input:checked){color:var(--ink);font-weight:600;}
+
   /* A full-width stamp-red button, so it reads as an action rather than
      a link. It rests at 80% strength, which softens the red against the
      card. On hover or focus a full-strength fill sweeps in from the left,

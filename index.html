@@ -122,12 +122,19 @@
               <option value="3">III · Severe</option>
             </select>
           </label>
-          <label class="options-field">
-            <span class="options-label">Lab</span>
-            <select class="filter-select" id="labFilter">
-              <option value="">All labs</option>
-            </select>
-          </label>
+          <!-- Multi-select, so a div rather than a label: one label can
+               only name one control. The summary is styled like the two
+               selects around it, and the checkbox list unfolds in place
+               beneath it rather than floating, since it already sits in
+               a floating panel. The boxes are built from the data in
+               the Build Lab Options section of the script. -->
+          <div class="options-field">
+            <span class="options-label" id="labLabel">Lab</span>
+            <details class="multi-select" id="labFilter">
+              <summary class="filter-select" id="labSummary" aria-describedby="labLabel">All labs</summary>
+              <div class="multi-select-list" id="labList" role="group" aria-labelledby="labLabel"></div>
+            </details>
+          </div>
           <label class="options-field">
             <span class="options-label">Outcome</span>
             <select class="filter-select" id="outcomeFilter">
@@ -881,13 +888,22 @@ function mug(seed){
 /* One value per filter rather than a set, since the chip rows became
    single-select dropdowns. An empty string means no filter. */
 const classSelect = document.getElementById('classFilter');
-const labSelect   = document.getElementById('labFilter');
+const labPicker   = document.getElementById('labFilter');
+const labSummary  = document.getElementById('labSummary');
+const labList     = document.getElementById('labList');
 const outcomeSelect = document.getElementById('outcomeFilter');
 
+/* Lab is the one multi-select, so it reads as a list of checked labs.
+   An empty list means no lab filter, same as an empty select value. */
+function selectedLabs(){
+  return [...labList.querySelectorAll('input:checked')].map(b=>b.value);
+}
+
 function filtered(){
+  const labs = selectedLabs();
   return CASES.filter(c =>
     (!classSelect.value   || String(c.cls)===classSelect.value) &&
-    (!labSelect.value     || c.lab===labSelect.value) &&
+    (!labs.length         || labs.includes(c.lab)) &&
     (!outcomeSelect.value || c.outcome===outcomeSelect.value)
   ).sort((a,b)=>a.order-b.order);
 }
@@ -897,12 +913,24 @@ function filtered(){
    ================================================ */
 
 /* Generated from the data, so a new case with a new lab adds its own
-   option. A lab spelled two ways yields two options. */
+   checkbox. A lab spelled two ways yields two boxes. */
 [...new Set(CASES.map(c=>c.lab))].forEach(l=>{
-  const o=document.createElement('option');
-  o.value=l; o.textContent=l;
-  labSelect.appendChild(o);
+  const row=document.createElement('label');
+  row.className='multi-select-option';
+  const box=document.createElement('input');
+  box.type='checkbox'; box.value=l;
+  row.append(box, document.createTextNode(l));
+  labList.appendChild(row);
 });
+
+/* The summary names the lab when one is checked and counts them when
+   several are, so the closed control still says what it is filtering */
+function updateLabSummary(labs){
+  labSummary.textContent = !labs.length ? 'All labs'
+    : labs.length===1 ? labs[0]
+    : `${labs.length} labs`;
+  labSummary.classList.toggle('is-active', labs.length>0);
+}
 
 /* Builds the disclosure chip that sits beside the class badge. The
    chip carries the category only, never the party's name, which is too
@@ -1422,8 +1450,10 @@ function applyFilters(){
   renderTimeline(list);
   renderScatter(list);
   renderLabChart(list);
-  [classSelect,labSelect,outcomeSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
-  const narrowed = !!(classSelect.value || labSelect.value || outcomeSelect.value);
+  [classSelect,outcomeSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
+  const labs = selectedLabs();
+  updateLabSummary(labs);
+  const narrowed = !!(classSelect.value || labs.length || outcomeSelect.value);
   filterCount.hidden = !narrowed;
   filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
   /* The filters live behind the options button now, so the button's
@@ -1432,7 +1462,7 @@ function applyFilters(){
   optionsClear.hidden = !narrowed;
 }
 
-[classSelect,labSelect,outcomeSelect].forEach(s=>s.addEventListener('change',applyFilters));
+[classSelect,labList,outcomeSelect].forEach(s=>s.addEventListener('change',applyFilters));
 
 /* ================================================
      Options Menu
@@ -1457,11 +1487,17 @@ document.addEventListener('click', e=>{
 /* Skipped while a case poster is open, since that Escape belongs to
    the poster */
 document.addEventListener('keydown', e=>{
-  if(e.key==='Escape' && optionsMenu.open && !overlay.classList.contains('open')) closeOptions(true);
+  if(e.key!=='Escape' || !optionsMenu.open || overlay.classList.contains('open')) return;
+  /* An open lab list closes first, so Escape backs out one level at a
+     time rather than dropping the whole panel */
+  if(labPicker.open){ labPicker.open=false; labSummary.focus(); return; }
+  closeOptions(true);
 });
 
 document.getElementById('optionsClear').addEventListener('click', ()=>{
-  [classSelect,labSelect,outcomeSelect].forEach(s=>{ s.value=''; });
+  [classSelect,outcomeSelect].forEach(s=>{ s.value=''; });
+  labList.querySelectorAll('input').forEach(b=>{ b.checked=false; });
+  labPicker.open = false;
   applyFilters();
   /* The button hides itself once nothing is set, so focus moves to the
      first select rather than falling back to the page */
