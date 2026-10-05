@@ -1510,15 +1510,35 @@ document.getElementById('optionsClose').addEventListener('click', ()=>closeOptio
      View Tabs
    ================================================ */
 
-/* The chosen view is mirrored into a ?view= parameter so a link to the
-   Threat Matrix opens on the Threat Matrix. Timeline is the default and
-   carries no parameter, which keeps the bare URL clean.
+/* Each dashboard has its own permalink, so a link to the Threat Matrix
+   opens on the Threat Matrix. Timeline is the default and lives at the
+   bare app path. The other two are a path segment under it, and nginx
+   (and scripts/serve.py locally) serves this same page for both.
 
    replaceState rather than pushState: this is a view toggle, not a
    navigation, and pushing would stack an entry per switch so the back
    button walked through them instead of leaving the page. */
 const tabs=document.querySelectorAll('.tab');
 const VIEWS=['timeline','matrix','labs'];
+const VIEW_SLUGS={matrix:'threat-matrix', labs:'lab-counts'};
+
+/* The app's own path with any view segment removed, so it holds on
+   production (/tools/models-gone-wild/) and in a local preview alike.
+   Always ends in a slash. */
+const APP_BASE=(function(){
+  let p=window.location.pathname
+    .replace(/index\.html$/,'')
+    .replace(/(?:threat-matrix|lab-counts)\/?$/,'');
+  return p.endsWith('/') ? p : p+'/';
+})();
+
+/* Reads the view from the path. Falls back to the old ?view= parameter
+   so links shared before the permalinks still land on the right view. */
+function viewFromUrl(){
+  const seg=window.location.pathname.slice(APP_BASE.length).replace(/\/$/,'');
+  for(const name in VIEW_SLUGS){ if(VIEW_SLUGS[name]===seg) return name; }
+  return new URLSearchParams(window.location.search).get('view');
+}
 
 function showView(name, syncUrl){
   if(VIEWS.indexOf(name)===-1) name='timeline';
@@ -1533,11 +1553,13 @@ function showView(name, syncUrl){
      so the icons are placed again the moment it becomes visible. */
   if(name==='matrix') placeAxisIcons();
   if(syncUrl && window.history && history.replaceState){
-    /* Built from the live URL so the app's subpath is preserved. */
+    /* Built from the live URL so any other parameter and the hash
+       survive. The old ?view= parameter is dropped, which also tidies
+       a legacy link into its permalink on arrival. */
     const url=new URL(window.location.href);
-    if(name==='timeline') url.searchParams.delete('view');
-    else url.searchParams.set('view', name);
-    history.replaceState(null,'',url);
+    url.pathname=APP_BASE+(VIEW_SLUGS[name] ? VIEW_SLUGS[name]+'/' : '');
+    url.searchParams.delete('view');
+    if(url.href!==window.location.href) history.replaceState(null,'',url);
   }
 }
 
@@ -1789,9 +1811,10 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.
      Init
    ================================================ */
 applyFilters();
-/* Honour a shared ?view= link. Runs after the first render so both
-   panels already hold content when one of them is revealed. */
-showView(new URLSearchParams(window.location.search).get('view'), false);
+/* Honour a shared permalink. Runs after the first render so both panels
+   already hold content when one of them is revealed. Syncing the URL
+   turns a legacy ?view= link into its permalink. */
+showView(viewFromUrl(), true);
 /* Oswald usually arrives after the first paint, so the charts are drawn
    a second time once it has. That re-measures the dot labels and the
    lab names in the real font and places the axis icons again. */

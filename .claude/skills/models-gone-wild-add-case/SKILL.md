@@ -124,9 +124,10 @@ When it reports an overlap:
 Serve the preview at the real subpath, in the background:
 
 ```bash
-mkdir -p /tmp/mgw/tools && ln -sfn "$PWD" /tmp/mgw/tools/models-gone-wild
-(cd /tmp/mgw && python3 -m http.server 8899)
+python3 scripts/serve.py --port 8899
 ```
+
+Use the script, not `python3 -m http.server`, which cannot serve the dashboard permalinks.
 
 ## Step 6: The proposal
 
@@ -139,7 +140,7 @@ Reply in the terminal, in this order. Keep it tight; Annie skims.
 5. What changed around it: new glossary terms, `order` shifts, new claim entries, checks run and their results, including the overlap check's view count and where each new label landed (for example, "below-right of its dot, since the row is full").
 6. Conflicts and unsourced items. What was resolved and how, and what is still thin.
 7. Decisions for Annie. Numbered questions with a recommendation for each. Ask them directly; do not bury a decision in a sentence.
-8. To-do. A checklist of what Annie needs to do, each with a clickable link: the preview (`http://127.0.0.1:8899/tools/models-gone-wild/`), the specific things to look at there (the card, the poster, the dot on the Threat Matrix and its tooltip), the matrix screenshot path, and the two or three source links worth spot-checking. Link the Threat Matrix directly with `?view=matrix`.
+8. To-do. A checklist of what Annie needs to do, each with a clickable link: the preview (`http://127.0.0.1:8899/tools/models-gone-wild/`), the specific things to look at there (the card, the poster, the dot on the Threat Matrix and its tooltip), the matrix screenshot path, and the two or three source links worth spot-checking. Link the Threat Matrix directly with its permalink (`http://127.0.0.1:8899/tools/models-gone-wild/threat-matrix/`).
 9. Sources. Every URL relied on, as markdown links.
 
 Then STOP. Nothing is committed until Annie approves.

@@ -85,7 +85,7 @@ CRITICAL: view the current file first, then show Annie the proposed block and wa
 sudo cat /etc/nginx/sites-available/annielytics.conf
 ```
 
-Add all four blocks to `annielytics.conf`, in this order. They live with the other `/tools/` apps, after the `model-safety` blocks:
+Add all six blocks to `annielytics.conf`, in this order. They live with the other `/tools/` apps, after the `model-safety` blocks:
 
 ```nginx
 # Send the bare path to the trailing-slash form. Without this, a request
@@ -93,6 +93,24 @@ Add all four blocks to `annielytics.conf`, in this order. They live with the oth
 # falls through to whatever else is configured.
 location = /tools/models-gone-wild {
     return 301 /tools/models-gone-wild/;
+}
+
+# The dashboard permalinks. /threat-matrix/ and /lab-counts/ are the same
+# page as the bare path, with the view read from the URL by the page's
+# script. Bare forms first get their trailing slash, which keeps one
+# canonical URL per view.
+location ~ ^/tools/models-gone-wild/(threat-matrix|lab-counts)$ {
+    return 301 /tools/models-gone-wild/$1/;
+}
+
+# Strip the view segment and match again. That serves index.html for the
+# permalink itself, and it resolves the page's relative asset paths, which
+# the browser requests as /threat-matrix/css/styles.css and so on. `last`
+# reruns location matching on the rewritten URI, so the 404, cache, and
+# .git rules all still apply to it. Keep the slug list in step with
+# VIEW_SLUGS in index.html and scripts/serve.py.
+location ~ ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/ {
+    rewrite ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/(.*)$ /tools/models-gone-wild/$1 last;
 }
 
 # Repo files that ship with the clone but are not site content. Without
@@ -146,13 +164,13 @@ Run this on the server, which bypasses Cloudflare by talking to nginx directly:
 
 ```bash
 H="Host: www.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
-for f in "" "js/html2canvas.min.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
+for f in "" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "js/html2canvas.min.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
   printf "%-28s %s\n" "/$f" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B/$f")"
 done
 printf "%-28s %s\n" "bare path" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B")"
 ```
 
-Expected results, in order. The page is 200, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, and the bare path is 301.
+Expected results, in order. The page and both permalinks are 200, the stylesheet requested through a permalink is 200, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, and the bare path is 301.
 
 Wait a couple of seconds after `systemctl reload nginx` before running this. A reload leaves the old workers draining, so a check fired immediately can still be answered by a worker running the previous config and show a stale result.
 

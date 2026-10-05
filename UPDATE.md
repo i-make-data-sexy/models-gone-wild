@@ -279,10 +279,11 @@ PY
 Then look at it. Serve the repo at the real subpath so relative paths are exercised the way production exercises them, rather than opening the file directly.
 
 ```bash
-mkdir -p /tmp/mgw/tools && ln -sfn "$PWD" /tmp/mgw/tools/models-gone-wild
-(cd /tmp/mgw && python3 -m http.server 8899)
+python3 scripts/serve.py --port 8899
 # then open http://127.0.0.1:8899/tools/models-gone-wild/
 ```
+
+Use this rather than `python3 -m http.server`, which cannot serve the dashboard permalinks (`threat-matrix/` and `lab-counts/`). The script strips the view segment the way the nginx rewrite does in production.
 
 Click through both tabs, open the new case's poster, and download it. There is no JavaScript engine available in this environment, so the structural check above cannot catch a runtime error. The browser is the only real test.
 
