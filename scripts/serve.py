@@ -6,7 +6,8 @@ since /threat-matrix/ and /lab-counts/ are not folders on disk. This
 server does what the nginx rewrite does in production: it strips the
 view segment, so /tools/models-gone-wild/lab-counts/ serves index.html
 and /tools/models-gone-wild/lab-counts/css/styles.css serves the real
-stylesheet. Serving at the subpath also exercises the relative asset
+stylesheet. Old ?view= links get the same 301 to their permalink that
+nginx sends. Serving at the subpath also exercises the relative asset
 paths the way production does.
 
 Usage:
@@ -19,6 +20,7 @@ import os
 import re
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qs, urlsplit
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREFIX = "/tools/models-gone-wild"
@@ -26,6 +28,10 @@ PREFIX = "/tools/models-gone-wild"
 # Keep in step with VIEW_SLUGS in index.html and the rewrite in DEPLOY.md
 VIEW_SLUGS = ("threat-matrix", "lab-counts")
 VIEW_RE = re.compile(r"^" + re.escape(PREFIX) + r"/(?:" + "|".join(VIEW_SLUGS) + r")(/.*)?$")
+
+# The old ?view= values and the permalink each one now lives at. Mirrors
+# the 301s in the nginx page block in DEPLOY.md.
+LEGACY_VIEWS = {"matrix": "threat-matrix", "labs": "lab-counts"}
 
 
 # ========================================================================
@@ -57,13 +63,25 @@ class PreviewHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         """
-        Sends a bare view path to its trailing-slash form, as nginx does, then serves normally
+        Answers the redirects nginx answers in production, then serves normally
         """
         bare = self.path.split("?", 1)[0]
-        if bare not in (f"{PREFIX}/{slug}" for slug in VIEW_SLUGS):
-            return super().do_GET()
+        legacy = LEGACY_VIEWS.get(parse_qs(urlsplit(self.path).query).get("view", [""])[0])
+        if bare.startswith(PREFIX + "/") and legacy:
+            return self.redirect(f"{PREFIX}/{legacy}/")
+        if bare in (f"{PREFIX}/{slug}" for slug in VIEW_SLUGS):
+            return self.redirect(bare + "/")
+        return super().do_GET()
+
+    def redirect(self, location: str):
+        """
+        Sends a permanent redirect
+
+        Args:
+            location (str): The path to send the browser to
+        """
         self.send_response(301)
-        self.send_header("Location", bare + "/")
+        self.send_header("Location", location)
         self.end_headers()
 
 

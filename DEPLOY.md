@@ -136,7 +136,16 @@ location ~* ^/tools/models-gone-wild/(js|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp
 
 # The page itself. It carries the case data inline, so a stale copy is a
 # wrong copy and it must never be cached.
+#
+# The two ifs move links shared before the permalinks, when a view was a
+# ?view= parameter, to their permalink for good. An if whose only job is
+# a return is the one use nginx documents as safe inside a location. The
+# page's script also tidies a ?view= link on arrival, which covers a
+# local preview and anything that slips past these.
 location /tools/models-gone-wild/ {
+    if ($arg_view = matrix) { return 301 /tools/models-gone-wild/threat-matrix/; }
+    if ($arg_view = labs)   { return 301 /tools/models-gone-wild/lab-counts/; }
+
     alias /home/anniecushing/apps/models-gone-wild/;
     index index.html;
     expires -1;
@@ -168,9 +177,12 @@ for f in "" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "js/html2
   printf "%-28s %s\n" "/$f" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B/$f")"
 done
 printf "%-28s %s\n" "bare path" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B")"
+for q in "matrix" "labs"; do
+  printf "%-28s %s\n" "?view=$q" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code} %{redirect_url}' "$B/?view=$q")"
+done
 ```
 
-Expected results, in order. The page and both permalinks are 200, the stylesheet requested through a permalink is 200, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, and the bare path is 301.
+Expected results, in order. The page and both permalinks are 200, the stylesheet requested through a permalink is 200, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, and the bare path is 301. The two old `?view=` links are 301 to `/threat-matrix/` and `/lab-counts/`. The redirect URL prints as `https://127.0.0.1/...`, since curl builds it from the address it called; the path is what to check.
 
 Wait a couple of seconds after `systemctl reload nginx` before running this. A reload leaves the old workers draining, so a check fired immediately can still be answered by a worker running the previous config and show a stale result.
 
