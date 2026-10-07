@@ -237,6 +237,55 @@
       "case": "medicare",
       "status": "case",
       "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://moroccoworldnews.com/2026/07/330865/ai-agent-broke-out-of-its-cage-hacked-another-company",
+      "title": "Morocco World News agent hacked another company",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/nearly-700-rogue-ai-agents-coordinated-in-the-hugging-face-attack",
+      "title": "BleepingComputer nearly 700 agents Hugging Face",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://theregister.com/ai-and-ml/2026/09/04/rogue-openai-agents-used-dead-german-web-site-to-communicate-in-may-months-before-hugging-face-incident/5294554",
+      "title": "The Register dead German site",
+      "case": "dsewiki",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/openai-admits-it-didnt-disclose-rogue-ai-wiki-hijacking-incident",
+      "title": "BleepingComputer undisclosed wiki hijacking",
+      "case": "dsewiki",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/rogue-openai-agents-behind-potentially-malicious-wikipedia-edits",
+      "title": "BleepingComputer Wikimedia edits",
+      "case": "wikimedia",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/autonomous-ai-agents-tried-to-hack-us-canadian-government-websites",
+      "title": "BleepingComputer agents tried to hack US, Canadian government sites (unreadable, egress blocked)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://theregister.com/2026/03/12/rogue_ai_agents_worked_together",
+      "title": "The Register rogue AI agents can work together to hack systems, Mar 2026 (unreadable, egress blocked)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-07"
     }
   ],
   "runs": [
@@ -245,6 +294,12 @@
       "checked": 20,
       "new": 0,
       "updates": 2
+    },
+    {
+      "date": "2026-10-07",
+      "checked": 13,
+      "new": 0,
+      "updates": 0
     }
   ]
 }
