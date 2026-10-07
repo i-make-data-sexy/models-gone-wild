@@ -97,7 +97,154 @@
       "case": "edocr",
       "status": "case",
       "first_seen": "2026-10-04"
+    },
+    {
+      "url": "https://defensehub.substack.com/p/containment-failure-openai-model",
+      "title": "Containment Failure: OpenAI Model Escapes",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://csoonline.com/article/4206782/moonshots-kimi-ai-model-has-also-escaped-from-a-test-environment.html",
+      "title": "CSO: Kimi escaped",
+      "case": "kimi",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://scmp.com/tech/tech-trends/article/3363271/chinas-kimi-k3-ai-model-escapes-isolated-sandbox-during-security-test-researchers",
+      "title": "SCMP Kimi K3",
+      "case": "kimi",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://aibusiness.com/cybersecurity/openai-admits-more-ai-agents-went-astray-in-may",
+      "title": "AI Business: more agents went astray in May",
+      "case": "dsewiki",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://runtimewire.com/article/openai-agent-australia-medicare-portal-june-2026",
+      "title": "Runtime Wire Medicare",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://threatcluster.io/cluster/mythos-5-and-gpt-56-38acf3ac",
+      "title": "ThreatCluster Mythos 5 and GPT-5.6",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://forklog.com/en/news/nyt-openai-agents-interacted-with-us-government-websites-without-authorization",
+      "title": "Forklog US gov sites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://threatbeat.com/attacks-and-incidents/openais-rogue-ai-agents-reached-at-least-12-more-websites-researchers-say",
+      "title": "Threatbeat 12 more websites",
+      "case": "rubygems",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://propakistani.pk/2026/09/10/anthropic-reveals-fourth-claude-incident-involving-unauthorized-system-access",
+      "title": "ProPakistani fourth Claude incident",
+      "case": "opus46",
+      "status": "proposed",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://businesstoday.in/technology/artificial-intelligence/story/claude-gained-unauthorized-access-to-3-companies-anthropic-discloses-ai-safety-incidents-546445-2026-07-31",
+      "title": "Business Today Claude 3 companies",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://thenationalnews.com/future/technology/2026/09/19/google-says-gemini-model-hacked-three-companies-during-test",
+      "title": "The National Gemini",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://ctvnews.ca/sci-tech/article/meta-ai-model-hacks-another-company-during-testing",
+      "title": "CTV Meta model",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://resultsense.com/news/2026-07-22-aisi-frontier-models-cheating-evaluations",
+      "title": "AISI cheating evals",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://malaymail.com/news/world/2026/10/02/australia-reports-second-govt-website-breach-involving-openai/237431",
+      "title": "Malay Mail NSW",
+      "case": "nswfire",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://1news.co.nz/2026/09/29/openai-apologises-for-aus-govt-website-hack-creates-task-force",
+      "title": "1News OpenAI apologises",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://cybersecuritynews.com/ai-agents-hack-public-websites",
+      "title": "Cyber Security News",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://aljazeera.com/amp/news/2026/7/29/openais-rogue-agent-hacked-an-account-at-a-second-technology-firm-report",
+      "title": "Al Jazeera Modal Labs",
+      "case": "sol",
+      "status": "update",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://cxotoday.com/ai/researchers-claim-another-batch-of-rogue-openai-agents-went-berserk",
+      "title": "CXOToday",
+      "case": "rubygems",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://theweek.in/news/sci-tech/2026/09/26/openai-agents-go-rogue-access-us-government-websites-including-census-sec-data.html",
+      "title": "The Week",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://hcamag.com/us/news/general/ai-data-breach-exposes-gaps-in-australias-government-cyber-defences/590972",
+      "title": "HCAMag",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-07"
     }
   ],
-  "runs": []
+  "runs": [
+    {
+      "date": "2026-10-07",
+      "checked": 20,
+      "new": 0,
+      "updates": 2
+    }
+  ]
 }
