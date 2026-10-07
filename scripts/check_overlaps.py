@@ -135,10 +135,14 @@ function measure(doc){
 frame.addEventListener('load', async ()=>{
   const win = frame.contentWindow, doc = frame.contentDocument;
   if(doc.fonts) await doc.fonts.ready;
-  const cls = doc.getElementById('classFilter'), lab = doc.getElementById('labFilter');
+  const cls = doc.getElementById('classFilter');
+  // The Lab filter is a checkbox list, so a lab view is one box ticked
+  // and the unfiltered view is none
+  const labBoxes = [...doc.querySelectorAll('#labList input')];
   const out = doc.getElementById('outcomeFilter');
   const set = (c,l,o)=>{
-    cls.value = c; lab.value = l; if(out) out.value = o || '';
+    cls.value = c; if(out) out.value = o || '';
+    labBoxes.forEach(b=>{ b.checked = (b.value === l); });
     cls.dispatchEvent(new win.Event('change'));
     // Revealing the matrix is what places the axis icons, so click the
     // tab after every filter change, the way a reader's view is built.
@@ -148,7 +152,7 @@ frame.addEventListener('load', async ()=>{
   const results = [];
   const outs = out ? [...out.options].map(o=>o.value) : [''];
   for(const c of [...cls.options].map(o=>o.value)){
-    for(const l of [...lab.options].map(o=>o.value)){
+    for(const l of ['', ...labBoxes.map(b=>b.value)]){
       for(const o of outs){
         set(c,l,o);
         results.push({classFilter:c||'all', labFilter:l||'all', outcomeFilter:o||'all', ...measure(doc)});

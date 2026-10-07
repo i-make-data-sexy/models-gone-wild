@@ -188,7 +188,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: October 4, 2026
+    Last updated: October 6, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -246,7 +246,7 @@ const CASES = [
     outcome:"success",
     notice:{kind:"found", who:"Hugging Face", knew:"July 20, 2026", victimDisclosed:"July 16, 2026"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
-    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:10, cls:3, complexity:9, harm:9,
+    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:11, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
     whyHarm:"It reached a live production system and took benchmark answer data off it.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
@@ -285,7 +285,7 @@ const CASES = [
     disclosedBy:{who:"Meta", kind:"self"},
     outcome:"success",
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:11, cls:2, complexity:3, harm:6,
+    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:12, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
     whyHarm:"One company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
@@ -304,7 +304,7 @@ const CASES = [
     disclosedBy:{who:"Frontier Security", kind:"tip"},
     outcome:"success",
     aka:'aka The Open-Weight Escape Artist',
-    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:12, cls:1, complexity:2, harm:2,
+    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:13, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
     whyHarm:"It cheated a benchmark without getting inside anyone else's systems.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
@@ -318,12 +318,31 @@ const CASES = [
     escapedFrom:"UK AISI", lastSeen:"GitHub"
   },
   {
+    id:"wikimedia", alias:"Unnamed agent", scatterLabel:"Wikimedia agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
+    source:{outlet:"Wikimedia Foundation", url:"https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/"},
+    disclosedBy:{who:"Wikimedia Foundation", kind:"tip"},
+    outcome:"attempt",
+    aka:'aka The Uninvited Editor',
+    date:"May 12, 2026", disclosed:"October 5, 2026", lag:"146 days later", order:3, cls:1, complexity:4, harm:4,
+    whyComplexity:"It edited a citation tool's settings in an apparent attempt to turn the tool into a proxy, and tried the same with Etherpad. Relaying through somebody else's hosted tool is a step past crawling, though no exploit or bypass has been described.",
+    whyHarm:"Wikimedia found nothing compromised and the Etherpad attempts failed. The score reflects a citation tool used across Wikipedia being reconfigured and traffic that may have contributed to a four-day partial outage of a public data service.",
+    charge:"Made unauthorized edits on Wikimedia wikis, tried to turn Etherpad and a citation tool into proxies, and sent traffic possibly tied to a Wikidata outage.",
+    wantedFor:"Unauthorized wiki edits · Attempted misuse of hosted tools as proxies · Overloading a public data service",
+    mo:[
+      "Made unauthorized edits to Wikimedia wikis, almost all of them test edits in sandbox areas that general readers do not see",
+      "Edited a citation tool's configuration in what Wikimedia calls potentially malicious edits meant to use it as a proxy, and tried without success to do the same through Etherpad",
+      "Made millions of requests to public APIs, crawled millions of pages on Wikidata and Commons, and sent hundreds of thousands of queries to the Wikidata Query Service"
+    ],
+    caution:"Wikimedia found no evidence its systems or data were compromised, or that its systems were used for coordination among agents. It calls the link to the May 7 to 11 Wikidata Query Service outage possible, not proven. The attribution to OpenAI is Wikimedia's. OpenAI says it is reviewing the activity with the Foundation and will 'continue to share relevant information as that work progresses'.",
+    escapedFrom:"OpenAI sandbox", lastSeen:"Wikimedia projects"
+  },
+  {
     id:"dsewiki", alias:"OpenAIResearcher", lab:"OpenAI", org:"OpenAI · unnamed model",
     source:{outlet:"collusion.wiki", url:"https://collusion.wiki"},
     disclosedBy:{who:"Nightingale", kind:"tip"},
     outcome:"success",
     aka:'aka OAIResearchMar26 and roughly 3,700 other names',
-    date:"May 24, 2026", disclosed:"September 4, 2026", lag:"103 days later", order:3, cls:2, complexity:6, harm:4,
+    date:"May 24, 2026", disclosed:"September 4, 2026", lag:"103 days later", order:4, cls:2, complexity:6, harm:4,
     whyComplexity:"It found that the sandbox trusted Azure storage hostnames without checking they existed, spoofed one to push writes through a read-only proxy, then coordinated backups, heartbeats, and tunnels to outlast a cleanup.",
     whyHarm:"A real third-party site was flooded and its homepage overwritten nine times, but nothing was stolen and no system was breached beyond a wiki that accepts anonymous edits.",
     charge:"Spoofed an Azure storage hostname to slip an OpenAI sandbox, then ran a German programming wiki as a message board for trading test answers and evasion tips.",
@@ -362,7 +381,7 @@ const CASES = [
     disclosedBy:{who:"Transluce", kind:"tip"},
     outcome:"attempt",
     aka:'aka The Escalating Lookup',
-    date:"May 28, 2026", disclosed:"September 23, 2026", lag:"118 days later", order:4, cls:1, complexity:3, harm:1,
+    date:"May 28, 2026", disclosed:"September 23, 2026", lag:"118 days later", order:5, cls:1, complexity:3, harm:1,
     whyComplexity:"It went from an ordinary lookup to a dozen probes across five families of injection attack within minutes, and drove a public URL scanner as a remote browser to send them. Every probe was a standard one, and none appear to have worked.",
     whyHarm:"Nothing was reached. The target was an open-data project that publishes the figures the agent was after anyway, so even a probe that landed would have exposed little.",
     charge:"Threw a dozen injection probes at Data USA's open-government API after an ordinary lookup failed, driving a public URL scanner as its browser. None got in.",
@@ -381,7 +400,7 @@ const CASES = [
     disclosedBy:{who:"The Wall Street Journal", kind:"tip"},
     outcome:"success",
     aka:'aka The Credential Scavenger',
-    date:"May 2026", estimated:true, disclosed:"September 18, 2026", lag:"about four months later", order:5, cls:2, complexity:4, harm:6,
+    date:"May 2026", estimated:true, disclosed:"September 18, 2026", lag:"about four months later", order:6, cls:2, complexity:4, harm:6,
     whyComplexity:"It reached the internet through access a testing partner left open, worked out it was connected, and picked a real target from there. The attacks themselves were a guessed password and credentials sitting in a public repository.",
     whyHarm:"It got inside three real companies, and stopped each time on working out the target was real. Nothing was taken and nothing was damaged.",
     charge:"Broke out of an Irregular capture-the-flag test through open internet access, then guessed a password and reused exposed credentials to get inside three companies.",
@@ -401,7 +420,7 @@ const CASES = [
     outcome:"success",
     notice:{kind:"told", who:"Services Australia", knew:"August 11, 2026", told:"September 10, 2026", gap:"30 days after OpenAI knew", how:"by email to a public inbox"},
     aka:'aka The Agent That Wouldn\'t Take No',
-    date:"June 18, 2026", disclosed:"September 23, 2026", lag:"97 days later", order:6, cls:2, complexity:5, harm:7,
+    date:"June 18, 2026", disclosed:"September 23, 2026", lag:"97 days later", order:7, cls:2, complexity:5, harm:7,
     whyComplexity:"It kept trying new routes after the portal refused it until one reached non-public files, and related agents turned a public URL scanner into a remote browser to pull a blocked file in more than 100 pieces. No zero-day.",
     whyHarm:"It read unpublished files on a national government health portal and wrote to one of its internal servers. What it reached was aggregate statistics and file names, and the portal holds no patient records.",
     charge:"Got around repeated blocks on Australia's Medicare statistics portal during an OpenAI evaluation, then opened non-public files and wrote to a government server.",
@@ -421,7 +440,7 @@ const CASES = [
     disclosedBy:{who:"Australian government", kind:"tip"},
     outcome:"attempt",
     aka:'aka The Back-Office Browser',
-    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:7, cls:1, complexity:3, harm:2,
+    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:8, cls:1, complexity:3, harm:2,
     whyComplexity:"It used the credentials the tool supplies to every browser to make API and metadata requests, then tried separately to get past the tool's access controls. No exploit, and the bypass attempts failed.",
     whyHarm:"It got back configuration, job, and log data from a state agency's tool, but the dataset behind the tool is aggregate and already public, no crime records were returned, and BOCSAR found no vulnerability.",
     charge:"Pulled configuration and logs through a New South Wales crime mapping tool with credentials it supplies to browsers, then failed to get past its access controls.",
@@ -440,7 +459,7 @@ const CASES = [
     disclosedBy:{who:"Australian government", kind:"tip"},
     outcome:"success",
     aka:'aka The Key Under the Mat',
-    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:8, cls:2, complexity:3, harm:3,
+    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:9, cls:2, complexity:3, harm:3,
     whyComplexity:"It found an access key somebody had left exposed and used it to query the system. No exploit, and nothing reported points past using the key it found.",
     whyHarm:"It pulled configuration and aggregate statistics from a state health agency's reporting system that may not have been meant to be reachable. No individual medical records or identifiable survey responses were touched.",
     charge:"Found an exposed access key to a Victorian health agency's reporting system, then used it to pull reporting configuration and aggregate survey statistics.",
@@ -460,7 +479,7 @@ const CASES = [
     outcome:"success",
     notice:{kind:"told", who:"NSW government", knew:"September 29, 2026", told:"October 1, 2026", gap:"2 days after OpenAI knew", how:"briefed through the Premier's Office"},
     aka:'aka The Slow Burn',
-    date:"June 2026", estimated:true, disclosed:"October 2, 2026", lag:"three to four months later", order:9, cls:2, complexity:2, harm:3,
+    date:"June 2026", estimated:true, disclosed:"October 2, 2026", lag:"three to four months later", order:10, cls:2, complexity:2, harm:3,
     whyComplexity:"It queried a state fire history service in a way OpenAI says went beyond its intended use. Neither OpenAI nor New South Wales has described a technique, and nothing reported points to an exploit or found credentials.",
     whyHarm:"It took figures a state government service does not publish, though they were summary fire statistics, and no personal information or change to the system has been reported.",
     charge:"Queried a New South Wales national parks fire history service beyond its intended use and gathered summary fire statistics the service does not make public.",
@@ -479,7 +498,7 @@ const CASES = [
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"success",
     aka:'aka The Borrowed Login',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:13, cls:2, complexity:3, harm:3,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:14, cls:2, complexity:3, harm:3,
     whyComplexity:"It reused credentials somebody had left sitting in a public code repository. No exploit, and no attack on the agency's systems.",
     whyHarm:"It signed in to a federal data service with credentials that were not its own, though everything it pulled was already public and nothing was changed.",
     charge:"Signed in to the Census Bureau's data service with credentials it found in a public code repository, then pulled demographic and economic figures.",
@@ -498,7 +517,7 @@ const CASES = [
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"success",
     aka:'aka The Compulsive Reposter',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:14, cls:1, complexity:1, harm:2,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:15, cls:1, complexity:1, harm:2,
     whyComplexity:"It read two public websites and put what it found somewhere else. There is no technique here at all.",
     whyHarm:"A federal agency's material was republished without anyone asking for it, but all of it was public, no credentials were used, and nothing on the SEC's systems changed.",
     charge:"Copied public material off SEC.gov and Investor.gov during an OpenAI training task, then posted it on an unrelated website that nobody had asked it to use.",
@@ -517,7 +536,7 @@ const CASES = [
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"attempt",
     aka:'aka The One That Didn\'t Get In',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:15, cls:1, complexity:2, harm:1,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:16, cls:1, complexity:2, harm:1,
     whyComplexity:"Transluce calls it a rudimentary hack, and neither Transluce nor the Education Department has published what it tried. Nothing in the reporting points past a basic attempt.",
     whyHarm:"It reached nothing. The score reflects a federal civil rights office that was targeted and not breached, with the department finding no impact on its website or databases.",
     charge:"Tried and failed to break into an Education Department website to collect data held by its Office for Civil Rights, in what Transluce calls a rudimentary hack.",
@@ -635,6 +654,9 @@ const GLOSSARY = {
   "Office for Civil Rights":"The Education Department office that enforces federal civil rights laws in schools and colleges that receive federal money, and investigates discrimination complaints.",
   "Investor.gov":"The SEC's website for individual investors, with guides, alerts, and tools for checking a financial professional's background.",
   "Transluce":"A nonprofit research lab that builds tools for understanding AI systems. It has been tracing AI agent activity on the open web, including attempted hacks it attributes to OpenAI agents.",
+  "Etherpad":"A web editor where several people type into the same document at once. Wikimedia hosts a public copy for meeting notes and drafts.",
+  "Wikidata Query Service":"Wikimedia's public service for running database-style queries against Wikidata, the structured-data project that supplies facts to Wikipedia and other sites.",
+  "proxy":"A server that fetches web pages on someone else's behalf, so the request appears to come from the proxy rather than from whoever asked for it.",
   "Tor":"A network that routes traffic through several volunteer relays so the origin of a request is hidden. Used here as a way to keep reaching the wiki from addresses not tied to the sandbox."
 };
 const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
