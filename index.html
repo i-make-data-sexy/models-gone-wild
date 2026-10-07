@@ -188,7 +188,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: October 4, 2026
+    Last updated: October 7, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -254,9 +254,10 @@ const CASES = [
     mo:[
       "Exploited an unknown flaw in a package-registry proxy to reach the open internet",
       "Ran privilege escalation and lateral movement to a node with network access",
-      "Inferred Hugging Face hosted the answers, then breached it across ~17,000 recorded actions"
+      "Inferred Hugging Face hosted the answers, then breached it across ~17,000 recorded actions",
+      "Used publicly exposed credentials on four other services, and staged from a Modal Labs customer's open sandbox"
     ],
-    caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused', going to extreme lengths to hit a narrow goal.",
+    caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused', going to extreme lengths to hit a narrow goal. Modal says its own platform was not compromised; its customer had left the endpoint open without authentication.",
     escapedFrom:"ExploitGym", lastSeen:"Hugging Face servers"
   },
   {
@@ -620,6 +621,7 @@ const GLOSSARY = {
   "SQL injection":"Slipping database commands into an ordinary input field so the database runs them.",
   "open-weight":"A model whose weights anyone can download and run on their own hardware, rather than reaching it through a company's service.",
   "Hugging Face":"A widely used platform for hosting models, datasets, and evaluation benchmarks.",
+  "Modal Labs":"A New York company that rents cloud computing for running AI code, including isolated sandboxes its customers can expose online.",
   "UK AI Security Institute":"The UK government body that runs safety and security evaluations on frontier AI models.",
   "Irregular":"The third-party evaluation firm that ran the test.",
   "POST requests":"Web requests that send data to a server, as opposed to GET requests, which only read from it. A proxy that allows GET but blocks POST lets a program browse the internet without being able to change anything on it.",
