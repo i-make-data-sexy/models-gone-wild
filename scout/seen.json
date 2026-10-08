@@ -286,6 +286,167 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-10-07"
+    },
+    {
+      "url": "https://news.bgov.com/business-and-practice/chinas-top-ai-model-evaded-testing-environment-researchers-say",
+      "title": "Kimi evaded testing environment",
+      "case": "kimi",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://schneier.com/news/archives/2026/08/harvards-schneier-praises-uk-aisi-s-evaluation-of-frontier-ais-cyber-capabilities.html",
+      "title": "Schneier on UK AISI evaluation",
+      "case": "kimi",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://idnfinancials.com/news/69412/openai-agent-breached-australian-govt-portal-investigation-continues",
+      "title": "OpenAI agent breached Australian portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://hcamag.com/asia/news/general/ai-data-breach-exposes-gaps-in-australias-government-cyber-defences/590975",
+      "title": "AI data breach exposes gaps in Australia",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://irishexaminer.com/world/arid-41918866.html",
+      "title": "OpenAI another hack Australia department",
+      "case": "nswfire",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://cybernews.com/security/openai-agent-hacked-australia-government-website",
+      "title": "Australia says OpenAI agent hacked gov website",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://therecord.media/openai-apologizes-australia-medicare-breach",
+      "title": "OpenAI apologizes Australia",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://trendingtopics.eu/openai-wiki-attack",
+      "title": "OpenAI wiki attack",
+      "case": "dsewiki",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://kaxe.org/2026-09-26/openai-says-its-ai-agents-probed-federal-websites-without-the-companys-knowledge",
+      "title": "OpenAI agents probed federal websites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://therecord.media/openai-software-attempted-to-secretly-scrape-data-from-dozens-of-websites",
+      "title": "OpenAI software scrape dozens of websites",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://therecord.media/wikimedia-foundation-openai-agents-report",
+      "title": "Wikimedia report on OpenAI agents",
+      "case": "wikimedia",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/openai-details-more-cases-of-ai-agents-taking-unauthorized-actions",
+      "title": "OpenAI details more cases",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://therecord.media/openai-says-rogue-agent-behind-hugging-face-hack-broke-into-additional-services",
+      "title": "Rogue agent broke into additional services",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://therecord.media/openai-cyberattack-hugging-face",
+      "title": "OpenAI models behind Hugging Face breach",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/hugging-face-breach-autonomous-ai-agent-system-internal-datasets-credentials",
+      "title": "Hugging Face warns autonomous agent",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/openai-says-its-ai-models-hacked-hugging-face-during-testing",
+      "title": "OpenAI models hacked Hugging Face",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://therecord.media/anthropic-ai-hacked-three-real-companies",
+      "title": "Anthropic AI hacked three companies",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://hackmag.com/news/gemini-evil",
+      "title": "Hacker used Gemini CLI for botnet",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://therecord.media/thailand-hackers-ai-finance-ministry",
+      "title": "Hackers used AI agent vs Thailand",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://theregister.com/security/2026/09/02/ai-agents-carried-out-every-step-of-this-ransomware-attack-then-left-the-victim-an-80-page-security-audit/5294009",
+      "title": "Human-directed AI ransomware",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://theregister.com/cyber-crime/2026/09/16/spain-gets-its-first-taste-of-ai-aided-cyber-attack/5296844",
+      "title": "Spain AEPD first AI agent personal data breach",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/automated-ai-agent-used-to-breach-cybersecurity-nonprofit-divd",
+      "title": "AI agent breach of DIVD",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://theregister.com/security/2026/10/01/ai-agents-hacked-the-hackers-stealing-email-addresses-from-security-research-org/5300652",
+      "title": "AI agents hacked DIVD (Register)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-08"
     }
   ],
   "runs": [
@@ -298,6 +459,12 @@
     {
       "date": "2026-10-07",
       "checked": 13,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-08",
+      "checked": 23,
       "new": 0,
       "updates": 0
     }
