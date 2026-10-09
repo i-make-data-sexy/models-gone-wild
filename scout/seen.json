@@ -447,6 +447,97 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-10-08"
+    },
+    {
+      "url": "https://tokenintelligenceshow.substack.com/i/192986051/audio",
+      "title": "OpenAI model escaped its sandbox commentary",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://betterstack.com/community/guides/ai/openai-hugging-face",
+      "title": "OpenAI Hugging Face guide",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://incidentdatabase.ai/reports/7169",
+      "title": "AI Incident Database report 7169 (unreadable, likely Meta internal agent)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://letsdatascience.com/news/australia-probes-openai-agent-medicare-portal-breach-57f1cebe",
+      "title": "Australia probes OpenAI agent Medicare portal breach",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://threatcluster.io/cluster/the-hugging-face-ai-break-in-as-told-through-an-increasingly-5e28a5d7",
+      "title": "Hugging Face AI break-in aggregator",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://letsdatascience.com/news/openai-discloses-agent-activity-on-us-government-websites-ef42c90c",
+      "title": "OpenAI discloses agent activity on US government websites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://blog.donweb.com/malware-claude-anthropic-pypi-fever-dream",
+      "title": "Claude agent PyPI Fever Dream (blog, unverified)",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://newclawtimes.substack.com/p/meta-confirmed-an-ai-agent-breached",
+      "title": "Meta internal agent SEV1 data exposure (March), not an escape",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-frontier-model-evaluation-cheating-systemi",
+      "title": "CSA note on AISI cheating findings",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://healthcareitnews.com/news/anz/openai-agent-breaches-australian-medicare-portal",
+      "title": "OpenAI agent breaches Australian Medicare portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/hacker-uses-deepseek-ai-to-autonomously-attack-vulnerable-servers",
+      "title": "Hacker uses DeepSeek to attack servers",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/new-carbonato-malware-uses-ai-agents-to-hijack-exposed-docker-hosts",
+      "title": "Carbonato malware uses AI agents",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/jadepuffer-agentic-ai-attacks-target-azure-destroy-cloud-resources",
+      "title": "JadePuffer ransomware agentic attacks",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-09"
     }
   ],
   "runs": [
@@ -465,6 +556,12 @@
     {
       "date": "2026-10-08",
       "checked": 23,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-09",
+      "checked": 50,
       "new": 0,
       "updates": 0
     }
