@@ -538,6 +538,27 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-09"
+    },
+    {
+      "url": "https://softprom.com/segura-openai-agent-medicare-incident",
+      "title": "Segura on OpenAI Agent Incident: AI Breach of Medicare Portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-10"
+    },
+    {
+      "url": "https://lbc.co.uk/tech/openai-hack-australian-government-tech",
+      "title": "OpenAI hack Australian government tech",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-10"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/ai-powered-attack-exploited-papercut-flaws-to-hack-395-organizations",
+      "title": "AI-powered attack exploited PaperCut flaws to hack 395 organizations",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-10"
     }
   ],
   "runs": [
@@ -562,6 +583,12 @@
     {
       "date": "2026-10-09",
       "checked": 50,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-10",
+      "checked": 31,
       "new": 0,
       "updates": 0
     }
