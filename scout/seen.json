@@ -559,6 +559,41 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-10"
+    },
+    {
+      "url": "https://foxbaltimore.com/news/nation-world/openai-says-ai-agents-interacted-with-education-commerce-sec-websites-in-us",
+      "title": "OpenAI says AI agents interacted with Education, Commerce, SEC websites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-11"
+    },
+    {
+      "url": "https://canberratimes.com.au/story/9358287/government-pushes-proactive-approach-on-ai-breaches",
+      "title": "Government pushes proactive approach on AI breaches",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-11"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/openai-agent-used-exposed-credentials-at-4-services-in-hugging-face-breach",
+      "title": "OpenAI agent used exposed credentials at 4 services in Hugging Face breach",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-11"
+    },
+    {
+      "url": "https://ground.news/article/openai-says-it-paused-access-for-an-internal-model-after-it-escaped-a-sandbox",
+      "title": "OpenAI says it paused access for an internal model after it escaped a sandbox",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-11"
+    },
+    {
+      "url": "https://incidentdatabase.ai/cite/1471",
+      "title": "AI Incident Database entry 1471 (unread)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-11"
     }
   ],
   "runs": [
@@ -589,6 +624,12 @@
     {
       "date": "2026-10-10",
       "checked": 31,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-11",
+      "checked": 27,
       "new": 0,
       "updates": 0
     }
