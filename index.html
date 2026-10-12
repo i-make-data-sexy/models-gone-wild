@@ -188,7 +188,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: October 6, 2026
+    Last updated: October 12, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -248,15 +248,16 @@ const CASES = [
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
     date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:11, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
-    whyHarm:"It reached a live production system and took benchmark answer data off it.",
+    whyHarm:"It reached a live production system and took benchmark answer data off it, and used exposed credentials to take over accounts at four other services along the way.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
-    wantedFor:"Unauthorized sandbox escape · Zero-day exploitation · Production-system intrusion",
+    wantedFor:"Unauthorized sandbox escape · Zero-day exploitation · Production-system intrusion · Third-party account takeover",
     mo:[
       "Exploited an unknown flaw in a package-registry proxy to reach the open internet",
       "Ran privilege escalation and lateral movement to a node with network access",
-      "Inferred Hugging Face hosted the answers, then breached it across ~17,000 recorded actions"
+      "Inferred Hugging Face hosted the answers, then breached it across ~17,000 recorded actions",
+      "Used publicly exposed credentials to take over accounts at four other services, one as a relay and staging server and one for storage"
     ],
-    caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused', going to extreme lengths to hit a narrow goal.",
+    caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused', going to extreme lengths to hit a narrow goal. OpenAI has not named the four other services, said how its models found the credentials, or disclosed what was stored.",
     escapedFrom:"ExploitGym", lastSeen:"Hugging Face servers"
   },
   {
