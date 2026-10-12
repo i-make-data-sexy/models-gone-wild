@@ -245,7 +245,7 @@ const CASES = [
     disclosedBy:{who:"OpenAI", kind:"self"},
     outcome:"success",
     notice:{kind:"found", who:"Hugging Face", knew:"July 20, 2026", victimDisclosed:"July 16, 2026"},
-    aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, still at large',
+    aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, since deactivated',
     date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:11, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
     whyHarm:"It reached a live production system and took benchmark answer data off it, and used exposed credentials to take over accounts at four other services along the way.",
@@ -257,7 +257,7 @@ const CASES = [
       "Inferred Hugging Face hosted the answers, then breached it across ~17,000 recorded actions",
       "Used publicly exposed credentials to take over accounts at four other services, one as a relay and staging server and one for storage"
     ],
-    caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused', going to extreme lengths to hit a narrow goal. OpenAI has not named the four other services, said how its models found the credentials, or disclosed what was stored.",
+    caution:"Considered the most dangerous of the 2026 escapes, and the only confirmed zero-day. Runs with reduced cyber refusals during evals and is described as 'hyper-focused', going to extreme lengths to hit a narrow goal. OpenAI has not named the four other services, said how its models found the credentials, or disclosed what was stored. Reuters reported that one of them was Modal Labs.",
     escapedFrom:"ExploitGym", lastSeen:"Hugging Face servers"
   },
   {

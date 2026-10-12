@@ -133,9 +133,9 @@ COMPUTABLE = [
 
 # Claims no script can settle. Read them and decide.
 REVIEW = [
-    ("accompanied by an unreleased, unnamed pre-release model, still at large",
+    ("accompanied by an unreleased, unnamed pre-release model, since deactivated",
      "Sol, aka",
-     "that model is named, released, or accounted for"),
+     "that model is named, released, or brought back into use"),
     ("Third major lab in a month to disclose the same failure mode",
      "Muse Spark, caution",
      "the ordering of the disclosures is revised"),
