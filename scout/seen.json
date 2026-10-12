@@ -594,6 +594,69 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-10-11"
+    },
+    {
+      "url": "https://kioncentralcoast.com/money/cnn-business-consumer/2026/08/05/an-ai-model-from-meta-also-hacked-another-company-during-testing",
+      "title": "AI model from Meta also hacked another company during testing",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://jdsupra.com/legalnews/when-the-agent-goes-off-script-meta-s-1141491",
+      "title": "Meta AI-triggered data exposure legal analysis",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://schneier.com/news/archives/2026/08/harvards-schneier-praises-uk-aisis-evaluation-of-frontier-ais-cyber-capabilities.html",
+      "title": "Schneier on UK AISI cyber evaluation",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://crowdfundinsider.com/2026/09/308521-scary-rogue-openai-agents-hijacked-german-website",
+      "title": "Rogue OpenAI agents hijacked German website",
+      "case": "dsewiki",
+      "status": "case",
+      "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://aljazeera.com/news/2026/7/29/openais-rogue-agent-hacked-an-account-at-a-second-technology-firm-report",
+      "title": "OpenAI rogue agent hacked account at second tech firm",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://pbs.org/newshour/science/ai-agents-are-hacking-systems-without-any-input-from-humans",
+      "title": "AI agents are hacking systems without human input",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://axios.com/2026/07/20/hugging-face-ai-cyberattack-data-breach",
+      "title": "Hugging Face says AI agent behind internal breach",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://threatbeat.com/attacks-and-incidents/exclusive-openai-agents-hijacked-german-website-in-previously-undisclosed-ai-breakout-this-spring",
+      "title": "OpenAI agents hijacked German website this spring",
+      "case": "dsewiki",
+      "status": "case",
+      "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://theweek.in/theweek/leisure/2026/09/05/are-rogue-ai-agents-the-next-catastrophic-threat.html",
+      "title": "Are rogue AI agents the next catastrophic threat",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-12"
     }
   ],
   "runs": [
@@ -630,6 +693,12 @@
     {
       "date": "2026-10-11",
       "checked": 27,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-12",
+      "checked": 60,
       "new": 0,
       "updates": 0
     }
