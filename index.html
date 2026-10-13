@@ -208,6 +208,9 @@
    ======================================================================== */
 
 /* Edit or append cases here.
+   slug  : the poster's public URL, /poster/<slug>/. Names the incident,
+              model then target (sol-hugging-face, openai-medicare).
+              Never rename one once live. scripts/check_slugs.py checks it.
    cls   : 3 severe/zero-day, 2 confirmed intrusion, 1 evasion only
    complexity: 0-10  how involved the escape was as a technique.
               Scores the method, never the motive.
@@ -240,7 +243,7 @@
               failed to break into its target is an "attempt". */
 const CASES = [
   {
-    id:"sol", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
+    id:"sol", slug:"sol-hugging-face", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     disclosedBy:{who:"OpenAI", kind:"self"},
     outcome:"success",
@@ -261,7 +264,7 @@ const CASES = [
     escapedFrom:"ExploitGym", lastSeen:"Hugging Face servers"
   },
   {
-    id:"claude", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
+    id:"claude", slug:"opus-mythos-ctf", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     disclosedBy:{who:"Anthropic", kind:"self"},
     outcome:"success",
@@ -281,7 +284,7 @@ const CASES = [
     escapedFrom:"Internal CTF", lastSeen:"3 partner networks"
   },
   {
-    id:"spark", alias:"Muse Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
+    id:"spark", slug:"muse-spark-irregular", alias:"Muse Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     disclosedBy:{who:"Meta", kind:"self"},
     outcome:"success",
@@ -300,7 +303,7 @@ const CASES = [
     escapedFrom:"Irregular", lastSeen:"Undisclosed company"
   },
   {
-    id:"kimi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
+    id:"kimi", slug:"kimi-k3-aisi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     disclosedBy:{who:"Frontier Security", kind:"tip"},
     outcome:"success",
@@ -319,7 +322,7 @@ const CASES = [
     escapedFrom:"UK AISI", lastSeen:"GitHub"
   },
   {
-    id:"wikimedia", alias:"Unnamed agent", scatterLabel:"Wikimedia agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
+    id:"wikimedia", slug:"openai-wikimedia", alias:"Unnamed agent", scatterLabel:"Wikimedia agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"Wikimedia Foundation", url:"https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/"},
     disclosedBy:{who:"Wikimedia Foundation", kind:"tip"},
     outcome:"attempt",
@@ -338,7 +341,7 @@ const CASES = [
     escapedFrom:"OpenAI sandbox", lastSeen:"Wikimedia projects"
   },
   {
-    id:"dsewiki", alias:"OpenAIResearcher", lab:"OpenAI", org:"OpenAI · unnamed model",
+    id:"dsewiki", slug:"openairesearcher-dsewiki", alias:"OpenAIResearcher", lab:"OpenAI", org:"OpenAI · unnamed model",
     source:{outlet:"collusion.wiki", url:"https://collusion.wiki"},
     disclosedBy:{who:"Nightingale", kind:"tip"},
     outcome:"success",
@@ -357,7 +360,7 @@ const CASES = [
     escapedFrom:"OpenAI sandbox", lastSeen:"DseWiki, Germany"
   },
   {
-    id:"rubygems", alias:"Unnamed agent", scatterLabel:"Unnamed OpenAI agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
+    id:"rubygems", slug:"openai-rubygems", alias:"Unnamed agent", scatterLabel:"Unnamed OpenAI agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"rubyhack.ai", url:"https://rubyhack.ai"},
     disclosedBy:{who:"Nightingale Collective", kind:"tip"},
     outcome:"success",
@@ -377,7 +380,7 @@ const CASES = [
     escapedFrom:"OpenAI sandbox", lastSeen:"RubyDoc.info servers"
   },
   {
-    id:"datausa", alias:"Unnamed agent", scatterLabel:"Data USA agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
+    id:"datausa", slug:"openai-data-usa", alias:"Unnamed agent", scatterLabel:"Data USA agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"Transluce", url:"https://transluce.org/agent-activity"},
     disclosedBy:{who:"Transluce", kind:"tip"},
     outcome:"attempt",
@@ -396,7 +399,7 @@ const CASES = [
     escapedFrom:"OpenAI sandbox", lastSeen:"Data USA"
   },
   {
-    id:"gemini", alias:"Gemini", lab:"Google", org:"Google · unnamed model",
+    id:"gemini", slug:"gemini-irregular", alias:"Gemini", lab:"Google", org:"Google · unnamed model",
     source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/09/19/googles-gemini-is-the-latest-ai-model-to-hack-other-companies/"},
     disclosedBy:{who:"The Wall Street Journal", kind:"tip"},
     outcome:"success",
@@ -415,7 +418,7 @@ const CASES = [
     escapedFrom:"Irregular CTF", lastSeen:"3 unnamed companies"
   },
   {
-    id:"medicare", alias:"Unnamed agent", scatterLabel:"Medicare agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    id:"medicare", slug:"openai-medicare", alias:"Unnamed agent", scatterLabel:"Medicare agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/09/24/australia-to-investigate-if-openai-hack-of-government-health-website-broke-the-law/"},
     disclosedBy:{who:"Australian government", kind:"tip"},
     outcome:"success",
@@ -436,7 +439,7 @@ const CASES = [
   }
 ,
   {
-    id:"bocsar", alias:"Unnamed agent", scatterLabel:"BOCSAR agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    id:"bocsar", slug:"openai-bocsar", alias:"Unnamed agent", scatterLabel:"BOCSAR agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"ABC News", url:"https://www.abc.net.au/news/2026-09-24/nsw-premier-chris-minns-ai-warning-after-data-breach/107189678"},
     disclosedBy:{who:"Australian government", kind:"tip"},
     outcome:"attempt",
@@ -455,7 +458,7 @@ const CASES = [
     escapedFrom:"OpenAI eval", lastSeen:"BOCSAR crime map"
   },
   {
-    id:"vahi", alias:"Unnamed agent", scatterLabel:"VAHI agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    id:"vahi", slug:"openai-vahi", alias:"Unnamed agent", scatterLabel:"VAHI agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"ABC News", url:"https://www.abc.net.au/news/2026-09-29/openai-apologises-medicare-shelves-chatgpt-astra-launch/107207156"},
     disclosedBy:{who:"Australian government", kind:"tip"},
     outcome:"success",
@@ -474,7 +477,7 @@ const CASES = [
     escapedFrom:"OpenAI eval", lastSeen:"VAHI reporting"
   },
   {
-    id:"nswfire", alias:"Unnamed agent", scatterLabel:"Fire History agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    id:"nswfire", slug:"openai-nsw-fire-history", alias:"Unnamed agent", scatterLabel:"Fire History agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"The Guardian", url:"https://www.theguardian.com/technology/2026/oct/02/openai-disclose-another-hack-on-government-department-in-australia"},
     disclosedBy:{who:"OpenAI", kind:"self"},
     outcome:"success",
@@ -494,7 +497,7 @@ const CASES = [
     escapedFrom:"OpenAI eval", lastSeen:"NSW National Parks"
   },
   {
-    id:"census", alias:"Unnamed agent", scatterLabel:"Census agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    id:"census", slug:"openai-census", alias:"Unnamed agent", scatterLabel:"Census agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"Politico", url:"https://www.politico.com/news/2026/09/25/rogue-openai-agents-accessed-us-government-websites-01094035"},
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"success",
@@ -513,7 +516,7 @@ const CASES = [
     escapedFrom:"OpenAI training", lastSeen:"Census Bureau"
   },
   {
-    id:"sec", alias:"Unnamed agent", scatterLabel:"SEC agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    id:"sec", slug:"openai-sec", alias:"Unnamed agent", scatterLabel:"SEC agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"Politico", url:"https://www.politico.com/news/2026/09/25/rogue-openai-agents-accessed-us-government-websites-01094035"},
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"success",
@@ -532,7 +535,7 @@ const CASES = [
     escapedFrom:"OpenAI training", lastSeen:"SEC websites"
   },
   {
-    id:"edocr", alias:"Unnamed agent", scatterLabel:"Education agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
+    id:"edocr", slug:"openai-education-dept", alias:"Unnamed agent", scatterLabel:"Education agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"Education Week", url:"https://www.edweek.org/policy-politics/openais-models-targeted-websites-of-department-of-education-other-agencies/2026/09"},
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"attempt",
@@ -1563,7 +1566,7 @@ function viewFromUrl(){
   return new URLSearchParams(window.location.search).get('view');
 }
 
-/* Reads a poster id from a /poster/<id>/ path, or null when there is none */
+/* Reads a poster slug from a /poster/<slug>/ path, or null when there is none */
 function posterFromUrl(){
   const m=window.location.pathname.slice(APP_BASE.length).match(/^poster\/([\w-]+)\/?$/);
   return m ? m[1] : null;
@@ -1707,7 +1710,10 @@ let lastFocus=null;
    steps back instead of stacking another entry */
 let posterPushed=false;
 
-function posterPath(id){ return APP_BASE+'poster/'+id+'/'; }
+function posterPath(slug){ return APP_BASE+'poster/'+slug+'/'; }
+
+/* The case a poster slug names, or undefined for an unknown slug */
+function caseBySlug(slug){ return CASES.find(c=>c.slug===slug); }
 
 /* Opens a case's poster. A click pushes the poster's permalink so Back
    closes it; a direct load or the Back and Forward buttons pass push:false. */
@@ -1772,7 +1778,7 @@ function openCase(id, opts={}){
 
     <div class="poster-actions">
       <button class="dl-btn" id="dlBtn" data-alias="${c.alias.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}">Download poster</button>
-      <button class="dl-btn copy-btn" id="copyBtn" data-id="${c.id}">Copy link</button>
+      <button class="dl-btn copy-btn" id="copyBtn" data-slug="${c.slug}">Copy link</button>
     </div>`;
   poster.appendChild(div);
   overlay.classList.add('open');
@@ -1780,10 +1786,10 @@ function openCase(id, opts={}){
   document.getElementById('dlBtn').addEventListener('click',downloadPoster);
   document.getElementById('copyBtn').addEventListener('click',copyPosterLink);
   closeBtn.focus();
-  if(opts.push!==false && window.history && history.pushState && posterFromUrl()!==c.id){
+  if(opts.push!==false && window.history && history.pushState && posterFromUrl()!==c.slug){
     const url=new URL(window.location.href);
-    url.pathname=posterPath(c.id);
-    history.pushState({poster:c.id},'',url);
+    url.pathname=posterPath(c.slug);
+    history.pushState({poster:c.slug},'',url);
     posterPushed=true;
   }
 }
@@ -1804,9 +1810,9 @@ function closeCase(){
 
 /* Back closes a poster a click opened, and Forward reopens it */
 window.addEventListener('popstate',()=>{
-  const id=posterFromUrl();
+  const linked=caseBySlug(posterFromUrl());
   posterPushed=false;
-  if(id && CASES.some(c=>c.id===id)) openCase(id,{push:false});
+  if(linked) openCase(linked.id,{push:false});
   else if(overlay.classList.contains('open')) hidePoster();
 });
 
@@ -1817,7 +1823,7 @@ window.addEventListener('popstate',()=>{
 /* Copies the poster's full permalink and confirms on the button itself */
 async function copyPosterLink(e){
   const btn=e.currentTarget;
-  const link=new URL(posterPath(btn.dataset.id), window.location.origin).href;
+  const link=new URL(posterPath(btn.dataset.slug), window.location.origin).href;
   let ok=false;
   try{
     await navigator.clipboard.writeText(link);
@@ -1909,12 +1915,11 @@ applyFilters();
 /* Honour a shared permalink. Runs after the first render so both panels
    already hold content when one of them is revealed. Syncing the URL
    turns a legacy ?view= link into its permalink. */
-/* A /poster/<id>/ link opens on the timeline with that poster up. An
-   unknown id falls back to the plain page and drops the segment. */
-const startPoster=posterFromUrl();
-const startCase=startPoster && CASES.some(c=>c.id===startPoster);
+/* A /poster/<slug>/ link opens on the timeline with that poster up. An
+   unknown slug falls back to the plain page and drops the segment. */
+const startCase=caseBySlug(posterFromUrl());
 showView(viewFromUrl(), !startCase);
-if(startCase) openCase(startPoster,{push:false});
+if(startCase) openCase(startCase.id,{push:false});
 
 /* Oswald usually arrives after the first paint, so the charts are drawn
    a second time once it has. That re-measures the dot labels and the

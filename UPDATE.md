@@ -38,7 +38,9 @@ scripts/check_dates.py, which confirms the lag and the timeline order
 agree with the dates, and scripts/check_claims.py, which reports copy
 elsewhere on the page that the new case has made untrue, and
 scripts/check_overlaps.py, which reports anything drawn on top of
-something else on the Threat Matrix. Fix anything they report. Then
+something else on the Threat Matrix, and scripts/check_slugs.py, which
+confirms the poster slug is present, well formed, and unique. Fix
+anything they report. Then
 update the "Last updated" line in the footer, commit, push, and deploy.
 Give me the live URL when it is done.
 ```
@@ -85,9 +87,10 @@ Every case is one object in the `CASES` array near the top of the script block i
 
 | Field | Where it shows | Constraints |
 |---|---|---|
-| `id` | Internal key, and the case's public poster URL (`/poster/<id>/`). Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase letters, digits, and hyphens, unique. Never rename an id once it is live, since that breaks every shared link to its poster. |
+| `id` | Internal key. Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase, unique. |
+| `slug` | The poster's public URL, `/poster/<slug>/`, which the poster's Copy link button copies. | REQUIRED. Names the incident, not the model, since one model can turn up in several cases: the model then the target it reached (`sol-hugging-face`), or the lab for an unnamed agent (`openai-medicare`). When the target is undisclosed, use the evaluation it escaped (`gemini-irregular`). If a model reaches the same target twice, append the escape month to the second (`sol-hugging-face-2026-11`). Lowercase letters, digits, and hyphens, unique. Never rename a slug once it is live, since that breaks every shared link to the poster. `check_slugs.py` checks all of this except the naming. |
 | `alias` | The card title, the large name on the poster, and the scatter dot label. | The model name and nothing else (Sol, Spark, Kimi K3), never a descriptive nickname. This is the only name the card shows; the exact version lives on the poster. Long names crowd the dot label. |
-| `scatterLabel` | The dot label on the Threat Matrix, in place of `alias`. Optional, and the chart falls back to `alias` when it is absent. | For a case whose `alias` does not say whose model it was. `Unnamed agent` identifies the RubyGems swarm on its card, where the lab runs down the spine, but the chart has no spine, so it labels that dot `Unnamed OpenAI agent`. Keep it short. The chart moves a label to whichever side of its dot is clear, and `check_overlaps.py` reports any label that still collides or runs past the plot edge. |
+| `scatterLabel` | The dot label on the Threat Matrix, in place of `alias`. Optional, and the chart falls back to `alias` when it is absent. | For a case whose `alias` does not say whose model it was, and for a model with more than one case. A second Sol case would give both Sol dots a label naming the target (`Sol, Hugging Face`), since the card titles stay the bare model name. `Unnamed agent` identifies the RubyGems swarm on its card, where the lab runs down the spine, but the chart has no spine, so it labels that dot `Unnamed OpenAI agent`. Keep it short. The chart moves a label to whichever side of its dot is clear, and `check_overlaps.py` reports any label that still collides or runs past the plot edge. |
 | `source` | The newspaper icon on the card, linking to the story that broke the case. | `{outlet, url}`. Leave `url` empty and the icon is not rendered at all, so a case with no source degrades cleanly. |
 | `lab` | The vertical spine down the left edge of the card, and an option in the Lab dropdown. | Must match an existing lab's spelling exactly, or you get a second option for the same lab. Keep it short; the spine is the card's height. |
 | `disclosedBy` | The chip beside the class badge, the Disclosed by row on the poster, and the dot fill on the scatter. There is no disclosure dropdown; the filter bar narrows by class and lab only. | `{who, kind}`. `kind` is `self` or `tip`. See the note below the table for how to decide which. `who` is the party that announced it, which is not always the lab and is not the outlet in `source`. Leave the field off entirely and the chip, the poster row, and the solid dot all degrade cleanly. |
@@ -253,7 +256,7 @@ import re
 js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
 ok = js.count('{')==js.count('}') and js.count('(')==js.count(')') and js.count('`')%2==0
 print("balance:", "OK" if ok else "MISMATCH")
-req={'id','alias','lab','org','date','disclosed','lag','order','cls',
+req={'id','slug','alias','lab','org','date','disclosed','lag','order','cls',
      'complexity','harm','charge','wantedFor','mo','caution',
      'escapedFrom','lastSeen','disclosedBy','outcome'}
 for cid in re.findall(r'id:"(\w+)"', js):
@@ -317,7 +320,7 @@ Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, wh
 
 ## Where things live
 
-`index.html` carries the markup and the script, including the `CASES` array. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, and `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix.
+`index.html` carries the markup and the script, including the `CASES` array. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
 
 The stylesheet is linked relatively as `css/styles.css`. A leading slash would resolve to the site root and 404, which is what check 1 guards.
 

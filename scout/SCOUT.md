@@ -98,7 +98,7 @@ Load the current cases with the snippet in Step 1 of `.claude/skills/models-gone
 - `proposed`, with `--case <new id>`: a new case. A model or agent got out of a sandbox, eval, or harness, or reached somebody else's systems without permission, and the sources say so.
 - `borderline`: you cannot tell which of the above it is. These get one line each in the email, not full research.
 
-Pick a new id the way the registry does: short, lowercase, unique, usually the victim (`medicare`, `bocsar`) or the model (`sol`, `kimi`).
+Pick a new id the way the registry does: short, lowercase, unique, usually the victim (`medicare`, `bocsar`) or the model (`sol`, `kimi`). The id is internal. The case also needs a `slug`, its public poster URL, which names the incident rather than the model (`sol-hugging-face`, `openai-medicare`). `UPDATE.md` has the pattern.
 
 ## Step 4: Research
 
