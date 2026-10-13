@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Serves a local preview of the app at its real production subpath.
 
-The plain python3 -m http.server cannot serve the dashboard permalinks,
-since /threat-matrix/ and /lab-counts/ are not folders on disk. This
-server does what the nginx rewrite does in production: it strips the
-view segment, so /tools/models-gone-wild/lab-counts/ serves index.html
+The plain python3 -m http.server cannot serve the dashboard or poster
+permalinks, since /threat-matrix/, /lab-counts/, and /poster/<id>/ are
+not folders on disk. This server does what the nginx rewrite does in
+production: it strips that segment, so /tools/models-gone-wild/lab-counts/ serves index.html
 and /tools/models-gone-wild/lab-counts/css/styles.css serves the real
 stylesheet. Old ?view= links get the same 301 to their permalink that
 nginx sends. Serving at the subpath also exercises the relative asset
@@ -29,6 +29,10 @@ PREFIX = "/tools/models-gone-wild"
 VIEW_SLUGS = ("threat-matrix", "lab-counts")
 VIEW_RE = re.compile(r"^" + re.escape(PREFIX) + r"/(?:" + "|".join(VIEW_SLUGS) + r")(/.*)?$")
 
+# A wanted poster's permalink, /poster/<case id>/. Mirrors the poster rewrite in DEPLOY.md.
+POSTER_RE      = re.compile(r"^" + re.escape(PREFIX) + r"/poster/[\w-]+(/.*)?$")
+POSTER_BARE_RE = re.compile(r"^" + re.escape(PREFIX) + r"/poster/[\w-]+$")
+
 # The old ?view= values and the permalink each one now lives at. Mirrors
 # the 301s in the nginx page block in DEPLOY.md.
 LEGACY_VIEWS = {"matrix": "threat-matrix", "labs": "lab-counts"}
@@ -40,7 +44,7 @@ LEGACY_VIEWS = {"matrix": "threat-matrix", "labs": "lab-counts"}
 
 class PreviewHandler(SimpleHTTPRequestHandler):
     """
-    Maps the production URL space onto the repo, including the view permalinks
+    Maps the production URL space onto the repo, including the view and poster permalinks
     """
 
     def translate_path(self, path: str) -> str:
@@ -56,7 +60,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         bare = path.split("?", 1)[0].split("#", 1)[0]
         if bare != PREFIX and not bare.startswith(PREFIX + "/"):
             return os.path.join(REPO, "__outside_prefix__")
-        view = VIEW_RE.match(bare)
+        view = VIEW_RE.match(bare) or POSTER_RE.match(bare)
         if view:
             bare = PREFIX + (view.group(1) or "/")
         return super().translate_path(bare[len(PREFIX):] or "/")
@@ -69,7 +73,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         legacy = LEGACY_VIEWS.get(parse_qs(urlsplit(self.path).query).get("view", [""])[0])
         if bare.startswith(PREFIX + "/") and legacy:
             return self.redirect(f"{PREFIX}/{legacy}/")
-        if bare in (f"{PREFIX}/{slug}" for slug in VIEW_SLUGS):
+        if bare in (f"{PREFIX}/{slug}" for slug in VIEW_SLUGS) or POSTER_BARE_RE.match(bare):
             return self.redirect(bare + "/")
         return super().do_GET()
 

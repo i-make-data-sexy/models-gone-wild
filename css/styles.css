@@ -815,7 +815,9 @@
   }
   .poster-footer b{color:var(--ink);}
 
-  .poster-actions{margin:20px 24px 0;}
+  /* Side by side on a desktop poster, stacked once each button would be under 150px */
+  .poster-actions{margin:20px 24px 0;display:flex;flex-wrap:wrap;gap:10px;}
+  .poster-actions .dl-btn{flex:1 1 150px;}
   .dl-btn{
     width:100%;font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
     text-transform:uppercase;font-size:12px;padding:13px;cursor:pointer;
@@ -823,6 +825,8 @@
   }
   .dl-btn:hover,.dl-btn:focus-visible{background:var(--stamp-red);border-color:var(--stamp-red);outline:none;}
   .dl-btn[disabled]{opacity:.55;cursor:wait;}
+  .copy-btn{background:transparent;color:var(--ink);}
+  .copy-btn:hover,.copy-btn:focus-visible{color:var(--paper);}
 
   .stamp{
     position:absolute;top:70px;right:14px;font-family:'Oswald',sans-serif;font-weight:700;

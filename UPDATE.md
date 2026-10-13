@@ -85,7 +85,7 @@ Every case is one object in the `CASES` array near the top of the script block i
 
 | Field | Where it shows | Constraints |
 |---|---|---|
-| `id` | Internal key. Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase, unique. |
+| `id` | Internal key, and the case's public poster URL (`/poster/<id>/`). Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase letters, digits, and hyphens, unique. Never rename an id once it is live, since that breaks every shared link to its poster. |
 | `alias` | The card title, the large name on the poster, and the scatter dot label. | The model name and nothing else (Sol, Spark, Kimi K3), never a descriptive nickname. This is the only name the card shows; the exact version lives on the poster. Long names crowd the dot label. |
 | `scatterLabel` | The dot label on the Threat Matrix, in place of `alias`. Optional, and the chart falls back to `alias` when it is absent. | For a case whose `alias` does not say whose model it was. `Unnamed agent` identifies the RubyGems swarm on its card, where the lab runs down the spine, but the chart has no spine, so it labels that dot `Unnamed OpenAI agent`. Keep it short. The chart moves a label to whichever side of its dot is clear, and `check_overlaps.py` reports any label that still collides or runs past the plot edge. |
 | `source` | The newspaper icon on the card, linking to the story that broke the case. | `{outlet, url}`. Leave `url` empty and the icon is not rendered at all, so a case with no source degrades cleanly. |
@@ -283,7 +283,7 @@ python3 scripts/serve.py --port 8899
 # then open http://127.0.0.1:8899/tools/models-gone-wild/
 ```
 
-Use this rather than `python3 -m http.server`, which cannot serve the dashboard permalinks (`threat-matrix/` and `lab-counts/`). The script strips the view segment the way the nginx rewrite does in production.
+Use this rather than `python3 -m http.server`, which cannot serve the dashboard or poster permalinks (`threat-matrix/`, `lab-counts/`, and `poster/<id>/`). The script strips that segment the way the nginx rewrite does in production.
 
 Click through both tabs, open the new case's poster, and download it. There is no JavaScript engine available in this environment, so the structural check above cannot catch a runtime error. The browser is the only real test.
 

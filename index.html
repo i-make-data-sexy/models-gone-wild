@@ -1545,13 +1545,13 @@ const tabs=document.querySelectorAll('.tab');
 const VIEWS=['timeline','matrix','labs'];
 const VIEW_SLUGS={matrix:'threat-matrix', labs:'lab-counts'};
 
-/* The app's own path with any view segment removed, so it holds on
+/* The app's own path with any view or poster segment removed, so it holds on
    production (/tools/models-gone-wild/) and in a local preview alike.
    Always ends in a slash. */
 const APP_BASE=(function(){
   let p=window.location.pathname
     .replace(/index\.html$/,'')
-    .replace(/(?:threat-matrix|lab-counts)\/?$/,'');
+    .replace(/(?:threat-matrix|lab-counts|poster\/[\w-]+)\/?$/,'');
   return p.endsWith('/') ? p : p+'/';
 })();
 
@@ -1563,8 +1563,27 @@ function viewFromUrl(){
   return new URLSearchParams(window.location.search).get('view');
 }
 
+/* Reads a poster id from a /poster/<id>/ path, or null when there is none */
+function posterFromUrl(){
+  const m=window.location.pathname.slice(APP_BASE.length).match(/^poster\/([\w-]+)\/?$/);
+  return m ? m[1] : null;
+}
+
+/* Points the address bar at the current view. The old ?view= parameter
+   is dropped, which also tidies a legacy link into its permalink. */
+function syncViewUrl(){
+  if(!window.history || !history.replaceState) return;
+  const url=new URL(window.location.href);
+  url.pathname=APP_BASE+(VIEW_SLUGS[currentView] ? VIEW_SLUGS[currentView]+'/' : '');
+  url.searchParams.delete('view');
+  if(url.href!==window.location.href) history.replaceState(null,'',url);
+}
+
+let currentView='timeline';
+
 function showView(name, syncUrl){
   if(VIEWS.indexOf(name)===-1) name='timeline';
+  currentView=name;
   tabs.forEach(t=>t.setAttribute('aria-selected', t.id==='tab-'+name ? 'true':'false'));
   document.querySelectorAll('.view').forEach(v=>{
     const on = v.id==='view-'+name;
@@ -1575,15 +1594,7 @@ function showView(name, syncUrl){
      SVG. The matrix is usually drawn while hidden behind the timeline,
      so the icons are placed again the moment it becomes visible. */
   if(name==='matrix') placeAxisIcons();
-  if(syncUrl && window.history && history.replaceState){
-    /* Built from the live URL so any other parameter and the hash
-       survive. The old ?view= parameter is dropped, which also tidies
-       a legacy link into its permalink on arrival. */
-    const url=new URL(window.location.href);
-    url.pathname=APP_BASE+(VIEW_SLUGS[name] ? VIEW_SLUGS[name]+'/' : '');
-    url.searchParams.delete('view');
-    if(url.href!==window.location.href) history.replaceState(null,'',url);
-  }
+  if(syncUrl) syncViewUrl();
 }
 
 tabs.forEach(tab=>{
@@ -1692,7 +1703,15 @@ const poster=document.getElementById('poster');
 const closeBtn=document.getElementById('closeBtn');
 let lastFocus=null;
 
-function openCase(id){
+/* True while the open poster added its own history entry, so closing it
+   steps back instead of stacking another entry */
+let posterPushed=false;
+
+function posterPath(id){ return APP_BASE+'poster/'+id+'/'; }
+
+/* Opens a case's poster. A click pushes the poster's permalink so Back
+   closes it; a direct load or the Back and Forward buttons pass push:false. */
+function openCase(id, opts={}){
   const c=CASES.find(x=>x.id===id); if(!c) return;
   lastFocus=document.activeElement;
   poster.querySelector('.poster-content')?.remove();
@@ -1753,18 +1772,68 @@ function openCase(id){
 
     <div class="poster-actions">
       <button class="dl-btn" id="dlBtn" data-alias="${c.alias.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}">Download poster</button>
+      <button class="dl-btn copy-btn" id="copyBtn" data-id="${c.id}">Copy link</button>
     </div>`;
   poster.appendChild(div);
   overlay.classList.add('open');
   document.body.style.overflow='hidden';
   document.getElementById('dlBtn').addEventListener('click',downloadPoster);
+  document.getElementById('copyBtn').addEventListener('click',copyPosterLink);
   closeBtn.focus();
+  if(opts.push!==false && window.history && history.pushState && posterFromUrl()!==c.id){
+    const url=new URL(window.location.href);
+    url.pathname=posterPath(c.id);
+    history.pushState({poster:c.id},'',url);
+    posterPushed=true;
+  }
 }
 
-function closeCase(){
+function hidePoster(){
   overlay.classList.remove('open');
   document.body.style.overflow='';
   if(lastFocus) lastFocus.focus();
+}
+
+/* Closes the poster and returns the address bar to the view underneath */
+function closeCase(){
+  hidePoster();
+  if(posterFromUrl()===null) return;
+  if(posterPushed){ posterPushed=false; history.back(); }
+  else syncViewUrl();
+}
+
+/* Back closes a poster a click opened, and Forward reopens it */
+window.addEventListener('popstate',()=>{
+  const id=posterFromUrl();
+  posterPushed=false;
+  if(id && CASES.some(c=>c.id===id)) openCase(id,{push:false});
+  else if(overlay.classList.contains('open')) hidePoster();
+});
+
+/* ================================================
+     Copy Link
+   ================================================ */
+
+/* Copies the poster's full permalink and confirms on the button itself */
+async function copyPosterLink(e){
+  const btn=e.currentTarget;
+  const link=new URL(posterPath(btn.dataset.id), window.location.origin).href;
+  let ok=false;
+  try{
+    await navigator.clipboard.writeText(link);
+    ok=true;
+  }catch(err){
+    /* Older browsers and insecure origins lack the async clipboard */
+    const area=document.createElement('textarea');
+    area.value=link; area.setAttribute('readonly','');
+    area.style.position='fixed'; area.style.opacity='0';
+    document.body.appendChild(area); area.select();
+    try{ ok=document.execCommand('copy'); }catch(_){ ok=false; }
+    area.remove();
+  }
+  btn.textContent=ok ? 'Link copied' : "Couldn't copy";
+  clearTimeout(btn._reset);
+  btn._reset=setTimeout(()=>{ btn.textContent='Copy link'; },2000);
 }
 
 /* ================================================
@@ -1779,8 +1848,10 @@ async function downloadPoster(e){
   const label=btn.dataset.alias||'model';
   const original=btn.innerHTML;
   btn.disabled=true; btn.innerHTML='Rendering&hellip;';
+  const copyBtn=document.getElementById('copyBtn');
   closeBtn.style.visibility='hidden';
   btn.style.visibility='hidden';
+  if(copyBtn) copyBtn.style.visibility='hidden';
   /* Drops the glossary's dotted rules for the capture. A tooltip cannot
      open in a PNG, so the cue would be pointing at nothing. */
   poster.classList.add('exporting');
@@ -1801,6 +1872,7 @@ async function downloadPoster(e){
     poster.classList.remove('exporting');
     closeBtn.style.visibility='';
     btn.style.visibility='';
+    if(copyBtn) copyBtn.style.visibility='';
     btn.disabled=false; btn.innerHTML=original;
   }
 }
@@ -1837,7 +1909,13 @@ applyFilters();
 /* Honour a shared permalink. Runs after the first render so both panels
    already hold content when one of them is revealed. Syncing the URL
    turns a legacy ?view= link into its permalink. */
-showView(viewFromUrl(), true);
+/* A /poster/<id>/ link opens on the timeline with that poster up. An
+   unknown id falls back to the plain page and drops the segment. */
+const startPoster=posterFromUrl();
+const startCase=startPoster && CASES.some(c=>c.id===startPoster);
+showView(viewFromUrl(), !startCase);
+if(startCase) openCase(startPoster,{push:false});
+
 /* Oswald usually arrives after the first paint, so the charts are drawn
    a second time once it has. That re-measures the dot labels and the
    lab names in the real font and places the axis icons again. */

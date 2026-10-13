@@ -113,6 +113,18 @@ location ~ ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/ {
     rewrite ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/(.*)$ /tools/models-gone-wild/$1 last;
 }
 
+# The wanted-poster permalinks, /poster/<case id>/. Same page again, with
+# the poster read from the URL by the page's script, so they get the same
+# trailing-slash 301 and the same strip-and-rematch as the views. Keep the
+# id pattern in step with posterFromUrl in index.html and scripts/serve.py.
+location ~ ^/tools/models-gone-wild/poster/([a-z0-9-]+)$ {
+    return 301 /tools/models-gone-wild/poster/$1/;
+}
+
+location ~ ^/tools/models-gone-wild/poster/[a-z0-9-]+/ {
+    rewrite ^/tools/models-gone-wild/poster/[a-z0-9-]+/(.*)$ /tools/models-gone-wild/$1 last;
+}
+
 # Repo files that ship with the clone but are not site content. Without
 # this, DEPLOY.md is served publicly and it carries the server path and
 # the host IP. Nginx picks regex locations over prefix ones, so this
@@ -173,20 +185,21 @@ Run this on the server, which bypasses Cloudflare by talking to nginx directly:
 
 ```bash
 H="Host: www.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
-for f in "" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "js/html2canvas.min.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
+for f in "" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "poster/sol/" "poster/sol/css/styles.css" "poster/sol/js/html2canvas.min.js" "poster/sol/DEPLOY.md" "js/html2canvas.min.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
   printf "%-28s %s\n" "/$f" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B/$f")"
 done
 printf "%-28s %s\n" "bare path" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B")"
+printf "%-28s %s\n" "bare poster" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code} %{redirect_url}' "$B/poster/sol")"
 for q in "matrix" "labs"; do
   printf "%-28s %s\n" "?view=$q" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code} %{redirect_url}' "$B/?view=$q")"
 done
 ```
 
-Expected results, in order. The page and both permalinks are 200, the stylesheet requested through a permalink is 200, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, and the bare path is 301. The two old `?view=` links are 301 to `/threat-matrix/` and `/lab-counts/`. The redirect URL prints as `https://127.0.0.1/...`, since curl builds it from the address it called; the path is what to check.
+Expected results, in order. The page and both view permalinks are 200, the stylesheet requested through a permalink is 200, the poster permalink and its stylesheet and script are 200, `DEPLOY.md` requested through the poster path is 404, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, the bare path is 301, and the bare poster path is 301 to `/poster/sol/`. The two old `?view=` links are 301 to `/threat-matrix/` and `/lab-counts/`. The redirect URL prints as `https://127.0.0.1/...`, since curl builds it from the address it called; the path is what to check.
 
 Wait a couple of seconds after `systemctl reload nginx` before running this. A reload leaves the old workers draining, so a check fired immediately can still be answered by a worker running the previous config and show a stale result.
 
-Then open the page in a real browser, which is the only way to confirm the last mile past Cloudflare. Check that the fonts render as the typewriter and condensed faces rather than a fallback, that tapping a case opens its poster, and that the download button on an open poster produces a PNG.
+Then open the page in a real browser, which is the only way to confirm the last mile past Cloudflare. Check that the fonts render as the typewriter and condensed faces rather than a fallback, that tapping a case opens its poster and puts `/poster/<id>/` in the address bar, that Copy link copies that URL, and that the download button on an open poster produces a PNG.
 
 ## Updating after the first deploy
 
