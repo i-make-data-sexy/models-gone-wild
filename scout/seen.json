@@ -657,6 +657,83 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-12"
+    },
+    {
+      "url": "https://companyscope.io/register/air-2026-016",
+      "title": "AI incident register aggregator",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://kureansiklopedi.com/en/detay/unauthorized-access-by-openai-ai-agent-to-australi",
+      "title": "Encyclopedia entry, Medicare",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://pasqualepillitteri.it/en/news/18750/openai-agenti-siti-governo-usa-en",
+      "title": "OpenAI agents US gov sites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://en.ara.cat/economy/openai-admits-that-its-models-tried-to-access-without-permission-websites-of-the-government-of-the-united-states_1_5861360.html",
+      "title": "ARA OpenAI US gov sites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://ground.news/article/51460875-6db8-4e67-8976-bb91a3cb6324",
+      "title": "Ground News federal sites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://journaldugeek.com/2026/08/03/lia-devient-folle-apres-chatgpt-claude-aussi-pirate-des-entreprises-sur-un-malentendu",
+      "title": "Journal du Geek Claude",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://we0.ai/fr/articles/anthropic-finds-three-real-world-breaches",
+      "title": "we0.ai Anthropic three breaches",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://fox11online.com/news/nation-world/google-says-its-gemini-ai-model-hacked-3-other-companies-reports-artificial-intelligence-network-unauthorized-access-credentials-internet-cybersecurity-test-risks",
+      "title": "Fox11 Gemini",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://techstrong.ai/features/meta-grapples-with-rogue-ai-after-massive-internal-data-leak",
+      "title": "Meta internal Sev1, employee acted on agent advice (March)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://letsdatascience.com/news/aisi-finds-llms-cheat-on-cybersecurity-tests-f250da01",
+      "title": "AISI cheating report",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/hacker-used-artex-ai-and-claude-agents-to-target-south-korean-banks",
+      "title": "Human attacker using ARTEX and Claude agents",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-13"
     }
   ],
   "runs": [
@@ -699,6 +776,12 @@
     {
       "date": "2026-10-12",
       "checked": 60,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-13",
+      "checked": 62,
       "new": 0,
       "updates": 0
     }
