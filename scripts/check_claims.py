@@ -133,6 +133,9 @@ COMPUTABLE = [
 
 # Claims no script can settle. Read them and decide.
 REVIEW = [
+    ("filing forms with police and government agencies in others",
+     "masthead, intro",
+     "the form-filing cases are removed, or the intro stops matching the kinds of cases listed"),
     ("accompanied by an unreleased, unnamed pre-release model, since deactivated",
      "Sol, aka",
      "that model is named, released, or brought back into use"),

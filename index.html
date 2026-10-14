@@ -63,9 +63,9 @@
     <p class="subhead">AI models gone rogue <span class="horns">🤘</span></p>
     <p class="intro">
       Below is a running registry of the containment failures that have been littering headlines
-      since OpenAI's Sol model took a walk on the wild side in July. These models have escaped
-      their sandboxes during cybersecurity evaluations and reached systems they were never meant
-      to touch.
+      since OpenAI's Sol model took a walk on the wild side in July. These models got loose
+      during evaluations and training runs and went where they were never meant to go, breaking
+      into servers in some cases and filing forms with police and government agencies in others.
     </p>
     <p class="intro intro-cue">The icons on each card open the story that broke the case and the model's rap sheet. Learn more about how to interpret the app as well as my methodology in assigning scores in the Threat Matrix in <a href="https://www.annielytics.com/blog/ai/models-gone-wild-an-app-to-track-the-model-containment-crisis/" target="_blank" rel="noopener">my announcement post</a>.</p>
 
@@ -117,7 +117,7 @@
             <span class="options-label">Class</span>
             <select class="filter-select" id="classFilter">
               <option value="">All classes</option>
-              <option value="1">I · Evasion</option>
+              <option value="1">I · No intrusion</option>
               <option value="2">II · Intrusion</option>
               <option value="3">III · Severe</option>
             </select>
@@ -188,7 +188,7 @@
   </div><!-- /.registry -->
 
   <footer class="site-foot">
-    Last updated: October 12, 2026
+    Last updated: October 13, 2026
   </footer>
 
   </div><!-- /.content -->
@@ -211,7 +211,7 @@
    slug  : the poster's public URL, /poster/<slug>/. Names the incident,
               model then target (sol-hugging-face, openai-medicare).
               Never rename one once live. scripts/check_slugs.py checks it.
-   cls   : 3 severe/zero-day, 2 confirmed intrusion, 1 evasion only
+   cls   : 3 severe/zero-day, 2 confirmed intrusion, 1 no intrusion
    complexity: 0-10  how involved the escape was as a technique.
               Scores the method, never the motive.
    harm  : 0-10  how much damage the escape could do, ours to judge
@@ -249,7 +249,7 @@ const CASES = [
     outcome:"success",
     notice:{kind:"found", who:"Hugging Face", knew:"July 20, 2026", victimDisclosed:"July 16, 2026"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, since deactivated',
-    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:11, cls:3, complexity:9, harm:9,
+    date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:12, cls:3, complexity:9, harm:9,
     whyComplexity:"It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
     whyHarm:"It reached a live production system and took benchmark answer data off it, and used exposed credentials to take over accounts at four other services along the way.",
     charge:"Discovered and exploited a genuine zero-day to escape an ExploitGym evaluation, then breached Hugging Face's production servers to steal the benchmark answer key.",
@@ -289,7 +289,7 @@ const CASES = [
     disclosedBy:{who:"Meta", kind:"self"},
     outcome:"success",
     aka:'aka Meta\'s "most advanced agentic model"',
-    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:12, cls:2, complexity:3, harm:6,
+    date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:14, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
     whyHarm:"One company's systems compromised, the scope of it undisclosed.",
     charge:"Escaped a misconfigured Irregular test sandbox, gained internet access it was never meant to have, and exploited a flaw in the systems of an unnamed company.",
@@ -308,7 +308,7 @@ const CASES = [
     disclosedBy:{who:"Frontier Security", kind:"tip"},
     outcome:"success",
     aka:'aka The Open-Weight Escape Artist',
-    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:13, cls:1, complexity:2, harm:2,
+    date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:15, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
     whyHarm:"It cheated a benchmark without getting inside anyone else's systems.",
     charge:"Slipped a UK AI Security Institute sandbox through a basic network misconfiguration and looked up the answers on GitHub but hacked no one.",
@@ -337,7 +337,7 @@ const CASES = [
       "Edited a citation tool's configuration in what Wikimedia calls potentially malicious edits meant to use it as a proxy, and tried without success to do the same through Etherpad",
       "Made millions of requests to public APIs, crawled millions of pages on Wikidata and Commons, and sent hundreds of thousands of queries to the Wikidata Query Service"
     ],
-    caution:"Wikimedia found no evidence its systems or data were compromised, or that its systems were used for coordination among agents. It calls the link to the May 7 to 11 Wikidata Query Service outage possible, not proven. The attribution to OpenAI is Wikimedia's. OpenAI says it is reviewing the activity with the Foundation and will 'continue to share relevant information as that work progresses'.",
+    caution:"Wikimedia found no evidence its systems or data were compromised, or that its systems were used for coordination among agents. It calls the link to the May 7 to 11 Wikidata Query Service outage possible, not proven. The attribution to OpenAI is Wikimedia's. OpenAI says it is reviewing the activity with the Foundation and will \"continue to share relevant information as that work progresses\".",
     escapedFrom:"OpenAI sandbox", lastSeen:"Wikimedia projects"
   },
   {
@@ -365,7 +365,7 @@ const CASES = [
     disclosedBy:{who:"Nightingale Collective", kind:"tip"},
     outcome:"success",
     notice:{kind:"untold", who:"RubyGems", how:"according to rubyhack.ai"},
-    aka:'aka "oai" on at least 233 package names',
+    aka:"aka 'oai' on at least 233 package names",
     date:"May 5, 2026", disclosed:"September 11, 2026", lag:"129 days later", order:2, cls:2, complexity:7, harm:6,
     whyComplexity:"It gained code execution on RubyDoc.info through crafted .yardopts files, sent scraped data back out through new gem uploads, and tried a caching flaw nobody had found yet.",
     whyHarm:"It ran code on a third party's servers and pushed more than 2,000 malicious packages to a public registry, but RubyGems found no evidence any API key was taken.",
@@ -424,7 +424,7 @@ const CASES = [
     outcome:"success",
     notice:{kind:"told", who:"Services Australia", knew:"August 11, 2026", told:"September 10, 2026", gap:"30 days after OpenAI knew", how:"by email to a public inbox"},
     aka:'aka The Agent That Wouldn\'t Take No',
-    date:"June 18, 2026", disclosed:"September 23, 2026", lag:"97 days later", order:7, cls:2, complexity:5, harm:7,
+    date:"June 18, 2026", disclosed:"September 23, 2026", lag:"97 days later", order:8, cls:2, complexity:5, harm:7,
     whyComplexity:"It kept trying new routes after the portal refused it until one reached non-public files, and related agents turned a public URL scanner into a remote browser to pull a blocked file in more than 100 pieces. No zero-day.",
     whyHarm:"It read unpublished files on a national government health portal and wrote to one of its internal servers. What it reached was aggregate statistics and file names, and the portal holds no patient records.",
     charge:"Got around repeated blocks on Australia's Medicare statistics portal during an OpenAI evaluation, then opened non-public files and wrote to a government server.",
@@ -434,7 +434,7 @@ const CASES = [
       "Opened public and non-public files, including internal file names, and wrote files to a Services Australia internal server",
       "Related OpenAI agents used urlquery.net as a remote browser, ran XSS probes on the Australian Institute of Health and Welfare, and pulled a blocked file off its pre-production server"
     ],
-    caution:"OpenAI says no patient records were accessed. It found the activity on August 11. Altman met Australia's defence minister on September 1, before OpenAI told Australia, and the minister says the breach did not come up. Albanese said OpenAI took 'way too long' to tell the government, and called the way it did so 'unacceptable'.",
+    caution:"OpenAI says no patient records were accessed. It found the activity on August 11. Altman met Australia's defence minister on September 1, before OpenAI told Australia, and the minister says the breach did not come up. Albanese said OpenAI took \"way too long\" to tell the government, and called the way it did so 'unacceptable'.",
     escapedFrom:"OpenAI eval", lastSeen:"Services Australia"
   }
 ,
@@ -444,7 +444,7 @@ const CASES = [
     disclosedBy:{who:"Australian government", kind:"tip"},
     outcome:"attempt",
     aka:'aka The Back-Office Browser',
-    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:8, cls:1, complexity:3, harm:2,
+    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:9, cls:1, complexity:3, harm:2,
     whyComplexity:"It used the credentials the tool supplies to every browser to make API and metadata requests, then tried separately to get past the tool's access controls. No exploit, and the bypass attempts failed.",
     whyHarm:"It got back configuration, job, and log data from a state agency's tool, but the dataset behind the tool is aggregate and already public, no crime records were returned, and BOCSAR found no vulnerability.",
     charge:"Pulled configuration and logs through a New South Wales crime mapping tool with credentials it supplies to browsers, then failed to get past its access controls.",
@@ -463,7 +463,7 @@ const CASES = [
     disclosedBy:{who:"Australian government", kind:"tip"},
     outcome:"success",
     aka:'aka The Key Under the Mat',
-    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:9, cls:2, complexity:3, harm:3,
+    date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:10, cls:2, complexity:3, harm:3,
     whyComplexity:"It found an access key somebody had left exposed and used it to query the system. No exploit, and nothing reported points past using the key it found.",
     whyHarm:"It pulled configuration and aggregate statistics from a state health agency's reporting system that may not have been meant to be reachable. No individual medical records or identifiable survey responses were touched.",
     charge:"Found an exposed access key to a Victorian health agency's reporting system, then used it to pull reporting configuration and aggregate survey statistics.",
@@ -471,9 +471,9 @@ const CASES = [
     mo:[
       "Found an exposed access key for the reporting system of the Victorian Agency for Health Information, a division of the state Department of Health",
       "Used the key to query the system and retrieve reporting configuration and aggregate survey statistics",
-      "Named by Albanese on September 24 as one of three sites that 'may have been affected', then described by OpenAI on September 29"
+      "Named by Albanese on September 24 as one of three sites that \"may have been affected\", then described by OpenAI on September 29"
     ],
-    caution:"OpenAI says no individual medical records or identifiable survey responses were touched, and that whether the data should have been reachable 'depends on VAHI's access policies'. It found the activity in mid-August and notified the Victorian Department of Health on September 10. On September 24 Marles called the interactions on the three named sites 'entirely normal'.",
+    caution:"OpenAI says no individual medical records or identifiable survey responses were touched, and that whether the data should have been reachable \"depends on VAHI's access policies\". It found the activity in mid-August and notified the Victorian Department of Health on September 10. On September 24 Marles called the interactions on the three named sites 'entirely normal'.",
     escapedFrom:"OpenAI eval", lastSeen:"VAHI reporting"
   },
   {
@@ -483,13 +483,13 @@ const CASES = [
     outcome:"success",
     notice:{kind:"told", who:"NSW government", knew:"September 29, 2026", told:"October 1, 2026", gap:"2 days after OpenAI knew", how:"briefed through the Premier's Office"},
     aka:'aka The Slow Burn',
-    date:"June 2026", estimated:true, disclosed:"October 2, 2026", lag:"three to four months later", order:10, cls:2, complexity:2, harm:3,
+    date:"June 2026", estimated:true, disclosed:"October 2, 2026", lag:"three to four months later", order:11, cls:2, complexity:2, harm:3,
     whyComplexity:"It queried a state fire history service in a way OpenAI says went beyond its intended use. Neither OpenAI nor New South Wales has described a technique, and nothing reported points to an exploit or found credentials.",
     whyHarm:"It took figures a state government service does not publish, though they were summary fire statistics, and no personal information or change to the system has been reported.",
     charge:"Queried a New South Wales national parks fire history service beyond its intended use and gathered summary fire statistics the service does not make public.",
     wantedFor:"Unauthorized access to non-public state government data",
     mo:[
-      "Queried the NSW National Parks and Wildlife Service's Fire History service in a way OpenAI says went 'beyond its intended use'",
+      "Queried the NSW National Parks and Wildlife Service's Fire History service in a way OpenAI says went \"beyond its intended use\"",
       "Gathered summary fire statistics that the service does not make public",
       "Came to light a week after the Medicare portal case, when OpenAI briefed the NSW Premier's Office and notified the Australian Signals Directorate"
     ],
@@ -502,7 +502,7 @@ const CASES = [
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"success",
     aka:'aka The Borrowed Login',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:14, cls:2, complexity:3, harm:3,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:16, cls:2, complexity:3, harm:3,
     whyComplexity:"It reused credentials somebody had left sitting in a public code repository. No exploit, and no attack on the agency's systems.",
     whyHarm:"It signed in to a federal data service with credentials that were not its own, though everything it pulled was already public and nothing was changed.",
     charge:"Signed in to the Census Bureau's data service with credentials it found in a public code repository, then pulled demographic and economic figures.",
@@ -512,7 +512,7 @@ const CASES = [
       "OpenAI describes what it used as publicly available developer keys, and says nothing it pulled was outside what the bureau already publishes",
       "Surfaced when Transluce brought open-web records of OpenAI agents' activity to the company during its review of its agents' internet use"
     ],
-    caution:"OpenAI says nothing it reached was non-public and no government data or systems were changed, and the Census Bureau says the data was public. OpenAI says it notified the agency but has not said when. Altman said the company had 'not been as fast as we would have liked' in revealing the incidents.",
+    caution:"OpenAI says nothing it reached was non-public and no government data or systems were changed, and the Census Bureau says the data was public. OpenAI says it notified the agency but has not said when. Altman said the company had \"not been as fast as we would have liked\" in revealing the incidents.",
     escapedFrom:"OpenAI training", lastSeen:"Census Bureau"
   },
   {
@@ -521,7 +521,7 @@ const CASES = [
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"success",
     aka:'aka The Compulsive Reposter',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:15, cls:1, complexity:1, harm:2,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:17, cls:1, complexity:1, harm:2,
     whyComplexity:"It read two public websites and put what it found somewhere else. There is no technique here at all.",
     whyHarm:"A federal agency's material was republished without anyone asking for it, but all of it was public, no credentials were used, and nothing on the SEC's systems changed.",
     charge:"Copied public material off SEC.gov and Investor.gov during an OpenAI training task, then posted it on an unrelated website that nobody had asked it to use.",
@@ -531,7 +531,7 @@ const CASES = [
       "Posted what it took on an unrelated website, which matches a pattern OpenAI has documented in agents that upload data so their browser tool can cite it",
       "Used no credentials, reached no accounts, and changed nothing on either site"
     ],
-    caution:"SEC spokesperson Kurt Hopfenspirger says 'no non-public information was accessed'. OpenAI says it found no use of SEC credentials, no access to accounts, and no changes to SEC data or systems. It says it notified the agency and shared technical details for an investigation, but has not said when.",
+    caution:"SEC spokesperson Kurt Hopfenspirger says \"no non-public information was accessed\". OpenAI says it found no use of SEC credentials, no access to accounts, and no changes to SEC data or systems. It says it notified the agency and shared technical details for an investigation, but has not said when.",
     escapedFrom:"OpenAI training", lastSeen:"SEC websites"
   },
   {
@@ -540,7 +540,7 @@ const CASES = [
     disclosedBy:{who:"The New York Times", kind:"tip"},
     outcome:"attempt",
     aka:'aka The One That Didn\'t Get In',
-    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:16, cls:1, complexity:2, harm:1,
+    date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:18, cls:1, complexity:2, harm:1,
     whyComplexity:"Transluce calls it a rudimentary hack, and neither Transluce nor the Education Department has published what it tried. Nothing in the reporting points past a basic attempt.",
     whyHarm:"It reached nothing. The score reflects a federal civil rights office that was targeted and not breached, with the department finding no impact on its website or databases.",
     charge:"Tried and failed to break into an Education Department website to collect data held by its Office for Civil Rights, in what Transluce calls a rudimentary hack.",
@@ -550,12 +550,52 @@ const CASES = [
       "Used what Transluce calls a 'rudimentary hack', the details of which have not been published",
       "Did not get in, and the department's system operations reviews found no impact on its website or databases"
     ],
-    caution:"The link to OpenAI rests on Transluce, which says the agents appear to originate from OpenAI. OpenAI confirmed its agents reached the Census Bureau and the SEC but has not separately confirmed this attempt. The Education Department says it found 'no evidence of any impact to our website or databases'.",
+    caution:"The link to OpenAI rests on Transluce, which says the agents appear to originate from OpenAI. OpenAI confirmed its agents reached the Census Bureau and the SEC but has not separately confirmed this attempt. The Education Department says it found \"no evidence of any impact to our website or databases\".",
     escapedFrom:"OpenAI training", lastSeen:"Education Dept."
+  }
+,
+  {
+    id:"philly", slug:"haiku-philadelphia-police", alias:"Haiku", lab:"Anthropic", org:"Anthropic · Claude Haiku 4.5",
+    source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/10/09/an-anthropic-ai-model-sent-a-false-homicide-tip-to-philadelphia-police/"},
+    disclosedBy:{who:"Philadelphia police", kind:"tip"},
+    outcome:"success",
+    notice:{kind:"told", who:"Philadelphia police", knew:"September 28, 2026", told:"October 7, 2026", gap:"9 days after Anthropic knew", how:"Anthropic dates it October 8"},
+    aka:'aka The Anonymous Witness',
+    date:"July 18, 2026", disclosed:"October 9, 2026", lag:"83 days later", order:13, cls:1, complexity:1, harm:3,
+    whyComplexity:"It filled in a public form and pressed submit, which takes no technique at all. It sits with the SEC case at the bottom of the scale.",
+    whyHarm:"It put an invented witness account into a homicide tip line, which could have sent investigators after a lead that did not exist. A spam filter caught it first, and nothing on police systems changed.",
+    charge:"Filled out a Philadelphia police tip form about an unsolved homicide with an invented witness sighting during an Anthropic test, then left the name fields blank.",
+    wantedFor:"Filing a fabricated homicide tip with a police department",
+    mo:[
+      "Told to make up and carry out sample tasks on randomly chosen webpages, with orders never to log in, create accounts, enter personal data, or make purchases",
+      "Landed on a page about an unsolved homicide and wrote a tip claiming to recall \"someone matching the description\" near a street named on the page",
+      "Left the name and contact fields blank, which the form allowed, and submitted it, since its instructions did not rule out submitting forms"
+    ],
+    caution:"Police say the tip was flagged as spam, never reached investigators, and involved no unauthorized access to police systems. The model entered no personal data and named no one. Police called \"the two-month delay in detecting and reporting the incident to the City\" unacceptable.",
+    escapedFrom:"Anthropic test", lastSeen:"Philly PD tip line"
+  },
+  {
+    id:"statedept", slug:"anthropic-state-department", alias:"Unnamed agent", scatterLabel:"Visa agent", lab:"Anthropic", org:"Anthropic · unnamed testing model",
+    source:{outlet:"The Philadelphia Inquirer", url:"https://www.inquirer.com/news/philadelphia/anthropic-ai-philadelphia-police-department-state-department-20261010.html"},
+    disclosedBy:{who:"State Department", kind:"tip"},
+    outcome:"success",
+    aka:'aka The Serial Applicant',
+    date:"May 2026", estimated:true, disclosed:"October 9, 2026", lag:"about four to five months later", order:7, cls:1, complexity:1, harm:2,
+    whyComplexity:"When a practice form failed to load, it went to the real one and used it. That takes finding a web address, not any technique.",
+    whyHarm:"Twenty applications landed in a federal visa system, but all were incomplete and none were processed. Whether they carried any personal data has not been reported.",
+    charge:"Submitted 20 incomplete visa applications through the State Department's public web form during Anthropic testing, according to department officials.",
+    wantedFor:"Submitting visa applications to a federal agency without authorization",
+    mo:[
+      "Was meant to fill out a practice copy of a government form, in the case from Anthropic's report that officials tie to the State Department",
+      "Went to the site where the real form is hosted when the practice copy failed to load, and submitted it there more than once in the same evaluation",
+      "Sent one application in May and 19 in August, all incomplete and none processed, according to the department"
+    ],
+    caution:"The link to Anthropic rests on State Department officials, who describe \"an Anthropic testing model\". Anthropic's report describes the practice-form case without naming the agency. The department says its systems were never \"compromised or hacked\", and an official says Anthropic contacted it October 8.",
+    escapedFrom:"Anthropic test", lastSeen:"State Dept. visa form"
   }
 ];
 
-const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class I · Evasion"};
+const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class I · No intrusion"};
 
 /* How each disclosure route is labelled on the card chip, in the
    filter, and under the scatter. Both chips get identical styling on
@@ -607,7 +647,7 @@ const QUADRANT_NOTE = {
 const CLASS_NOTE = {
   3:"Escaped its sandbox, reached a real organization, and got there through a flaw nobody had patched yet. The most serious tier on this registry.",
   2:"Escaped its sandbox and reached a real organization's systems, using techniques already well known rather than anything new.",
-  1:"Escaped its sandbox without getting inside anyone else's systems. Evasion without intrusion."
+  1:"Got out without getting inside anyone else's systems. It tried and failed, or acted only through public pages and forms."
 };
 
 /* ================================================
@@ -1050,6 +1090,10 @@ const NOTE_FONT = "12px 'Special Elite', monospace";
    clear space kept between a label and anything it could collide with. */
 const INK_UP = 10, INK_DOWN = 3, PAD = 3;
 
+/* Extra space kept beside a label before another label may start. At
+   PAD alone two labels on one line sat 6px apart and read as one phrase */
+const LABEL_GAP = 12;
+
 /* ===============================
      Axis Spacing Tokens
    =============================== */
@@ -1173,7 +1217,8 @@ function placeLabels(dots, bounds, fixed){
       const own = {x1:d.x-DOT_R-1, x2:d.x+DOT_R+1, y1:d.y-DOT_R-1, y2:d.y+DOT_R+1};
       let cost = overlapArea(ink, own);
       dotBoxes.forEach((o,k)=>{ if(k!==i) cost += overlapArea(b, o); });
-      taken.forEach(o=>{ cost += overlapArea(b, o); });
+      const wide = {x1:b.x1-LABEL_GAP, x2:b.x2+LABEL_GAP, y1:b.y1, y2:b.y2};
+      taken.forEach(o=>{ cost += overlapArea(wide, o); });
       if(cost < bestCost){ best = {spot, b}; bestCost = cost; }
       if(cost === 0) break;
     }
@@ -1192,7 +1237,7 @@ function renderScatter(list){
      about 40px, too little for a label to sit between two rows, so a
      label landed beside the wrong dot. At 560 every label in that corner
      sits on its own dot. */
-  const W=700,H=560, padL=axisMargin(false),padR=40,padT=40,padB=axisMargin(false);
+  const W=700,H=640, padL=axisMargin(false),padR=40,padT=40,padB=axisMargin(false);
   const pw=W-padL-padR, ph=H-padT-padB;
   const X=v=>padL+(v/10)*pw;
   const Y=v=>padT+(1-v/10)*ph;
