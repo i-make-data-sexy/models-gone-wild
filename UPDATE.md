@@ -219,7 +219,7 @@ Two things are manual. The footer's `Last updated: <date>` line has to be edited
 
 The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry. The Outcome and Kind dropdowns are hard-coded the same way, with a matching `OUTCOME_LABEL` or `KIND_LABEL` entry per value.
 
-The Methodology page at `methodology/index.html` explains every filter and every option by its dropdown name. It is plain markup, so renaming, adding, or removing a filter option means editing its entry there too. Its site header is a copy of the one in `index.html`; change one and change the other.
+The Methodology page at `methodology/index.html` explains the three tabs, the disclosure chip, the card dates, every wanted-poster row, and every filter option by its dropdown name. It is plain markup, so renaming, adding, or removing any of those means editing its entry there too. Its site header is a copy of the one in `index.html`; change one and change the other.
 
 ## The glossary
 
