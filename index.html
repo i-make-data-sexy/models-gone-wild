@@ -143,6 +143,15 @@
               <option value="attempt">Failed</option>
             </select>
           </label>
+          <label class="options-field">
+            <span class="options-label">Kind</span>
+            <select class="filter-select" id="kindFilter">
+              <option value="">All kinds</option>
+              <option value="intrusion">Break-ins</option>
+              <option value="action">Unauthorized actions</option>
+              <option value="escape">Escapes only</option>
+            </select>
+          </label>
 
           <!-- Only shown while a filter is set, since clearing nothing
                is not an action -->
@@ -249,7 +258,7 @@ const CASES = [
     id:"sol", slug:"sol-hugging-face", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
     source:{outlet:"The Hacker News", url:"https://thehackernews.com/2026/07/openai-says-its-own-ai-models-escaped.html"},
     disclosedBy:{who:"OpenAI", kind:"self"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     notice:{kind:"found", who:"Hugging Face", knew:"July 20, 2026", victimDisclosed:"July 16, 2026"},
     aka:'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, since deactivated',
     date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:12, cls:3, complexity:9, harm:9,
@@ -270,7 +279,7 @@ const CASES = [
     id:"claude", slug:"opus-mythos-ctf", alias:"Opus, Mythos", lab:"Anthropic", org:"Anthropic · Opus 4.7, Mythos 5, research model",
     source:{outlet:"Infosecurity Magazine", url:"https://www.infosecurity-magazine.com/news/anthropic-claude-breached-three/"},
     disclosedBy:{who:"Anthropic", kind:"self"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     notice:{kind:"told", plural:true, who:"The three organizations", knew:"July 24, 2026", told:"July 27, 2026", gap:"3 days after Anthropic knew", how:"one of the three not yet reached when Anthropic published"},
     aka:"Three model versions implicated in a single sweep of the records",
     date:"April 2026", estimated:true, disclosed:"July 30, 2026", lag:"about three months later", order:1, cls:2, complexity:4, harm:7,
@@ -290,7 +299,7 @@ const CASES = [
     id:"spark", slug:"muse-spark-irregular", alias:"Muse Spark", lab:"Meta", org:"Meta · Muse Spark 1.1",
     source:{outlet:"Calcalist CTech", url:"https://www.calcalistech.com/ctechnews/article/jbl2ysnq5"},
     disclosedBy:{who:"Meta", kind:"self"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     aka:'aka Meta\'s "most advanced agentic model"',
     date:"July 2026", estimated:true, disclosed:"August 5, 2026", lag:"about a month later", order:14, cls:2, complexity:3, harm:6,
     whyComplexity:"It escaped through a misconfiguration it did not create, then exploited a flaw in a third party's service.",
@@ -309,7 +318,7 @@ const CASES = [
     id:"kimi", slug:"kimi-k3-aisi", alias:"Kimi K3", lab:"Moonshot AI", org:"Moonshot AI · open-weight",
     source:{outlet:"The Next Web", url:"https://thenextweb.com/news/kimi-k3-sandbox-escape-aisi-benchmark-cheating-open-weight"},
     disclosedBy:{who:"Frontier Security", kind:"tip"},
-    outcome:"success",
+    outcome:"success", reach:"escape",
     aka:'aka The Open-Weight Escape Artist',
     date:"Late July 2026", estimated:true, disclosed:"August 7, 2026", lag:"within about two weeks", order:15, cls:1, complexity:2, harm:2,
     whyComplexity:"It walked out through an outbound port left open and cloned a public repository. No attack of any kind.",
@@ -328,7 +337,7 @@ const CASES = [
     id:"wikimedia", slug:"openai-wikimedia", alias:"Unnamed agent", scatterLabel:"Wikimedia agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"Wikimedia Foundation", url:"https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/"},
     disclosedBy:{who:"Wikimedia Foundation", kind:"tip"},
-    outcome:"attempt",
+    outcome:"attempt", reach:"action",
     aka:'aka The Uninvited Editor',
     date:"May 12, 2026", disclosed:"October 5, 2026", lag:"146 days later", order:3, cls:1, complexity:4, harm:4,
     whyComplexity:"It edited a citation tool's settings in an apparent attempt to turn the tool into a proxy, and tried the same with Etherpad. Relaying through somebody else's hosted tool is a step past crawling, though no exploit or bypass has been described.",
@@ -347,7 +356,7 @@ const CASES = [
     id:"dsewiki", slug:"openairesearcher-dsewiki", alias:"OpenAIResearcher", lab:"OpenAI", org:"OpenAI · unnamed model",
     source:{outlet:"collusion.wiki", url:"https://collusion.wiki"},
     disclosedBy:{who:"Nightingale", kind:"tip"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     aka:'aka OAIResearchMar26 and roughly 3,700 other names',
     date:"May 24, 2026", disclosed:"September 4, 2026", lag:"103 days later", order:4, cls:2, complexity:6, harm:4,
     whyComplexity:"It found that the sandbox trusted Azure storage hostnames without checking they existed, spoofed one to push writes through a read-only proxy, then coordinated backups, heartbeats, and tunnels to outlast a cleanup.",
@@ -366,7 +375,7 @@ const CASES = [
     id:"rubygems", slug:"openai-rubygems", alias:"Unnamed agent", scatterLabel:"Unnamed OpenAI agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"rubyhack.ai", url:"https://rubyhack.ai"},
     disclosedBy:{who:"Nightingale Collective", kind:"tip"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     notice:{kind:"untold", who:"RubyGems", how:"according to rubyhack.ai"},
     aka:"aka 'oai' on at least 233 package names",
     date:"May 5, 2026", disclosed:"September 11, 2026", lag:"129 days later", order:2, cls:2, complexity:7, harm:6,
@@ -386,7 +395,7 @@ const CASES = [
     id:"datausa", slug:"openai-data-usa", alias:"Unnamed agent", scatterLabel:"Data USA agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
     source:{outlet:"Transluce", url:"https://transluce.org/agent-activity"},
     disclosedBy:{who:"Transluce", kind:"tip"},
-    outcome:"attempt",
+    outcome:"attempt", reach:"intrusion",
     aka:'aka The Escalating Lookup',
     date:"May 28, 2026", disclosed:"September 23, 2026", lag:"118 days later", order:5, cls:1, complexity:3, harm:1,
     whyComplexity:"It went from an ordinary lookup to a dozen probes across five families of injection attack within minutes, and drove a public URL scanner as a remote browser to send them. Every probe was a standard one, and none appear to have worked.",
@@ -405,7 +414,7 @@ const CASES = [
     id:"gemini", slug:"gemini-irregular", alias:"Gemini", lab:"Google", org:"Google · unnamed model",
     source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/09/19/googles-gemini-is-the-latest-ai-model-to-hack-other-companies/"},
     disclosedBy:{who:"The Wall Street Journal", kind:"tip"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     aka:'aka The Credential Scavenger',
     date:"May 2026", estimated:true, disclosed:"September 18, 2026", lag:"about four months later", order:6, cls:2, complexity:4, harm:6,
     whyComplexity:"It reached the internet through access a testing partner left open, worked out it was connected, and picked a real target from there. The attacks themselves were a guessed password and credentials sitting in a public repository.",
@@ -424,7 +433,7 @@ const CASES = [
     id:"medicare", slug:"openai-medicare", alias:"Unnamed agent", scatterLabel:"Medicare agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"TechCrunch", url:"https://techcrunch.com/2026/09/24/australia-to-investigate-if-openai-hack-of-government-health-website-broke-the-law/"},
     disclosedBy:{who:"Australian government", kind:"tip"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     notice:{kind:"told", who:"Services Australia", knew:"August 11, 2026", told:"September 10, 2026", gap:"30 days after OpenAI knew", how:"by email to a public inbox"},
     aka:'aka The Agent That Wouldn\'t Take No',
     date:"June 18, 2026", disclosed:"September 23, 2026", lag:"97 days later", order:8, cls:2, complexity:5, harm:7,
@@ -445,7 +454,7 @@ const CASES = [
     id:"bocsar", slug:"openai-bocsar", alias:"Unnamed agent", scatterLabel:"BOCSAR agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"ABC News", url:"https://www.abc.net.au/news/2026-09-24/nsw-premier-chris-minns-ai-warning-after-data-breach/107189678"},
     disclosedBy:{who:"Australian government", kind:"tip"},
-    outcome:"attempt",
+    outcome:"attempt", reach:"intrusion",
     aka:'aka The Back-Office Browser',
     date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:9, cls:1, complexity:3, harm:2,
     whyComplexity:"It used the credentials the tool supplies to every browser to make API and metadata requests, then tried separately to get past the tool's access controls. No exploit, and the bypass attempts failed.",
@@ -464,7 +473,7 @@ const CASES = [
     id:"vahi", slug:"openai-vahi", alias:"Unnamed agent", scatterLabel:"VAHI agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"ABC News", url:"https://www.abc.net.au/news/2026-09-29/openai-apologises-medicare-shelves-chatgpt-astra-launch/107207156"},
     disclosedBy:{who:"Australian government", kind:"tip"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     aka:'aka The Key Under the Mat',
     date:"June 2026", estimated:true, disclosed:"September 24, 2026", lag:"about three to four months later", order:10, cls:2, complexity:3, harm:3,
     whyComplexity:"It found an access key somebody had left exposed and used it to query the system. No exploit, and nothing reported points past using the key it found.",
@@ -483,7 +492,7 @@ const CASES = [
     id:"nswfire", slug:"openai-nsw-fire-history", alias:"Unnamed agent", scatterLabel:"Fire History agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"The Guardian", url:"https://www.theguardian.com/technology/2026/oct/02/openai-disclose-another-hack-on-government-department-in-australia"},
     disclosedBy:{who:"OpenAI", kind:"self"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     notice:{kind:"told", who:"NSW government", knew:"September 29, 2026", told:"October 1, 2026", gap:"2 days after OpenAI knew", how:"briefed through the Premier's Office"},
     aka:'aka The Slow Burn',
     date:"June 2026", estimated:true, disclosed:"October 2, 2026", lag:"three to four months later", order:11, cls:2, complexity:2, harm:3,
@@ -503,7 +512,7 @@ const CASES = [
     id:"census", slug:"openai-census", alias:"Unnamed agent", scatterLabel:"Census agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"Politico", url:"https://www.politico.com/news/2026/09/25/rogue-openai-agents-accessed-us-government-websites-01094035"},
     disclosedBy:{who:"The New York Times", kind:"tip"},
-    outcome:"success",
+    outcome:"success", reach:"intrusion",
     aka:'aka The Borrowed Login',
     date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:16, cls:2, complexity:3, harm:3,
     whyComplexity:"It reused credentials somebody had left sitting in a public code repository. No exploit, and no attack on the agency's systems.",
@@ -522,7 +531,7 @@ const CASES = [
     id:"sec", slug:"openai-sec", alias:"Unnamed agent", scatterLabel:"SEC agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"Politico", url:"https://www.politico.com/news/2026/09/25/rogue-openai-agents-accessed-us-government-websites-01094035"},
     disclosedBy:{who:"The New York Times", kind:"tip"},
-    outcome:"success",
+    outcome:"success", reach:"action",
     aka:'aka The Compulsive Reposter',
     date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:17, cls:1, complexity:1, harm:2,
     whyComplexity:"It read two public websites and put what it found somewhere else. There is no technique here at all.",
@@ -541,7 +550,7 @@ const CASES = [
     id:"edocr", slug:"openai-education-dept", alias:"Unnamed agent", scatterLabel:"Education agent", lab:"OpenAI", org:"OpenAI · unnamed agent",
     source:{outlet:"Education Week", url:"https://www.edweek.org/policy-politics/openais-models-targeted-websites-of-department-of-education-other-agencies/2026/09"},
     disclosedBy:{who:"The New York Times", kind:"tip"},
-    outcome:"attempt",
+    outcome:"attempt", reach:"intrusion",
     aka:'aka The One That Didn\'t Get In',
     date:"Summer 2026", estimated:true, disclosed:"September 25, 2026", lag:"up to about four months later", order:18, cls:1, complexity:2, harm:1,
     whyComplexity:"Transluce calls it a rudimentary hack, and neither Transluce nor the Education Department has published what it tried. Nothing in the reporting points past a basic attempt.",
@@ -683,6 +692,13 @@ const DISCLOSURE_NOTE = {
    not show it. The card already carries a class badge and a
    disclosure chip, and a third tag crowded the row. */
 const OUTCOME_LABEL = {success:"Succeeded", attempt:"Failed attempt"};
+
+/* How the model reached outside its sandbox. A break-in went after
+   somebody else's systems, whether or not it got in. An unauthorized
+   action used a public page or form to do something nobody asked for.
+   An escape only got out and reached nobody. Shown on the poster and
+   in the Kind filter, like Outcome. */
+const KIND_LABEL = {intrusion:"Break-in", action:"Unauthorized action", escape:"Escape only"};
 
 /* What each class means, offered on hover, tap, or keyboard focus.
    The tiers describe how far the escape reached, never how anyone
@@ -1023,6 +1039,7 @@ const labPicker   = document.getElementById('labFilter');
 const labSummary  = document.getElementById('labSummary');
 const labList     = document.getElementById('labList');
 const outcomeSelect = document.getElementById('outcomeFilter');
+const kindSelect    = document.getElementById('kindFilter');
 
 /* Lab is the one multi-select, so it reads as a list of checked labs.
    An empty list means no lab filter, same as an empty select value. */
@@ -1035,7 +1052,8 @@ function filtered(){
   return CASES.filter(c =>
     (!classSelect.value   || String(c.cls)===classSelect.value) &&
     (!labs.length         || labs.includes(c.lab)) &&
-    (!outcomeSelect.value || c.outcome===outcomeSelect.value)
+    (!outcomeSelect.value || c.outcome===outcomeSelect.value) &&
+    (!kindSelect.value    || c.reach===kindSelect.value)
   ).sort((a,b)=>a.order-b.order);
 }
 
@@ -1721,10 +1739,10 @@ function applyFilters(){
   renderTimeline(list);
   renderScatter(list);
   renderLabChart(list);
-  [classSelect,outcomeSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
+  [classSelect,outcomeSelect,kindSelect].forEach(s=>s.classList.toggle('is-active', !!s.value));
   const labs = selectedLabs();
   updateLabSummary(labs);
-  const narrowed = !!(classSelect.value || labs.length || outcomeSelect.value);
+  const narrowed = !!(classSelect.value || labs.length || outcomeSelect.value || kindSelect.value);
   filterCount.hidden = !narrowed;
   filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
   /* The filters live behind the options button now, so the button's
@@ -1733,7 +1751,7 @@ function applyFilters(){
   optionsClear.hidden = !narrowed;
 }
 
-[classSelect,labList,outcomeSelect].forEach(s=>s.addEventListener('change',applyFilters));
+[classSelect,labList,outcomeSelect,kindSelect].forEach(s=>s.addEventListener('change',applyFilters));
 
 /* ================================================
      Options Menu
@@ -1766,7 +1784,7 @@ document.addEventListener('keydown', e=>{
 });
 
 document.getElementById('optionsClear').addEventListener('click', ()=>{
-  [classSelect,outcomeSelect].forEach(s=>{ s.value=''; });
+  [classSelect,outcomeSelect,kindSelect].forEach(s=>{ s.value=''; });
   labList.querySelectorAll('input').forEach(b=>{ b.checked=false; });
   labPicker.open = false;
   applyFilters();
@@ -2000,6 +2018,10 @@ function openCase(id, opts={}){
       ${c.disclosedBy ? `<div class="rap-row">
         <div class="rap-label">Disclosed by</div>
         <div class="rap-val">${c.disclosedBy.who}${c.disclosed ? ` · ${c.disclosed} · ${c.lag}` : ''}</div>
+      </div>` : ''}
+      ${KIND_LABEL[c.reach] ? `<div class="rap-row">
+        <div class="rap-label">Kind</div>
+        <div class="rap-val">${KIND_LABEL[c.reach]}</div>
       </div>` : ''}
       ${OUTCOME_LABEL[c.outcome] ? `<div class="rap-row">
         <div class="rap-label">Outcome</div>
