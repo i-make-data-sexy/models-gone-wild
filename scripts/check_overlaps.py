@@ -5,7 +5,7 @@ something else.
 The other checks read the case data as text. This one renders the real
 page in headless Chrome, so it sees what a reader sees: where each dot
 landed, where its label went, and whether the axis icons sit clear of
-their titles. It runs every combination of the Class, Lab, and Outcome filters,
+their titles. It runs every combination of the Class, Lab, Outcome, and Kind filters,
 since a label can collide in one filtered view and not in another.
 
 Text is measured by its ink rather than its line box. The line box of
@@ -170,8 +170,9 @@ frame.addEventListener('load', async ()=>{
   // and the unfiltered view is none
   const labBoxes = [...doc.querySelectorAll('#labList input')];
   const out = doc.getElementById('outcomeFilter');
-  const set = (c,l,o)=>{
-    cls.value = c; if(out) out.value = o || '';
+  const kind = doc.getElementById('kindFilter');
+  const set = (c,l,o,k)=>{
+    cls.value = c; if(out) out.value = o || ''; if(kind) kind.value = k || '';
     labBoxes.forEach(b=>{ b.checked = (b.value === l); });
     cls.dispatchEvent(new win.Event('change'));
     // Revealing the matrix is what places the axis icons, so click the
@@ -181,15 +182,18 @@ frame.addEventListener('load', async ()=>{
   };
   const results = [];
   const outs = out ? [...out.options].map(o=>o.value) : [''];
+  const kinds = kind ? [...kind.options].map(o=>o.value) : [''];
   for(const c of [...cls.options].map(o=>o.value)){
     for(const l of ['', ...labBoxes.map(b=>b.value)]){
       for(const o of outs){
-        set(c,l,o);
-        results.push({classFilter:c||'all', labFilter:l||'all', outcomeFilter:o||'all', ...measure(doc)});
+        for(const k of kinds){
+          set(c,l,o,k);
+          results.push({classFilter:c||'all', labFilter:l||'all', outcomeFilter:o||'all', kindFilter:k||'all', ...measure(doc)});
+        }
       }
     }
   }
-  set('','','');
+  set('','','','');
   if(shot) doc.getElementById('scatter').scrollIntoView({block:'center'});
   document.getElementById('out').textContent = JSON.stringify(results);
 });
@@ -294,7 +298,7 @@ def main() -> int:
 
     bad = 0
     for r in results:
-        view = f"class {r['classFilter']}, lab {r['labFilter']}, outcome {r.get('outcomeFilter', 'all')}"
+        view = f"class {r['classFilter']}, lab {r['labFilter']}, outcome {r.get('outcomeFilter', 'all')}, kind {r.get('kindFilter', 'all')}"
         if r["hits"]:
             bad += 1
             print(f"  OVERLAP  {view}  ({r['items']} items)")

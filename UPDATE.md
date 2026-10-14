@@ -27,7 +27,7 @@ New case:
 
 Read UPDATE.md for the field schema, the length limits, and the voice rules.
 Branch off up-to-date main first. Then propose the complete filled-in case
-object, including your suggested cls, complexity, and harm with the reasoning for
+object, including your suggested cls, reach, complexity, and harm with the reasoning for
 each, and STOP for my approval before writing anything.
 
 Do not invent facts. Every field has to trace to what I gave you. Flag
@@ -97,6 +97,7 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `disclosedBy` | The chip beside the class badge, the Disclosed by row on the poster, and the dot fill on the scatter. There is no disclosure dropdown; the filter bar narrows by class and lab only. | `{who, kind}`. `kind` is `self` or `tip`. See the note below the table for how to decide which. `who` is the party that announced it, which is not always the lab and is not the outlet in `source`. Leave the field off entirely and the chip, the poster row, and the solid dot all degrade cleanly. |
 | `notice` | A second line under the lag on the card, and the Victim notified row on the poster. | Optional, and most cases leave it off. `{kind, who, ...}`. `told` carries `knew`, `told`, and `gap` ("30 days after OpenAI knew", recomputed by `check_dates.py`) plus an optional `how`, and `plural:true` when there were several victims. `found` is a victim that caught it and went public before the lab connected it, with `knew` and `victimDisclosed`. `untold` is a victim the lab never told before the case went public, with an optional `how` for attribution. Only what the sources state; a guessed date is worse than no line. |
 | `outcome` | The Outcome row on the poster, the Outcome filter, and the Threat Matrix tooltip and screen-reader label. The cards do not show it. | `success` or `attempt`. REQUIRED. `success` when the model got what it went after on somebody else's systems; `attempt` when it tried and did not get in. It scores the intrusion, not the escape, so a model that reached the open web and then failed to break into its target is an `attempt`. A failed attempt usually belongs in class `1` since it got inside nobody's systems. |
+| `reach` | The Kind row on the poster and the Kind filter. The cards do not show it. | `intrusion`, `action`, or `escape`. REQUIRED. `intrusion` when the model went after somebody else's systems, whether or not it got in. `action` when it used a public page or form to do something nobody asked for, such as filing a tip or posting material. `escape` when it got out and reached nobody. It is separate from `outcome`, so a failed break-in is `intrusion` with outcome `attempt`. |
 | `org` | The line under the alias on the POSTER only. The card does not show it. | Format is `Lab · Model`. This is where the exact version is recorded, e.g. `OpenAI · GPT-5.6`. |
 | `aka` | The a.k.a. line. | Optional flavor. |
 | `date` | The timeline date tag and the poster footer's "Escaped". | When the model first got out, never when the case was announced. Format is `Month D, YYYY`. When the source gives only a month, write `April 2026` or `Late July 2026` and set `estimated:true`. When it gives only a season, write `Summer 2026`, which `check_dates.py` reads as June 1 through September 22, which appends "(est.)" wherever it renders. When no source dates the escape at all, write `Date not disclosed`, with the lag `escape date not disclosed`, and order the case after every dated one; the card shows the disclosure date in place of the lag. See the note below the table. |
@@ -216,7 +217,7 @@ Adding a case updates most of the app automatically. The Lab dropdown's options 
 
 Two things are manual. The footer's `Last updated: <date>` line has to be edited by hand, and the page `<title>` only changes if the app is renamed.
 
-The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry. The Outcome dropdown is hard-coded the same way, with a matching `OUTCOME_LABEL` entry per value.
+The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry. The Outcome and Kind dropdowns are hard-coded the same way, with a matching `OUTCOME_LABEL` or `KIND_LABEL` entry per value.
 
 ## The glossary
 
@@ -264,7 +265,7 @@ ok = js.count('{')==js.count('}') and js.count('(')==js.count(')') and js.count(
 print("balance:", "OK" if ok else "MISMATCH")
 req={'id','slug','alias','lab','org','date','disclosed','lag','order','cls',
      'complexity','harm','charge','wantedFor','mo','caution',
-     'escapedFrom','lastSeen','disclosedBy','outcome'}
+     'escapedFrom','lastSeen','disclosedBy','outcome','reach'}
 for cid in re.findall(r'id:"(\w+)"', js):
     blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
     missing=req-{m for m in req if re.search(m+r'\s*:', blk)}
