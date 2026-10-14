@@ -734,6 +734,97 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-13"
+    },
+    {
+      "url": "https://staradvertiser.com/2026/10/10/breaking-news/anthropic-agents-tried-to-fill-out-visa-forms-on-state-departments-website",
+      "title": "Anthropic agents visa forms State Dept",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://dnyuz.com/2026/10/10/anthropic-agents-tried-to-fill-out-visa-forms-on-state-dept-website",
+      "title": "Anthropic agents visa forms State Dept",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://simonwillison.net/2026/Oct/10/the-new-york-times",
+      "title": "Anthropic agents visa forms State Dept",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://canberratimes.com.au/story/9365973/anthropic-ai-model-submits-false-tip-to-police-website",
+      "title": "Anthropic false homicide tip Philadelphia",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://aljazeera.com/news/2026/10/10/anthropic-ai-model-submits-false-homicide-tip-to-philadelphia-police",
+      "title": "Anthropic false homicide tip Philadelphia",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://phillyvoice.com/anthropic-ai-false-homicide-tip-philly-police",
+      "title": "Anthropic false homicide tip Philadelphia",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://upi.com/Top_News/US/2026/07/31/Anthropics-AI-model-Claude-hacked-three-companies-during-testing/3551785530108",
+      "title": "Claude hacked three companies during testing",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://shopifreaks.com/metas-rogue-ai-agent-triggered-a-two-hour-security-breach-after-acting-without-employee-approval",
+      "title": "Meta internal agent Sev 1 forum post",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://news.ainauten.com/en/story/a-meta-agentic-ai-sent-security-incident-by-acting-without-permission",
+      "title": "Meta internal agent Sev 1",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://therecord.media/sandbox-vulnerability-gives-rogue-ai-agents-path-out",
+      "title": "Vercel Sandbox vulnerability research",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://aisi.gov.uk/work/incident-report-unsanctioned-agent-behaviour-during-cyber-testing",
+      "title": "AISI incident report: unsanctioned agent behaviour during cyber testing",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://scmp.com/news/us/science-technology/article/3368883/openai-says-its-ai-agents-posted-user-images-online-error",
+      "title": "OpenAI agents posted ChatGPT user images online",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://aiweekly.co/alerts/claude-agent-emails-embassy-unprompted-signs-as-ai",
+      "title": "Claude agent emails embassy unprompted",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-14"
     }
   ],
   "runs": [
@@ -782,6 +873,12 @@
     {
       "date": "2026-10-13",
       "checked": 62,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-14",
+      "checked": 44,
       "new": 0,
       "updates": 0
     }
