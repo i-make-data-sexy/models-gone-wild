@@ -51,7 +51,7 @@ SUBPATH = "tools/models-gone-wild"
 # the findings into #out for the Python side to read back.
 HARNESS = r"""<!doctype html>
 <html><head><meta charset="utf-8">
-<style>html,body{margin:0}iframe{border:0;width:1300px;height:1000px}</style>
+<style>html,body{margin:0}iframe{border:0;width:__WIDTH__px;height:1000px}</style>
 </head><body>
 <iframe id="app" src="/__SUBPATH__/"></iframe>
 <pre id="out">PENDING</pre>
@@ -113,6 +113,18 @@ function measure(doc){
       const t = Math.max(0, Math.min(1, ((px-a.x)*dx + (py-a.y)*dy) / (dx*dx + dy*dy || 1)));
       if(Math.hypot(a.x + t*dx - px, a.y + t*dy - py) < r)
         hits.push(`leader ${g.dataset.id} crosses dot ${o.id}`);
+    });
+    // Nor may it pass through another case's label
+    svg.querySelectorAll('.pt').forEach(o=>{
+      if(o === g) return;
+      const box = inkBox(doc, o.querySelector('text'));
+      for(let s=0; s<=1; s+=0.02){
+        const x = a.x + s*dx, y = a.y + s*dy;
+        if(x > box.x1 && x < box.x2 && y > box.y1 && y < box.y2){
+          hits.push(`leader ${g.dataset.id} crosses label ${o.dataset.id}`);
+          break;
+        }
+      }
     });
   });
   svg.querySelectorAll('.svg-note').forEach(t=>{
@@ -227,9 +239,11 @@ def chrome(args: list) -> str:
     return run.stdout
 
 
-def build_site() -> str:
+def build_site(width: int) -> str:
     """
     Lays out a throwaway web root with the repo at its production subpath and the harness at the top
+    Args:
+        width (int): The page width to render at, in pixels
     Returns:
         str: The path of the web root
     """
@@ -237,7 +251,7 @@ def build_site() -> str:
     os.makedirs(os.path.join(root, os.path.dirname(SUBPATH)))
     os.symlink(REPO, os.path.join(root, SUBPATH))
     with open(os.path.join(root, "harness.html"), "w") as f:
-        f.write(HARNESS.replace("__SUBPATH__", SUBPATH))
+        f.write(HARNESS.replace("__SUBPATH__", SUBPATH).replace("__WIDTH__", str(width)))
     return root
 
 
@@ -253,13 +267,15 @@ def main() -> int:
     """
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--shot", help="Write a PNG of the unfiltered chart to this path")
+    ap.add_argument("--width", type=int, default=1300,
+                    help="Page width in pixels. The chart fills its column, so check a phone width (390) as well")
     opts = ap.parse_args()
 
     if not os.path.exists(CHROME):
         print(f"Chrome not found at {CHROME}. Set CHROME to its path.")
         return 1
 
-    root = build_site()
+    root = build_site(opts.width)
     server, port = serve(root)
     try:
         url = f"http://127.0.0.1:{port}/harness.html"

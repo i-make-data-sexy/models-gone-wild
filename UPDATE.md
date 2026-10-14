@@ -170,7 +170,10 @@ Check it after adding or rescoring a case, or after any change to the chart:
 
 ```bash
 python3 scripts/check_overlaps.py --shot /tmp/matrix.png
+python3 scripts/check_overlaps.py --width 390
 ```
+
+The chart is drawn to its column's width, so it lays out differently on a phone, where the drawing keeps 700 units and scales down. Run the check at both widths.
 
 It renders the real page in headless Chrome, runs every combination of the Class, Lab, and Outcome filters, and measures each dot, dot label, quadrant label, and axis title by its ink. Anything drawn over anything else is reported with the size of the overlap, and the run exits 1. `--shot` saves a picture of the unfiltered chart. It needs Google Chrome in `/Applications`, or a `CHROME` environment variable pointing at a Chrome binary.
 

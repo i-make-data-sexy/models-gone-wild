@@ -107,6 +107,7 @@ python3 scripts/check_claims.py
 python3 scripts/check_slugs.py
 python3 scripts/check_quotes.py
 python3 scripts/check_overlaps.py --shot <scratchpad>/matrix.png
+python3 scripts/check_overlaps.py --width 390
 ```
 
 Fix what they report.

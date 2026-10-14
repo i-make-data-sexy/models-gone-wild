@@ -160,8 +160,7 @@
     </section>
 
     <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
-      <div class="scatter-wrap">
-          <div id="scatter"></div>
+      <div class="scatter-wrap matrix-wrap">
           <!-- Says what the two dot colours mean. Kept in step with
                DISC_FILL in the script; changing one means changing the
                other. -->
@@ -169,6 +168,7 @@
             <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#5a6b2a" stroke="#e6ddc6" stroke-width="2"/></svg>Self-reported</span>
             <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#8f1d16" stroke="#e6ddc6" stroke-width="2"/></svg>Tipped off</span>
           </p>
+          <div id="scatter"></div>
       </div>
     </section>
 
@@ -1147,7 +1147,7 @@ function textWidth(text, font){
 
 const DOT_R = 11;          // Radius of every dot on the chart
 const DOT_CLEAR = 15;      // Radius plus its ring, the hover ring, and breathing room
-const LABEL_FONT = "600 13px 'Oswald', sans-serif";
+const LABEL_FONT = "400 13px 'Oswald', sans-serif";
 const NOTE_FONT = "12px 'Special Elite', monospace";
 
 /* A label's box around its baseline. Oswald at 13px rises about 10px
@@ -1159,12 +1159,16 @@ const INK_UP = 10, INK_DOWN = 3, PAD = 3;
    PAD alone two labels on one line sat 6px apart and read as one phrase */
 const LABEL_GAP = 12;
 
+/* The same between stacked labels, so a descender never touches the
+   label below it */
+const LABEL_GAP_Y = 2;
+
 /* Cost of a label sitting nearer another dot than its own */
 const OWN_PENALTY = 400;
 
 /* Leader lines: the distances tried from the dot, and the cost of a line
    crossing another dot or label */
-const LEADER_RINGS = [48, 64, 80, 96, 112, 130, 150, 175, 200];
+const LEADER_RINGS = [48, 64, 80, 96, 112, 130, 150, 175, 200, 230, 260];
 const LEADER_CROSS = 5000;
 
 /* Distance from a point to the nearest point of a line segment */
@@ -1172,6 +1176,12 @@ function segToPoint(a, b, p){
   const dx = b.x-a.x, dy = b.y-a.y;
   const t = Math.max(0, Math.min(1, ((p.x-a.x)*dx + (p.y-a.y)*dy) / (dx*dx + dy*dy || 1)));
   return Math.hypot(a.x + t*dx - p.x, a.y + t*dy - p.y);
+}
+
+/* Whether two line segments cross */
+function segsCross(a, b, c, d){
+  const side = (p, q, r) => Math.sign((q.x-p.x)*(r.y-p.y) - (q.y-p.y)*(r.x-p.x));
+  return side(a,b,c) !== side(a,b,d) && side(c,d,a) !== side(c,d,b);
 }
 
 /* Whether a line segment passes through a box, by sampling along it */
@@ -1287,115 +1297,132 @@ function jitterDots(list, X, Y, obstacles){
   });
 }
 
-/* Places each label at the first spot that clears every dot, every label
-   already placed, the quadrant labels, and the plot edge. Labels are
-   placed left to right, so a crowded row fans out from its first dot.
-   If no spot is clean, the one with the least overlap wins, and the
-   overlap check in scripts/check_overlaps.py will report it. */
+/* Places each label beside its dot where it fits, and otherwise out in
+   open space with a leader line back to the dot. Every placement is
+   scored by the same rule, `clash`, the square pixels it overlaps plus a
+   heavy charge for any line through a dot or a label, so nothing is
+   ever scored against a layout that has since moved. The overlap check
+   in scripts/check_overlaps.py reports anything left touching. */
 function placeLabels(dots, bounds, fixed){
   const dotBoxes = dots.map(d=>({x1:d.x-DOT_CLEAR, x2:d.x+DOT_CLEAR, y1:d.y-DOT_CLEAR, y2:d.y+DOT_CLEAR}));
   const order = dots.map((d,i)=>i).sort((i,j)=> dots[i].x - dots[j].x || dots[i].y - dots[j].y);
   const labels = dots.map(d=>d.c.scatterLabel || d.c.alias);
   const widths = labels.map(l=>textWidth(l, LABEL_FONT));
   const placed = new Array(dots.length).fill(null);
+  /* Labels about to move are not obstacles at the spots they will leave */
+  let waiting = new Set();
+  const live = (k, i) => k !== i && placed[k] && !waiting.has(k);
   /* Distance from a dot's centre to the nearest edge of a label box */
   const reach = (b, d) => Math.hypot(Math.max(b.x1-d.x, 0, d.x-b.x2), Math.max(b.y1-d.y, 0, d.y-b.y2));
 
-  /* What a label costs at one spot, given every other label placed so
-     far. Overlap is counted in square pixels, and a label sitting nearer
-     another dot than its own pays OWN_PENALTY, since it reads as that
-     dot's label even when nothing touches. */
-  function spotCost(i, spot){
+  /* What a candidate for label i collides with. A candidate is a box,
+     plus a leader line when it sits away from the dot */
+  function clash(i, cand){
+    const {b, leader} = cand;
+    if(b.x1 < bounds.x1 || b.x2 > bounds.x2 || b.y1 < bounds.y1 || b.y2 > bounds.y2) return Infinity;
     const d = dots[i];
-    const b = labelBox(d.x, d.y, widths[i], spot);
-    if(b.x1 < bounds.x1 || b.x2 > bounds.x2 || b.y1 < bounds.y1 || b.y2 > bounds.y2) return {cost:Infinity, b};
-    /* A label only has to clear its own dot's ink, since every spot
-       is already set just off it. Every other dot gets the full margin. */
-    const ink = {x1:b.x1+PAD, x2:b.x2-PAD, y1:b.y1+PAD, y2:b.y2-PAD};
-    const own = {x1:d.x-DOT_R-1, x2:d.x+DOT_R+1, y1:d.y-DOT_R-1, y2:d.y+DOT_R+1};
-    let cost = overlapArea(ink, own);
-    const mine = reach(b, d);
-    dotBoxes.forEach((o,k)=>{
-      if(k===i) return;
-      cost += overlapArea(b, o);
-      if(reach(b, dots[k]) < mine - 2) cost += OWN_PENALTY;
+    const wide = {x1:b.x1-LABEL_GAP, x2:b.x2+LABEL_GAP, y1:b.y1-LABEL_GAP_Y, y2:b.y2+LABEL_GAP_Y};
+    let c = 0;
+    if(!leader){
+      /* Beside the dot, a label only has to clear its own dot's ink, and
+         it pays for sitting nearer another dot than its own, since it
+         would read as that dot's label */
+      const ink = {x1:b.x1+PAD, x2:b.x2-PAD, y1:b.y1+PAD, y2:b.y2-PAD};
+      c += overlapArea(ink, {x1:d.x-DOT_R-1, x2:d.x+DOT_R+1, y1:d.y-DOT_R-1, y2:d.y+DOT_R+1});
+      const mine = reach(b, d);
+      dots.forEach((o,k)=>{ if(k!==i && reach(b, o) < mine - 2) c += OWN_PENALTY; });
+    }
+    dotBoxes.forEach((o,k)=>{ if(k!==i || leader) c += overlapArea(b, o); });
+    fixed.forEach(o=>{ c += overlapArea(wide, o); });
+    placed.forEach((p,k)=>{
+      if(!live(k, i)) return;
+      c += overlapArea(wide, p.b);
+      if(p.leader && segHitsBox(p.leader.from, p.leader.to, b)) c += LEADER_CROSS;
+      if(leader && segHitsBox(leader.from, leader.to, p.b)) c += LEADER_CROSS;
+      if(leader && p.leader && segsCross(leader.from, leader.to, p.leader.from, p.leader.to)) c += LEADER_CROSS;
     });
-    const wide = {x1:b.x1-LABEL_GAP, x2:b.x2+LABEL_GAP, y1:b.y1, y2:b.y2};
-    fixed.forEach(o=>{ cost += overlapArea(wide, o); });
-    placed.forEach((p,k)=>{ if(p && k!==i) cost += overlapArea(wide, p.b); });
-    return {cost, b};
+    if(leader) dots.forEach((o,k)=>{ if(k!==i && segToPoint(leader.from, leader.to, o) < DOT_R+2) c += LEADER_CROSS; });
+    return c;
   }
 
-  function bestSpot(i){
+  /* The best spot beside the dot */
+  function besideSpot(i){
+    const d = dots[i];
     let best = null;
     for(const spot of LABEL_SPOTS){
-      const t = spotCost(i, spot);
-      if(!best || t.cost < best.cost) best = {spot, b:t.b, cost:t.cost};
-      if(t.cost === 0) break;
+      const b = labelBox(d.x, d.y, widths[i], spot);
+      const c = clash(i, {b});
+      if(!best || c < best.clash) best = {anchor:spot.anchor, b, leader:null, clash:c, score:c};
+      if(c === 0) break;
     }
     return best;
   }
 
-  /* First pass left to right, so a crowded row fans out from its first
-     dot */
-  order.forEach(i=>{ placed[i] = bestSpot(i); });
-
-  /* Repair passes. A label placed early can take the only spot a later
-     one needed, so any label still paying a cost is placed again against
-     the full set, until a pass changes nothing */
-  for(let pass=0; pass<12; pass++){
-    let moved = false;
-    order.forEach(i=>{
-      if(placed[i].cost === 0) return;
-      const now = spotCost(i, placed[i].spot).cost;
-      const next = bestSpot(i);
-      if(next.cost < now){ placed[i] = next; moved = true; }
-      else placed[i].cost = now;
-    });
-    if(!moved) break;
-  }
-
-  /* A label still colliding has no room beside its dot, so it moves out
-     to open space with a leader line back to the dot. Rings widen until
-     a clean spot turns up; a nearer spot wins a tie, and a line may not
-     cross another dot or label, or it would point at the wrong case. */
-  order.forEach(i=>{
-    if(placed[i].cost === 0) return;
+  /* The best spot out on a leader line. Any collision outweighs any
+     extra length of line, so a clean spot farther out always wins */
+  function leaderSpot(i){
     const d = dots[i];
     let best = null;
     for(const r of LEADER_RINGS){
-      for(let k=0; k<32; k++){
-        const a = k*Math.PI/16;
+      for(let k=0; k<48; k++){
+        const a = k*Math.PI/24;
         const px = d.x + r*Math.cos(a), py = d.y + r*Math.sin(a);
         const anchor = Math.cos(a) >= 0 ? 'start' : 'end';
         const left = anchor==='start' ? px : px - widths[i];
         const b = {x1:left-PAD, x2:left+widths[i]+PAD, y1:py+4-INK_UP-PAD, y2:py+4+INK_DOWN+PAD, tx:px, base:py+4};
-        if(b.x1 < bounds.x1 || b.x2 > bounds.x2 || b.y1 < bounds.y1 || b.y2 > bounds.y2) continue;
-        const from = {x:d.x + (DOT_R+2)*Math.cos(a), y:d.y + (DOT_R+2)*Math.sin(a)};
-        const to = {x:anchor==='start' ? b.x1+PAD-3 : b.x2-PAD+3, y:py};
-        const wide = {x1:b.x1-LABEL_GAP, x2:b.x2+LABEL_GAP, y1:b.y1, y2:b.y2};
-        let cost = r * 0.5;
-        dotBoxes.forEach(o=>{ cost += overlapArea(b, o); });
-        fixed.forEach(o=>{ cost += overlapArea(wide, o); });
-        placed.forEach((p,k2)=>{ if(k2!==i) cost += overlapArea(wide, p.b); });
-        dots.forEach((o,k2)=>{ if(k2!==i && segToPoint(from, to, o) < DOT_R+3) cost += LEADER_CROSS; });
-        placed.forEach((p,k2)=>{ if(k2!==i && segHitsBox(from, to, p.b)) cost += LEADER_CROSS; });
-        if(!best || cost < best.cost) best = {cost, b, anchor, from, to};
+        const leader = {from:{x:d.x + (DOT_R+2)*Math.cos(a), y:d.y + (DOT_R+2)*Math.sin(a)},
+                        to:{x:anchor==='start' ? b.x1+PAD-3 : b.x2-PAD+3, y:py}};
+        const c = clash(i, {b, leader});
+        const score = c*10 + r*0.5;
+        if(!best || score < best.score) best = {anchor, b, leader, clash:c, score};
       }
       /* Nothing collides on this ring, so a farther ring cannot do better */
-      if(best && best.cost < r*0.5 + 1) break;
+      if(best && best.clash === 0) break;
     }
-    /* Only worth the line if it leaves the label clearer than before */
-    if(best && best.cost < placed[i].cost + LEADER_RINGS[0]*0.5)
-      placed[i] = {spot:{anchor:best.anchor}, b:best.b, cost:0, leader:{from:best.from, to:best.to}};
+    return best;
+  }
+
+  const clashNow = i => clash(i, placed[i]);
+
+  /* Beside every dot first, left to right, so a crowded row fans out
+     from its first dot, then again against the full set until nothing
+     improves */
+  order.forEach(i=>{ placed[i] = besideSpot(i); });
+  for(let pass=0; pass<12; pass++){
+    let moved = false;
+    order.forEach(i=>{
+      if(clashNow(i) === 0) return;
+      const next = besideSpot(i);
+      if(next.clash < clashNow(i)){ placed[i] = next; moved = true; }
+    });
+    if(!moved) break;
+  }
+
+  /* Anything still colliding moves out on a leader line. The first pass
+     ignores the spots the crowded labels are leaving; later passes
+     settle whatever the first move left touching, beside or out */
+  waiting = new Set(order.filter(i=>clashNow(i) > 0));
+  [...waiting].forEach(i=>{
+    waiting.delete(i);
+    const now = clashNow(i), next = leaderSpot(i);
+    if(next && next.clash < now) placed[i] = next;
   });
+  for(let pass=0; pass<4; pass++){
+    let moved = false;
+    order.forEach(i=>{
+      const now = clashNow(i);
+      if(now === 0) return;
+      const options = [besideSpot(i), leaderSpot(i)].filter(Boolean).sort((x,y)=>x.clash-y.clash);
+      if(options[0].clash < now){ placed[i] = options[0]; moved = true; }
+    });
+    if(!moved) break;
+  }
 
   return placed.map((p,i)=>{
     /* Every spot fell outside the plot, which only a very long label can
        cause. Keep it beside the dot rather than dropping it. */
-    const spot = p.cost === Infinity ? LABEL_SPOTS[0] : p.spot;
-    const b = p.cost === Infinity ? labelBox(dots[i].x, dots[i].y, widths[i], spot) : p.b;
-    return {label:labels[i], anchor:spot.anchor, x:b.tx, y:b.base, leader:p.leader || null};
+    const q = p.clash === Infinity ? {anchor:LABEL_SPOTS[0].anchor, b:labelBox(dots[i].x, dots[i].y, widths[i], LABEL_SPOTS[0]), leader:null} : p;
+    return {label:labels[i], anchor:q.anchor, x:q.b.tx, y:q.b.base, leader:q.leader};
   });
 }
 
@@ -1405,7 +1432,11 @@ function renderScatter(list){
      about 40px, too little for a label to sit between two rows, so a
      label landed beside the wrong dot. At 560 every label in that corner
      sits on its own dot. */
-  const W=700,H=720, padL=axisMargin(false),padR=40,padT=40,padB=axisMargin(false);
+  /* As wide as its container in real pixels, so the plot fills the
+     column while its text stays 13px. Below 700 the drawing keeps 700
+     units and scales down, since a narrower plot cannot hold the labels.
+     A hidden chart measures zero and draws at 700 until it is shown. */
+  const W=Math.max(700, Math.floor(scatterHost.clientWidth)),H=800, padL=axisMargin(false),padR=2,padT=40,padB=axisMargin(false);
   const pw=W-padL-padR, ph=H-padT-padB;
   const X=v=>padL+(v/10)*pw;
   const Y=v=>padT+(1-v/10)*ph;
@@ -1810,7 +1841,7 @@ function showView(name, syncUrl){
   /* The axis icons are placed from getBBox, which reads zero on hidden
      SVG. The matrix is usually drawn while hidden behind the timeline,
      so the icons are placed again the moment it becomes visible. */
-  if(name==='matrix') placeAxisIcons();
+  if(name==='matrix') renderScatter(filtered());
   if(syncUrl) syncViewUrl();
 }
 
@@ -1910,6 +1941,17 @@ function hideTip(){
 /* A fixed bubble would otherwise sit still while the page moves under it. */
 window.addEventListener('scroll', hideTip, true);
 window.addEventListener('resize', hideTip);
+
+/* The matrix is drawn to its container's width, so a resize redraws it.
+   Debounced, since a drag fires resize many times a second */
+let scatterResize = null, scatterWidth = 0;
+window.addEventListener('resize', ()=>{
+  clearTimeout(scatterResize);
+  scatterResize = setTimeout(()=>{
+    const w = Math.floor(scatterHost.clientWidth);
+    if(currentView==='matrix' && w !== scatterWidth){ scatterWidth = w; renderScatter(filtered()); }
+  }, 150);
+});
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') hideTip(); });
 
 /* ================================================
