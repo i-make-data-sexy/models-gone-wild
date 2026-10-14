@@ -67,7 +67,10 @@
       during evaluations and training runs and went where they were never meant to go, breaking
       into servers in some cases and filing forms with police and government agencies in others.
     </p>
-    <p class="intro intro-cue">The icons on each card open the story that broke the case and the model's rap sheet. Learn more about how to interpret the app as well as my methodology in assigning scores in the Threat Matrix in <a href="https://www.annielytics.com/blog/ai/models-gone-wild-an-app-to-track-the-model-containment-crisis/" target="_blank" rel="noopener">my announcement post</a>.</p>
+    <!-- The href is relative for a no-script fallback. The script points
+         it at APP_BASE so it stays clean on a permalink like
+         /threat-matrix/, where a relative path would land under it. -->
+    <p class="intro intro-cue">Learn more about what each filter does, what the card icons open, and how I scored the Threat Matrix on the <a href="methodology/" id="methodologyLink">Methodology page</a>.</p>
 
     <!-- Three dots closing the masthead, in place of the double
          rule. Drawn with CSS rather than typed, so the size, spacing,
@@ -1820,6 +1823,11 @@ const APP_BASE=(function(){
     .replace(/(?:threat-matrix|lab-counts|poster\/[\w-]+)\/?$/,'');
   return p.endsWith('/') ? p : p+'/';
 })();
+
+/* The masthead's Methodology link, anchored to the app path rather than
+   the current view or poster */
+const methodologyLink=document.getElementById('methodologyLink');
+if(methodologyLink) methodologyLink.href=APP_BASE+'methodology/';
 
 /* Reads the view from the path. Falls back to the old ?view= parameter
    so links shared before the permalinks still land on the right view. */

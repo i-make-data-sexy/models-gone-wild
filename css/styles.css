@@ -861,6 +861,55 @@
   footer.site-foot b{color:var(--ink);}
 
   /* ===============================
+       Methodology Page
+     =============================== */
+
+  /* The Wanted title scaled down, since this page is a reference rather
+     than the poster board */
+  .page-title{
+    font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+    letter-spacing:.06em;font-size:clamp(40px,9vw,72px);line-height:.95;
+    margin:0;color:var(--ink);text-shadow:2px 2px 0 rgba(0,0,0,.12);
+  }
+
+  .back-line{margin:0 0 28px;text-align:left;}
+
+  .method{margin-top:10px;}
+  .method-section{margin:0 0 40px;}
+  .method-section h2{
+    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;font-size:18px;color:var(--stamp-red);
+    margin:0 0 12px;padding-bottom:8px;border-bottom:1.5px solid var(--ink);
+  }
+  .method-section p{margin:0 0 14px;font-size:15px;line-height:1.65;}
+
+  /* One option per row: the name as it reads in the dropdown, then
+     what it means */
+  .method-options{margin:18px 0 0;}
+  .method-options dt{
+    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;font-size:13px;color:var(--ink);margin:0 0 6px;
+  }
+  .method-options dt .class-badge{margin-top:0;font-size:11px;}
+  .method-options dd{
+    margin:0 0 18px;padding-left:14px;border-left:3px solid var(--paper-deep);
+    font-size:15px;line-height:1.6;color:var(--ink-soft);
+  }
+
+  /* Styled like the masthead's prose link, so the two pages share one
+     link treatment */
+  .back-link{
+    font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.14em;
+    text-transform:uppercase;font-size:12px;color:var(--ink-soft);
+    text-decoration:underline;text-decoration-color:rgba(58,54,44,.5);
+    text-decoration-thickness:1px;text-underline-offset:3px;
+  }
+  .back-link:hover,.back-link:focus-visible{
+    color:var(--stamp-red);text-decoration-color:var(--stamp-red);
+  }
+  .back-link:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
+
+  /* ===============================
        Site Header Responsive (Annielytics v2)
      =============================== */
 

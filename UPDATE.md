@@ -219,6 +219,8 @@ Two things are manual. The footer's `Last updated: <date>` line has to be edited
 
 The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry. The Outcome and Kind dropdowns are hard-coded the same way, with a matching `OUTCOME_LABEL` or `KIND_LABEL` entry per value.
 
+The Methodology page at `methodology/index.html` explains every filter and every option by its dropdown name. It is plain markup, so renaming, adding, or removing a filter option means editing its entry there too. Its site header is a copy of the one in `index.html`; change one and change the other.
+
 ## The glossary
 
 Security jargon gets a dotted underline and a definition on hover, tap, or keyboard focus. The terms live in the `GLOSSARY` object in the script block, not in the case data.
@@ -254,8 +256,8 @@ Run all of these from the repo root. Each takes seconds.
 ```bash
 # 1. No leading-slash paths. Must print nothing. A path starting with a
 #    slash resolves to the site root and 404s under /tools/models-gone-wild/.
-#    Both files, since the stylesheet carries url() references too.
-grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/styles.css
+#    All three files, since the stylesheet carries url() references too.
+grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/styles.css methodology/index.html
 
 # 2. Script block still parses structurally, and every case is well formed.
 python3 - <<'PY'
@@ -327,7 +329,7 @@ Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, wh
 
 ## Where things live
 
-`index.html` carries the markup and the script, including the `CASES` array. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
+`index.html` carries the markup and the script, including the `CASES` array. `methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/styles.css`), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
 
 The stylesheet is linked relatively as `css/styles.css`. A leading slash would resolve to the site root and 404, which is what check 1 guards.
 

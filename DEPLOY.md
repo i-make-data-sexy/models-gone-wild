@@ -10,6 +10,7 @@ One self-contained HTML page plus one vendored JavaScript library.
 
 ```
 index.html                  the whole app: markup, CSS, data, and behavior
+methodology/index.html      the Methodology page, explaining each filter
 js/html2canvas.min.js       powers the "download poster" button
 DEPLOY.md                   this file
 .gitignore
@@ -185,7 +186,7 @@ Run this on the server, which bypasses Cloudflare by talking to nginx directly:
 
 ```bash
 H="Host: www.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
-for f in "" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "poster/sol-hugging-face/" "poster/sol-hugging-face/css/styles.css" "poster/sol-hugging-face/js/html2canvas.min.js" "poster/sol-hugging-face/DEPLOY.md" "js/html2canvas.min.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
+for f in "" "methodology/" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "poster/sol-hugging-face/" "poster/sol-hugging-face/css/styles.css" "poster/sol-hugging-face/js/html2canvas.min.js" "poster/sol-hugging-face/DEPLOY.md" "js/html2canvas.min.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
   printf "%-28s %s\n" "/$f" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B/$f")"
 done
 printf "%-28s %s\n" "bare path" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B")"
@@ -195,7 +196,7 @@ for q in "matrix" "labs"; do
 done
 ```
 
-Expected results, in order. The page and both view permalinks are 200, the stylesheet requested through a permalink is 200, the poster permalink and its stylesheet and script are 200, `DEPLOY.md` requested through the poster path is 404, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, the bare path is 301, and the bare poster path is 301 to `/poster/sol-hugging-face/`. The two old `?view=` links are 301 to `/threat-matrix/` and `/lab-counts/`. The redirect URL prints as `https://127.0.0.1/...`, since curl builds it from the address it called; the path is what to check.
+Expected results, in order. The page, the Methodology page, and both view permalinks are 200, the stylesheet requested through a permalink is 200, the poster permalink and its stylesheet and script are 200, `DEPLOY.md` requested through the poster path is 404, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, the bare path is 301, and the bare poster path is 301 to `/poster/sol-hugging-face/`. The two old `?view=` links are 301 to `/threat-matrix/` and `/lab-counts/`. The redirect URL prints as `https://127.0.0.1/...`, since curl builds it from the address it called; the path is what to check.
 
 Wait a couple of seconds after `systemctl reload nginx` before running this. A reload leaves the old workers draining, so a check fired immediately can still be answered by a worker running the previous config and show a stale result.
 
