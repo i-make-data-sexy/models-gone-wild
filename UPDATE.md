@@ -39,7 +39,8 @@ agree with the dates, and scripts/check_claims.py, which reports copy
 elsewhere on the page that the new case has made untrue, and
 scripts/check_overlaps.py, which reports anything drawn on top of
 something else on the Threat Matrix, and scripts/check_slugs.py, which
-confirms the poster slug is present, well formed, and unique. Fix
+confirms the poster slug is present, well formed, and unique, and
+scripts/check_quotes.py, which catches a quotation in single quotes. Fix
 anything they report. Then
 update the "Last updated" line in the footer, commit, push, and deploy.
 Give me the live URL when it is done.
@@ -103,7 +104,7 @@ Every case is one object in the `CASES` array near the top of the script block i
 | `disclosed` | The Disclosed by row on the poster, and it drives the lag line under the card's date tag. | When the case went public. Always a full `Month D, YYYY`. |
 | `lag` | "Disclosed <lag>" under the date tag, and the tail of the poster's Disclosed by row. | The gap between `date` and `disclosed`, in words that follow "Disclosed". For a day-precise `date` it must be exactly `N days later`; `check_dates.py` recomputes it. For an estimate, judge it: `about three months later`, `within about two weeks`. |
 | `order` | Timeline position, sorted ascending. Array position is ignored. | Follows the escape date, not the disclosure. An estimated month can sit on either side of a dated case inside that month; `check_dates.py` fails only when the sequence is impossible. |
-| `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` evasion only. |
+| `cls` | The class badge and the dot color. | `3` severe, `2` confirmed intrusion, `1` no intrusion, meaning the model tried and failed or acted only through public pages and forms. |
 | `complexity` | Scatter x-axis, how involved the escape was as a technique. | `0` to `10`. An editorial judgment of ours. Score the method, never the motive. Nothing here should imply a lab or a model meant for this to happen, which is why the field is not called intent. |
 | `harm` | Scatter y-axis, how much damage the escape could do. | `0` to `10`. An editorial judgment of ours, not a figure from the reporting. |
 | `whyComplexity` | The Escape complexity justification in the datapoint tooltip. | REQUIRED. One or two sentences on why that score. |
@@ -228,7 +229,9 @@ The full rules are in `~/.claude/rules/editorial/annielytics-writing-rules.md` a
 
 No em-dashes or en-dashes anywhere. No comma before "because" or "since". Oxford commas throughout. No marketese, and no editorializing about how common or how missed something is.
 
-Punctuation goes outside a closing quote. The quote mark sits closer to the word than the comma or period does, so it is `'hyper-focused', going to` and never `'hyper-focused,' going to`. This holds for single and double quotes alike here, since nothing on the page quotes speech that carries its own punctuation.
+Anything a person or an organization said or wrote is a quote and takes double quotes, partial or full: `Albanese said OpenAI took "way too long"`. Single quotes are only for a word or two used as a label or term, such as `'hyper-focused'`. Case strings are double-quoted in the script, so a double quote inside one is written `\"`. Run `python3 scripts/check_quotes.py` after any copy change. It fails on a single-quoted span of three words or more, and prints the one- and two-word spans for you to judge.
+
+Punctuation goes outside the closing quote when it belongs to our sentence rather than the quoted words, which is every case on the page so far: `says "no non-public information was accessed".` and `'hyper-focused', going to`.
 
 Never praise or defend a lab. This page is written with Claude, which Anthropic makes, so any admiring line about how a lab handled its disclosure reads as a conflict of interest the moment somebody asks what wrote the copy. That applies hardest to Anthropic and is safest applied to all four. A caution that said "Notable for the sheer scale of the self-audit that uncovered it" was cut for exactly this reason, along with "no malice" in the same sentence, which defends intent rather than describing behavior.
 

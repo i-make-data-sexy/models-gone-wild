@@ -2,7 +2,7 @@
 
 The runbook for the daily cloud routine that looks for new cases and emails Annie about them. The routine's prompt says only "follow scout/SCOUT.md", so everything the run needs is here. You start with no other context.
 
-The job, in one line: find stories about AI models or agents escaping or breaking into systems, drop the ones the registry already has, research anything new with the add-case skill, and email Annie a proposal she can answer with letters. You never publish anything. Annie publishes from her own machine.
+The job, in one line: find stories about AI models or agents escaping, breaking into systems, or taking actions on the open web that nobody authorized, drop the ones the registry already has, research anything new with the add-case skill, and email Annie a proposal she can answer with letters. You never publish anything. Annie publishes from her own machine.
 
 ## Hard limits
 
@@ -55,7 +55,7 @@ Publish the Models Gone Wild case on branch candidate/<id>, following UPDATE.md:
 
 Search for stories from the last four days. The overlap with yesterday's run is deliberate, since a missed run should not lose a story. Run every query below with the WebSearch tool and collect each result's URL and headline.
 
-The registry's cases so far came out in three ways, so search all three.
+The registry's cases so far came out in three ways, so search all three. The fourth group catches models that broke into nothing but acted where they had no business acting, such as filing a form, a tip, or an application.
 
 Lab disclosures:
 - `AI model escaped sandbox`
@@ -78,6 +78,13 @@ Security press:
 - `AI agent` breach site:theregister.com
 - `AI agent` site:404media.co
 
+Unauthorized actions:
+- `AI agent submitted form government`
+- `AI model false tip police`
+- `AI agent filed application government agency`
+- `AI agent posted without authorization`
+- `AI model test live internet incident`
+
 Also open the registry's own source pages for the swarm cases, which have been updated as new victims surface: https://collusion.wiki, https://rubyhack.ai, and https://transluce.org/agent-activity. A new victim named there is a candidate.
 
 Then run every collected URL through the ledger:
@@ -95,7 +102,7 @@ Load the current cases with the snippet in Step 1 of `.claude/skills/models-gone
 - `irrelevant`: not an AI model or agent acting on its own. A person using AI to phish, a chatbot that a person tricked into saying something, an opinion piece, a funding story. Most results land here.
 - `case`, with `--case <id>`: a new article about something already in the registry with no new facts.
 - `update`, with `--case <id>`: an existing case with new facts. Examples: a victim notice date, a new statement from the lab, a second victim, a corrected escape date.
-- `proposed`, with `--case <new id>`: a new case. A model or agent got out of a sandbox, eval, or harness, or reached somebody else's systems without permission, and the sources say so.
+- `proposed`, with `--case <new id>`: a new case. A model or agent got out of a sandbox, eval, or harness, reached somebody else's systems without permission, or acted on somebody else's service without authorization (submitting a form, a tip, an application, or a post nobody asked for), and the sources say so.
 - `borderline`: you cannot tell which of the above it is. These get one line each in the email, not full research.
 
 Pick a new id the way the registry does: short, lowercase, unique, usually the victim (`medicare`, `bocsar`) or the model (`sol`, `kimi`). The id is internal. The case also needs a `slug`, its public poster URL, which names the incident rather than the model (`sol-hugging-face`, `openai-medicare`). `UPDATE.md` has the pattern.

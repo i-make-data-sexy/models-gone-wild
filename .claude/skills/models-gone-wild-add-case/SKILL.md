@@ -1,6 +1,6 @@
 ---
 name: models-gone-wild-add-case
-description: Research and propose a new case (a model escape, hack, or unauthorized intrusion by an AI agent) for the Models Gone Wild registry. Annie supplies a headline and a few links; this skill runs its own searches, reconstructs the escape and disclosure timeline, scores the case against the existing ones, stages a local preview, and returns a proposal with a TL;DR, score rationale, decisions, and a to-do list with links to test. Use when Annie shares a new AI escape or hack story for Models Gone Wild, says "add a case", "new exploit", "another model got out", or pastes links about an AI agent breaching a system.
+description: Research and propose a new case (a model escape, hack, unauthorized intrusion, or unauthorized action such as a submitted form or tip by an AI agent) for the Models Gone Wild registry. Annie supplies a headline and a few links; this skill runs its own searches, reconstructs the escape and disclosure timeline, scores the case against the existing ones, stages a local preview, and returns a proposal with a TL;DR, score rationale, decisions, and a to-do list with links to test. Use when Annie shares a new AI escape or hack story for Models Gone Wild, says "add a case", "new exploit", "another model got out", or pastes links about an AI agent breaching a system or acting on a website without authorization.
 ---
 
 # Models Gone Wild: Add a Case
@@ -105,6 +105,7 @@ python3 scripts/check_charges.py
 python3 scripts/check_dates.py
 python3 scripts/check_claims.py
 python3 scripts/check_slugs.py
+python3 scripts/check_quotes.py
 python3 scripts/check_overlaps.py --shot <scratchpad>/matrix.png
 ```
 
@@ -121,7 +122,7 @@ When it reports an overlap:
 - Never change a score to make room. `complexity` and `harm` are editorial judgments, and the layout serves them, not the other way round.
 - Shorten a `scatterLabel` first, since that costs nothing.
 - If the layout itself cannot place the label, fix `placeLabels()` or `jitterDots()` in `index.html` (for example, add a spot to `LABEL_SPOTS`), rerun, and say in the proposal what changed.
-- The checker fails on the old layout code as well as the new one, so a change to the chart can be tested against both. Self-check the prose against `~/.claude/rules/editorial/annielytics-writing-rules.md`: no em or en dashes, no comma before because or since, punctuation outside closing quotes, no red-flag words in `caution` (notable, impressive, responsible, transparent, thorough, to their credit).
+- The checker fails on the old layout code as well as the new one, so a change to the chart can be tested against both. Self-check the prose against `~/.claude/rules/editorial/annielytics-writing-rules.md`: no em or en dashes, no comma before because or since, double quotes for anything a person or organization said (single quotes only for a word or two used as a term), punctuation outside closing quotes when it belongs to our sentence, no red-flag words in `caution` (notable, impressive, responsible, transparent, thorough, to their credit).
 
 Serve the preview at the real subpath, in the background:
 
