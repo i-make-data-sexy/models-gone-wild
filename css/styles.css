@@ -183,19 +183,10 @@
      it than a full paragraph gap would put it */
   .intro-cue{margin-top:14px;}
 
-  /* The masthead's one prose link. Every other link in the app is an
-     icon button, so there is no global anchor style and without this
-     it renders browser-default blue against the paper. Solid underline
-     keeps it distinct from a glossary term's dotted one, and stamp red
-     on hover and focus matches the icon buttons. */
-  .intro a{
-    color:inherit;text-decoration:underline;
-    text-decoration-color:rgba(58,54,44,.5);
-    text-decoration-thickness:1px;text-underline-offset:3px;
-  }
-  .intro a:hover,.intro a:focus-visible{
-    color:var(--stamp-red);text-decoration-color:var(--stamp-red);
-  }
+  /* The masthead's one prose link. Stamp red with no underline marks it
+     as a link and keeps it distinct from a glossary term's dotted one */
+  .intro a{color:var(--stamp-red);text-decoration:none;}
+  .intro a:hover,.intro a:focus-visible{color:var(--ink);}
   .intro a:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
 
   /* Three stamp-red dots, the quietest divider that still reads as
@@ -889,27 +880,16 @@
     text-transform:uppercase;font-size:15px;color:var(--ink);
     margin:30px 0 8px;
   }
-  .method-section a:not(.back-link){
-    color:inherit;text-decoration:underline;
-    text-decoration-color:rgba(58,54,44,.5);
-    text-decoration-thickness:1px;text-underline-offset:3px;
-  }
-  .method-section a:not(.back-link):hover,
-  .method-section a:not(.back-link):focus-visible{
-    color:var(--stamp-red);text-decoration-color:var(--stamp-red);
-  }
+  .method-section a{color:var(--stamp-red);text-decoration:none;}
+  .method-section a:hover,.method-section a:focus-visible{color:var(--ink);}
 
-  /* Styled like the masthead's prose link, so the two pages share one
-     link treatment */
+  /* Small uppercase type marks it as a link, so it needs no underline */
   .back-link{
     font-family:'Oswald',sans-serif;font-weight:500;letter-spacing:.14em;
     text-transform:uppercase;font-size:12px;color:var(--ink-soft);
-    text-decoration:underline;text-decoration-color:rgba(58,54,44,.5);
-    text-decoration-thickness:1px;text-underline-offset:3px;
+    text-decoration:none;
   }
-  .back-link:hover,.back-link:focus-visible{
-    color:var(--stamp-red);text-decoration-color:var(--stamp-red);
-  }
+  .back-link:hover,.back-link:focus-visible{color:var(--stamp-red);}
   .back-link:focus-visible{outline:2px solid var(--stamp-red);outline-offset:2px;}
 
   /* ===============================
