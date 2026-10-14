@@ -97,6 +97,24 @@ function measure(doc){
     items.push({name:`dot ${id}`, box:dotBox(g.querySelector('circle'))});
     items.push({name:`label ${id}`, box:inkBox(doc, g.querySelector('text')), label:true});
   });
+  // A leader line ties a crowded label to its dot. Passing over any
+  // other dot would point the reader at the wrong case.
+  const dots = [...svg.querySelectorAll('.pt')].map(g=>({id:g.dataset.id, c:g.querySelector('circle')}));
+  svg.querySelectorAll('.pt').forEach(g=>{
+    const line = g.querySelector('line.leader');
+    if(!line) return;
+    const a = {x:+line.getAttribute('x1'), y:+line.getAttribute('y1')};
+    const b = {x:+line.getAttribute('x2'), y:+line.getAttribute('y2')};
+    const dx = b.x-a.x, dy = b.y-a.y;
+    dots.forEach(o=>{
+      if(o.id === g.dataset.id) return;
+      const px = +o.c.getAttribute('cx'), py = +o.c.getAttribute('cy');
+      const r = +o.c.getAttribute('r') + 1;
+      const t = Math.max(0, Math.min(1, ((px-a.x)*dx + (py-a.y)*dy) / (dx*dx + dy*dy || 1)));
+      if(Math.hypot(a.x + t*dx - px, a.y + t*dy - py) < r)
+        hits.push(`leader ${g.dataset.id} crosses dot ${o.id}`);
+    });
+  });
   svg.querySelectorAll('.svg-note').forEach(t=>{
     items.push({name:`quadrant "${t.textContent}"`, box:inkBox(doc, t)});
   });

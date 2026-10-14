@@ -17,6 +17,10 @@ either side of a dated case inside that month; the check only fails
 when the sequence cannot be true. It also fails if a case is disclosed
 before it could have escaped.
 
+A case whose source never dates the escape says "Date not disclosed",
+with the lag "escape date not disclosed". It may fall anywhere before
+its disclosure, and it sits after every dated case on the timeline.
+
 Where a case carries a `notice`, its dates are checked too. A "told"
 notice must run escape, lab knew, victim told, and its gap must be
 "<N> days after <lab> knew" for the exact count. A "found" notice must
@@ -29,6 +33,8 @@ import sys
 from datetime import datetime, timedelta
 
 SRC = "index.html"
+UNDATED = "Date not disclosed"
+UNDATED_LAG = "escape date not disclosed"
 
 
 def load_cases(text: str) -> list:
@@ -86,6 +92,8 @@ def window(c: dict) -> tuple | None:
             through September 22, the widest reading of a news report's
             "this summer". None when the date does not parse.
     """
+    if c["date"] == UNDATED:
+        return datetime.min, parse_day(c["disclosed"]) or datetime.max
     d = parse_day(c["date"])
     if d:
         return d, d
@@ -120,7 +128,12 @@ def main() -> int:
             print(f"  FAIL   {c['id']:10} disclosed date is not a full date: {c['disclosed']!r}")
             bad += 1
             continue
-        if esc and not c["estimated"]:
+        if c["date"] == UNDATED:
+            ok = c["lag"] == UNDATED_LAG and not c["estimated"]
+            print(f"  {'OK  ' if ok else 'FAIL'}   {c['id']:10} {UNDATED} -> {c['disclosed']}  ::  {c['lag']!r}"
+                  + ("" if ok else f"  (expected {UNDATED_LAG!r}, with no estimated flag)"))
+            bad += not ok
+        elif esc and not c["estimated"]:
             days = (dis - esc).days
             want = f"{days} days later"
             ok = c["lag"] == want and days >= 0
@@ -141,7 +154,7 @@ def main() -> int:
         wa, wb = window(a), window(b)
         # Case a precedes case b in the timeline. That is only impossible
         # when the earliest b could be is still before the latest a could be.
-        ok = wa and wb and wa[0] <= wb[1]
+        ok = wa and wb and wa[0] <= wb[1] and not (a["date"] == UNDATED and b["date"] != UNDATED)
         print(f"  {'OK  ' if ok else 'FAIL'}   {a['id']} ({a['date']}) before {b['id']} ({b['date']})")
         bad += not ok
 

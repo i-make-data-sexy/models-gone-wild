@@ -31,7 +31,7 @@ def load_cases(text: str) -> list:
     Args:
         text (str): The full contents of index.html
     Returns:
-        list: One dict per case with its id, alias, lab, date, charge, caution, complexity, and harm
+        list: One dict per case with its id, alias, lab, date, disclosed, charge, caution, complexity, and harm
     """
     js = re.search(r"<script>(.*?)</script>", text, re.S).group(1)
     cases = []
@@ -44,6 +44,7 @@ def load_cases(text: str) -> list:
             "alias": get("alias"),
             "lab": get("lab"),
             "date": get("date"),
+            "disclosed": get("disclosed"),
             "charge": get("charge"),
             "caution": get("caution"),
             "complexity": num("complexity"),
@@ -107,7 +108,8 @@ def check_registry_year(cases: list) -> tuple:
     Returns:
         tuple: Whether the claim holds, and a line listing the escape years represented
     """
-    years = sorted({c["date"].split()[-1] for c in cases})
+    # An undated case counts by the year it was disclosed
+    years = sorted({(c["disclosed"] if c["date"] == "Date not disclosed" else c["date"]).split()[-1] for c in cases})
     ok = years == ["2026"]
     return ok, "years represented: " + ", ".join(years)
 
@@ -133,6 +135,15 @@ COMPUTABLE = [
 
 # Claims no script can settle. Read them and decide.
 REVIEW = [
+    ("Anthropic does not name the university or date the incident",
+     "Mythos Preview (university), caution and date",
+     "the university is named or the incident is dated, which would also replace \"Date not disclosed\""),
+    ("Anthropic does not name the local government or date the incident",
+     "Mythos 5 (property map), caution and date",
+     "the local government is named or the incident is dated"),
+    ("Anthropic does not name the state agency or date the incident",
+     "Mythos 5 (state database), caution and date",
+     "the state agency is named or the incident is dated"),
     ("filing forms with police and government agencies in others",
      "masthead, intro",
      "the form-filing cases are removed, or the intro stops matching the kinds of cases listed"),

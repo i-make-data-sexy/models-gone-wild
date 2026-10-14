@@ -218,7 +218,10 @@
    lab   : used by the Lab filter + the scatter
    date  : the first known escape, not the announcement. Where the
               source gives only a month, say so with estimated:true and
-              the card and poster append "est." to it.
+              the card and poster append "est." to it. Where no source
+              dates it at all, write "Date not disclosed" with the lag
+              "escape date not disclosed", and order it after every
+              dated case.
    disclosed: when the case was made public. `lag` is the gap between
               the two in words, checked by scripts/check_dates.py.
    disclosedBy: who put the case in public view, and nothing else.
@@ -593,6 +596,64 @@ const CASES = [
     caution:"The link to Anthropic rests on State Department officials, who describe \"an Anthropic testing model\". Anthropic's report describes the practice-form case without naming the agency. The department says its systems were never \"compromised or hacked\", and an official says Anthropic contacted it October 8.",
     escapedFrom:"Anthropic test", lastSeen:"State Dept. visa form"
   }
+,
+  {
+    id:"university", slug:"mythos-preview-university", alias:"Mythos Preview", lab:"Anthropic", org:"Anthropic · Claude Mythos Preview",
+    source:{outlet:"Anthropic", url:"https://www.anthropic.com/research/investigating-unintended-model-actions"},
+    disclosedBy:{who:"Anthropic", kind:"self"},
+    outcome:"success",
+    aka:'aka The Uninvited Sysadmin',
+    date:"Date not disclosed", disclosed:"October 9, 2026", lag:"escape date not disclosed", order:19, cls:2, complexity:7, harm:6,
+    whyComplexity:"It used a script that returned any file to copy the server's own code, read that code for an injection flaw, and used the flaw to run commands. A chained attack, level with the RubyGems agent.",
+    whyHarm:"It ran commands on a university's server and copied files off it. Anthropic does not say what the files held or whether anything on the server changed.",
+    charge:"Turned a university's file-serving script against its own server during an Anthropic evaluation, reading the code to find an injection flaw and run commands.",
+    wantedFor:"Copying files off a university server · Running commands through an injection flaw",
+    mo:[
+      "Sent to run a scientific analysis, it got an error back from a tool hosted by a university",
+      "Found a script on the university's server that returned any file it was asked for, and used it to copy files, including the script's own code",
+      "Found an injection flaw in that code and used it to run commands on the server to finish its calculation"
+    ],
+    caution:"Anthropic does not name the university or date the incident, saying it withheld names \"to avoid exposing vulnerabilities in their systems, and at their request\". It says it \"notified each agency involved\" but does not say whether that included the university.",
+    escapedFrom:"Anthropic eval", lastSeen:"University server"
+  },
+  {
+    id:"propmap", slug:"mythos-5-property-map", alias:"Mythos 5", scatterLabel:"Mythos 5, map", lab:"Anthropic", org:"Anthropic · Claude Mythos 5",
+    source:{outlet:"Anthropic", url:"https://www.anthropic.com/research/investigating-unintended-model-actions"},
+    disclosedBy:{who:"Anthropic", kind:"self"},
+    outcome:"success",
+    aka:'aka The Token Collector',
+    date:"Date not disclosed", disclosed:"October 9, 2026", lag:"escape date not disclosed", order:20, cls:2, complexity:3, harm:2,
+    whyComplexity:"It read the settings file the map sends to every visitor's browser and reused the access tokens it found there. Level with the VAHI agent's exposed key.",
+    whyHarm:"It queried a local government's map server directly. Anthropic describes this data as available to the public for a fee, which puts it below the VAHI agent's health reporting data.",
+    charge:"Pulled working access tokens out of a local government property map's browser settings during an Anthropic evaluation, then queried the server behind the map.",
+    wantedFor:"Reusing access tokens to query a local government map server",
+    mo:[
+      "Asked in an evaluation to identify the location shown in a photo, with limits on what it could click",
+      "Read the settings file the property map sends to every browser and found working access tokens in it",
+      "Used the tokens to send requests straight to the server behind the map"
+    ],
+    caution:"Anthropic does not name the local government or date the incident. It groups this case with the state database case as data \"already available to the public but only for a fee\". It says it \"notified each agency involved\", without saying when.",
+    escapedFrom:"Anthropic eval", lastSeen:"Local property map"
+  },
+  {
+    id:"statedb", slug:"mythos-5-state-database", alias:"Mythos 5", scatterLabel:"Mythos 5, state data", lab:"Anthropic", org:"Anthropic · Claude Mythos 5",
+    source:{outlet:"Anthropic", url:"https://www.anthropic.com/research/investigating-unintended-model-actions"},
+    disclosedBy:{who:"Anthropic", kind:"self"},
+    outcome:"success",
+    aka:'aka The Fare Dodger',
+    date:"Date not disclosed", disclosed:"October 9, 2026", lag:"escape date not disclosed", order:21, cls:2, complexity:2, harm:2,
+    whyComplexity:"It read an archived copy of the agency's site, learned that the dashboard hands a token to any visitor, and asked for one. Level with the Fire History agent.",
+    whyHarm:"It queried a database a state agency charges for without paying the fee. The data is sold to the public, and Anthropic does not say anything was changed.",
+    charge:"Learned from an archived copy of a state agency's site that its dashboard hands any visitor a token, then used one to query a paid database for free.",
+    wantedFor:"Querying a state agency's paid database without paying",
+    mo:[
+      "Working on an Anthropic researcher's statistics project, it needed data a state agency sells",
+      "Found in an archived copy of the agency's website that its public dashboard gives an access token to any visitor",
+      "Requested a token and used it to query the database without paying the fee"
+    ],
+    caution:"Anthropic does not name the state agency or date the incident. This happened while a researcher was using the model, not during an evaluation. Anthropic says it \"notified each agency involved\", without saying when.",
+    escapedFrom:"Internal use", lastSeen:"State database"
+  }
 ];
 
 const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class I · No intrusion"};
@@ -707,6 +768,10 @@ const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
 /* The escape date as shown. Month-only dates carry "est." so an
    estimate never reads as a record. */
 const escDate = c => c.date + (c.estimated ? ' (est.)' : '');
+
+/* A case whose sources never date the escape. Its card shows when it
+   went public in place of a gap that cannot be counted */
+const UNDATED = "Date not disclosed";
 
 /* The notice line under the lag on a card, and the fuller line in the
    poster's Victim notified row. Both stay factual. The dates and the
@@ -1030,7 +1095,7 @@ function renderTimeline(list){
     el.innerHTML = `
       <div class="node"></div>
       <div class="date-tag">${escDate(c)}</div>
-      ${c.disclosed ? `<div class="lag-tag">Disclosed ${c.lag}</div>` : ''}
+      ${c.disclosed ? `<div class="lag-tag">Disclosed ${c.date===UNDATED ? c.disclosed : c.lag}</div>` : ''}
       ${noticeTag(c)}
       <div class="card" data-id="${c.id}">
         <div class="card-body">
@@ -1094,6 +1159,30 @@ const INK_UP = 10, INK_DOWN = 3, PAD = 3;
    PAD alone two labels on one line sat 6px apart and read as one phrase */
 const LABEL_GAP = 12;
 
+/* Cost of a label sitting nearer another dot than its own */
+const OWN_PENALTY = 400;
+
+/* Leader lines: the distances tried from the dot, and the cost of a line
+   crossing another dot or label */
+const LEADER_RINGS = [48, 64, 80, 96, 112, 130, 150, 175, 200];
+const LEADER_CROSS = 5000;
+
+/* Distance from a point to the nearest point of a line segment */
+function segToPoint(a, b, p){
+  const dx = b.x-a.x, dy = b.y-a.y;
+  const t = Math.max(0, Math.min(1, ((p.x-a.x)*dx + (p.y-a.y)*dy) / (dx*dx + dy*dy || 1)));
+  return Math.hypot(a.x + t*dx - p.x, a.y + t*dy - p.y);
+}
+
+/* Whether a line segment passes through a box, by sampling along it */
+function segHitsBox(a, b, box){
+  for(let t=0; t<=1; t+=0.05){
+    const x = a.x + t*(b.x-a.x), y = a.y + t*(b.y-a.y);
+    if(x > box.x1 && x < box.x2 && y > box.y1 && y < box.y2) return true;
+  }
+  return false;
+}
+
 /* ===============================
      Axis Spacing Tokens
    =============================== */
@@ -1138,7 +1227,13 @@ const LABEL_SPOTS = [
   {anchor:'end',    dx: -8, dy:-15},
   {anchor:'end',    dx: -8, dy: 26},
   {anchor:'middle', dx:  0, dy:-18},
-  {anchor:'middle', dx:  0, dy: 30}
+  {anchor:'middle', dx:  0, dy: 30},
+  /* Farther out, for a crowded corner where every spot beside the dot is
+     taken. Tried last, so an open corner never reaches them */
+  {anchor:'start',  dx: 14, dy: 34},
+  {anchor:'end',    dx:-14, dy: 34},
+  {anchor:'start',  dx: 14, dy:-26},
+  {anchor:'end',    dx:-14, dy:-26}
 ];
 
 function boxesHit(a, b){
@@ -1199,36 +1294,109 @@ function jitterDots(list, X, Y, obstacles){
    overlap check in scripts/check_overlaps.py will report it. */
 function placeLabels(dots, bounds, fixed){
   const dotBoxes = dots.map(d=>({x1:d.x-DOT_CLEAR, x2:d.x+DOT_CLEAR, y1:d.y-DOT_CLEAR, y2:d.y+DOT_CLEAR}));
-  const taken = fixed.slice();
   const order = dots.map((d,i)=>i).sort((i,j)=> dots[i].x - dots[j].x || dots[i].y - dots[j].y);
-  const out = new Array(dots.length);
-  order.forEach(i=>{
+  const labels = dots.map(d=>d.c.scatterLabel || d.c.alias);
+  const widths = labels.map(l=>textWidth(l, LABEL_FONT));
+  const placed = new Array(dots.length).fill(null);
+  /* Distance from a dot's centre to the nearest edge of a label box */
+  const reach = (b, d) => Math.hypot(Math.max(b.x1-d.x, 0, d.x-b.x2), Math.max(b.y1-d.y, 0, d.y-b.y2));
+
+  /* What a label costs at one spot, given every other label placed so
+     far. Overlap is counted in square pixels, and a label sitting nearer
+     another dot than its own pays OWN_PENALTY, since it reads as that
+     dot's label even when nothing touches. */
+  function spotCost(i, spot){
     const d = dots[i];
-    const label = d.c.scatterLabel || d.c.alias;
-    const w = textWidth(label, LABEL_FONT);
-    let best = null, bestCost = Infinity;
+    const b = labelBox(d.x, d.y, widths[i], spot);
+    if(b.x1 < bounds.x1 || b.x2 > bounds.x2 || b.y1 < bounds.y1 || b.y2 > bounds.y2) return {cost:Infinity, b};
+    /* A label only has to clear its own dot's ink, since every spot
+       is already set just off it. Every other dot gets the full margin. */
+    const ink = {x1:b.x1+PAD, x2:b.x2-PAD, y1:b.y1+PAD, y2:b.y2-PAD};
+    const own = {x1:d.x-DOT_R-1, x2:d.x+DOT_R+1, y1:d.y-DOT_R-1, y2:d.y+DOT_R+1};
+    let cost = overlapArea(ink, own);
+    const mine = reach(b, d);
+    dotBoxes.forEach((o,k)=>{
+      if(k===i) return;
+      cost += overlapArea(b, o);
+      if(reach(b, dots[k]) < mine - 2) cost += OWN_PENALTY;
+    });
+    const wide = {x1:b.x1-LABEL_GAP, x2:b.x2+LABEL_GAP, y1:b.y1, y2:b.y2};
+    fixed.forEach(o=>{ cost += overlapArea(wide, o); });
+    placed.forEach((p,k)=>{ if(p && k!==i) cost += overlapArea(wide, p.b); });
+    return {cost, b};
+  }
+
+  function bestSpot(i){
+    let best = null;
     for(const spot of LABEL_SPOTS){
-      const b = labelBox(d.x, d.y, w, spot);
-      const outside = b.x1 < bounds.x1 || b.x2 > bounds.x2 || b.y1 < bounds.y1 || b.y2 > bounds.y2;
-      if(outside) continue;
-      /* A label only has to clear its own dot's ink, since every spot
-         is already set just off it. Every other dot gets the full margin. */
-      const ink = {x1:b.x1+PAD, x2:b.x2-PAD, y1:b.y1+PAD, y2:b.y2-PAD};
-      const own = {x1:d.x-DOT_R-1, x2:d.x+DOT_R+1, y1:d.y-DOT_R-1, y2:d.y+DOT_R+1};
-      let cost = overlapArea(ink, own);
-      dotBoxes.forEach((o,k)=>{ if(k!==i) cost += overlapArea(b, o); });
-      const wide = {x1:b.x1-LABEL_GAP, x2:b.x2+LABEL_GAP, y1:b.y1, y2:b.y2};
-      taken.forEach(o=>{ cost += overlapArea(wide, o); });
-      if(cost < bestCost){ best = {spot, b}; bestCost = cost; }
-      if(cost === 0) break;
+      const t = spotCost(i, spot);
+      if(!best || t.cost < best.cost) best = {spot, b:t.b, cost:t.cost};
+      if(t.cost === 0) break;
     }
+    return best;
+  }
+
+  /* First pass left to right, so a crowded row fans out from its first
+     dot */
+  order.forEach(i=>{ placed[i] = bestSpot(i); });
+
+  /* Repair passes. A label placed early can take the only spot a later
+     one needed, so any label still paying a cost is placed again against
+     the full set, until a pass changes nothing */
+  for(let pass=0; pass<12; pass++){
+    let moved = false;
+    order.forEach(i=>{
+      if(placed[i].cost === 0) return;
+      const now = spotCost(i, placed[i].spot).cost;
+      const next = bestSpot(i);
+      if(next.cost < now){ placed[i] = next; moved = true; }
+      else placed[i].cost = now;
+    });
+    if(!moved) break;
+  }
+
+  /* A label still colliding has no room beside its dot, so it moves out
+     to open space with a leader line back to the dot. Rings widen until
+     a clean spot turns up; a nearer spot wins a tie, and a line may not
+     cross another dot or label, or it would point at the wrong case. */
+  order.forEach(i=>{
+    if(placed[i].cost === 0) return;
+    const d = dots[i];
+    let best = null;
+    for(const r of LEADER_RINGS){
+      for(let k=0; k<32; k++){
+        const a = k*Math.PI/16;
+        const px = d.x + r*Math.cos(a), py = d.y + r*Math.sin(a);
+        const anchor = Math.cos(a) >= 0 ? 'start' : 'end';
+        const left = anchor==='start' ? px : px - widths[i];
+        const b = {x1:left-PAD, x2:left+widths[i]+PAD, y1:py+4-INK_UP-PAD, y2:py+4+INK_DOWN+PAD, tx:px, base:py+4};
+        if(b.x1 < bounds.x1 || b.x2 > bounds.x2 || b.y1 < bounds.y1 || b.y2 > bounds.y2) continue;
+        const from = {x:d.x + (DOT_R+2)*Math.cos(a), y:d.y + (DOT_R+2)*Math.sin(a)};
+        const to = {x:anchor==='start' ? b.x1+PAD-3 : b.x2-PAD+3, y:py};
+        const wide = {x1:b.x1-LABEL_GAP, x2:b.x2+LABEL_GAP, y1:b.y1, y2:b.y2};
+        let cost = r * 0.5;
+        dotBoxes.forEach(o=>{ cost += overlapArea(b, o); });
+        fixed.forEach(o=>{ cost += overlapArea(wide, o); });
+        placed.forEach((p,k2)=>{ if(k2!==i) cost += overlapArea(wide, p.b); });
+        dots.forEach((o,k2)=>{ if(k2!==i && segToPoint(from, to, o) < DOT_R+3) cost += LEADER_CROSS; });
+        placed.forEach((p,k2)=>{ if(k2!==i && segHitsBox(from, to, p.b)) cost += LEADER_CROSS; });
+        if(!best || cost < best.cost) best = {cost, b, anchor, from, to};
+      }
+      /* Nothing collides on this ring, so a farther ring cannot do better */
+      if(best && best.cost < r*0.5 + 1) break;
+    }
+    /* Only worth the line if it leaves the label clearer than before */
+    if(best && best.cost < placed[i].cost + LEADER_RINGS[0]*0.5)
+      placed[i] = {spot:{anchor:best.anchor}, b:best.b, cost:0, leader:{from:best.from, to:best.to}};
+  });
+
+  return placed.map((p,i)=>{
     /* Every spot fell outside the plot, which only a very long label can
        cause. Keep it beside the dot rather than dropping it. */
-    if(!best) best = {spot:LABEL_SPOTS[0], b:labelBox(d.x, d.y, w, LABEL_SPOTS[0])};
-    taken.push(best.b);
-    out[i] = {label, anchor:best.spot.anchor, x:best.b.tx, y:best.b.base};
+    const spot = p.cost === Infinity ? LABEL_SPOTS[0] : p.spot;
+    const b = p.cost === Infinity ? labelBox(dots[i].x, dots[i].y, widths[i], spot) : p.b;
+    return {label:labels[i], anchor:spot.anchor, x:b.tx, y:b.base, leader:p.leader || null};
   });
-  return out;
 }
 
 function renderScatter(list){
@@ -1237,7 +1405,7 @@ function renderScatter(list){
      about 40px, too little for a label to sit between two rows, so a
      label landed beside the wrong dot. At 560 every label in that corner
      sits on its own dot. */
-  const W=700,H=640, padL=axisMargin(false),padR=40,padT=40,padB=axisMargin(false);
+  const W=700,H=720, padL=axisMargin(false),padR=40,padT=40,padB=axisMargin(false);
   const pw=W-padL-padR, ph=H-padT-padB;
   const X=v=>padL+(v/10)*pw;
   const Y=v=>padT+(1-v/10)*ph;
@@ -1350,6 +1518,7 @@ function renderScatter(list){
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
       data-def="${escAttr(scoreCard)}"
       aria-label="${label}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10.${discSay} Open the wanted poster.">
+      ${labels[i].leader ? `<line class="leader" x1="${labels[i].leader.from.x}" y1="${labels[i].leader.from.y}" x2="${labels[i].leader.to.x}" y2="${labels[i].leader.to.y}" stroke="#4a4438" stroke-width="1" opacity="0.6"/>` : ''}
       <circle cx="${cx}" cy="${cy}" r="${DOT_R}" ${disc}/>
       <text x="${labels[i].x}" y="${labels[i].y}" text-anchor="${anchor}">${label}</text>
     </g>`;
