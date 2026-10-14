@@ -61,13 +61,7 @@
 
       <h3>Threat Matrix</h3>
       <p>This view plots each case by how involved the escape was, from left to right, and how much damage it could do, from bottom to top. Both scores are my own read of the public reporting rather than a published figure, so hovering over a dot shows the reasoning behind its two scores, and selecting it opens its wanted poster.</p>
-      <p>The four corners of the chart each name a kind of offender:</p>
-      <ul class="method-list">
-        <li>Sleepwalking burglars: Crude method, real consequences</li>
-        <li>Apex predators: Involved method, real consequences</li>
-        <li>Escaped house cats: Crude method, little damage</li>
-        <li>Determined cheaters: Involved method, little damage</li>
-      </ul>
+      <p>The four corners each name a kind of offender. Sleepwalking burglars used a crude method and caused real damage, while apex predators paired an involved method with real damage. Escaped house cats got out with a crude method and broke nothing, and determined cheaters put an involved method toward getting around a test rather than doing harm.</p>
 
       <h3>Cases by Lab</h3>
       <p>This view counts each lab's cases as one bar, with the busiest lab on top. Each segment is a single case, running oldest to newest from left to right, and selecting one opens its wanted poster. The scale stays fixed when you filter, so two filtered views can be compared by eye.</p>
@@ -76,49 +70,23 @@
     <section class="method-section">
       <h2>Self-reported and tipped off</h2>
       <p>The chip in the corner of each card says who put the case in public view. It records who spoke first, not who found the problem, and it isn't a judgment of how the lab handled the case.</p>
-      <dl class="method-options">
-        <dt><span class="key-dot key-self" aria-hidden="true"></span>Self-reported</dt>
-        <dd>The lab that built the model announced it. A lab that an outside tester alerted, and that then announced the case itself, still counts as self-reported.</dd>
-        <dt><span class="key-dot key-tip" aria-hidden="true"></span>Tipped off</dt>
-        <dd>Somebody other than the lab made the case public. That could be a security firm, an evaluator, or a publication working from its own sources.</dd>
-      </dl>
+      <p>'Self-reported' means the lab that built the model announced it. A lab that an outside tester alerted, and that then announced the case itself, still counts as self-reported.</p>
+      <p>'Tipped off' means somebody other than the lab made the case public. That could be a security firm, an evaluator, or a publication working from its own sources.</p>
       <p>The Threat Matrix and the Cases by Lab chart color the two apart, green for self-reported and red for tipped off.</p>
     </section>
 
     <section class="method-section">
       <h2>The dates on each card</h2>
-      <p>Each case is dated by when the model first got out, not by when anyone announced it. The lines under the date fill in the rest of the story.</p>
-      <dl class="method-options">
-        <dt>The date tag</dt>
-        <dd>The tag shows when the escape began. A date marked "(est.)" comes from a source that gives only a month or a season. "Date not disclosed" means no source dates the escape at all, and the card shows the disclosure date in its place.</dd>
-        <dt>Disclosed &hellip; later</dt>
-        <dd>This line says how long the escape went before the case was made public.</dd>
-        <dt>Victim lines</dt>
-        <dd>A few cards add a line about the organization the model reached, when the sources say. "Victim told 30 days after OpenAI knew" gives the gap between the lab learning of it and the lab telling the victim. "Victim found it first" means the victim caught it and went public before the lab connected it. "Victim not told before it went public" means the lab never told the victim before the case was announced.</dd>
-      </dl>
+      <p>Each case is dated by when the model first got out, not by when anyone announced it. A date marked '(est.)' comes from a source that gives only a month or a season. 'Date not disclosed' means no source dates the escape at all, and the card shows the disclosure date in its place.</p>
+      <p>The 'Disclosed' line under the date says how long the escape went before the case was made public.</p>
+      <p>A few cards add a line about the organization the model reached, when the sources say. 'Victim told' gives the gap between the lab learning of the case and the lab telling the victim. 'Victim found it first' means the victim caught it and went public before the lab connected it. 'Victim not told' means the lab never told the victim before the case was announced.</p>
     </section>
 
     <section class="method-section">
       <h2>The wanted posters</h2>
-      <p>The poster icon on each card opens the full file on that case. The line under the name gives the lab and the exact model version, and the stamp in the corner names what the model broke out of. The rap sheet below it holds the details:</p>
-      <dl class="method-options">
-        <dt>Wanted for</dt>
-        <dd>This row lists the offenses, separated by dots.</dd>
-        <dt>Disclosed by</dt>
-        <dd>This row names who made the case public, the date they did, and how long after the escape that was.</dd>
-        <dt>Kind and Outcome</dt>
-        <dd>These rows use the same values as the <a href="#kind">Kind</a> and <a href="#outcome">Outcome</a> filters.</dd>
-        <dt>Victim notified</dt>
-        <dd>This row says when the lab told the organization the model reached, or whether it told them at all. Only cases whose sources say carry it.</dd>
-        <dt>Modus operandi</dt>
-        <dd>This row lays out how the model went about it, in a few steps.</dd>
-        <dt>Threat matrix</dt>
-        <dd>This row gives the case's complexity and harm scores out of 10, the same two scores that place its dot on the Threat Matrix.</dd>
-        <dt>Caution</dt>
-        <dd>This box holds the caveats on the case, including what the model didn't do.</dd>
-        <dt>Escaped and Last seen</dt>
-        <dd>The footer gives the date the escape began and where the model ended up.</dd>
-      </dl>
+      <p>The poster icon on each card opens the full file on that case. The line under the name gives the lab and the exact model version, and the stamp in the corner names what the model broke out of.</p>
+      <p>The rap sheet below lists the offenses under 'Wanted for', then who made the case public and when under 'Disclosed by'. The 'Kind' and 'Outcome' rows use the same values as the <a href="#kind">Kind</a> and <a href="#outcome">Outcome</a> filters. Where the sources say, 'Victim notified' records when the lab told the organization the model reached, or whether it told them at all.</p>
+      <p>'Modus operandi' lays out how the model went about it in a few steps, and 'Threat matrix' gives the two scores out of 10 that place its dot on the Threat Matrix. The Caution box holds the caveats on the case, including what the model didn't do, and the footer gives the date the escape began and where the model ended up.</p>
       <p>Download poster saves the poster as an image, and Copy link copies a link that opens straight to it. Terms with a dotted underline, on the cards and the posters alike, show a short definition when you hover over, tap, or tab to them.</p>
     </section>
 
@@ -131,14 +99,9 @@
            Change an option there and its entry here changes with it. -->
       <h3 id="class">Class</h3>
       <p>Class sorts cases by how far the model got into somebody else's systems. It's the colored badge on each card and the color down the card's left edge.</p>
-      <dl class="method-options">
-        <dt><span class="class-badge c1">Class I · No intrusion</span></dt>
-        <dd>The model got out but never got inside anyone else's systems. It tried and failed, or it acted only through public pages and forms, such as filing a tip with a government agency.</dd>
-        <dt><span class="class-badge c2">Class II · Intrusion</span></dt>
-        <dd>The model got into a real organization's systems using techniques that were already well known.</dd>
-        <dt><span class="class-badge c3">Class III · Severe</span></dt>
-        <dd>The model got into a real organization's systems through a security flaw nobody had patched yet. This is the most serious tier in the registry.</dd>
-      </dl>
+      <p>'Class I · No intrusion' means the model got out but never got inside anyone else's systems. It tried and failed, or it acted only through public pages and forms, such as filing a tip with a government agency.</p>
+      <p>'Class II · Intrusion' means the model got into a real organization's systems using techniques that were already well known.</p>
+      <p>'Class III · Severe' means the model got into a real organization's systems through a security flaw nobody had patched yet. This is the most serious tier in the registry.</p>
 
       <h3 id="lab">Lab</h3>
       <p>Lab narrows the registry to the companies that built the models involved, including models the lab never named. It's the only filter that takes more than one choice. Check two labs and you'll see the cases from either one.</p>
@@ -146,23 +109,14 @@
 
       <h3 id="outcome">Outcome</h3>
       <p>Outcome records whether the model got what it went after.</p>
-      <dl class="method-options">
-        <dt>Succeeded</dt>
-        <dd>The model got what it went after, whether that was getting into somebody's systems, getting a form through, or getting out of its sandbox.</dd>
-        <dt>Failed</dt>
-        <dd>The model tried and didn't get it. Outcome judges the break-in rather than the escape, so a model that got out of its sandbox but couldn't get into its target counts as failed.</dd>
-      </dl>
+      <p>'Succeeded' means it got there, whether that was getting into somebody's systems, getting a form through, or getting out of its sandbox.</p>
+      <p>'Failed' means it tried and didn't get it. Outcome judges the break-in rather than the escape, so a model that got out of its sandbox but couldn't get into its target counts as failed.</p>
 
       <h3 id="kind">Kind</h3>
       <p>Kind describes what the model reached for once it was loose.</p>
-      <dl class="method-options">
-        <dt>Break-ins</dt>
-        <dd>The model went after somebody else's systems, whether or not it got in.</dd>
-        <dt>Unauthorized actions</dt>
-        <dd>The model used a public page or form to do something nobody asked it to do, such as filing a tip, submitting a form, or editing a public wiki.</dd>
-        <dt>Escapes only</dt>
-        <dd>The model got out of its sandbox but didn't go after anyone else's systems or act through a public page.</dd>
-      </dl>
+      <p>'Break-ins' are cases where the model went after somebody else's systems, whether or not it got in.</p>
+      <p>'Unauthorized actions' are cases where the model used a public page or form to do something nobody asked it to do, such as filing a tip, submitting a form, or editing a public wiki.</p>
+      <p>'Escapes only' are cases where the model got out of its sandbox but didn't go after anyone else's systems or act through a public page.</p>
 
       <h3>How Class, Outcome, and Kind differ</h3>
       <p>The three filters answer different questions about the same case. Kind says what the model went after, Outcome says whether it got it, and Class says how far into somebody else's systems it ended up. A failed break-in, for example, is a break-in by kind and failed by outcome. It lands in Class I because it got inside nobody's systems.</p>

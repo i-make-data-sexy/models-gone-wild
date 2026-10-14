@@ -889,8 +889,6 @@
     text-transform:uppercase;font-size:15px;color:var(--ink);
     margin:30px 0 8px;
   }
-  .method-list{margin:0 0 14px;padding-left:22px;font-size:15px;line-height:1.65;}
-  .method-list li{margin:0 0 4px;}
   .method-section a:not(.back-link){
     color:inherit;text-decoration:underline;
     text-decoration-color:rgba(58,54,44,.5);
@@ -899,26 +897,6 @@
   .method-section a:not(.back-link):hover,
   .method-section a:not(.back-link):focus-visible{
     color:var(--stamp-red);text-decoration-color:var(--stamp-red);
-  }
-  /* Matches the dot fills in DISC_FILL, the same as the chart legends */
-  .key-dot{
-    display:inline-block;width:11px;height:11px;border-radius:50%;
-    margin-right:8px;vertical-align:-1px;
-  }
-  .key-self{background:#5a6b2a;}
-  .key-tip{background:#8f1d16;}
-
-  /* One option per row: the name as it reads in the dropdown, then
-     what it means */
-  .method-options{margin:18px 0 0;}
-  .method-options dt{
-    font-family:'Oswald',sans-serif;font-weight:600;letter-spacing:.1em;
-    text-transform:uppercase;font-size:13px;color:var(--ink);margin:0 0 6px;
-  }
-  .method-options dt .class-badge{margin-top:0;font-size:11px;}
-  .method-options dd{
-    margin:0 0 18px;padding-left:14px;border-left:3px solid var(--rule);
-    font-size:15px;line-height:1.6;color:var(--ink-soft);
   }
 
   /* Styled like the masthead's prose link, so the two pages share one
