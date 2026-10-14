@@ -82,6 +82,8 @@ When outlets disagree on a fact, go to the primary source and record the conflic
 
 Score against the existing cases, not in the abstract. For each of `cls`, `complexity`, and `harm`, name the nearest existing case above and below and say why this one sits between them. Complexity scores the method, never the motive. Harm scores what was reached. If a score sits on the dashed divider at 5, say which quadrant it falls in and whether that is the intent.
 
+Set `reach` too, which feeds the Kind filter: `intrusion` when the model went after somebody else's systems, whether or not it got in; `action` when it used a public page or form to do something nobody asked for, such as filing a tip or posting material; `escape` when it got out and reached nobody. See the `reach` row in `UPDATE.md`.
+
 ## Step 5: Draft and stage
 
 Write the full case object, including `whyComplexity` and `whyHarm`, then any `GLOSSARY` terms the prose introduces. Insert it into `CASES` on the branch, renumber `order`, and add any `REVIEW` or `COMPUTABLE` entries. Do NOT commit.
