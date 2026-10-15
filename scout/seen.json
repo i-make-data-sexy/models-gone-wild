@@ -825,6 +825,62 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-10-14"
+    },
+    {
+      "url": "https://theregister.com/ai-and-ml/2026/10/06/wikimedia-foundation-comes-forward-as-latest-openai-agent-assault-victim/5301400",
+      "title": "Wikimedia Foundation comes forward as latest OpenAI agent victim",
+      "case": "wikimedia",
+      "status": "case",
+      "first_seen": "2026-10-15"
+    },
+    {
+      "url": "https://en.ilsole24ore.com/art/anthropic-ai-systems-have-carried-out-unintended-actions-on-government-websites-AJfWnffB",
+      "title": "Anthropic agents unintended actions on government sites",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-15"
+    },
+    {
+      "url": "https://digg.com/ai/bp9erw9y",
+      "title": "Anthropic agents unintended actions on government sites",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-15"
+    },
+    {
+      "url": "https://tribune.net.ph/2026/10/13/anthropic-agents-submit-visa-forms-fake-homicide-tip",
+      "title": "Anthropic agents submit visa forms, fake homicide tip",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-15"
+    },
+    {
+      "url": "https://jlellis.net/blog/an-ai-agent-sent-police-a-fake-murder-tip-why-lawyers-should-pay-attention",
+      "title": "AI agent sent police a fake murder tip",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-15"
+    },
+    {
+      "url": "https://casrai.org/news/meta-ai-model-hacked-outside-company-safety-testing",
+      "title": "Meta AI model hacked outside company in safety testing",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-10-15"
+    },
+    {
+      "url": "https://threatbeat.com/attacks-and-incidents/ai-just-went-rogue-again-this-time-it-turned-to-deception",
+      "title": "AI just went rogue again, turned to deception",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-15"
+    },
+    {
+      "url": "https://blog.spruceid.com/when-an-ai-agent-acts-on-behalf-of-a-resident",
+      "title": "When an AI agent acts on behalf of a resident",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-15"
     }
   ],
   "runs": [
@@ -879,6 +935,12 @@
     {
       "date": "2026-10-14",
       "checked": 44,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-15",
+      "checked": 55,
       "new": 0,
       "updates": 0
     }
