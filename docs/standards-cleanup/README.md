@@ -58,7 +58,7 @@ The script also suggested an inline-code step while reporting no inline-code fin
 - No pre-commit hook and no CI. Every check runs only when someone remembers it. Steps 1 and 8.
 - Two scout branches from 2026-10-07, `update/claude` and `update/sol`, are unmerged and edit `CASES` in `index.html`. Decision 11.
 - 26 local branches and 8 remote branches are already merged into `main`. Decision 10.
-- Two server-wide items sit outside this app's blocks. `sites-available/` holds 18 `annielytics.conf` backups, and `server_tokens off` is commented out in `nginx.conf`, so every response names `nginx/1.18.0`. Decision 26.
+- Two server-wide items sit outside this app's blocks. `sites-available/` holds 53 backups (23 of `annielytics.conf` and 30 of `staging.annielytics.conf`, counted 2026-10-16), and `server_tokens off` is commented out in `nginx.conf`, so the origin names `nginx/1.18.0`. Cloudflare replaces that header, so the public never sees it. Decision 26.
 - `~/.claude/rules/formatting/code-formatting.md` turns HTML comments into Jinja comments. A static page has no Jinja, so its `<!-- -->` comments must stay and ship in the page source. Decision 26.
 - `scout/seen.json` on `main` is a seed the scout overwrites at the start of every run. It is 922 lines behind the live ledger on `scout-state`. Decision 26.
 - The mobile menu's link text is `antiquewhite`, where the v2 header rule says white. The `nav-antiquewhite` and `menu-toggle-antiquewhite` branches show it was chosen. Decision 26.
@@ -140,7 +140,7 @@ Answer these before running the steps. Record each answer here because the step 
 25. Meta description and share tags (step 13B). a) A meta description plus Open Graph and Twitter title, description, and URL on both pages, with no share image (recommended). b) The same plus a share image you design. c) Leave them out.
     Decision: b, recorded 2026-10-16.
 26. Small calls. a) Take all four as listed (recommended). Leave the server-wide nginx backups and `server_tokens` for a server-wide pass, which touches every app. Keep the HTML comments as `<!-- -->` when prompt 5 reformats the code. Keep the `scout/seen.json` seed on `main`. Keep the `antiquewhite` menu text. b) Name the ones to change.
-    Decision: b, recorded 2026-10-16. Which of the four to change is still to be named. Step 6 stops until it is.
+    Decision: b, recorded 2026-10-16, with the four named the same day. Leave the nginx backups and `server_tokens` for a server-wide pass after this cleanup, whose prompt is in [server-wide-followup.md](server-wide-followup.md). Delete the 20 HTML comments outright in step 6, with no render step. Keep the `scout/seen.json` seed on `main`. Keep the `antiquewhite` menu text.
 
 ## The steps
 
@@ -167,6 +167,8 @@ Answer these before running the steps. Record each answer here because the step 
 | 13B | [13b-canonicals.md](13b-canonicals.md) | No canonicals, the `/index.html` duplicates, no share tags. | Small, SEO risk | Not started |
 
 Step 0B sits after step 0 because every later step deploys to it. Step 9A comes before 9B so the data move, which touches the most tooling, lands on its own. Step 10A comes before 10B because the policy would block the Google Fonts rewrite. Step 13A builds the URL list that proves 13B's changes, and splits the baseline's URL step so each half fits one session.
+
+After step 13B, one server-wide pass remains outside this app: the nginx backups and `server_tokens`. Its prompt is in [server-wide-followup.md](server-wide-followup.md).
 
 ## Rules every step follows
 
