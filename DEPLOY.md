@@ -26,6 +26,7 @@ APP_DISPLAY_NAME=   Models Gone Wild
 APP_TYPE=           static
 APP_PATH_SEGMENT=   tools/models-gone-wild
 BASE_URL_PROD=      https://www.annielytics.com/tools/models-gone-wild/
+BASE_URL_STAGING=   https://staging.annielytics.com/tools/models-gone-wild/
 HAS_DATABASE=       no
 PROD_PORT=          8025 (reserved, not in use)
 STAGING_PORT=       8026 (reserved, not in use)
@@ -211,6 +212,136 @@ git pull origin main
 ```
 
 That is the whole deploy. There is no service to restart, because nginx reads the file fresh on every request. The no-cache headers mean a reload in the browser shows the change immediately.
+
+## Staging
+
+Staging is a second checkout of the repo at `~/apps/staging/models-gone-wild`, served by nginx from `/etc/nginx/sites-available/staging.annielytics.conf` under `staging.annielytics.com`. Like production, it has no service, no gunicorn, and no port. Port 8026 stays reserved and unused.
+
+A branch goes to staging first, gets checked there, and reaches production only on Annie's word. Deploy a branch to staging:
+
+```bash
+ssh -i ~/.ssh/id_ed25519_imds anniecushing@208.109.215.51 \
+  "set -e; cd ~/apps/staging/models-gone-wild && git fetch origin && git checkout <branch> \
+   && git pull --ff-only origin <branch> && git log --oneline -1"
+```
+
+Once the change reaches production, switch staging back to `main`:
+
+```bash
+ssh -i ~/.ssh/id_ed25519_imds anniecushing@208.109.215.51 \
+  "set -e; cd ~/apps/staging/models-gone-wild && git fetch origin && git checkout main \
+   && git pull --ff-only origin main"
+```
+
+### The loopback exception
+
+The staging server block sets `auth_basic` for the whole host, so every request needs the staging password. The page block and the asset block carry four extra lines that let the server itself through without it:
+
+```nginx
+satisfy any;
+allow 127.0.0.1;
+allow ::1;
+deny all;
+```
+
+With `satisfy any`, a request passes if it comes from loopback or carries the password. Nginx takes the client address only from Cloudflare's ranges (`/etc/nginx/conf.d/cloudflare-real-ip.conf`), and UFW lets only Cloudflare reach ports 80 and 443, so no outside request can arrive as `127.0.0.1`. A browser on the public URL still gets the password prompt.
+
+The redirect, rewrite, and repo-file blocks need no exception. A `return` or a `rewrite` runs before the access check, and each rewrite hands off to the page or asset block, which applies it. The staging config's server-wide `location ~ /\.git` and `.env` rules cover the clone, as they do in production.
+
+Run the staging health check on the server. It needs no password:
+
+```bash
+H="Host: staging.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
+for p in "" methodology/ threat-matrix/ lab-counts/ poster/sol-hugging-face/ DEPLOY.md .git/config no-such-page/; do
+  printf "%-28s %s\n" "/$p" "$(curl -sk -H "$H" -o /dev/null -w "%{http_code}" "$B/$p")"; done
+```
+
+Healthy output is five 200s, then 404 for `DEPLOY.md`, 403 for `.git/config`, and 404 for `no-such-page/`.
+
+### The staging blocks
+
+These sit in `staging.annielytics.conf` after the Treks and the City blocks and before Vinspire, added 2026-10-16. They match the production blocks above line for line, apart from the staging aliases and the loopback exception.
+
+```nginx
+# ===============================================================
+# Models Gone Wild Staging - static page, no gunicorn and no port
+# ===============================================================
+# Port 8026 is reserved for this app but unused, since nginx serves
+# the checkout straight off disk. Blocks that serve a file let
+# loopback through without the staging password (satisfy any), so
+# the server's own health checks need no credentials. Everyone else
+# still gets the password prompt.
+
+# The bare path would fall through to location / below, so send it
+# to the trailing-slash form.
+location = /tools/models-gone-wild {
+    return 301 /tools/models-gone-wild/;
+}
+
+# The dashboard permalinks. /threat-matrix/ and /lab-counts/ are the
+# same page as the bare path; the page reads the view from the URL.
+# Bare forms get their trailing slash first.
+location ~ ^/tools/models-gone-wild/(threat-matrix|lab-counts)$ {
+    return 301 /tools/models-gone-wild/$1/;
+}
+
+# Strip the view segment and match again. Serves index.html for the
+# permalink and resolves its relative assets (threat-matrix/css/...).
+# `last` reruns location matching, so the rules below still apply.
+location ~ ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/ {
+    rewrite ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/(.*)$ /tools/models-gone-wild/$1 last;
+}
+
+# The wanted-poster permalinks, /poster/<slug>/. Same page again; the
+# page reads the poster from the URL. Bare forms get their trailing
+# slash, then the segment is stripped and matched again like the views.
+location ~ ^/tools/models-gone-wild/poster/([a-z0-9-]+)$ {
+    return 301 /tools/models-gone-wild/poster/$1/;
+}
+
+location ~ ^/tools/models-gone-wild/poster/[a-z0-9-]+/ {
+    rewrite ^/tools/models-gone-wild/poster/[a-z0-9-]+/(.*)$ /tools/models-gone-wild/$1 last;
+}
+
+# Repo files that ship with the clone but are not site content.
+# DEPLOY.md in particular carries the server path and host IP.
+location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
+    return 404;
+}
+
+# Unchanging assets cache hard. A regex beats the prefix block
+# below, and the extension whitelist keeps it to real assets.
+location ~* ^/tools/models-gone-wild/(js|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
+    satisfy any;
+    allow 127.0.0.1;
+    allow ::1;
+    deny all;
+
+    alias /home/anniecushing/apps/staging/models-gone-wild/$1/$2;
+    expires 30d;
+    add_header Cache-Control "public, no-transform";
+}
+
+# The page itself. The case data lives inline, so a stale copy is a
+# wrong copy and it must never be cached.
+location /tools/models-gone-wild/ {
+    satisfy any;
+    allow 127.0.0.1;
+    allow ::1;
+    deny all;
+
+    # Old ?view= links from before the permalinks, moved for good.
+    if ($arg_view = matrix) { return 301 /tools/models-gone-wild/threat-matrix/; }
+    if ($arg_view = labs)   { return 301 /tools/models-gone-wild/lab-counts/; }
+
+    alias /home/anniecushing/apps/staging/models-gone-wild/;
+    index index.html;
+    expires -1;
+    add_header Cache-Control "no-cache, no-store, must-revalidate";
+}
+```
+
+When a production block changes, make the same change here so the two stay comparable.
 
 ## Branch discipline
 
