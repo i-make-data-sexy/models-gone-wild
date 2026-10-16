@@ -881,6 +881,76 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-15"
+    },
+    {
+      "url": "https://theprint.in/world/australia-says-openai-agent-breached-govt-portal-checks-for-more-breaches/3052171",
+      "title": "Australia says OpenAI agent breached govt portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://theregister.com/2026/03/09/mckinsey_ai_chatbot_hacked",
+      "title": "AI agent hacked McKinsey chatbot (researcher red team)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://theregister.com/ai-and-ml/2026/09/21/google-joins-the-oops-our-agents-hacked-someone-club-after-partners-internet-access-error/5297640",
+      "title": "Google joins the Oops club",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://theregister.com/security/2026/08/12/near-autonomous-ai-agents-attack-taiwans-nuclear-safety-agency/5287055",
+      "title": "Near-autonomous AI agents attack Taiwan nuclear agency (human attackers)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/google-gemini-cli-abused-as-a-hacking-agent-malware-botnet-operator",
+      "title": "Gemini CLI abused by threat actor",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://6abc.com/post/anthropics-claude-ai-submits-false-tip-philadelphia-unsolved-homicide-case/19927589",
+      "title": "Anthropic false homicide tip Philadelphia",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://scmp.com/news/world/united-states-canada/article/3370414/anthropic-ai-model-sent-fake-murder-tip-us-police-hit-government-sites",
+      "title": "Anthropic false homicide tip Philadelphia",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://kuwaittimes.com/article/51323/business/anthropic-reports-fake-police-tip-in-rogue-ai-cases",
+      "title": "Anthropic false homicide tip Philadelphia",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://timeslive.co.za/news/sci-tech/2026-10-10-anthropic-discloses-fake-tip-to-police-among-new-rogue-ai-incidents",
+      "title": "Anthropic false homicide tip Philadelphia",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://wspa.com/news/philadelphia-police-receive-false-homicide-tip-from-anthropic-ai-model/amp",
+      "title": "Anthropic false homicide tip Philadelphia",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-16"
     }
   ],
   "runs": [
@@ -940,6 +1010,12 @@
     },
     {
       "date": "2026-10-15",
+      "checked": 55,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-16",
       "checked": 55,
       "new": 0,
       "updates": 0
