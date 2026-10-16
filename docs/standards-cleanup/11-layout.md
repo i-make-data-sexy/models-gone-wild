@@ -6,7 +6,7 @@ Brings both pages to the end state of `~/.claude/rules/design/sticky-footer.md`,
 
 ## Decisions this step reads
 
-Decision 1 (staging) and decision 18 (the wrapper's name), from `docs/standards-cleanup/README.md`.
+Decision 18a (the wrapper becomes `.main-content`), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -38,7 +38,7 @@ The `.tip` and `.overlay` elements are fixed-position overlays outside the wrapp
 
 ## The changes
 
-1. Under decision 18a, rename `.wrap` to `.main-content` in both pages and every stylesheet. Under 18b, keep `.wrap` and apply the same rules to it.
+1. Rename `.wrap` to `.main-content` in both pages and every stylesheet (decision 18a).
 2. Restructure both pages to:
 
    ```
@@ -102,7 +102,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 2. Run both suites and confirm they pass. Measure the current gap above the
    footer on every page at the four widths, as the before numbers.
 3. Sample-file review gate (HTML and CSS): restructure index.html and
-   css/base.css as the step file shows (wrapper per decision 18), run the
+   css/base.css as the step file shows (wrapper renamed .main-content), run the
    gap measurement, the screenshot diff, and the pinning check, and give me
    clickable links to both files, the numbers, the changed screenshots,
    and the git diff command. STOP until I approve.
@@ -112,7 +112,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 5. Update UPDATE.md and DEPLOY.md, and add the layout tests.
 6. Run both suites, the CSP walk, the screenshot diff, the gap and pinning
    checks, and the comment style checker (0), gating on each exit code.
-7. Commit, push, and under decision 1a deploy the branch to staging with the
+7. Commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
 8. Report what you verified and how, give me the staging links with a
    reminder to hard-refresh and to try the menu on my phone, and STOP. Do
@@ -141,7 +141,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    health check.
 4. Remind me to hard-refresh the home page and Methodology and to try the
    menu on my phone.
-5. Under decision 1a, switch staging back to main with the README command.
+5. Switch staging back to main with the README command.
 6. Mark step 11 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main. Add Models Gone Wild to
    the list of finished apps in ~/.claude/rules/design/sticky-footer.md,

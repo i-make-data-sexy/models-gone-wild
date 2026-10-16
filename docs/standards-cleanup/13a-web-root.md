@@ -6,7 +6,7 @@ The first half of the baseline's URL step, which goes last because it can break 
 
 ## Decisions this step reads
 
-Decision 1 (staging), decision 22 (the prefix mechanism), and decision 23 (repo tooling in the web root), from `docs/standards-cleanup/README.md`.
+Decision 22a (keep relative paths and nginx's strip-and-rematch) and decision 23a (move the site into `public/`), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -17,7 +17,7 @@ The app handled its URLs this way on 2026-10-16:
 - `scripts/serve.py` reimplements nginx's redirects and strip-and-rematch for the local preview, and `scripts/check_overlaps.py` names the prefix once (`SUBPATH`).
 - No shipped page, stylesheet, or script hardcodes the prefix. The five strings in shipped files are all comments.
 
-So the prefix is handled by one mechanism (relative paths through nginx's rewrites), mirrored by two tools. Decision 22 keeps it (22a), replaces the asset rewrites with a `<base href>` in each page (22b), or switches to root-relative paths (22c).
+So the prefix is handled by one mechanism (relative paths through nginx's rewrites), mirrored by two tools. Decision 22a keeps it, so this step adds a test that holds the mirrors in agreement and changes no path.
 
 The web root is the git checkout. Besides the site, it holds `.claude/`, `scout/`, `scripts/`, `tests/`, `deploy/`, `docs/`, `DEPLOY.md`, `UPDATE.md`, `requirements-dev.txt`, and the git hook. An extension denylist keeps most of them private, but `deploy/nginx/headers.conf` (step 2) and `scripts/git-hooks/pre-commit` (step 8) are served today, harmlessly, and any new kind of file would be public until someone extends the denylist.
 
@@ -35,23 +35,22 @@ Add `scripts/url-list/origin.sh <host>`, which runs the same list on the server 
 ## The changes
 
 1. Build the URL list and record `main` locally and on production before anything else.
-2. Under decision 23a, `git mv` the site into `public/`: `index.html`, `404.html`, `methodology/`, `css/`, `js/`, `img/`, and `fonts/`. Point `scripts/serve.py`, `scripts/check_overlaps.py`, `scripts/cases.py`, the tests, and the screenshot and CSP harnesses at `public/`. Update `UPDATE.md`, `DEPLOY.md`, both copies of the add-case skill (its footer-date `sed` edits `public/index.html`), and `scout/SCOUT.md`. Move the pytest marker config from `tests/conftest.py` into a root `pytest.ini`, now that the root is private, and update the root allowlist (`index.html` and `404.html` leave it; `pytest.ini` joins). On both servers, change every `alias` to `/home/anniecushing/apps/<staging/>models-gone-wild/public/...`, and delete the denylist block since nothing outside `public/` can be reached. Keep the server-wide `.git` and `.env` rules as they are.
-3. Under decision 23b, add a block returning 404 for `^/tools/models-gone-wild/(scripts|scout|tests|deploy|docs|\.claude)/`, add `conf` and `ini` to the denylist, and add `tests/test_served.py`, which lists every tracked file and fails on one nginx would serve that is not a page, stylesheet, script, font, or image.
-4. Apply decision 22. Under 22a, add a test that `serve.py`'s redirects and strip-and-rematch agree with the nginx blocks shown in `DEPLOY.md`. Under 22b or 22c, change the paths and the nginx blocks together, and expect the asset-under-permalink rows to change in the URL list.
+2. `git mv` the site (`index.html`, `404.html`, `methodology/`, `css/`, `js/`, `img/`, and `fonts/`) into `public/`. Point `scripts/serve.py`, `scripts/check_overlaps.py`, `scripts/cases.py`, the tests, and the screenshot and CSP harnesses at `public/`. Update `UPDATE.md`, `DEPLOY.md`, both copies of the add-case skill (its footer-date `sed` edits `public/index.html`), and `scout/SCOUT.md`. Move the pytest marker config from `tests/conftest.py` into a root `pytest.ini`, now that the root is private, and update the root allowlist (`index.html` and `404.html` leave it; `pytest.ini` joins). On both servers, change every `alias` to `/home/anniecushing/apps/<staging/>models-gone-wild/public/...`, and delete the denylist block since nothing outside `public/` can be reached. Keep the server-wide `.git` and `.env` rules as they are.
+3. Add a test that `serve.py`'s redirects and strip-and-rematch agree with the nginx blocks shown in `DEPLOY.md` (decision 22a).
 
 ## The sample-file review gate
 
-- Python: `scripts/serve.py` is the sample since every other tool and test serves through it. Point it at `public/` (23a), run the URL list against the branch, and stop for approval before the other scripts and tests.
+- Python: `scripts/serve.py` is the sample since every other tool and test serves through it. Point it at `public/`, run the URL list against the branch, and stop for approval before the other scripts and tests.
 - Markdown: `UPDATE.md` is the sample, then the skill copies, `DEPLOY.md`, and `SCOUT.md`.
-- HTML: Under 22a and 23a the pages move without edits, so there is nothing to sample. Under 22b or 22c, `index.html` is the sample.
+- HTML: The pages move without edits, so there is nothing to sample.
 
 ## Done when
 
-The URL list for the branch matches `main` row for row, locally and at the staging origin, except that the private files now return 404 instead of 403 or the denylist's 404 (23a), and the asset-under-permalink rows under 22b or 22c. Every remaining difference is shown and approved. Both suites, the CSP walk, the five check scripts, and `check_overlaps.py` pass, and the screenshot diff is pixel-identical.
+The URL list for the branch matches `main` row for row, locally and at the staging origin, except that `deploy/nginx/headers.conf` and `scripts/git-hooks/pre-commit`, which nginx serves today, now return 404. Every remaining difference is shown and approved. Both suites, the CSP walk, the five check scripts, and `check_overlaps.py` pass, and the screenshot diff is pixel-identical.
 
 ## Rollback
 
-Revert the commit and restore the config backup on each server, run `sudo nginx -t`, reload, and add a PCI row. Under 23a the code and the config must roll back together, in one command, as they shipped.
+Revert the commit and restore the config backup on each server, run `sudo nginx -t`, reload, and add a PCI row. The code and the config must roll back together, in one command, as they shipped.
 
 ## Paste-ready prompt: build and stage
 
@@ -70,20 +69,19 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 3. Build scripts/url-list/run.sh and origin.sh. Record main locally and at
    the production origin (Host: www.annielytics.com), and show me both
    lists.
-4. Sample-file review gate (Python): under decision 23a, git mv the site
+4. Sample-file review gate (Python): git mv the site
    into public/ and point scripts/serve.py at it. Run the URL list against
    the branch and diff it with main. Give me a clickable link to serve.py,
    a short summary, the diff, and the git diff command, and STOP until I
-   approve. Under 23b, do the served-files test and the nginx additions
-   instead.
+   approve.
 5. After I approve, update the other tools, the tests, the harnesses, and
    the root allowlist, then the docs (UPDATE.md first as the Markdown
    sample, STOP for approval, then both skill copies, DEPLOY.md, and
-   SCOUT.md). Apply decision 22.
+   SCOUT.md). Add the test that serve.py agrees with DEPLOY.md's blocks.
 6. Run both suites, the CSP walk, the five check scripts,
    check_overlaps.py, the screenshot diff (pixel-identical), and the
    comment style checker (0), gating on each exit code.
-7. Under decision 1a, on the server: back up
+7. On the server: back up
    /etc/nginx/sites-available/staging.annielytics.conf and write the new
    staging blocks to a scratch file. Show me the diff and STOP until I
    approve. Then, in ONE ssh command, deploy the branch to staging, copy the
@@ -126,7 +124,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 6. Run origin.sh against production and diff it with the list from before
    the change. Show me every difference, and run the production health
    check.
-7. Under decision 1a, switch staging back to main with the README command.
+7. Switch staging back to main with the README command.
 8. Mark step 13A done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 9. Give me the production links to spot-check with a hard refresh. Then

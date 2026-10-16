@@ -76,7 +76,6 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    on a branch off an up-to-date main named standards-step-0, commit, push,
    and merge to main (it is a docs-only change, so this prompt is my
    go-ahead for that merge).
-5. Tell me the next step: step 0B under decision 1a, whose prompt is at the
-   bottom of docs/standards-cleanup/00b-staging.md, or step 1 under
-   decision 1b, at the bottom of docs/standards-cleanup/01-tests.md.
+5. Tell me the next step is step 0B, whose prompt is at the bottom of
+   docs/standards-cleanup/00b-staging.md.
 ```

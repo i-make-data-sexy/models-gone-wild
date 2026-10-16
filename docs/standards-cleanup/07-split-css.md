@@ -90,7 +90,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 7. Run run.sh main standards-split-css again (pixel-identical at every
    width), both suites, and the comment style checker (0), gating on each
    exit code.
-8. Commit, push, and under decision 1a deploy the branch to staging with the
+8. Commit, push, and deploy the branch to staging with the
    README command, run the staging health check, and confirm
    threat-matrix/css/registry.css returns 200 at the staging origin.
 9. Report what you verified and how, give me the staging links with a
@@ -120,7 +120,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    health check, and confirm css/variables.css and
    threat-matrix/css/registry.css return 200 at the origin.
 4. Remind me to hard-refresh (Command-Shift-R) the production pages.
-5. Under decision 1a, switch staging back to main with the README command.
+5. Switch staging back to main with the README command.
 6. Mark step 7 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 7. Give me https://www.annielytics.com/tools/models-gone-wild/ and

@@ -23,7 +23,7 @@ The five lowercase comments label hair styles in a lookup table (`side part, swe
 
 1. Read `~/.claude/skills/annielytics-comment-style/SKILL.md` and follow it.
 2. Fix the banner, the comment prose, and the docstrings, using the skill's scripts where they apply (`docstring_layout.py` for the blank lines, `normalize_banners.py` for the banner) and by hand where they do not.
-3. HTML comments stay `<!-- -->`. A static page has no Jinja to hide them in (decision 26).
+3. HTML comments stay `<!-- -->` since a static page has no Jinja to hide them in, unless decision 26 names them as one of the small calls to change.
 
 ## The sample-file review gate
 
@@ -47,8 +47,8 @@ Revert the commit.
 Run step 6 (comment style) of the Models Gone Wild standards cleanup,
 following docs/standards-cleanup/06-comment-style.md exactly. Read
 docs/standards-cleanup/README.md and
-~/.claude/skills/annielytics-comment-style/SKILL.md first. Use decisions 1
-and 26 as recorded in the README, and stop if either is blank.
+~/.claude/skills/annielytics-comment-style/SKILL.md first. Stop if decision
+26 in the README still says which small calls to change are to be named.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
@@ -68,7 +68,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 6. Prove the Python is unchanged with an ast.dump comparison that excludes
    docstrings. Run check_style.py (must report 0) and both suites, gating on
    each exit code.
-7. Commit, push, and under decision 1a deploy the branch to staging with the
+7. Commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
 8. Report what you verified and how, and STOP. Do not merge to main or touch
    production until I say so.
@@ -94,7 +94,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 2. Merge standards-comment-style to main and push.
 3. Deploy main to production with the README command and run the production
    health check.
-4. Under decision 1a, switch staging back to main with the README command.
+4. Switch staging back to main with the README command.
 5. Mark step 6 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 6. Tell me the next step is step 7, whose prompt is at the bottom of

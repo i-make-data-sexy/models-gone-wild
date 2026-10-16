@@ -2,11 +2,11 @@
 
 Branch: `standards-design-tokens`
 
-This is pass A of the design-tokens skill. Every literal becomes a token holding the exact same value, so nothing moves by a pixel. Consolidating near-duplicates is pass B, step 8B, and runs only under decision 13b.
+This is pass A of the design-tokens skill. Every literal becomes a token holding the exact same value, so nothing moves by a pixel. Consolidating near-duplicates is pass B, step 8B, which is skipped under decision 13a.
 
 ## Decisions this step reads
 
-Decision 1 (staging) and decision 12 (the 31 colors in `index.html`), from `docs/standards-cleanup/README.md`.
+Decision 12a (the script reads its colors from the CSS tokens) and decision 13a (no consolidation pass), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -35,18 +35,17 @@ There is no pre-commit hook and `core.hooksPath` is unset. A hook at `scripts/gi
 1. Read `~/.claude/skills/design-tokens/SKILL.md` and follow pass A.
 2. In the seven CSS files from step 7, give every raw color, `rgb()`/`rgba()` value, font size, and line height a token in `variables.css` holding the exact literal, named for its role, and replace each use with `var()`. Keep values identical, including spelling (`.95em` stays `.95em`).
 3. Remove the three unused tokens, and the duplicate definition of `--options-knob-fill`, after grepping both pages and every CSS file to confirm nothing reads them.
-4. Under decision 12a:
+4. Under decision 12a, the 31 colors in `index.html` move onto the tokens.
    - At startup, read each color the script draws with from the CSS custom properties with `getComputedStyle(document.documentElement).getPropertyValue(...)`, trimmed, and assign them to the existing constants (`DISC_FILL`, `M_INK`, and the rest). The SVG the script builds keeps receiving literal colors, which matters because html2canvas renders a poster's SVG as an image and would not apply a stylesheet to it.
    - Replace the two legends' `fill="#..."` attributes with classes the stylesheet colors from the tokens (the legends are never captured by html2canvas), and drop the "keep in step with `DISC_FILL`" comments since both now read one source.
    - Add a test that fails on any hex color in `index.html` or `methodology/index.html`.
-   Under decision 12b, leave the 31 and skip the test.
 5. Install the gate: `scripts/git-hooks/pre-commit` runs `python3 ~/.claude/skills/design-tokens/scripts/check_raw_values.py --staged --checks color,rgb,font-size,line-height` and exits non-zero on a finding. Set `git config core.hooksPath scripts/git-hooks`, and note in `UPDATE.md` that a fresh clone needs the same command.
 6. Run the screenshot diff, and open a poster and press Download poster to confirm the PNG still renders (step 1's browser suite covers opening; the download is a manual check).
 
 ## The sample-file review gate
 
 - CSS: `css/poster.css` is the sample since it carries the most raw values of the seven (28 of 90). Tokenize it, run the screenshot diff, and stop for approval before the other six.
-- HTML and JS: `index.html` is the only file with colors under decision 12a, so there is nothing further to sample.
+- HTML and JS: `index.html` is the only file with colors, so there is nothing further to sample.
 
 ## Done when
 
@@ -82,14 +81,14 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    diff result, and the git diff command, and STOP until I approve.
 4. After I approve, tokenize the other six CSS files and remove the three
    unused tokens and the duplicate definition.
-5. Under decision 12a, read the script's colors from the tokens at startup,
+5. Read the script's colors from the tokens at startup,
    move the legend fills to classes, and add the no-hex test for both pages.
 6. Install scripts/git-hooks/pre-commit, set core.hooksPath, note the
    command in UPDATE.md, and show me the hook blocking a raw hex.
 7. Run the screenshot diff (pixel-identical), both suites, the comment
    style checker (0), and check_raw_values.py (0), gating on each exit
    code. Download one poster locally and confirm the PNG looks right.
-8. Commit, push, and under decision 1a deploy the branch to staging with the
+8. Commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
 9. Report what you verified and how, give me the staging links with a
    reminder to hard-refresh and to download one poster, and STOP. Do not
@@ -118,11 +117,9 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    health check.
 4. Remind me to hard-refresh and to download one poster from
    https://www.annielytics.com/tools/models-gone-wild/poster/sol-hugging-face/.
-5. Under decision 1a, switch staging back to main with the README command.
+5. Switch staging back to main with the README command.
 6. Mark step 8 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
-7. Tell me the next step: step 8B under decision 13b, whose prompt is at
-   the bottom of docs/standards-cleanup/08b-token-consolidation.md, or step
-   9A under decision 13a, at the bottom of
-   docs/standards-cleanup/09a-case-data.md.
+7. Tell me the next step is step 9A (step 8B is skipped under decision
+   13a), whose prompt is at the bottom of docs/standards-cleanup/09a-case-data.md.
 ```

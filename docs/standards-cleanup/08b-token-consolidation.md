@@ -2,7 +2,7 @@
 
 Branch: `standards-token-consolidation`
 
-Only under decision 13b. Under 13a, mark this step skipped in the README and go to step 9A.
+Skipped under decision 13a (recorded 2026-10-16), and marked skipped in the README. The file stays so the pass can run later if you change your mind. Do not run its prompts without changing decision 13 first.
 
 This is pass B of the design-tokens skill, a deliberate visual change reviewed screenshot by screenshot. Pass A (step 8) has to be in production first, so a bug in this step cannot be mistaken for the extraction.
 
@@ -60,7 +60,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 6. Run both suites, check_overlaps.py at --width 1300 and --width 390,
    check_raw_values.py (0), and the comment style checker (0), gating on
    each exit code.
-7. Commit, push, and under decision 1a deploy the branch to staging with the
+7. Commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
 8. Report what you verified and how, give me the staging links with a
    reminder to hard-refresh, and STOP. Do not merge to main or touch
@@ -89,7 +89,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 3. Deploy main to production with the README command and run the production
    health check.
 4. Remind me to hard-refresh the production pages and open a poster.
-5. Under decision 1a, switch staging back to main with the README command.
+5. Switch staging back to main with the README command.
 6. Mark step 8B done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 7. Tell me the next step is step 9A, whose prompt is at the bottom of

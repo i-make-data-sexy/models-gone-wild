@@ -4,7 +4,7 @@ Branch: `standards-root-files`
 
 ## Decisions this step reads
 
-Decision 1 (staging), decision 8 (`DEPLOY.md` and `UPDATE.md`), decision 9 (the prompts that deploy straight to production), and decision 10 (merged branches), from `docs/standards-cleanup/README.md`.
+Decision 8a (`DEPLOY.md` and `UPDATE.md` stay at the root), decision 9a (rewrite the prompts that deploy straight to production), and decision 10a (delete merged branches), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -25,9 +25,9 @@ Three more items land here because they are hygiene rather than code:
 
 ## The changes
 
-1. `tests/test_root.py`: lists the tracked files at the root with `git ls-files` and fails on any not in the allowlist. The allowlist is `.gitignore`, `index.html`, `requirements-dev.txt`, and, under decision 8a, `DEPLOY.md` and `UPDATE.md`. Tracked folders are not counted. Under decision 8b, move `DEPLOY.md` and `UPDATE.md` to `docs/`, update every reference (`grep -rn "UPDATE.md\|DEPLOY.md"` across the repo, both skill copies, and `scout/SCOUT.md`), and leave them out of the allowlist.
-2. Under decision 9a, rewrite the deploy flow in:
-   - `UPDATE.md`: the three prompts and "Deploying the change", so each ends by deploying the branch to staging (decision 1a) or running the local preview (decision 1b), giving the links, and stopping. Production then runs only on your word, with the commands from the README.
+1. `tests/test_root.py`: lists the tracked files at the root with `git ls-files` and fails on any not in the allowlist. The allowlist is `.gitignore`, `index.html`, `requirements-dev.txt`, `DEPLOY.md`, and `UPDATE.md`. Tracked folders are not counted.
+2. Under decision 9a, rewrite the deploy flow in five files.
+   - `UPDATE.md`: the three prompts and "Deploying the change", so each ends by deploying the branch to staging, giving the links, and stopping. Production then runs only on your word, with the commands from the README.
    - `.claude/skills/models-gone-wild-add-case/SKILL.md` and `~/.claude/skills/models-gone-wild-add-case/SKILL.md`: the closing deploy step, the same way. Keep the two copies byte-identical since the cloud scout reads the repo copy.
    - `DEPLOY.md`: "Updating after the first deploy" and "Branch discipline", to name the staging leg.
    - `scout/SCOUT.md`: the publishing prompt, to name the staging leg.
@@ -61,18 +61,18 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    standards-root-files. Never work on main.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass before any change.
-3. Write tests/test_root.py with the allowlist for decision 8, and show me
+3. Write tests/test_root.py with the allowlist from the step file, and show me
    the guard failing on a scratch root file and passing without it.
-4. Sample-file review gate (Markdown), under decision 9a: rewrite UPDATE.md's
+4. Sample-file review gate (Markdown): rewrite UPDATE.md's
    three prompts and its "Deploying the change" section first. Give me a
    clickable link, a short summary, and the git diff command, and STOP
    until I approve. Then do both copies of the add-case skill (identical),
    DEPLOY.md, and scout/SCOUT.md the same way.
-5. Under decision 10a, list the merged local and remote branches you would
+5. List the merged local and remote branches you would
    delete, and STOP until I approve the list. Then delete them with git
    branch -d and git push origin --delete.
 6. Run both suites and the comment style checker, gating on each exit code,
-   commit, push, and under decision 1a deploy the branch to staging with the
+   commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
 7. Report what you verified and how, and STOP. Do not merge to main or touch
    production until I say so.
@@ -98,7 +98,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 2. Merge standards-root-files to main and push.
 3. Deploy main to production with the README command and run the production
    health check.
-4. Under decision 1a, switch staging back to main with the README command.
+4. Switch staging back to main with the README command.
 5. Mark step 4 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 6. Tell me the next step is step 5, whose prompt is at the bottom of

@@ -2,7 +2,7 @@
 
 Branch: `standards-staging`
 
-Only under decision 1a. Under 1b, mark this step skipped in the README and go to step 1.
+Decision 1a (recorded 2026-10-16). Port 8026 is reserved for this staging copy in `~/.claude/skills/DEPLOY.md`. A static copy served by nginx binds no port, so 8026 stays held and unused unless the app is ever rebuilt on Flask. Do not create a systemd unit.
 
 ## Background
 
@@ -55,8 +55,8 @@ Restore the backup over `staging.annielytics.conf`, run `sudo nginx -t`, reload,
 ```
 Run step 0B (staging copy) of the Models Gone Wild standards cleanup,
 following docs/standards-cleanup/00b-staging.md exactly. Read
-docs/standards-cleanup/README.md first. Decision 1 must be a; if it is b,
-mark step 0B skipped in the README and stop.
+docs/standards-cleanup/README.md first. Decision 1a applies (recorded
+2026-10-16). Create no systemd unit; port 8026 stays reserved and unused.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 

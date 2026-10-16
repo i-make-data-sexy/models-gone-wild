@@ -6,7 +6,7 @@ The first half of the baseline's inline-code step. The case data moves on its ow
 
 ## Decisions this step reads
 
-Decision 1 (staging), decision 11 (the open scout branches), decision 14 (the data's format), and decision 15 (caching the moved code), from `docs/standards-cleanup/README.md`.
+Decision 11a (you publish or close the open scout branches first), decision 14a (plain `js/cases.js` and `js/glossary.js`), and decision 15a (html2canvas moves to `js/vendor/`, and only that folder and `img/` keep the 30-day cache), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -27,13 +27,12 @@ Nginx hard-caches everything under `js/` and `img/` for 30 days (`expires 30d`, 
 
 ## The changes
 
-1. Confirm decision 11 is settled: `git log --oneline origin/main..origin/update/claude -- index.html` and the same for `update/sol` print nothing, or the branches are gone. If either still carries unmerged `CASES` edits, stop.
-2. Under decision 15a:
+1. Confirm decision 11a is done. `git log --oneline origin/main..origin/update/claude -- index.html` and the same for `update/sol` print nothing, or the branches are gone. If either still carries unmerged `CASES` edits, stop.
+2. Narrow the long cache, under decision 15a.
    - `git mv js/html2canvas.min.js js/vendor/html2canvas.min.js`, move `js/VENDORED.md` beside it, and update the `<script src>`, the hash test, and `DEPLOY.md`.
    - Narrow the asset rule on both servers to `^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$`, aliasing `/home/anniecushing/apps/<staging/>models-gone-wild/$1/$2`, so `js/*.js` falls through to the no-cache page block like `css/`.
-   - Under 15b, leave `js/` alone and put the data in a new top-level `app/` folder, which no cache rule matches. Under 15c, keep `js/`, add `?v=<short commit>` to the tag, and document in `UPDATE.md` that every data change bumps it.
-3. Under decision 14a, move `CASES` and its field comment into `js/cases.js`, and `GLOSSARY` into `js/glossary.js`, as plain scripts with the same object syntax, byte for byte. Load both from `index.html` with relative `<script src>` tags before the inline script, so its top-level code sees them as before. Under 14b, put both in `<script type="application/json" id="cases-data">` and `id="glossary-data"` blocks with every key quoted, and parse them at the top of the script. Under 14c, write `data/cases.json` and `data/glossary.json`, fetch them before the first render, and take `json` off nginx's denylist for `data/` only.
-4. Add `scripts/cases.py` with one loader, `load_cases_js()`, that returns the case source from wherever decision 14 put it. Point `check_charges.py`, `check_claims.py`, `check_dates.py`, and `check_slugs.py` at it, removing their four copies. Point `check_quotes.py` at `index.html` plus the data files.
+3. Under decision 14a, move `CASES` and its field comment into `js/cases.js`, and `GLOSSARY` into `js/glossary.js`, as plain scripts with the same object syntax, byte for byte. Load both from `index.html` with relative `<script src>` tags before the inline script, so its top-level code sees them as before.
+4. Add `scripts/cases.py` with one loader, `load_cases_js()`, that returns the case source from `js/cases.js`. Point `check_charges.py`, `check_claims.py`, `check_dates.py`, and `check_slugs.py` at it, removing their four copies. Point `check_quotes.py` at `index.html`, `js/cases.js`, and `js/glossary.js`.
 5. Rewrite `UPDATE.md`'s second and third checks, "The case schema" and "Where things live", the add-case skill's loader snippet and every instruction that says the cases live in `index.html` (both copies, kept identical), and `scout/SCOUT.md` where it names `index.html`.
 6. Point `tests/test_static.py` at the shared loader, and add a test that `index.html` contains no `CASES = [` or `GLOSSARY = {`.
 
@@ -46,11 +45,11 @@ Nginx hard-caches everything under `js/` and `img/` for 30 days (`expires 30d`, 
 
 ## Done when
 
-The five check scripts exit 0 reading the new location, both suites pass, the screenshot diff is pixel-identical, `index.html` no longer holds the data, and under 15a `curl -skI` shows `js/cases.js` with the no-cache header and `js/vendor/html2canvas.min.js` with the 30-day one at the staging origin.
+The five check scripts exit 0 reading the new location, both suites pass, the screenshot diff is pixel-identical, `index.html` no longer holds the data, and `curl -skI` shows `js/cases.js` with the no-cache header and `js/vendor/html2canvas.min.js` with the 30-day one at the staging origin.
 
 ## Rollback
 
-Revert the commits. Under 15a, restore the config backup on each server, run `sudo nginx -t`, reload, and add a PCI row. If production served `js/cases.js` under the old rule even once, purge it in Cloudflare (Caching, Configuration, Custom Purge, by URL).
+Revert the commits. Restore the config backup on each server, run `sudo nginx -t`, reload, and add a PCI row. If production served `js/cases.js` under the old rule even once, purge it in Cloudflare (Caching, Configuration, Custom Purge, by URL).
 
 ## Paste-ready prompt: build and stage
 
@@ -67,10 +66,10 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    if one does. Branch off an up-to-date main as standards-case-data. Never
    work on main.
 2. Run both suites and the five check scripts, and confirm they pass.
-3. Under decision 15a, move html2canvas to js/vendor/ with git mv, and
+3. Move html2canvas to js/vendor/ with git mv, and
    update its tag, the hash test, js/VENDORED.md's location, and DEPLOY.md.
-4. Move CASES and GLOSSARY out of the inline script as decision 14 says,
-   byte for byte, and load them before the inline script. Show me a diff of
+4. Move CASES and GLOSSARY out of the inline script into js/cases.js and
+   js/glossary.js, byte for byte, and load them before the inline script. Show me a diff of
    js/cases.js against the original lines.
 5. Sample-file review gate (Python): write scripts/cases.py and switch
    scripts/check_dates.py to it. Run it and give me a clickable link, a
@@ -85,7 +84,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 8. Run the five check scripts, both suites, the screenshot diff
    (pixel-identical), and the comment style checker (0), gating on each
    exit code.
-9. Under decision 15a, on the server: back up
+9. On the server: back up
    /etc/nginx/sites-available/staging.annielytics.conf, narrow this app's
    asset rule to js/vendor and img as the step file shows, show me the
    diff, and STOP until I approve. Then sudo nginx -t, reload, wait two
@@ -103,7 +102,7 @@ the bottom of docs/standards-cleanup/09a-case-data.md, copied exactly.
 
 ## Paste-ready prompt: ship to production
 
-Paste this once you are happy with the step 9A report. It needs no edits. Under decision 15a, the nginx change goes first, so the old 30-day rule never serves the data file.
+Paste this once you are happy with the step 9A report. It needs no edits. The nginx change goes first, so the old 30-day rule never serves the data file.
 
 ```
 Ship step 9A (move the case data) of the Models Gone Wild standards cleanup
@@ -115,7 +114,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
 1. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    on standards-case-data, gating on each exit code.
-2. Under decision 15a, BEFORE deploying any code: back up
+2. BEFORE deploying any code: back up
    /etc/nginx/sites-available/annielytics.conf, narrow this app's asset
    rule to js/vendor and img, run sudo nginx -t, reload, wait two seconds,
    and write the PCI change-log row yourself, reading it back.
@@ -125,7 +124,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    js/vendor/html2canvas.min.js (30 days) at the production origin.
 5. Remind me to hard-refresh, open a poster, and download it at
    https://www.annielytics.com/tools/models-gone-wild/poster/sol-hugging-face/.
-6. Under decision 1a, switch staging back to main with the README command.
+6. Switch staging back to main with the README command.
 7. Mark step 9A done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 8. Tell me the next step is step 9B, whose prompt is at the bottom of

@@ -6,7 +6,7 @@ The second half of the baseline's inline-code step. After step 9A, `index.html` 
 
 ## Decisions this step reads
 
-Decision 1 (staging), decision 15 (where the code lives, from step 9A), and decision 16 (loading html2canvas), from `docs/standards-cleanup/README.md`.
+Decision 15a (the app's scripts live in `js/`, served no-cache since step 9A) and decision 16a (html2canvas loads on the first Download poster press), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -31,20 +31,20 @@ The Methodology page's inline script is the same menu listener as lines 2177 to 
 
 The files stay classic scripts, not modules, loaded in the table's order at the end of `<body>`, where the inline script sat. Top-level `const` and `function` declarations in one classic script are visible to the next, so the code runs exactly as before. Modules would change scoping and timing, which is out of scope here.
 
-`js/html2canvas.min.js` (`js/vendor/` under decision 15a) loads in `<head>`, render-blocking, on every visit. It is 198 KB, and only Download poster uses it.
+`js/vendor/html2canvas.min.js` (moved there in step 9A) loads in `<head>`, render-blocking, on every visit. It is 198 KB, and only Download poster uses it.
 
 Neither page has a `<style>` block, a `style=` attribute, or an `on*=` handler. The script sets 15 style properties through `element.style`, which a Content Security Policy allows. The JS template strings that build cards and posters carry no `style=` or `on*=` either.
 
 ## The changes
 
-1. Move each section into its file, byte for byte, and replace the inline script with one relative `<script src>` per file in the table's order (`../js/menu.js` on Methodology). Under decision 15b, the files go in `app/` instead of `js/`.
-2. Under decision 16a, drop html2canvas's `<script>` from `<head>`. In `js/poster.js`, load it on the first Download poster press by appending a `<script>` element and awaiting its `load` event, with the button showing "Rendering…" as it already does while it works. Under 16b, add `defer` to the tag. Under 16c, leave it.
+1. Move each section into its file, byte for byte, and replace the inline script with one relative `<script src>` per file in the table's order (`../js/menu.js` on Methodology).
+2. Drop html2canvas's `<script>` from `<head>`. In `js/poster.js`, load it on the first Download poster press by appending a `<script>` element and awaiting its `load` event, with the button showing "Rendering…" as it already does while it works.
 3. Add `tests/test_inline.py`. It fails on any `<script>` without `src` (other than `type="application/json"`), any `<style>` block, any `style=` attribute, or any `on*=` attribute in `index.html` and `methodology/index.html` (and `404.html` once step 12 adds it), and on any `style=` or `on[a-z]+=` inside a template string in the app's own JS files.
 4. Update `UPDATE.md` ("Changing design or behavior" says "Everything lives in index.html"; "Where things live"; the traps) and `DEPLOY.md`'s file list.
 
 ## The sample-file review gate
 
-- JavaScript: `js/poster.js` is the sample since it carries the history, clipboard, and export code, and under decision 16a the new on-demand loading. Move it first, leaving the code before and after it inline in the same order, run both suites and the screenshot diff, download a poster, and stop for approval before the other files.
+- JavaScript: `js/poster.js` is the sample since it carries the history, clipboard, and export code, and the new on-demand loading. Move it first, leaving the code before and after it inline in the same order, run both suites and the screenshot diff, download a poster, and stop for approval before the other files.
 - HTML: `index.html` is the sample. `methodology/index.html` follows, swapping its inline script for `../js/menu.js`.
 
 ## Done when
@@ -71,8 +71,8 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    confirm they pass. Confirm the section boundaries against the step
    file's table.
 3. Sample-file review gate (JavaScript): move the Modal, Copy Link, and PNG
-   Export sections into js/poster.js (app/ under decision 15b), byte for
-   byte, with html2canvas loaded as decision 16 says. Run both suites and
+   Export sections into js/poster.js, byte for byte, with html2canvas
+   loaded on the first Download poster press. Run both suites and
    the screenshot diff, download a poster, and give me a clickable link, a
    short summary, and the git diff command. STOP until I approve.
 4. After I approve, move the other sections into their files in order and
@@ -85,7 +85,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 7. Run both suites, the five check scripts, check_overlaps.py, the
    screenshot diff (pixel-identical), and the comment style checker (0),
    gating on each exit code. Download a poster locally.
-8. Commit, push, and under decision 1a deploy the branch to staging with the
+8. Commit, push, and deploy the branch to staging with the
    README command, run the staging health check, and confirm every new JS
    file returns 200 with the no-cache header at the staging origin.
 9. Report what you verified and how, give me the staging links with a
@@ -116,7 +116,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    no-cache header at the production origin.
 4. Remind me to hard-refresh, switch tabs, open the menu on my phone, and
    download a poster at https://www.annielytics.com/tools/models-gone-wild/.
-5. Under decision 1a, switch staging back to main with the README command.
+5. Switch staging back to main with the README command.
 6. Mark step 9B done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 7. Tell me the next step is step 10A, whose prompt is at the bottom of

@@ -6,7 +6,7 @@ Applies the four design rules in `~/.claude/rules/design/` (footer icon discs, t
 
 ## Decisions this step reads
 
-Decision 1 (staging), decision 19 (footer icon discs), decision 20 (prose link hover), and decision 21 (an unknown poster slug), from `docs/standards-cleanup/README.md`.
+Decision 19a (footer icon discs drawn in inline SVG), decision 20a (prose links keep the 2026-10-14 no-underline style), and decision 21a (an unknown poster slug shows a notice and is marked noindex), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -24,10 +24,10 @@ Each of the four rules stands differently here:
 
 ## The changes
 
-1. The 404 page. Add `404.html` at the root (and to step 4's root allowlist) on the step 11 layout: the site header, a masthead in the page's voice ("File not found" under the bureau line), a link back to the registry, and the footer. Nginx serves it at whatever depth the bad URL had, so relative paths would break; give `404.html` alone `<base href="/tools/models-gone-wild/">` and keep its paths relative to it, and add `404.html` as the one exception in the leading-slash test. On both servers, add `error_page 404 /tools/models-gone-wild/404.html;` inside this app's page block and denylist block. `scripts/serve.py` serves the same file with a 404 for any path it cannot find. Add `noindex` in a robots meta tag.
-2. Under decision 21a, when `posterFromUrl()` names no case, show a "no such file" notice where the poster would open, with a link to the registry, and add `<meta name="robots" content="noindex">` to the head from the script. Under 21b, add an nginx `map` of valid slugs that returns 404, and add a step to the add-case skill to update it with every new case. Under 21c, leave it.
-3. Under decision 19a, add a `<nav class="footer-nav">` with two icon discs, Methodology and the announcement post (`https://www.annielytics.com/blog/ai/models-gone-wild-an-app-to-track-the-model-containment-crisis/`), drawn with inline SVG in the line-icon style, following `~/.claude/rules/design/apply-footer-icon-disc-redesign.md` for the disc and the hover pill. Keep "Last updated" beneath. Propose the two icons in prose first and stop for approval. Under 19b, mark the footer rule not applicable in the README.
-4. Under decision 20a, mark the sweep rule not applicable to prose links in the README, citing 27ce695. Under 20b, add the sweep to prose links per `~/.claude/rules/design/add-sweep-underline-to-links.md`, inside `min-width: 501px`.
+1. The 404 page. Add `404.html` at the root (and to step 4's root allowlist) on the step 11 layout. It carries the site header, a masthead in the page's voice ("File not found" under the bureau line), a link back to the registry, the footer, and step 10B's tag (`js/gtm.js` first in the head with `data-gtm-id="GTM-5FJGP2"`, and the `<noscript>` frame after `<body>`). Nginx serves it at whatever depth the bad URL had, so relative paths would break; give `404.html` alone `<base href="/tools/models-gone-wild/">` and keep its paths relative to it, and add `404.html` as the one exception in the leading-slash test. On both servers, add `error_page 404 /tools/models-gone-wild/404.html;` inside this app's page block and denylist block. `scripts/serve.py` serves the same file with a 404 for any path it cannot find. Add `noindex` in a robots meta tag.
+2. When `posterFromUrl()` names no case, show a "no such file" notice where the poster would open, with a link to the registry, and add `<meta name="robots" content="noindex">` to the head from the script.
+3. Add a `<nav class="footer-nav">` with two icon discs, Methodology and the announcement post (`https://www.annielytics.com/blog/ai/models-gone-wild-an-app-to-track-the-model-containment-crisis/`), drawn with inline SVG in the line-icon style, following `~/.claude/rules/design/apply-footer-icon-disc-redesign.md` for the disc and the hover pill. Keep "Last updated" beneath. Propose the two icons in prose first and stop for approval.
+4. Mark the sweep rule not applicable to prose links in the README (decision 20a), citing 27ce695. The nav keeps its sweep.
 5. Pin `text-decoration: none` on `.icon-btn` and its `:hover`, `:focus`, `:active`, and `:visited` states, per `~/.claude/rules/design/remove-underlines-from-buttons.md`.
 6. In `js/tooltip.js`, clamp to the `.poster` box when the trigger is inside an open poster, and to `.content` otherwise. Add `text-align: left` to `.tip`.
 7. Tests: an unknown path through the preview server returns 404 with the app's title; an unknown poster slug shows the notice and the robots tag (browser test); a glossary bubble inside an open poster sits at least 10px inside the poster at 375 and 1440 (browser test); `.tip` computes `text-align: left`.
@@ -60,22 +60,21 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 1. Confirm step 11 is merged and live. Branch off an up-to-date main as
    standards-design-rules. Never work on main.
 2. Run both suites and confirm they pass.
-3. Under decision 19a, propose the two footer icons in prose and STOP
+3. Propose the two footer icons in prose and STOP
    until I approve them.
 4. Sample-file review gate (CSS and JavaScript): fix the tooltip in
    js/tooltip.js and css/charts.css first. Give me clickable links, a short
    summary, the result of the in-poster tooltip test, and the git diff
    command, and STOP until I approve.
-5. Sample-file review gate (HTML): add the footer nav to index.html (19a),
+5. Sample-file review gate (HTML): add the footer nav to index.html,
    run the screenshot diff, and give me the link, the changed screenshots,
    and the diff command. STOP until I approve. Then methodology/index.html.
 6. Build 404.html with its base href, the serve.py fallback, the unknown
-   poster handling (decision 21), the .icon-btn fix, and the README marks
-   for decisions 19b or 20a if they apply. Add the tests, and add the 404
+   poster notice, the .icon-btn fix, and the README mark for decision 20a. Add the tests, and add the 404
    page to the CSP walk's routes.
 7. Run both suites, the CSP walk, the screenshot diff, and the comment style
    checker (0), gating on each exit code.
-8. Under decision 1a, on the server: back up
+8. On the server: back up
    /etc/nginx/sites-available/staging.annielytics.conf, add error_page 404
    to this app's staging page and denylist blocks, show me the diff, and
    STOP until I approve. Then sudo nginx -t, reload, wait two seconds, and
@@ -117,7 +116,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    and https://www.annielytics.com/tools/models-gone-wild/poster/no-such-slug/
    to check, with a reminder to hard-refresh and hover a glossary term
    inside an open poster.
-6. Under decision 1a, switch staging back to main with the README command.
+6. Switch staging back to main with the README command.
 7. Mark step 12 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 8. Tell me the next step is step 13A, whose prompt is at the bottom of

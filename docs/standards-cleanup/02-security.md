@@ -6,7 +6,7 @@ Each fix is independent, so commit them separately. Nothing here changes what a 
 
 ## Decisions this step reads
 
-Decision 1 (staging), decision 4 (where the headers live), decision 5 (`X-Frame-Options`), and decision 6 (the Cloudflare token), from `docs/standards-cleanup/README.md`.
+Decision 4a (one repo file, copied to a staging and a production snippet), decision 5a (`X-Frame-Options: SAMEORIGIN`), and decision 6a (you delete the server's `.env`), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## What the baseline asks, and what applies here
 
@@ -24,7 +24,7 @@ At the origin on 2026-10-16, no page, stylesheet, or script returned `X-Content-
 
 Nginx drops every inherited `add_header` in a block that sets its own, and this app's page and asset blocks each set `Cache-Control`. So a server-level header would never reach these responses. The headers have to be in each serving block.
 
-Under decision 4a, Claude makes three changes:
+Under decision 4a, Claude makes three changes.
 
 1. Create `deploy/nginx/headers.conf` in the repo:
 
@@ -34,11 +34,9 @@ Under decision 4a, Claude makes three changes:
    add_header X-Frame-Options "SAMEORIGIN" always;
    ```
 
-   Drop the last line under decision 5b. `always` sends the header on a 404 too. The file sits in the web root and nginx's denylist does not cover `.conf`, so it is publicly readable. That is harmless since every value in it is sent on every response anyway, and decision 23a moves it out of the web root in step 13A.
+   `X-Frame-Options` stays, under decision 5a. `always` sends the header on a 404 too. The file sits in the web root and nginx's denylist does not cover `.conf`, so it is publicly readable. That is harmless since every value in it is sent on every response anyway, and decision 23a moves it out of the web root in step 13A.
 2. On the server, copy it to two snippets, one per host, so a staging build never changes production: `/etc/nginx/snippets/models-gone-wild-headers-staging.conf`, included by this app's asset, page, and denylist blocks in `staging.annielytics.conf` during the build, and `/etc/nginx/snippets/models-gone-wild-headers.conf`, included by the same three blocks in `annielytics.conf` at ship time. Every later step that changes the headers copies the repo file to the staging snippet when it builds and to the production snippet when it ships.
 3. In `scripts/serve.py`, read `deploy/nginx/headers.conf`, parse each `add_header Name "value"` line, and send those headers on every response, so the local preview and the tests see exactly what nginx sends.
-
-Under decision 4b, write the three `add_header ... always;` lines into each of the three blocks by hand, and hardcode the same three in `serve.py`.
 
 Tests check that the home page, `methodology/`, a poster permalink, `css/styles.css`, `js/html2canvas.min.js`, and an unknown path each return the three headers through the preview server.
 
@@ -48,13 +46,15 @@ The page block sets both `expires -1` and `add_header Cache-Control "no-cache, n
 
 ## Fix 2c: The Cloudflare token in the web root
 
-Production's checkout holds `~/apps/models-gone-wild/.env` (mode 600, written 2026-10-16) with a `CLOUDFLARE_API_TOKEN`. The server-wide `location ~* /\.env$` rule returns 403 for it, so it is not public, but it sits in the folder nginx serves, and no tracked file reads the variable. Server `.env` changes are yours, so Claude gives you the command and does not run it.
+Production's checkout holds `~/apps/models-gone-wild/.env` (mode 600, written 2026-10-16) with a `CLOUDFLARE_API_TOKEN`. The server-wide `location ~* /\.env$` rule returns 403 for it, so it is not public, but it sits in the folder nginx serves, and no tracked file reads the variable. Server `.env` changes are yours, so Claude gives you the command and does not run it. Under decision 6a, you run this on the server:
 
-- Decision 6a: On the server, run `rm ~/apps/models-gone-wild/.env`. The copy on your Mac stays.
-- Decision 6b: Run `mkdir -p ~/.config/models-gone-wild && mv ~/apps/models-gone-wild/.env ~/.config/models-gone-wild/.env`.
-- Decision 6c: Leave it.
+```
+rm ~/apps/models-gone-wild/.env
+```
 
-Then Claude confirms `git -C ~/apps/models-gone-wild status --porcelain --ignored` no longer lists `.env` (6a and 6b).
+The copy on your Mac stays.
+
+Then Claude confirms `git -C ~/apps/models-gone-wild status --porcelain --ignored` no longer lists `.env`.
 
 ## The sample-file review gate
 
@@ -71,7 +71,7 @@ for p in "" methodology/ poster/sol-hugging-face/ css/styles.css js/html2canvas.
   printf "  %-26s %s\n" "/$p" "$(curl -skI -H "$H" https://127.0.0.1/tools/models-gone-wild/$p | grep -ciE "^(x-content-type-options|referrer-policy|x-frame-options):")"; done; done'
 ```
 
-prints 3 for every path on both hosts (2 under decision 5b), and `curl -skI` on the home page shows one `Cache-Control` line. Under decision 1b, only the production half runs, at ship time.
+prints 3 for every path on both hosts, and `curl -skI` on the home page shows one `Cache-Control` line. The staging half runs in the build, and the production half at ship time.
 
 ## Rollback
 
@@ -91,21 +91,20 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    standards-security. Never work on main.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass before any change.
-3. Fix 2a: create deploy/nginx/headers.conf (decision 4a) and teach
-   scripts/serve.py to send its headers, or hardcode them (4b). Add the
-   header tests. Commit.
+3. Fix 2a: create deploy/nginx/headers.conf with all three headers and
+   teach scripts/serve.py to send them. Add the header tests. Commit.
 4. Fix 2b: update the page block shown in DEPLOY.md to drop expires -1.
    Commit.
-5. Under decision 1a, on the server: back up
+5. On the server: back up
    /etc/nginx/sites-available/staging.annielytics.conf, copy the snippet to
    /etc/nginx/snippets/models-gone-wild-headers-staging.conf, include it in
    this app's staging asset, page, and denylist blocks, and drop expires -1
    from the staging page block. Show me the diff of the config and STOP until I approve. Then run
    sudo nginx -t, reload, wait two seconds, and write the PCI change-log
    row into the Google Sheet yourself, reading it back.
-6. Fix 2c: give me the exact command for decision 6 and wait for me to run
-   it. Do not touch the .env yourself. Then confirm it is gone from git
-   status --ignored (6a, 6b).
+6. Fix 2c: give me the rm command from the step file and wait for me to
+   run it. Do not touch the .env yourself. Then confirm it is gone from git
+   status --ignored.
 7. Run both suites and the comment style checker, gating on each exit code,
    push, deploy the branch to staging with the README command, and run the
    "Done when" check for the staging host.
@@ -134,15 +133,15 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 2. Merge standards-security to main and push, then deploy main to
    production with the README command.
 3. On the server, back up /etc/nginx/sites-available/annielytics.conf, copy
-   deploy/nginx/headers.conf to /etc/nginx/snippets/models-gone-wild-headers.conf
-   (decision 4a), include it in this app's asset, page, and denylist blocks
+   deploy/nginx/headers.conf to /etc/nginx/snippets/models-gone-wild-headers.conf,
+   include it in this app's asset, page, and denylist blocks
    (lines 310 to 372 on 2026-10-16), and drop expires -1 from the page
    block. Run sudo nginx -t, reload, and wait two seconds.
 4. Write the PCI change-log row into the Google Sheet yourself and read it
    back.
 5. Run the "Done when" check for www.annielytics.com and the production
    health check.
-6. Under decision 1a, switch staging back to main with the README command.
+6. Switch staging back to main with the README command.
 7. Mark step 2 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 8. Give me https://www.annielytics.com/tools/models-gone-wild/ to

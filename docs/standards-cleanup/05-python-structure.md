@@ -66,7 +66,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 5. Run add_type_hints.py --missing (must report zero), py_compile on every
    tracked .py file, both suites, and the comment style checker, gating on
    each exit code.
-6. Commit, push, and under decision 1a deploy the branch to staging with the
+6. Commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
 7. Report what you verified and how, and STOP. Do not merge to main or touch
    production until I say so.
@@ -92,7 +92,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 2. Merge standards-type-hints to main and push.
 3. Deploy main to production with the README command and run the production
    health check.
-4. Under decision 1a, switch staging back to main with the README command.
+4. Switch staging back to main with the README command.
 5. Mark step 5 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 6. Tell me the next step is step 6, whose prompt is at the bottom of

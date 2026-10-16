@@ -4,7 +4,7 @@ Branch: `standards-requirements`
 
 ## Decisions this step reads
 
-Decision 7 (requirements), from `docs/standards-cleanup/README.md`.
+Decision 7a (a pinned `requirements-dev.txt`, no `requirements.txt`, and a record of html2canvas), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -18,7 +18,7 @@ Step 1 added `requirements-dev.txt` with `pytest` and `playwright`. This step ma
 
 ## The changes
 
-Under decision 7a:
+Under decision 7a, the step makes six changes.
 
 1. Confirm every line of `requirements-dev.txt` is pinned with `==`, and that it lists exactly what the suite imports (`pytest`, `playwright`), not their transitive dependencies.
 2. Run `pip-audit` against it with a throwaway install (`venv/bin/python3 -m pip install pip-audit`, then `venv/bin/python3 -m pip_audit -r requirements-dev.txt`). Bump only what it flags, to the release it names. Do not add `pip-audit` to the file; it is a tool you run, not one the suite needs.
@@ -28,8 +28,6 @@ Under decision 7a:
 6. Add a test that every line of `requirements-dev.txt` is a `name==version` pin.
 
 No `requirements.txt` is added. A file listing nothing would suggest production installs something.
-
-Under decision 7b, mark the step not applicable in the README with the evidence above, and stop.
 
 ## The sample-file review gate
 
@@ -49,9 +47,7 @@ Revert the commits. Rebuild the venv from the previous `requirements-dev.txt` if
 Run step 3 (requirements) of the Models Gone Wild standards cleanup,
 following docs/standards-cleanup/03-requirements.md exactly. Read
 docs/standards-cleanup/README.md first. Use decisions 1 and 7 as recorded in
-the README, and stop if either is blank. Under 7b, mark step 3 not
-applicable in the README with the step file's evidence, commit that on a
-branch, and stop.
+the README, and stop if either is blank.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
@@ -67,7 +63,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    Chromium for Playwright, and run both suites, gating on each exit code.
 5. Write js/VENDORED.md and the two tests the step file lists.
 6. Run the comment style checker (no higher than main), commit, push, and
-   under decision 1a deploy the branch to staging with the README command and
+   deploy the branch to staging with the README command and
    run the staging health check.
 7. Report what you verified and how, and STOP. Do not merge to main or touch
    production until I say so.
@@ -94,7 +90,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 3. Deploy main to production with the README command and run the production
    health check. Confirm js/VENDORED.md returns 404 at the origin:
    curl -sk -H "Host: www.annielytics.com" -o /dev/null -w "%{http_code}\n" https://127.0.0.1/tools/models-gone-wild/js/VENDORED.md
-4. Under decision 1a, switch staging back to main with the README command.
+4. Switch staging back to main with the README command.
 5. Mark step 3 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 6. Tell me the next step is step 4, whose prompt is at the bottom of

@@ -6,7 +6,7 @@ Every later step leans on this suite to prove it changed nothing, so it comes fi
 
 ## Decisions this step reads
 
-Decision 2 (the revert-and-fail bug) and decision 3 (the check scripts), from `docs/standards-cleanup/README.md`.
+Decision 2a (the tooltip clamp fix, 8e726b4, is the revert-and-fail bug) and decision 3a (the check scripts run inside the suite), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
 
 ## Background
 
@@ -29,7 +29,7 @@ The site header is copied by hand from `index.html` into `methodology/index.html
 
 Two traps are specific to this app:
 
-- The repo root is the web root, so any file at the root is served unless nginx's denylist names its extension. The denylist covers `md`, `txt`, `json`, `yml`, `yaml`, `lock`, and `py`, but not `ini` or `toml`. A root `pytest.ini` would be public. So the suite registers its `browser` marker and the default deselection in `tests/conftest.py` with `pytest_configure` and `pytest_collection_modifyitems`, and no config file goes at the root. Step 13A moves this into a `pytest.ini` if decision 23a moves the web root.
+- The repo root is the web root, so any file at the root is served unless nginx's denylist names its extension. The denylist covers `md`, `txt`, `json`, `yml`, `yaml`, `lock`, and `py`, but not `ini` or `toml`. A root `pytest.ini` would be public. So the suite registers its `browser` marker and the default deselection in `tests/conftest.py` with `pytest_configure` and `pytest_collection_modifyitems`, and no config file goes at the root. Step 13A moves this into a `pytest.ini` once it moves the web root (decision 23a).
 - Gitignored files never reach the server, so `venv/` and `.pytest_cache/` stay local.
 
 ## The changes
@@ -51,14 +51,14 @@ Two traps are specific to this app:
    - Every poster footer fits on one line, from `UPDATE.md`'s third snippet.
    - The `<header class="site-header">` block in both pages is identical apart from the `../` on the logo path.
    - No page contains a `<form` with `method="post"`, and no script sets `document.cookie`. The CSRF guard.
-6. `tests/test_checks.py`, under decision 3a: one test per check script that runs it with `venv/bin/python3` from the repo root and asserts exit 0, printing its output on failure. `check_overlaps.py` carries the `browser` marker. Under decision 3b, skip this file.
+6. `tests/test_checks.py`, under decision 3a. One test per check script that runs it with `venv/bin/python3` from the repo root and asserts exit 0, printing its output on failure. `check_overlaps.py` carries the `browser` marker.
 7. `tests/test_browser.py`, marked `browser`, with Playwright's Chromium against the preview server:
    - The home page loads with no console errors.
    - Each tab shows its view and puts its permalink in the address bar.
    - Opening a case's poster puts `/poster/<slug>/` in the address bar, and Escape closes it and restores the address.
    - The Class filter narrows the timeline and shows the count line.
    - At 375 pixels wide, the MENU label opens and closes the drawer.
-   - The revert-and-fail test, under decision 2a: hover every glossary term in the first three cards at 1440 and 375 pixels wide, and assert each bubble sits at least 10px inside `.content` on both sides. Under 2b, assert instead that a duplicated slug fails `check_slugs.py`, using a copy of `index.html` in a temporary folder.
+   - The revert-and-fail test, under decision 2a. Hover every glossary term in the first three cards at 1440 and 375 pixels wide, and assert each bubble sits at least 10px inside `.content` on both sides.
 8. After the first run, set `com.dropbox.ignored` on every new `__pycache__` folder:
 
    ```
@@ -69,7 +69,7 @@ Every test gets a docstring in the house format, per the annielytics-comment-sty
 
 ## The revert-and-fail proof
 
-Prove the suite catches the decision 2 bug. Under 2a, 8e726b4 added the horizontal clamp in `positionTip()` (the `minX` and `maxX` lines and the two `if` statements that apply them). Delete those lines in the working tree, run `venv/bin/python3 -m pytest -m browser tests/test_browser.py`, show the failure, then restore them with `git checkout index.html` and show the pass. Paste both outcomes into the report. A test that passes on both is worse than none.
+Prove the suite catches the decision 2a bug. 8e726b4 added the horizontal clamp in `positionTip()` (the `minX` and `maxX` lines and the two `if` statements that apply them). Delete those lines in the working tree, run `venv/bin/python3 -m pytest -m browser tests/test_browser.py`, show the failure, then restore them with `git checkout index.html` and show the pass. Paste both outcomes into the report. A test that passes on both is worse than none.
 
 ## The sample-file review gate
 
@@ -94,8 +94,7 @@ is blank.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
-1. Confirm step 0B is done (or skipped under decision 1b) and step 0 is
-   done. Branch off an up-to-date main as standards-tests. Never work on
+1. Confirm steps 0 and 0B are marked done in the README. Branch off an up-to-date main as standards-tests. Never work on
    main.
 2. Run the six check scripts in scripts/ and confirm each exits 0 before
    any change.
@@ -107,17 +106,16 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    a short summary, the pass count, and the git diff command, and STOP until
    I approve. Carry any correction into the rest.
 5. After I approve, write tests/test_static.py, tests/test_checks.py
-   (decision 3a only), and tests/test_browser.py as the step file lists.
-6. Do the revert-and-fail proof for the decision 2 bug and paste both
+   and tests/test_browser.py as the step file lists.
+6. Do the revert-and-fail proof on 8e726b4's tooltip clamp and paste both
    outcomes.
 7. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser,
    gating on each exit code, then run
    python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py
    and confirm the count is no higher than on main (75). Mark every new
    __pycache__ folder Dropbox-ignored.
-8. Commit, push, and under decision 1a deploy the branch to staging with the
-   README command and run the staging health check. Under 1b, skip the
-   deploy. Report what you verified and how, and STOP. Do not merge to main
+8. Commit, push, and deploy the branch to staging with the
+   README command and run the staging health check. Report what you verified and how, and STOP. Do not merge to main
    or touch production until I say so.
 
 When you stop, end your report with the ship-to-production prompt from
@@ -143,7 +141,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    requirements-dev.txt return 404 at the origin:
    curl -sk -H "Host: www.annielytics.com" -o /dev/null -w "%{http_code}\n" https://127.0.0.1/tools/models-gone-wild/tests/conftest.py
    curl -sk -H "Host: www.annielytics.com" -o /dev/null -w "%{http_code}\n" https://127.0.0.1/tools/models-gone-wild/requirements-dev.txt
-4. Under decision 1a, switch staging back to main with the README command.
+4. Switch staging back to main with the README command.
 5. Mark step 1 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 6. Tell me the next step is step 2, whose prompt is at the bottom of

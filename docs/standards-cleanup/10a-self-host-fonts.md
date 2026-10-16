@@ -6,7 +6,7 @@ Added to the baseline because step 10B's policy cannot work without it. The patt
 
 ## Decisions this step reads
 
-Decision 1 (staging) and decision 15 (the cache rule from step 9A), from `docs/standards-cleanup/README.md`.
+Decision 15a (the 30-day cache has covered only `js/vendor/` and `img/` since step 9A), recorded in `docs/standards-cleanup/README.md` on 2026-10-16. This step adds `fonts/` to that rule.
 
 ## Background
 
@@ -32,7 +32,7 @@ Fonts never change, so they want a long cache. A `fonts/` folder would fall thro
 2. Download every distinct `fonts.gstatic.com` file with `curl` (not Python's urllib, which has no CA certificates on your Mac) into `fonts/<family>/<subset>.woff2`, for example `fonts/oswald/latin.woff2`. Keep the Noto Emoji file as `fonts/noto-emoji/horns.woff2` since it holds one glyph.
 3. Write `css/fonts.css` with Google's `@font-face` rules unchanged except two things: each `url()` becomes relative (`../fonts/<family>/<subset>.woff2`), and the subset comments are capitalized (`/* Latin */`). Open it with a banner and a comment naming where and when the rules came from.
 4. In both pages, replace the Google Fonts links and both preconnects with one relative link to `css/fonts.css` (`../css/fonts.css` on Methodology), at the position of the first Google link, so the cascade is unchanged.
-5. Extend the asset rule on both servers to `^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico|woff2))$` under decision 15a (keep `js` in place of `js/vendor` under 15b and 15c), with the same `alias .../$1/$2` and 30-day cache. The family folder gets its own `[\w-]+` group, which cannot express `..`, and the filename class stays as it was. Confirm by requesting `fonts/../DEPLOY.md` and getting a 404.
+5. Extend the asset rule on both servers to `^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico|woff2))$`, with the same `alias .../$1/$2` and 30-day cache. The family folder gets its own `[\w-]+` group, which cannot express `..`, and the filename class stays as it was. Confirm by requesting `fonts/../DEPLOY.md` and getting a 404.
 6. Add two tests: no tracked page, stylesheet, or script mentions `fonts.googleapis.com` or `fonts.gstatic.com`, and every `url()` in `css/fonts.css` names a file that exists.
 
 ## The sample-file review gate
@@ -73,7 +73,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 5. Add the two tests. Run both suites, check_overlaps.py, the screenshot
    diff (pixel-identical), and the comment style checker (0), gating on
    each exit code.
-6. Under decision 1a, on the server: back up
+6. On the server: back up
    /etc/nginx/sites-available/staging.annielytics.conf, extend this app's
    asset rule to fonts and woff2 as the step file shows, show me the diff,
    and STOP until I approve. Then sudo nginx -t, reload, wait two seconds,
@@ -113,7 +113,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    at the production origin.
 5. Give me the document.fonts console line to run on
    https://www.annielytics.com/tools/models-gone-wild/ after a hard refresh.
-6. Under decision 1a, switch staging back to main with the README command.
+6. Switch staging back to main with the README command.
 7. Mark step 10A done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main. Update the Models Gone
    Wild row in ~/.claude/rules/design/self-host-google-fonts.md's table to

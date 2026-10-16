@@ -14,7 +14,7 @@ That shapes the plan in three ways.
 
 - Several baseline steps were written for a Flask app. Each still has its file. Where part of a step cannot apply here (a secret key, a DEBUG flag, a debug route), the step file shows the evidence and does the part that does apply.
 - Every header, redirect, and 404 comes from nginx, so the security, policy, 404, and URL steps change nginx. Each of those changes gets a row in the PCI Network Security Change Log.
-- There is no staging copy today (decision 1). Every "deploy to staging" in this plan assumes decision 1a. Under 1b, each build prompt stops at the local preview instead.
+- There is no staging copy today. Step 0B adds one (decision 1a), and every later step deploys there before production.
 
 Behavior stays identical unless a step says otherwise or a decision below approves an intended change.
 
@@ -41,7 +41,7 @@ The script also suggested an inline-code step while reporting no inline-code fin
 - Nginx caches everything under `js/` and `img/` for 30 days. Any app code or case data moved into `js/` would reach returning readers a month late. Decision 15.
 - `js/html2canvas.min.js` (198 KB, version 1.4.1, the current release) loads render-blocking in `<head>` on every visit, though only the Download poster button uses it. Decision 16.
 - Both pages load Oswald, Special Elite, Courier Prime, and a one-glyph Noto Emoji subset from `fonts.googleapis.com`. Under a policy without `'unsafe-inline'`, Cloudflare APO's rewrite of those links would block every face, per `~/.claude/rules/design/self-host-google-fonts.md`. Step 10A.
-- The app loads no analytics tag. Decision 17.
+- The app loads no analytics tag, unlike the other public tools, which share GTM-5FJGP2. Decision 17.
 - The production checkout holds a `.env` with a `CLOUDFLARE_API_TOKEN` (mode 600, written 2026-10-16) inside the folder nginx serves. A server-wide `location ~* /\.env$` rule returns 403 for it, so it is not public. No tracked file reads the variable. Decision 6.
 - The page and the stylesheet each return two `Cache-Control` headers because the page block sets both `expires -1` and `add_header Cache-Control`. Step 2.
 - An unknown path returns nginx's built-in 162-byte 404 page, not one in the app's design. Step 12.
@@ -90,65 +90,65 @@ These checked out fine, so they are not in the plan. With no Python serving page
 Answer these before running the steps. Record each answer here because the step prompts read them from this section and stop if one they need is blank.
 
 1. Staging (every step, and step 0B). a) Add a staging copy at `~/apps/staging/models-gone-wild`, with this app's blocks in `staging.annielytics.conf` behind the existing basic auth and loopback let through, so every step deploys there first (recommended since the house rule is staging before production and this app has no stop between build and live today). b) No staging. Each build stops at the local preview (`scripts/serve.py` on port 8899) and the test suite, and production waits for your word.
-   Decision:
+   Decision: a, recorded 2026-10-16. Port 8026 is reserved for the staging copy. As a static copy served by nginx it binds no port, so 8026 stays held, unused, in case the app is ever rebuilt on Flask.
 2. The bug the revert-and-fail proof uses (step 1). a) 8e726b4, where glossary bubbles spilled past the left edge of the reading column until `positionTip()` clamped them. A browser test asserts every bubble sits at least 10px inside the column (recommended). b) A data invariant, such as two cases sharing a poster slug. c) Claude picks.
-   Decision:
+   Decision: a, recorded 2026-10-16.
 3. The six check scripts (step 1). a) Wrap each in a test that runs it and asserts exit 0, keep them runnable alone, and run `check_overlaps.py` under `-m browser` since it needs Chrome (recommended). b) Leave them as manual commands outside the suite.
-   Decision:
+   Decision: a, recorded 2026-10-16.
 4. Where the headers and the policy live (steps 2 and 10B). a) One file tracked in the repo at `deploy/nginx/headers.conf`, copied to a staging snippet and a production snippet in `/etc/nginx/snippets/` and included in each of this app's serving blocks, with `scripts/serve.py` reading the same file so the local preview sends the same headers (recommended). b) `add_header` lines written into each nginx block by hand, and a separate copy in `serve.py`.
-   Decision:
+   Decision: a, recorded 2026-10-16.
 5. `X-Frame-Options` (step 2). a) `SAMEORIGIN` (recommended, unless the registry is shown in an iframe on another site). b) Omit it.
-   Decision:
+   Decision: a, recorded 2026-10-16.
 6. The Cloudflare token in production's app folder (step 2). a) You delete `~/apps/models-gone-wild/.env` on the server since nothing tracked reads it and the local copy remains (recommended). b) Move it outside the served folder, to `~/.config/models-gone-wild/.env`. c) Leave it, relying on nginx's `.env` rule.
-   Decision:
+   Decision: a, recorded 2026-10-16.
 7. Requirements (step 3). a) Add `requirements-dev.txt` with the test tools pinned with `==`, clean under `pip-audit`, and no `requirements.txt` since production installs nothing. Record html2canvas 1.4.1 and its SHA-256 in `js/VENDORED.md` (recommended). b) Mark step 3 not applicable.
-   Decision:
+   Decision: a, recorded 2026-10-16.
 8. `DEPLOY.md` and `UPDATE.md` (step 4). a) Keep both at the root and allow them in the root guard since the house convention puts `DEPLOY.md` at the root and the skill and the scout point at `UPDATE.md` there (recommended). b) Move both to `docs/` and update every reference.
-   Decision:
+   Decision: a, recorded 2026-10-16.
 9. The prompts that deploy straight to production (step 4). a) Rewrite `UPDATE.md`'s three prompts, its "Deploying the change" section, both copies of the add-case skill, and `DEPLOY.md`'s update section to branch, staging (or the local preview under 1b), and production only on your word (recommended). b) Leave them, treating your approval of a proposal as the go-ahead.
-   Decision:
+   Decision: a, recorded 2026-10-16.
 10. Branches already merged into `main` (step 4). a) Delete the 26 local and 8 remote branches already merged, keeping `main`, `scout-state`, every `update/*` and `candidate/*`, and the current branch (recommended). b) Leave them.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 11. The open scout branches `update/claude` and `update/sol` (before step 9A). a) You publish or close each before step 9A, and its build prompt stops if either still edits `CASES` in `index.html` (recommended). b) Leave them, and rebase each by hand after step 9A moves the data.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 12. The 31 colors in `index.html` (step 8). a) Read them from the CSS tokens at runtime with `getComputedStyle`, so each color has one source and html2canvas still receives literal values when it draws a poster (recommended). b) Tokenize the CSS only and leave the 31.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 13. Token consolidation (step 8B). a) Pixel-identical tokens and the pre-commit gate only (recommended). b) Also run step 8B, which merges near-duplicate colors and snaps the 16 font sizes (e.g., 10.5px, 11px, 11.5px, and 12.5px) onto a scale, a visual change you review.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 14. The case data's format (step 9A). The cases and the glossary move together since the add-case skill edits both. a) Plain scripts, `js/cases.js` and `js/glossary.js`, holding `CASES` and `GLOSSARY` exactly as they are written now, so the skill and the scout keep editing the same object syntax (recommended). b) JSON in `<script type="application/json">` blocks inside `index.html`, with every key quoted. c) `data/cases.json` and `data/glossary.json` fetched at load, which also needs `.json` taken off nginx's denylist for `data/`.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 15. Caching the moved code (step 9A). a) Move html2canvas to `js/vendor/`, narrow the 30-day rule to `js/vendor/` and `img/`, and let the app's own scripts fall through to the no-cache page block like `css/` (recommended). b) Put the app's scripts in a new top-level folder the cache rule never matches, with no nginx change. c) Add a hand-edited `?v=` to each script tag on every change.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 16. Loading html2canvas (step 9B). a) Load it on the first Download poster press, saving 198 KB on every other visit (recommended). b) Add `defer`. c) Leave it in `<head>`.
-    Decision:
-17. An analytics tag (step 10B). a) Leave the app untagged, so the policy stays `'self'` only and the cleanup adds no tracking (recommended since adding a tag is a product choice). b) Add Google Tag Manager through an external loader file, as AI Timeline does, and allow it in the policy.
-    Decision:
+    Decision: a, recorded 2026-10-16.
+17. An analytics tag (step 10B). a) Leave the app untagged, so the policy stays `'self'` only. b) Add Google Tag Manager through an external loader file, as AI Timeline does, and allow it in the policy.
+    Decision: b, recorded 2026-10-16. Same container as AI Timeline and AI Strategy, GTM-5FJGP2 (one tag, GA4 G-2CGX3KD64R).
 18. The wrapper's name (step 11). a) Rename `.wrap` to `.main-content`, the name the layout and footer rules use (recommended). b) Keep `.wrap` with the same flex rules.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 19. Footer icon discs (step 12). a) Add a footer nav of discs for Methodology and the announcement post, drawn with inline SVG in the app's line-icon style rather than Font Awesome, with "Last updated" kept beneath (recommended). b) Mark the footer disc rule not applicable since the footer has no links.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 20. Prose link hover (step 12). a) Keep your 2026-10-14 choice (stamp red at rest, ink on hover, no underline), and mark the sweep rule not applicable to prose links. The nav keeps its sweep (recommended). b) Add the sweep underline on hover to prose links.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 21. An unknown poster slug (step 12). a) The page shows a "no such file" state in place of the poster and adds `<meta name="robots" content="noindex">` (recommended). b) An nginx map of valid slugs that returns a real 404, which needs an nginx change for every new case. c) Leave it.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 22. The URL prefix mechanism (step 13A). a) Keep relative paths served through nginx's strip-and-rematch as the one mechanism, with `APP_BASE` and `serve.py` as mirrors a test holds in agreement (recommended since no shipped code names the prefix). b) A `<base href>` in each page, retiring the rewrites that serve assets under every permalink. c) Root-relative paths.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 23. Repo tooling in the web root (step 13A). a) Move the served files into `public/` and point nginx's `alias` there, so the denylist is no longer the only thing between `.claude/`, `scout/`, and `scripts/` and the public (recommended). b) Keep the denylist, and add a test that lists every tracked file and fails on one whose extension nginx would serve.
-    Decision:
+    Decision: a, recorded 2026-10-16.
 24. Canonicals and `/index.html` (step 13B). a) A canonical to the home page on `index.html` since every view and poster is the same document, Methodology its own, the 404 none, and a 301 from `/index.html` to the bare path (recommended). b) A canonical per permalink, sent as an nginx `Link` header from each block. c) No canonicals.
-    Decision:
+    Decision: b, recorded 2026-10-16.
 25. Meta description and share tags (step 13B). a) A meta description plus Open Graph and Twitter title, description, and URL on both pages, with no share image (recommended). b) The same plus a share image you design. c) Leave them out.
-    Decision:
+    Decision: b, recorded 2026-10-16.
 26. Small calls. a) Take all four as listed (recommended). Leave the server-wide nginx backups and `server_tokens` for a server-wide pass, which touches every app. Keep the HTML comments as `<!-- -->` when prompt 5 reformats the code. Keep the `scout/seen.json` seed on `main`. Keep the `antiquewhite` menu text. b) Name the ones to change.
-    Decision:
+    Decision: b, recorded 2026-10-16. Which of the four to change is still to be named. Step 6 stops until it is.
 
 ## The steps
 
 | Step | File | What it fixes | Size | Status |
 |---|---|---|---|---|
 | 0 | [00-dropbox-ignore.md](00-dropbox-ignore.md) | `venv` and the caches would sync through Dropbox. Creates the empty `venv` so it can be marked. | Tiny | Not started |
-| 0B | [00b-staging.md](00b-staging.md) | No staging copy. Only under decision 1a. | Small | Not started |
-| 1 | [01-tests.md](01-tests.md) | No test suite. Adds one, proven by reverting the decision 2 bug. | Medium | Not started |
+| 0B | [00b-staging.md](00b-staging.md) | No staging copy. | Small | Not started |
+| 1 | [01-tests.md](01-tests.md) | No test suite. Adds one, proven by reverting the tooltip clamp fix (8e726b4). | Medium | Not started |
 | 2 | [02-security.md](02-security.md) | No security headers, duplicate `Cache-Control`, the token in the web root. | Small | Not started |
 | 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Not started |
 | 4 | [04-root-files.md](04-root-files.md) | No root guard, workflow docs that skip staging, merged branches. | Small | Not started |
@@ -156,11 +156,11 @@ Answer these before running the steps. Record each answer here because the step 
 | 6 | [06-comment-style.md](06-comment-style.md) | 75 comment-style issues. | Small | Not started |
 | 7 | [07-split-css.md](07-split-css.md) | 972-line stylesheet, no screenshot harness. | Medium | Not started |
 | 8 | [08-design-tokens.md](08-design-tokens.md) | 90 raw values in CSS, 31 colors in `index.html`, no gate. | Medium | Not started |
-| 8B | [08b-token-consolidation.md](08b-token-consolidation.md) | Near-duplicate colors and font sizes. Only under decision 13b. | Medium | Not started |
+| 8B | [08b-token-consolidation.md](08b-token-consolidation.md) | Near-duplicate colors and font sizes. | Medium | Skipped under decision 13a (marked 2026-10-16) |
 | 9A | [09a-case-data.md](09a-case-data.md) | The case data inside the inline script, and every tool that reads it there. | Medium | Not started |
 | 9B | [09b-inline-code.md](09b-inline-code.md) | The rest of both inline scripts, html2canvas in `<head>`. | Medium | Not started |
 | 10A | [10a-self-host-fonts.md](10a-self-host-fonts.md) | Google Fonts, which a policy would block under Cloudflare APO. | Small | Not started |
-| 10B | [10b-csp.md](10b-csp.md) | No Content Security Policy, no walk harness. | Medium | Not started |
+| 10B | [10b-csp.md](10b-csp.md) | No Content Security Policy, no walk harness, no analytics tag. | Medium | Not started |
 | 11 | [11-layout.md](11-layout.md) | No `<main class="page-body">`, no pinned footer. | Medium | Not started |
 | 12 | [12-design-rules.md](12-design-rules.md) | Default 404 page, soft 404 posters, tooltip and footer gaps. | Medium | Not started |
 | 13A | [13a-web-root.md](13a-web-root.md) | No URL list, the prefix mirrors, repo tooling in the web root. | Medium, highest SEO risk | Not started |
@@ -175,7 +175,7 @@ Step 0B sits after step 0 because every later step deploys to it. Step 9A comes 
 - Gate every deploy on the test exit code. Never put `pytest | tail` in a chain that ends in a push or deploy. Use `set -e` or `|| exit 1`.
 - Keep behavior identical unless the step or a decision says otherwise.
 - Follow the sample-file review gate. Whenever a step changes more than one file of the same filetype, apply the change to the named sample file first, give Annie a clickable link to it, a short summary of what changed, and the `git diff` command for it, and STOP. Change the rest of that filetype only after she approves the sample, carrying over any correction she asks for.
-- Deploy the branch to staging, confirm it is healthy, give the staging links, and stop. Under decision 1b, run the local preview and give its links instead. Production only on Annie's explicit word, every time.
+- Deploy the branch to staging, confirm it is healthy, give the staging links, and stop. Production only on Annie's explicit word, every time.
 - Once a step reaches production, switch staging back to `main`.
 - New and moved code follows the house comment style and `~/.claude/rules/formatting/code-formatting.md`. Run `python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` before committing. From step 6 on, the expected count is 0.
 - Every relative path stays relative. Run the leading-slash check from `UPDATE.md` before every deploy. The two exceptions are `404.html`'s `<base href>` (step 12) and the absolute canonical and share URLs (step 13B), each allowed by name in the test.
@@ -254,7 +254,7 @@ Healthy output is five 200s, then 404 for `DEPLOY.md`, 403 for `.git/config`, an
 
 Each step file ends with two prompts, both ready to paste with no edits:
 
-1. Build and stage. Claude builds the step, proves it, deploys it to staging (or runs the local preview under decision 1b), and stops. Its report ends with the second prompt, copied out for you.
+1. Build and stage. Claude builds the step, proves it, deploys it to staging, and stops. Its report ends with the second prompt, copied out for you.
 2. Ship to production. Paste it once you have checked staging. It merges to `main`, does that step's production-only work, deploys, switches staging back to `main`, marks the step done here, and names the next step.
 
 Ship every step before starting the next since each build prompt begins by confirming the previous step is live. Step 0 has no ship prompt since it only touches your Mac.
@@ -283,7 +283,7 @@ These need step 0B, and sit behind the staging password.
 
 ### Local preview
 
-Use these under decision 1b, or before any deploy.
+Use these before any deploy.
 
 - Home: http://127.0.0.1:8899/tools/models-gone-wild/
 - Threat Matrix: http://127.0.0.1:8899/tools/models-gone-wild/threat-matrix/
