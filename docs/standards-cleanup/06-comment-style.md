@@ -2,7 +2,7 @@
 
 Branch: `standards-comment-style`
 
-Apply the annielytics-comment-style skill. Comments and docstrings only, so no behavior changes.
+Apply the annielytics-comment-style skill, and delete every HTML comment from the two pages (decision 26). Comments and docstrings only, so no behavior changes.
 
 ## Background
 
@@ -23,7 +23,8 @@ The five lowercase comments label hair styles in a lookup table (`side part, swe
 
 1. Read `~/.claude/skills/annielytics-comment-style/SKILL.md` and follow it.
 2. Fix the banner, the comment prose, and the docstrings, using the skill's scripts where they apply (`docstring_layout.py` for the blank lines, `normalize_banners.py` for the banner) and by hand where they do not.
-3. HTML comments stay `<!-- -->` since a static page has no Jinja to hide them in, unless decision 26 names them as one of the small calls to change.
+3. Delete every `<!-- -->` comment from `index.html` (15) and `methodology/index.html` (5), with no replacement (decision 26). Nginx serves the pages as they are, so a Jinja comment would show as text on the page, and an HTML comment ships in the page source. The `/* */` and `//` comments inside the inline `<style>` and `<script>` blocks stay, fixed to the skill's prose rules.
+4. Add a guard test under `tests/` that fails if either page contains `<!--`, so a comment cannot come back.
 
 ## The sample-file review gate
 
@@ -35,7 +36,7 @@ Fix each sample, stop for approval, then do the rest of that filetype.
 
 ## Done when
 
-`python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` reports 0, and both suites pass. For the Python files, `ast.dump` of each file is identical before and after with docstrings excluded, which proves only comments moved.
+`python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` reports 0, `grep -c '<!--' index.html methodology/index.html` prints 0 for both, the new guard test fails when a comment is put back, and both suites pass. For the Python files, `ast.dump` of each file is identical before and after with docstrings excluded, which proves only comments moved.
 
 ## Rollback
 
@@ -47,8 +48,8 @@ Revert the commit.
 Run step 6 (comment style) of the Models Gone Wild standards cleanup,
 following docs/standards-cleanup/06-comment-style.md exactly. Read
 docs/standards-cleanup/README.md and
-~/.claude/skills/annielytics-comment-style/SKILL.md first. Stop if decision
-26 in the README still says which small calls to change are to be named.
+~/.claude/skills/annielytics-comment-style/SKILL.md first. Decision 26 says
+to delete the HTML comments outright.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
@@ -60,10 +61,12 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 3. Sample-file review gate (Python): fix scripts/scout_seen.py first, then
    give me a clickable link, a short summary, and the git diff command, and
    STOP until I approve. Then fix the other .py files.
-4. Sample-file review gate (HTML): fix index.html's 17 comments first (keep
-   them as <!-- --> and /* */, capitalize the HAIR labels without
-   rewording), give me the link, summary, and diff command, and STOP until I
-   approve. Then fix methodology/index.html.
+4. Sample-file review gate (HTML): in index.html first, delete every
+   <!-- --> comment and fix the /* */ and // comments (capitalize the HAIR
+   labels without rewording). List each deleted comment, give me the link,
+   summary, and diff command, and STOP until I approve. Then do the same in
+   methodology/index.html, and add the guard test that fails if either page
+   contains <!--, proving it fails with one comment put back.
 5. Fix the CSS banner at css/styles.css:896.
 6. Prove the Python is unchanged with an ast.dump comparison that excludes
    docstrings. Run check_style.py (must report 0) and both suites, gating on
