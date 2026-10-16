@@ -147,7 +147,7 @@ Answer these before running the steps. Record each answer here because the step 
 | Step | File | What it fixes | Size | Status |
 |---|---|---|---|---|
 | 0 | [00-dropbox-ignore.md](00-dropbox-ignore.md) | `venv` and the caches would sync through Dropbox. Creates the empty `venv` so it can be marked. | Tiny | Done 2026-10-16 |
-| 0B | [00b-staging.md](00b-staging.md) | No staging copy. | Small | Not started |
+| 0B | [00b-staging.md](00b-staging.md) | No staging copy. | Small | Done 2026-10-16 (merge 4759143) |
 | 1 | [01-tests.md](01-tests.md) | No test suite. Adds one, proven by reverting the tooltip clamp fix (8e726b4). | Medium | Not started |
 | 2 | [02-security.md](02-security.md) | No security headers, duplicate `Cache-Control`, the token in the web root. | Small | Not started |
 | 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Not started |
