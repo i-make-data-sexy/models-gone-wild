@@ -22,11 +22,28 @@ python3 ~/.claude/skills/annielytics-comment-style/scripts/add_type_hints.py --m
 
 The tests written in steps 1 to 4 must carry hints too. Run the check on them as well.
 
+The README's rule on functions applies too. On 2026-10-16, every Python file kept values at the top level that only one function uses, and two scripts ran their whole job there with no `main()`:
+
+| File | Top-level names on 2026-10-16 |
+|---|---|
+| `scripts/check_charges.py` | 3 names and 2 loose calls, no `main()` |
+| `scripts/check_quotes.py` | 7 names and 2 loose calls, no `main()` |
+| `scripts/check_claims.py` | `SRC`, `MID`, `COMPUTABLE`, `REVIEW` |
+| `scripts/check_dates.py` | `SRC`, `UNDATED`, `UNDATED_LAG` |
+| `scripts/check_overlaps.py` | `REPO`, `CHROME`, `SUBPATH`, `HARNESS` |
+| `scripts/check_slugs.py` | `REPO`, `SLUG_RE` |
+| `scripts/scout_seen.py` | `REPO`, `LEDGER`, `STATUSES` |
+| `tests/conftest.py` | `REPO`, `SCRIPTS`, `PYTHON`, `BROWSER`, and the two loaded scripts |
+| `tests/test_browser.py`, `test_checks.py`, `test_headers.py`, `test_pages.py`, `test_static.py` | Constants, parametrize lists, and markers |
+
+`scripts/serve.py` was brought down to `REPO` and `PREFIX` as the Python sample for the stricter review gate, so it needs no further change here.
+
 ## The changes
 
 1. Run `add_type_hints.py` (without `--missing`) on every tracked `.py` file to write the hints it can prove from the docstrings.
 2. Write the rest by hand, using the real types: `log_message(self, format: str, *args: object) -> None`, `do_GET(self) -> None`, `redirect(self, location: str) -> None`, and the two `main` functions' return types as their docstrings state (`int` where they return an exit status, `None` otherwise). Test functions return `None`, and fixtures name their real types (`pytest.MonkeyPatch`, Playwright's `Page`, `str`).
 3. Keep each docstring's `Args` and `Returns` types in step with the hints.
+4. Roll every file's top-level code into functions under the README's rule. Move each value only one function uses into that function, give `check_charges.py` and `check_quotes.py` a `main()` called under the entry-point guard, and leave only imports, shared settings, parametrize lists, markers, and the entry-point call at the top level. Prove each script unchanged by running it before and after and comparing its output and exit code, and prove the tests by the same pass count.
 
 ## The sample-file review gate
 
@@ -38,7 +55,7 @@ The tests written in steps 1 to 4 must carry hints too. Run the check on them as
 python3 ~/.claude/skills/annielytics-comment-style/scripts/add_type_hints.py --missing $(git ls-files '*.py')
 ```
 
-reports zero, `python3 -m py_compile` passes on every tracked `.py` file, and both suites pass.
+reports zero, `python3 -m py_compile` passes on every tracked `.py` file, both suites pass, every script prints the same output and exit code as before, and no file keeps a top-level name the README's rule does not allow.
 
 ## Rollback
 
@@ -69,12 +86,17 @@ a stop because a filetype changes in only one file.
    docstrings in step, and give me a clickable link, a short summary, and
    the git diff command. STOP until I approve.
 4. After I approve, hint every other tracked .py file, the tests included.
-5. Run add_type_hints.py --missing (must report zero), py_compile on every
+5. Roll each file's top-level code into functions under the README's rule,
+   starting with scripts/check_quotes.py as the sample. Run it before and
+   after, show me the matching output and exit code with a clickable link,
+   a short summary, and the git diff command, and STOP until I approve.
+   Then do the rest, proving each the same way.
+6. Run add_type_hints.py --missing (must report zero), py_compile on every
    tracked .py file, both suites, and the comment style checker, gating on
    each exit code.
-6. Commit, push, and deploy the branch to staging with the
+7. Commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
-7. Report what you verified and how, and STOP. Do not merge to main or touch
+8. Report what you verified and how, and STOP. Do not merge to main or touch
    production until I say so.
 
 When you stop, end your report with the ship-to-production prompt from
