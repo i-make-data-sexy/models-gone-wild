@@ -31,7 +31,7 @@ No `requirements.txt` is added. A file listing nothing would suggest production 
 
 ## The sample-file review gate
 
-Each filetype changes in one file, so there is nothing to sample.
+The Python sample is the new `tests/test_dependencies.py`. It is the only `.py` file the step creates, and it still gets the stop. No `.js`, `.css`, or `.html` file changes.
 
 ## Done when
 
