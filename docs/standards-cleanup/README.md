@@ -201,7 +201,7 @@ Answer these before running the steps. Record each answer here because the step 
 | 1 | [01-tests.md](01-tests.md) | No test suite. Adds one, proven by reverting the tooltip clamp fix (8e726b4). | Medium | Done 2026-10-16 (merge 7eafe8d) |
 | 2 | [02-security.md](02-security.md) | No security headers, duplicate `Cache-Control`, the token in the web root. | Small | Done 2026-10-16 (merge fc717de) |
 | 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Done 2026-10-17 (merge 8243928) |
-| F1 | [f1-css.md](f1-css.md) | `css/styles.css` to AI Strategy's format, the screenshot harness, and the formatting pre-commit hook. | Medium | Not started |
+| F1 | [f1-css.md](f1-css.md) | `css/styles.css` to AI Strategy's format, the screenshot harness, and the formatting pre-commit hook. | Medium | Done 2026-10-17 (merge df0fd2d) |
 | F2 | [f2-javascript.md](f2-javascript.md) | The two inline scripts to AI Strategy's format, the case data left as is. | Medium | Not started |
 | F3 | [f3-python.md](f3-python.md) | 8 Python files to the rule's spacing, comments, and docstrings, and `check_style.py` to 0. | Small | Not started |
 | F4 | [f4-html.md](f4-html.md) | Both pages to AI Strategy's format, the 20 HTML comments deleted. | Small | Not started |
