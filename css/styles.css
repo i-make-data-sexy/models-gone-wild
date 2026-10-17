@@ -1,12 +1,19 @@
-/* Models Gone Wild.
-   The page links this RELATIVELY, as css/styles.css: the app is served
-   at /tools/models-gone-wild/, so a leading slash would resolve to the
-   site root and 404.
+/* ========================================================================
+     About This File
+   ======================================================================== */
 
-   Nginx needs no new rule for this directory. The asset regex covers
-   js/ and img/ only, so css/ falls through to the page block and is
-   served with no-cache, which is what a stylesheet that changes with
-   the content wants anyway. */
+/* The one stylesheet for both pages, covering the page shell, site header,
+   masthead, registry panel and its options menu, timeline cards, glossary
+   terms and tooltips, Threat Matrix, Cases by Lab, wanted poster, and
+   Methodology page. Both pages link it as css/styles.css, a relative path,
+   since the app lives under /tools/models-gone-wild/ and a leading slash
+   would point at the site root. */
+
+
+
+/* ========================================================================
+     Page Shell
+   ======================================================================== */
 
 :root {
     --paper:            #e6ddc6;
