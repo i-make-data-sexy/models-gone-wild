@@ -184,13 +184,13 @@ Answer these before running the steps. Record each answer here because the step 
 26. Small calls. a) Take all four as listed (recommended). Leave the server-wide nginx backups and `server_tokens` for a server-wide pass, which touches every app. Keep the HTML comments as `<!-- -->` when prompt 5 reformats the code. Keep the `scout/seen.json` seed on `main`. Keep the `antiquewhite` menu text. b) Name the ones to change.
     Decision: b, recorded 2026-10-16, with the four named the same day. Leave the nginx backups and `server_tokens` for a server-wide pass after this cleanup, whose prompt is in [server-wide-followup.md](server-wide-followup.md). Delete the 20 HTML comments outright in step 6, with no render step. Keep the `scout/seen.json` seed on `main`. Keep the `antiquewhite` menu text.
 27. How a formatting step reaches production (steps F1 to F7). a) Like every other step, each ships only on your word, with its own ship prompt (recommended). b) Claude ships each verified F step itself once every proof passes, and stops on any failure or unexplained difference, the way AI Strategy's sweep ran on 2026-10-12.
-    Decision:
+    Decision: a, recorded 2026-10-17.
 28. The pre-commit hook (step F1). a) Install it per `~/.claude/rules/formatting/format-gate.md`. `scripts/git-hooks/pre-commit` runs the shared gate, `~/.claude/formatting-tools/check_format.py`, on the staged files of each language listed in `scripts/git-hooks/format-languages`, each F step adds its language once every file of it is clean, and step 8 adds its raw-value check to the same hook (recommended). b) The per-step check only, with no hook.
-    Decision:
+    Decision: a, recorded 2026-10-17.
 29. The About This File section on the two pages (step F4). The rule opens every file with one, but these pages have no template engine, so it can only be an HTML comment, which ships in the page source, and decision 26 deletes every HTML comment. a) Keep one short About This File banner as an HTML comment just below the doctype of each page, holding the two warnings that keep a line from being "fixed" wrongly (relative paths, no click handler on `.menu-toggle`), the only comment the guard test allows, so both pages pass the gate and `html` joins the hook (recommended). b) No About section on the two pages, so they never pass `check_format.py`, `html` stays off the hook, and each later step checks its HTML by hand.
-    Decision:
+    Decision: a, recorded 2026-10-17.
 30. The case data's layout (step 9A). Decision 14a moves `CASES` and `GLOSSARY` into `js/cases.js` and `js/glossary.js` byte for byte, but the gate then checks the new files, and the data as written holds 48 uneven runs in `CASES` and 1 in `GLOSSARY`. a) Align the data as it moves, prove the shared loader returns the same cases and glossary before and after, and update every pattern that reads the unaligned form in the check scripts, the tests, `UPDATE.md`, and both copies of the add-case skill, so the skill and the scout write aligned cases from then on (recommended). b) Move the data byte for byte with only an About section added, and accept the two data files as the one known gap in the JavaScript gate.
-    Decision:
+    Decision: a, recorded 2026-10-17.
 
 ## The steps
 
