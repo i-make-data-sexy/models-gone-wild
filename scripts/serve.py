@@ -1,63 +1,120 @@
-#!/usr/bin/env python3
-"""Serves a local preview of the app at its real production subpath.
+# ========================================================================
+#   About This File
+# ========================================================================
+
+"""
+Serves a local preview of the app at its real production subpath.
 
 The plain python3 -m http.server cannot serve the dashboard or poster
-permalinks, since /threat-matrix/, /lab-counts/, and /poster/<id>/ are
-not folders on disk. This server does what the nginx rewrite does in
-production: it strips that segment, so /tools/models-gone-wild/lab-counts/ serves index.html
-and /tools/models-gone-wild/lab-counts/css/styles.css serves the real
-stylesheet. Old ?view= links get the same 301 to their permalink that
-nginx sends. Serving at the subpath also exercises the relative asset
-paths the way production does.
+permalinks, since /threat-matrix/, /lab-counts/, and /poster/<id>/ are not
+folders on disk. This server does what the nginx rewrite does in production.
+It strips that segment, so /tools/models-gone-wild/lab-counts/ serves
+index.html and /tools/models-gone-wild/lab-counts/css/styles.css serves the
+real stylesheet. Old ?view= links get the same 301 to their permalink that
+nginx sends, and every response carries the security headers from
+deploy/nginx/headers.conf. Serving at the subpath also exercises the
+relative asset paths the way production does.
 
 Usage:
-  python3 scripts/serve.py [--port 8899]
+    python3 scripts/serve.py [--port 8899]
 
 Then open http://127.0.0.1:8899/tools/models-gone-wild/
 """
+
+
+
+# ========================================================================
+#   Imports
+# ========================================================================
+
+# Python built-ins
 import argparse
 import os
 import re
-from functools import partial
-from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+from functools    import lru_cache, partial
+from http.server  import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+# ========================================================================
+#   Global Variables
+# ========================================================================
+
+# Repo root and the app's URL prefix
+REPO   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREFIX = "/tools/models-gone-wild"
 
-# Keep in step with VIEW_SLUGS in index.html and the rewrite in DEPLOY.md
-VIEW_SLUGS = ("threat-matrix", "lab-counts")
-VIEW_RE = re.compile(r"^" + re.escape(PREFIX) + r"/(?:" + "|".join(VIEW_SLUGS) + r")(/.*)?$")
-
-# A wanted poster's permalink, /poster/<case id>/. Mirrors the poster rewrite in DEPLOY.md.
-POSTER_RE      = re.compile(r"^" + re.escape(PREFIX) + r"/poster/[\w-]+(/.*)?$")
-POSTER_BARE_RE = re.compile(r"^" + re.escape(PREFIX) + r"/poster/[\w-]+$")
-
-# The old ?view= values and the permalink each one now lives at. Mirrors
-# the 301s in the nginx page block in DEPLOY.md.
-LEGACY_VIEWS = {"matrix": "threat-matrix", "labs": "lab-counts"}
-
-# The security headers nginx includes in every block, sent here too
-HEADERS_FILE = os.path.join(REPO, "deploy", "nginx", "headers.conf")
-ADD_HEADER   = re.compile(r'^\s*add_header\s+([\w-]+)\s+"([^"]*)"(?:\s+always)?\s*;')
 
 
-def read_headers(path: str = HEADERS_FILE) -> list[tuple[str, str]]:
+# ========================================================================
+#   Permalink Rules
+# ========================================================================
+
+def resolve_permalink(path: str) -> tuple[str | None, str | None]:
     """
-    Reads the add_header lines from the nginx headers snippet
+    Applies the nginx permalink rules to a request path
 
     Args:
-        path (str): The snippet's file path
+        path (str): The raw request path, query string included
 
     Returns:
-        list[tuple[str, str]]: Each header's name and value, in file order
+        tuple[str | None, str | None]: The 301 target or None, and the repo path to serve or None
     """
 
-    with open(path, encoding="utf-8") as handle:
-        return [match.groups() for match in map(ADD_HEADER.match, handle) if match]
+    # View slugs and old ?view= links, as in DEPLOY.md
+    view_slugs   = ("threat-matrix", "lab-counts")
+    legacy_views = {"matrix": "threat-matrix", "labs": "lab-counts"}
+
+    bare   = path.split("?", 1)[0]
+    legacy = legacy_views.get(parse_qs(urlsplit(path).query).get("view", [""])[0])
+    root   = re.escape(PREFIX)
+    views  = "|".join(view_slugs)
+
+    # Old ?view= links, then bare view and poster paths
+    target = None
+    if bare.startswith(PREFIX + "/") and legacy:
+        target = f"{PREFIX}/{legacy}/"
+    elif bare in (f"{PREFIX}/{slug}" for slug in view_slugs) or re.match(rf"^{root}/poster/[\w-]+$", bare):
+        target = bare + "/"
+
+    # Nothing outside the prefix is served
+    served = bare.split("#", 1)[0]
+    if served != PREFIX and not served.startswith(PREFIX + "/"):
+        return target, None
+
+    # Strip a view or poster segment, as nginx does
+    segment = (re.match(rf"^{root}/(?:{views})(/.*)?$", served)
+            or re.match(rf"^{root}/poster/[\w-]+(/.*)?$", served))
+    if segment:
+        served = PREFIX + (segment.group(1) or "/")
+    return target, served[len(PREFIX):] or "/"
 
 
-SECURITY_HEADERS = read_headers()
+
+# ========================================================================
+#   Security Headers
+# ========================================================================
+
+@lru_cache(maxsize=None)
+def read_headers() -> tuple[tuple[str, str], ...]:
+    """
+    Reads the add_header lines from the nginx headers snippet, once per run
+
+    Args:
+        None
+
+    Returns:
+        tuple[tuple[str, str], ...]: Each header's name and value, in file order
+    """
+
+    snippet = os.path.join(REPO, "deploy", "nginx", "headers.conf")
+    pattern = re.compile(r'^\s*add_header\s+([\w-]+)\s+"([^"]*)"(?:\s+always)?\s*;')
+
+    with open(snippet, encoding="utf-8") as handle:
+        return tuple(match.groups() for match in map(pattern.match, handle) if match)
+
 
 
 # ========================================================================
@@ -79,33 +136,39 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         Returns:
             str: The file path to serve, or a path that does not exist so the request 404s
         """
-        bare = path.split("?", 1)[0].split("#", 1)[0]
-        if bare != PREFIX and not bare.startswith(PREFIX + "/"):
-            return os.path.join(REPO, "__outside_prefix__")
-        view = VIEW_RE.match(bare) or POSTER_RE.match(bare)
-        if view:
-            bare = PREFIX + (view.group(1) or "/")
-        return super().translate_path(bare[len(PREFIX):] or "/")
 
-    def do_GET(self):
+        _, served = resolve_permalink(path)
+        if served is None:
+            return os.path.join(REPO, "__outside_prefix__")
+        return super().translate_path(served)
+
+    def do_GET(self) -> None:
         """
         Answers the redirects nginx answers in production, then serves normally
+
+        Args:
+            None
+
+        Returns:
+            None
         """
-        bare = self.path.split("?", 1)[0]
-        legacy = LEGACY_VIEWS.get(parse_qs(urlsplit(self.path).query).get("view", [""])[0])
-        if bare.startswith(PREFIX + "/") and legacy:
-            return self.redirect(f"{PREFIX}/{legacy}/")
-        if bare in (f"{PREFIX}/{slug}" for slug in VIEW_SLUGS) or POSTER_BARE_RE.match(bare):
-            return self.redirect(bare + "/")
+
+        target, _ = resolve_permalink(self.path)
+        if target:
+            return self.redirect(target)
         return super().do_GET()
 
-    def redirect(self, location: str):
+    def redirect(self, location: str) -> None:
         """
         Sends a permanent redirect
 
         Args:
             location (str): The path to send the browser to
+
+        Returns:
+            None
         """
+
         self.send_response(301)
         self.send_header("Location", location)
         self.end_headers()
@@ -121,30 +184,45 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             None
         """
 
-        for name, value in SECURITY_HEADERS:
+        for name, value in read_headers():
             self.send_header(name, value)
         super().end_headers()
 
 
+
 # ========================================================================
-#   Entry Point
+#   Command Line
 # ========================================================================
 
-def main():
+def main() -> None:
     """
     Parses the port and serves the repo until interrupted
+
+    Args:
+        None
+
+    Returns:
+        None
     """
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+
+    parser = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
     parser.add_argument("--port", type=int, default=8899)
-    args = parser.parse_args()
+
+    args    = parser.parse_args()
     handler = partial(PreviewHandler, directory=REPO)
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), handler)
+    server  = ThreadingHTTPServer(("127.0.0.1", args.port), handler)
+
     print(f"Serving http://127.0.0.1:{args.port}{PREFIX}/")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
         pass
 
+
+
+# ========================================================================
+#   Entry Point
+# ========================================================================
 
 if __name__ == "__main__":
     main()
