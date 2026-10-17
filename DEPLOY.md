@@ -136,6 +136,7 @@ location ~ ^/tools/models-gone-wild/poster/[a-z0-9-]+/ {
 # extension here whenever a new kind of tooling file joins the repo,
 # or it will be readable on the live site.
 location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
+    include snippets/models-gone-wild-headers.conf;
     return 404;
 }
 
@@ -146,6 +147,7 @@ location ~* ^/tools/models-gone-wild/(js|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp
     alias /home/anniecushing/apps/models-gone-wild/$1/$2;
     expires 30d;
     add_header Cache-Control "public, no-transform";
+    include snippets/models-gone-wild-headers.conf;
 }
 
 # The page itself. It carries the case data inline, so a stale copy is a
@@ -163,6 +165,7 @@ location /tools/models-gone-wild/ {
     alias /home/anniecushing/apps/models-gone-wild/;
     index index.html;
     add_header Cache-Control "no-cache, no-store, must-revalidate";
+    include snippets/models-gone-wild-headers.conf;
 }
 ```
 
@@ -173,6 +176,8 @@ The trailing slashes on both the `location` and the `alias` have to match. Dropp
 The `css/` directory needs no rule of its own. The asset regex above covers `js/` and `img/` only, so a request for `css/styles.css` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheet changes whenever the design does, and a hard-cached copy would strand readers on an old one. Do not add `css` to the asset regex without also solving cache-busting.
 
 The clone's `.git` directory and `.gitignore` need no rule here. The config already carries a `location ~ /\.git` block further down, and regex locations outrank the prefix block above.
+
+The security headers come from `deploy/nginx/headers.conf` in the repo, copied to `/etc/nginx/snippets/models-gone-wild-headers.conf` (production) and `/etc/nginx/snippets/models-gone-wild-headers-staging.conf` (staging). Nginx drops inherited `add_header` lines in any block that sets its own, so each serving block includes the snippet itself. When the repo file changes, copy it to the staging snippet during the build and to the production snippet at ship time. `scripts/serve.py` reads the same file, so the local preview sends the same headers.
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
@@ -305,6 +310,7 @@ location ~ ^/tools/models-gone-wild/poster/[a-z0-9-]+/ {
 # Repo files that ship with the clone but are not site content.
 # DEPLOY.md in particular carries the server path and host IP.
 location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
+    include snippets/models-gone-wild-headers-staging.conf;
     return 404;
 }
 
@@ -319,6 +325,7 @@ location ~* ^/tools/models-gone-wild/(js|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp
     alias /home/anniecushing/apps/staging/models-gone-wild/$1/$2;
     expires 30d;
     add_header Cache-Control "public, no-transform";
+    include snippets/models-gone-wild-headers-staging.conf;
 }
 
 # The page itself. The case data lives inline, so a stale copy is a
@@ -336,6 +343,7 @@ location /tools/models-gone-wild/ {
     alias /home/anniecushing/apps/staging/models-gone-wild/;
     index index.html;
     add_header Cache-Control "no-cache, no-store, must-revalidate";
+    include snippets/models-gone-wild-headers-staging.conf;
 }
 ```
 
