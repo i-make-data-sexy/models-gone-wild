@@ -49,6 +49,8 @@ The model is AI Strategy's `static/css/base.css` and `static/css/components.css`
    - One-line comments: List every comment over one line with `audit_comments.py`, write a reviewed JSON list of one-line labels (AI Strategy's lists in `~/.claude/formatting-tools/edits/` show the voice), and apply it with `apply_comment_edits.py`, which refuses any edit that changes a declaration. No comment sits beside a declaration or inside a rule. Fix the line 896 banner in this pass.
 4. In the last commit, add `css` to `scripts/git-hooks/format-languages`, so the hook gates every CSS file from then on.
 
+What shipped (merge df0fd2d): After the four passes, Annie had all 61 label comments deleted, since they were notes for editing by hand. Only About This File and the 16 section banners stay. The later formatting steps delete label comments the same way.
+
 The hook, its language list, and `run.sh` sit in the web root, and nginx's denylist (`md|txt|json|ya?ml|lock|py`) does not cover a file with no extension or a `.sh` file, so all three are public until step 13A moves the site into `public/` (decision 23a). Each holds only a call to a shared checker or the harness steps, which is harmless, the same reasoning step 8 gave for its gate.
 
 ## The sample-file review gate

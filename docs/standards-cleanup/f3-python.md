@@ -35,7 +35,7 @@ One commit per pass, all four passes on the sample first.
 1. Alignment and spacing: Run `format_py.py`. Consecutive assignments align their `=`, keyword arguments in a multi-line call align, dict values align after the colon, siblings in a bracket share a column, `from X import` runs align their `import`, wrapped conditions lead with `and` and `or`, and trailing comments in a block share one column. Three blank lines above a section banner, two above a subsection banner, one blank line after every docstring, and no newline at the end of the file.
 2. Dead code and history: Run `strip_dead_comments.py`, printing every comment removed. Step and decision numbers, dates, "moved out of", and "used to" go since git keeps that record.
 3. About This File: Run `add_about_py.py`, turning each module docstring into the About This File section.
-4. One-line comments and docstrings: Run the comment-style skill's `docstring_layout.py` for the blank lines, then a reviewed JSON list applied with `apply_comment_edits.py`. Every comment is one line, a short label. A docstring's explanation paragraph and each Args and Returns entry are one line. A warning that stops a line being "fixed" wrongly stays, cut to its label.
+4. Label comments and docstrings: Run the comment-style skill's `docstring_layout.py` for the blank lines, then a JSON list applied with `apply_comment_edits.py`, which prints each comment removed. Delete every `#` comment except the section banners and the import group labels, in all 15 files, the seven that already pass included (see "Formatting comes first" in the README). Docstrings stay, with the explanation paragraph and each Args and Returns entry on one line.
 
 In the last commit, add `py` to `scripts/git-hooks/format-languages` (under decision 28a).
 
@@ -89,14 +89,17 @@ a stop because a filetype changes in only one file.
    week --today 2026-10-17 subcommands only, which never write the ledger).
 3. Sample-file review gate (Python): run all four passes on
    scripts/scout_seen.py (alignment and spacing, dead code and history,
-   About This File, one-line comments and docstrings), one commit per
-   pass, and prove it with verify_equivalent.py (py, and py-comments for
-   the docstring pass) and a matching output and exit code. Give me a
-   clickable link to it, a short summary, every comment you deleted, and
-   the git diff command, then STOP until I approve. Carry any correction I
-   ask for into the rest.
+   About This File, then deleting the label comments and laying out the
+   docstrings), one commit per pass, and prove it with
+   verify_equivalent.py (py, and py-comments for the docstring pass) and
+   a matching output and exit code. Keep only the section banners, the
+   import group labels, and the docstrings. Give me a clickable link to
+   it, a short summary, every comment you deleted, and the git diff
+   command, then STOP until I approve. Carry any correction I ask for
+   into the rest.
 4. On approval, do the other seven failing Python files, one commit per
-   pass, and confirm the seven clean files still pass. Add py to
+   pass, then delete the label comments in the seven files that already
+   pass and confirm they still pass. Add py to
    scripts/git-hooks/format-languages in the last commit.
 5. Prove it: verify_equivalent.py against main on every file, py_compile
    on every file, every script's output and exit code against the saved
