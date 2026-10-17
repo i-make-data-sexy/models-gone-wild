@@ -1869,8 +1869,6 @@ const APP_BASE=(function(){
 const methodologyLink=document.getElementById('methodologyLink');
 if(methodologyLink) methodologyLink.href=APP_BASE+'methodology/';
 
-/* Reads the view from the path. Falls back to the old ?view= parameter
-   so links shared before the permalinks still land on the right view. */
 function viewFromUrl(){
   const seg=window.location.pathname.slice(APP_BASE.length).replace(/\/$/,'');
   for(const name in VIEW_SLUGS){ if(VIEW_SLUGS[name]===seg) return name; }
@@ -1883,8 +1881,6 @@ function posterFromUrl(){
   return m ? m[1] : null;
 }
 
-/* Points the address bar at the current view. The old ?view= parameter
-   is dropped, which also tidies a legacy link into its permalink. */
 function syncViewUrl(){
   if(!window.history || !history.replaceState) return;
   const url=new URL(window.location.href);
@@ -2254,9 +2250,6 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.
 
 applyFilters();
 
-/* Honour a shared permalink. Runs after the first render so both panels
-   already hold content when one of them is revealed. Syncing the URL
-   turns a legacy ?view= link into its permalink. */
 /* A /poster/<slug>/ link opens on the timeline with that poster up. An
    unknown slug falls back to the plain page and drops the segment. */
 const startCase=caseBySlug(posterFromUrl());
