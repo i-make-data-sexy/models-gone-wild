@@ -41,7 +41,7 @@ The steps run in the order AI Strategy's sweep ran, measured with `audit_format.
 | F1 | 1 CSS file, `css/styles.css`, 972 lines | Not clean. No About section, 15 value columns where the rule allows 2, 135 uneven runs, 59 comments over one line, 64 wordy, 6 inside a rule, 3 history notes, 21 banner problems. No screenshot harness and no hook, so F1 adds both. |
 | F2 | The inline scripts, 2,014 lines (1,996 in `index.html`, 18 in `methodology/index.html`) | Neither clean. 82 uneven runs, 90 comments over one line, 109 wordy, 7 inside a block, 1 mixed placement, 3 history notes, 32 banner problems, and 18 of `check_style.py`'s 70 issues. The one `.js` file is the vendored html2canvas, which stays as shipped. |
 | F3 | 15 Python files, 2,508 lines | 7 clean (`serve.py` and six test files). The other 8 hold 25 uneven runs, 6 comments over one line, 8 wordy, 3 history notes, 8 banner problems, and 51 of `check_style.py`'s issues. 7 lack an About section and 6 end with a newline. Heaviest: `scripts/scout_seen.py`. |
-| F4 | 2 pages, 2,371 lines | Neither clean. Neither has an About section, both end with a newline, and they hold 15 comments over one line, 15 wordy, and the 20 HTML comments decision 26 deletes. Markup indented two spaces, where the rule wants four. |
+| F4 | 2 pages, 2,371 lines | Neither clean. Neither has an About section, both end with a newline, and they hold 15 comments over one line, 15 wordy, and the 20 HTML comments decision 26 deletes. Step F2 deleted the 15 in `index.html` at Annie's request on 2026-10-17. Markup indented two spaces, where the rule wants four. |
 | F5 | requirements, shell, editor settings | `requirements-dev.txt` (2 pins, not aligned), the 2 shell scripts F1 adds, and no `.vscode/settings.json`. |
 | F6 | Quotes | 27 single-quoted Python strings, all holding a double quote, so all stay. About 330 single-quoted strings in the inline scripts outside the data, about 8 of which stay. No single-quoted HTML attributes. |
 | F7 | Python structure and type hints, formerly step 5 | 2 functions without a hint. Every script and test except `serve.py` and `test_dependencies.py` keeps top-level names only one function uses, and `check_charges.py` and `check_quotes.py` run their whole job at the top level. |
@@ -204,7 +204,7 @@ Answer these before running the steps. Record each answer here because the step 
 | F1 | [f1-css.md](f1-css.md) | `css/styles.css` to AI Strategy's format, the screenshot harness, and the formatting pre-commit hook. | Medium | Done 2026-10-17 (merge df0fd2d) |
 | F2 | [f2-javascript.md](f2-javascript.md) | The two inline scripts to AI Strategy's format, the case data left as is. | Medium | Not started |
 | F3 | [f3-python.md](f3-python.md) | 8 Python files to the rule's spacing, comments, and docstrings, and `check_style.py` to 0. | Small | Not started |
-| F4 | [f4-html.md](f4-html.md) | Both pages to AI Strategy's format, the 20 HTML comments deleted. | Small | Not started |
+| F4 | [f4-html.md](f4-html.md) | Both pages to AI Strategy's format, Methodology's 5 HTML comments deleted (`index.html`'s 15 went in F2). | Small | Not started |
 | F5 | [f5-other-files.md](f5-other-files.md) | The requirements and shell formatting, and the editor settings. | Tiny | Not started |
 | F6 | [f6-quotes.md](f6-quotes.md) | Double quotes in the inline JavaScript. | Small | Not started |
 | F7 | [f7-python-structure.md](f7-python-structure.md) | `filters.py`'s layout on every Python file, 2 functions without type hints. Formerly step 5. | Small | Not started |

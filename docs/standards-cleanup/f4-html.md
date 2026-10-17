@@ -21,7 +21,7 @@ Measured with `audit_format.py` and `check_format.py` on 2026-10-17, read only. 
 
 Neither has an About This File section, and both end with a newline. Most of `index.html`'s banner problems are the inline script's banners, which step F2 fixes, so rerun the audit at the start.
 
-The rule turns HTML comments into Jinja comments so none reaches the page source. These pages have no Jinja, so decision 26 deletes all 20 instead. Two of them carry a warning that keeps a line from being "fixed" wrongly. The page's paths stay relative because it is served under `/tools/models-gone-wild/`, and `.menu-toggle` must never get a click handler because that breaks the menu on iPhone Safari. Under decision 29a, each page's About section keeps those two as one-line notes.
+The rule turns HTML comments into Jinja comments so none reaches the page source. These pages have no Jinja, so decision 26 deletes all 20 instead. Step F2 already deleted the 15 in `index.html`, at Annie's request on 2026-10-17, so this step deletes Methodology's 5. Two of them carry a warning that keeps a line from being "fixed" wrongly. The page's paths stay relative because it is served under `/tools/models-gone-wild/`, and `.menu-toggle` must never get a click handler because that breaks the menu on iPhone Safari. Under decision 29a, each page's About section keeps those two as one-line notes.
 
 The markup is indented two spaces per level, and the contents of `<head>` and `<body>` start at column 0. The rule wants four spaces per level, with each tag inside another indented four from it. The inline `<script>` block keeps its lines exactly as step F2 left them since `CASES` and `GLOSSARY` sit inside it and the case loaders depend on their indentation.
 
@@ -47,7 +47,7 @@ In the last commit, under decisions 28a and 29a, add `html` to `scripts/git-hook
 
 ## Proving it
 
-- Serve `main` and the branch with `scripts/serve.py`, fetch every page and view, and compare the HTML once whitespace is collapsed. The only differences allowed are the 20 deleted comments and the two About banners. `verify_equivalent.py html main index.html methodology/index.html` covers the source since it ignores comments and whitespace.
+- Serve `main` and the branch with `scripts/serve.py`, fetch every page and view, and compare the HTML once whitespace is collapsed. The only differences allowed are Methodology's 5 deleted comments and the two About banners. `verify_equivalent.py html main index.html methodology/index.html` covers the source since it ignores comments and whitespace.
 - `scripts/screenshot-diff/run.sh main standards-format-html` reports zero changed pixels, and `scripts/check_overlaps.py` reports no overlaps.
 - Both suites pass with the same counts plus the new guard test before every commit, and the five check scripts exit 0.
 - `~/.claude/formatting-tools/check_format.py` exits 0 on both pages (under decision 29a), and both read top to bottom like AI Strategy's templates.

@@ -22,7 +22,7 @@ The app's own JavaScript lives inline until steps 9A and 9B move it into files. 
 
 The one tracked `.js` file, `js/html2canvas.min.js`, is a vendored third-party library, minified and pinned by the SHA-256 test from step 3. It stays exactly as shipped and is out of scope.
 
-The `CASES` array (lines 259 to 669, under its 40-line field comment) and the `GLOSSARY` object (lines 754 to 785) stay byte for byte. Four check scripts, `tests/test_static.py`, `UPDATE.md`, and the add-case skill find cases with patterns such as `id:"` and a closing brace indented two spaces, so a realigned case breaks them all. Step 9A moves both into files and settles their format under decision 30.
+The `CASES` array (lines 259 to 669) and the `GLOSSARY` object (lines 754 to 785) stay byte for byte. Four check scripts, `tests/test_static.py`, `UPDATE.md`, and the add-case skill find cases with patterns such as `id:"` and a closing brace indented two spaces, so a realigned case breaks them all. Step 9A moves both into files and settles their format under decision 30.
 
 `audit_format.py` measures an `.html` file's comments, not its inline code, so the hook cannot see these blocks. Adding `js` to the hook's list here makes it gate the files steps 9A and 9B create from them.
 
@@ -34,7 +34,7 @@ Work on each block as a scratch `.js` file in the session scratchpad, then put i
 
 1. Alignment and spacing: Run `format_js.py`. Consecutive `const` lines align their `=`, object values align after the colon (siblings in a bracket share one column, a key that opens a nested block included), multi-line ternaries and conditions lead with their operators, and promise chains align their arrows. Banner spacing per the rule. Restore the `CASES` and `GLOSSARY` lines from `main` before writing the block back.
 2. Dead code and history: Run `strip_dead_comments.py`, printing every comment removed.
-3. Label comments: Delete every comment except the section banners and the field comment above `CASES`, with a JSON list applied by `apply_comment_edits.py`, which prints each one removed. Label comments are deleted, not shortened (see "Formatting comes first" in the README). The `CASES` field comment documents the data the add-case skill writes, so it stays as it is until step 9A.
+3. Label comments: Delete every comment except the section banners, with a JSON list applied by `apply_comment_edits.py`, which prints each one removed. Label comments are deleted, not shortened (see "Formatting comes first" in the README). At the sample review on 2026-10-17, Annie asked for the long comments left in `index.html` to go as well. That took the `CASES` field comment, which only repeated `UPDATE.md`'s schema table, and the page's 15 HTML comments, pulled forward from step F4.
 
 The block gets no About This File section of its own. Step F4 gives each page one, and step 9B gives each script file it creates one.
 
