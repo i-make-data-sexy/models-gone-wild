@@ -6,7 +6,7 @@ A pure reorganization. Every rule moves byte for byte, the cascade order is pres
 
 ## Background
 
-`css/styles.css` is 972 lines, over the 800-line limit. It was lifted out of an inline `<style>` block (90d2b19), which is why every rule is still indented two spaces. Prompt 5's formatting sweep fixes the indentation later; this step moves rules without reformatting them.
+`css/styles.css` is 972 lines, over the 800-line limit. Step F1 brought it to the formatting rule. This step moves every rule byte for byte, then gives each new file an About This File section and re-runs `format_css.py` on it since each file's value columns are set by its own longest property names.
 
 The stylesheet's banners on 2026-10-16 are below, with the target file for each. The ranges are contiguous, so linking the files in this order reproduces the original cascade exactly:
 
@@ -20,7 +20,7 @@ The stylesheet's banners on 2026-10-16 are below, with the target file for each.
 | 856 to 895 | Methodology Page | `methodology.css` |
 | 896 to 972 | Site Header Responsive, the 1023px and 800px queries, reduced motion | `responsive.css` |
 
-Confirm the line numbers at the start since step 6 may have shifted them. The media queries at lines 114, 415, 418, 431, and 684 stay with their sections.
+Step F1 shifted these line numbers, so find each range by its banner at the start. The media queries (at lines 114, 415, 418, 431, and 684 on 2026-10-16) stay with their sections.
 
 Every file stays under `css/`, which nginx serves through the page block with no-cache headers, so no nginx rule changes. Seven no-cache requests replace one; Cloudflare serves them over HTTP/2.
 
@@ -29,22 +29,15 @@ Both pages keep loading every file, in the same order. Trimming what Methodology
 ## The changes
 
 1. Split with a script that maps line ranges to files and asserts every line lands in exactly one file, as the pattern rule shows. Keep the script in the session scratchpad, not the repo.
-2. Rewrite the header comment that moves to `variables.css` so it names the seven files and why they load in order.
-3. In `index.html`, replace `<link rel="stylesheet" href="css/styles.css">` with seven relative links in the table's order. In `methodology/index.html`, the same with `../css/`.
-4. Delete `css/styles.css`. First grep the repo for every other reference (`UPDATE.md`'s leading-slash check, `DEPLOY.md`'s verify list, the step 1 tests, `scripts/check_overlaps.py`) and update each.
-5. Add a test that every stylesheet each page links exists, returns 200 through the preview server at the root and under a permalink, and that no CSS file is more than 800 lines.
+2. Give each new file an About This File section with `add_about.py` and re-run `format_css.py` on it. Prove the move with the split script, which checks that the seven files, joined in link order with whitespace and comments stripped, match `css/styles.css` on `main` stripped the same way.
+3. Rewrite the header comment that moves to `variables.css` so it names the seven files and why they load in order.
+4. In `index.html`, replace `<link rel="stylesheet" href="css/styles.css">` with seven relative links in the table's order. In `methodology/index.html`, the same with `../css/`.
+5. Delete `css/styles.css`. First grep the repo for every other reference (`UPDATE.md`'s leading-slash check, `DEPLOY.md`'s verify list, the step 1 tests, `scripts/check_overlaps.py`) and update each.
+6. Add a test that every stylesheet each page links exists, returns 200 through the preview server at the root and under a permalink, and that no CSS file is more than 800 lines.
 
 ## The screenshot harness
 
-There is no harness yet. ML Model Picker's is the reference for apps with no database. It lives at `~/Dropbox/Annielytics/Code/Python/ML Model Picker/scripts/screenshot-diff/` and holds `run.sh`, `capture.py`, and `diff.py`. Port it into `scripts/screenshot-diff/` with these changes:
-
-- Use this repo's `venv` for Playwright rather than borrowing another app's.
-- Check out each ref into its own git worktree under `/tmp`, outside Dropbox, and serve it with that worktree's `scripts/serve.py` on a free port.
-- Capture the home page, `threat-matrix/`, `lab-counts/`, `poster/sol-hugging-face/` with the poster open, and `methodology/`, at 375, 768, 1024, and 1440 pixels wide.
-- Wait for `document.fonts.ready` before each capture since the Threat Matrix measures its labels in Oswald and lays out differently in a fallback face.
-- `run.sh main main` must come back clean first, which proves the harness is stable.
-
-Steps 8, 9A, 9B, 10A, 11, 12, and 13 reuse it.
+Step F1 built it in `scripts/screenshot-diff/`. Confirm `run.sh main main` comes back clean before editing any CSS. Steps 8, 9A, 9B, 10A, 11, 12, and 13 reuse it.
 
 ## The sample-file review gate
 
@@ -54,6 +47,8 @@ Steps 8, 9A, 9B, 10A, 11, 12, and 13 reuse it.
 ## Done when
 
 `scripts/screenshot-diff/run.sh main standards-split-css` reports zero changed pixels at every width, no file in `css/` is more than 800 lines, and both suites pass.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
 ## Rollback
 
@@ -76,17 +71,24 @@ files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
 
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
+
 1. Confirm step 6 is merged and live. Branch off an up-to-date main as
    standards-split-css. Never work on main.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass.
-3. Port ML Model Picker's screenshot-diff harness into
-   scripts/screenshot-diff/ as the step file describes, and show me that
-   run.sh main main comes back clean BEFORE editing any CSS.
-4. Confirm the section line numbers in css/styles.css against the step
-   file's table.
+3. Run step F1's scripts/screenshot-diff/run.sh main main and show me it
+   comes back clean BEFORE editing any CSS.
+4. Find each section range in css/styles.css by its banner since step F1
+   moved the line numbers, and show me the ranges against the step file's
+   table.
 5. Sample-file review gate (CSS): split styles.css into the seven files with
-   the coverage-checked script, link them from index.html (the HTML sample),
+   the coverage-checked script, give each its About section and re-run
+   format_css.py on it, link them from index.html (the HTML sample),
    and run run.sh main standards-split-css. Give me clickable links to
    css/registry.css and index.html, the coverage result, the diff result,
    and the git diff command, and STOP until I approve.

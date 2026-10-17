@@ -32,16 +32,18 @@ Three more items land here because they are hygiene rather than code:
    - `DEPLOY.md`: "Updating after the first deploy" and "Branch discipline", to name the staging leg.
    - `scout/SCOUT.md`: the publishing prompt, to name the staging leg.
 3. `tests/test_root.py` also asserts the repo's skill copy matches `~/.claude/skills/models-gone-wild-add-case/SKILL.md` when the home copy exists, and skips otherwise (the cloud has no home copy).
-4. Under decision 10a, delete the merged branches, keeping `main`, `scout-state`, every `update/*` and `candidate/*`, and the current branch. List them first with `git branch --merged main` and `git branch -r --merged origin/main`, show the list, and delete only after approval: `git branch -d <name>` locally (never `-D`), and `git push origin --delete <name>` for the remote ones.
+4. Under decision 10a, delete the merged branches, keeping `main`, `scout-state`, every `update/*` and `candidate/*`, and the current branch. List them first with `git branch --merged main` and `git branch -r --merged origin/main`, show the list, and delete only after approval, with `git branch -d <name>` locally (never `-D`) and `git push origin --delete <name>` for the remote ones.
 
 ## The sample-file review gate
 
 - Markdown: `UPDATE.md` is the sample since it holds four of the deploy instructions. Rewrite it first and stop for approval before the skill copies, `DEPLOY.md`, and `SCOUT.md`.
-- Python: There is one new test file, so there is nothing to sample.
+- Python: `tests/test_root.py` is the sample, the one Python file the step creates. Write it, show it failing on a scratch root file and passing without it, and stop for approval.
 
 ## Done when
 
 `tests/test_root.py` passes, and fails when a scratch file is added at the root (`touch notes.txt && git add -N notes.txt`, run it, then `git rm --cached notes.txt && rm notes.txt`). Show both outcomes.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
 ## Rollback
 
@@ -63,12 +65,20 @@ files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
 
-1. Confirm step 3 is merged and live. Branch off an up-to-date main as
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
+
+1. Confirm step F7 is merged and live. Branch off an up-to-date main as
    standards-root-files. Never work on main.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass before any change.
-3. Write tests/test_root.py with the allowlist from the step file, and show me
-   the guard failing on a scratch root file and passing without it.
+3. Sample-file review gate (Python): write tests/test_root.py with the
+   allowlist from the step file, show me the guard failing on a scratch root
+   file and passing without it, give me a clickable link, a short summary,
+   and the git diff command, and STOP until I approve.
 4. Sample-file review gate (Markdown): rewrite UPDATE.md's
    three prompts and its "Deploying the change" section first. Give me a
    clickable link, a short summary, and the git diff command, and STOP
@@ -107,6 +117,6 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 4. Switch staging back to main with the README command.
 5. Mark step 4 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
-6. Tell me the next step is step 5, whose prompt is at the bottom of
-   docs/standards-cleanup/05-python-structure.md.
+6. Tell me the next step is step 6 (step 5 is retired into F7), whose
+   prompt is at the bottom of docs/standards-cleanup/06-comment-style.md.
 ```

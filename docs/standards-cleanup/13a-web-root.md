@@ -42,11 +42,13 @@ Add `scripts/url-list/origin.sh <host>`, which runs the same list on the server 
 
 - Python: `scripts/serve.py` is the sample since every other tool and test serves through it. Point it at `public/`, run the URL list against the branch, and stop for approval before the other scripts and tests.
 - Markdown: `UPDATE.md` is the sample, then the skill copies, `DEPLOY.md`, and `SCOUT.md`.
-- HTML: The pages move without edits, so there is nothing to sample.
+- HTML: The pages move with `git mv` and no edits. If an edit turns out to be needed, `index.html` is the sample and gets the stop.
 
 ## Done when
 
 The URL list for the branch matches `main` row for row, locally and at the staging origin, except that `deploy/nginx/headers.conf` and `scripts/git-hooks/pre-commit`, which nginx serves today, now return 404. Every remaining difference is shown and approved. Both suites, the CSP walk, the five check scripts, and `check_overlaps.py` pass, and the screenshot diff is pixel-identical.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
 ## Rollback
 
@@ -67,6 +69,12 @@ Follow the README's sample-file review gate exactly. The first .py, .js,
 files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
+
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
 
 1. Confirm step 12 is merged and live. Branch off an up-to-date main as
    standards-web-root. Never work on main.

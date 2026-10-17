@@ -2,41 +2,40 @@
 
 Branch: `standards-comment-style`
 
-Apply the annielytics-comment-style skill, and delete every HTML comment from the two pages (decision 26). Comments and docstrings only, so no behavior changes.
+Steps F1 to F4 did this step's work, so it confirms `check_style.py` reports 0 and keeps it there. Comments and docstrings only, so no behavior changes.
+
+## Decisions this step reads
+
+Decision 1a (staging) and decision 26 (delete the HTML comments), recorded 2026-10-16, and decision 29 (the About section on the two pages), recorded in `docs/standards-cleanup/README.md`.
 
 ## Background
 
-On 2026-10-16, `python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` reported 75 issues. The 5 in `scripts/serve.py` were fixed with the Python sample for the stricter review gate, so 70 remain:
+On 2026-10-16, `python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` reported 70 issues, and the formatting steps fix all of them:
 
-| Category | Count | Where |
-|---|---|---|
-| Banners | 1 | `css/styles.css:896`, a 39-character label inside a 31-wide rule |
-| Comment prose | 18 | 17 in `index.html` (12 one-sentence comments ending in a period, 5 starting lowercase in the `HAIR` table near line 926), 1 in `methodology/index.html:139` |
-| Docstrings | 51 | `scout_seen.py` 16, `check_claims.py` 12, `check_overlaps.py` 11, `check_dates.py` 8, `check_slugs.py` 4. Nearly all are a missing blank line before `Args:` or `Returns:`. |
-| Dashes, trailing comments, JS block comments, annotations | 0 | |
+| Category | Count | Where | Fixed in |
+|---|---|---|---|
+| Banners | 1 | `css/styles.css:896`, a 39-character label inside a 31-wide rule | Step F1 |
+| Comment prose | 18 | 17 in `index.html`'s inline script (12 one-sentence comments ending in a period, 5 lowercase labels in the `HAIR` table), 1 in `methodology/index.html:139` | Step F2 |
+| Docstrings | 51 | `scout_seen.py` 16, `check_claims.py` 12, `check_overlaps.py` 11, `check_dates.py` 8, `check_slugs.py` 4 | Step F3 |
 
-The checker prints at most 15 issues per category, so run it with the limit lifted to see every line (copy it to the scratchpad and change `issues[:15]` to `issues`). Tests added in steps 1 to 5 are in scope too.
+Step F4 also deleted the 20 HTML comments under decision 26 and added the guard test that keeps them out. Step F7 and step 4 then wrote code under the same gate.
 
-The five lowercase comments label hair styles in a lookup table (`side part, swept across the crown`). Capitalize them; do not reword them.
+The checker prints at most 15 issues per category, so run it with the limit lifted to see every line (copy it to the scratchpad and change `issues[:15]` to `issues`). Nothing runs it automatically today, so a later edit could bring an issue back unseen.
 
 ## The changes
 
-1. Read `~/.claude/skills/annielytics-comment-style/SKILL.md` and follow it.
-2. Fix the banner, the comment prose, and the docstrings, using the skill's scripts where they apply (`docstring_layout.py` for the blank lines, `normalize_banners.py` for the banner) and by hand where they do not.
-3. Delete every `<!-- -->` comment from `index.html` (15) and `methodology/index.html` (5), with no replacement (decision 26). Nginx serves the pages as they are, so a Jinja comment would show as text on the page, and an HTML comment ships in the page source. The `/* */` and `//` comments inside the inline `<style>` and `<script>` blocks stay, fixed to the skill's prose rules.
-4. Add a guard test under `tests/` that fails if either page contains `<!--`, so a comment cannot come back.
+1. Read `~/.claude/skills/annielytics-comment-style/SKILL.md`, run the checker with the limit lifted, and fix any issue it finds, using the skill's scripts where they apply and by hand where they do not.
+2. Add `tests/test_comment_style.py`, which runs `check_style.py` on the repo and fails on any issue. It skips with a reason when the skill is not on the machine since a fresh clone or the cloud scout may not have it.
 
 ## The sample-file review gate
 
-- Python: `scripts/scout_seen.py` is the sample since it carries the most docstring issues (16).
-- HTML: `index.html` is the sample since it carries 17 of the 18 prose issues. `methodology/index.html` follows.
-- CSS: There is one file, so there is nothing to sample.
-
-Fix each sample, stop for approval, then do the rest of that filetype.
+- Python: `tests/test_comment_style.py` is the sample, the one Python file the step creates. Write it, show it passing and failing with one issue put back (a lowercase comment, say), and stop for approval. If step 1 finds issues to fix, the first file it fixes is that filetype's sample instead, and gets its own stop.
 
 ## Done when
 
-`python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` reports 0, `grep -c '<!--' index.html methodology/index.html` prints 0 for both, the new guard test fails when a comment is put back, and both suites pass. For the Python files, `ast.dump` of each file is identical before and after with docstrings excluded, which proves only comments moved.
+`check_style.py` reports 0 with the limit lifted, the new test passes and fails with an issue put back, `grep -c '<!--' index.html methodology/index.html` prints 1 for each under decision 29a (the About banner) or 0 under 29b, and both suites pass.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
 ## Rollback
 
@@ -48,8 +47,8 @@ Revert the commit.
 Run step 6 (comment style) of the Models Gone Wild standards cleanup,
 following docs/standards-cleanup/06-comment-style.md exactly. Read
 docs/standards-cleanup/README.md and
-~/.claude/skills/annielytics-comment-style/SKILL.md first. Decision 26 says
-to delete the HTML comments outright.
+~/.claude/skills/annielytics-comment-style/SKILL.md first. Use decisions 1,
+26, and 29 as recorded in the README, and stop if any is blank.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
@@ -59,27 +58,29 @@ files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
 
-1. Confirm step 5 is merged and live. Branch off an up-to-date main as
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
+
+1. Confirm step 4 is merged and live. Branch off an up-to-date main as
    standards-comment-style. Never work on main.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass. Run check_style.py with the 15-line limit lifted
-   (a copy in the scratchpad) and show me the full count by file.
-3. Sample-file review gate (Python): fix scripts/scout_seen.py first, then
-   give me a clickable link, a short summary, and the git diff command, and
-   STOP until I approve. Then fix the other .py files.
-4. Sample-file review gate (HTML): in index.html first, delete every
-   <!-- --> comment and fix the /* */ and // comments (capitalize the HAIR
-   labels without rewording). List each deleted comment, give me the link,
-   summary, and diff command, and STOP until I approve. Then do the same in
-   methodology/index.html, and add the guard test that fails if either page
-   contains <!--, proving it fails with one comment put back.
-5. Fix the CSS banner at css/styles.css:896.
-6. Prove the Python is unchanged with an ast.dump comparison that excludes
-   docstrings. Run check_style.py (must report 0) and both suites, gating on
-   each exit code.
-7. Commit, push, and deploy the branch to staging with the
+   (a copy in the scratchpad) and show me the count by file (0 expected).
+3. If it finds any issue, fix it per the skill, stopping at the first file
+   of each filetype as its sample.
+4. Sample-file review gate (Python): write tests/test_comment_style.py,
+   show it passing and failing with one issue put back, give me a clickable
+   link, a short summary, and the git diff command, and STOP until I
+   approve.
+5. Confirm grep -c '<!--' on both pages prints 1 each under decision 29a or
+   0 under 29b. Run check_style.py (must report 0) and both suites, gating
+   on each exit code.
+6. Commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
-8. Report what you verified and how, and STOP. Do not merge to main or touch
+7. Report what you verified and how, and STOP. Do not merge to main or touch
    production until I say so.
 
 When you stop, end your report with the ship-to-production prompt from

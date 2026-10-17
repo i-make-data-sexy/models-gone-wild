@@ -73,13 +73,15 @@ The `.tip` and `.overlay` elements are fixed-position overlays outside the wrapp
 
 ## Done when
 
-The rule's three proofs run with the step 7 harness:
+The rule's three proofs run with the step F1 harness:
 
 - Gap. At 375, 768, 1024, and 1440 wide, in a short window so every page is long, `footer.getBoundingClientRect().top` minus the bottom of `main`'s last visible child with height equals the footer's top margin on every page and view, including an open poster.
 - Screenshot diff against `main`. Every changed capture is shorter, never taller. You review and approve the images.
 - Pinning. In a 1440 by 1400 window, the footer's bottom equals `innerHeight` (less any bottom margin the footer keeps) on Methodology, the shortest page until step 12 adds the 404.
 
 Both suites pass, and the mobile menu still opens and closes at 375 pixels.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
 ## Rollback
 
@@ -102,6 +104,12 @@ Follow the README's sample-file review gate exactly. The first .py, .js,
 files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
+
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
 
 1. Confirm step 10B is merged and live. Branch off an up-to-date main as
    standards-layout. Never work on main.

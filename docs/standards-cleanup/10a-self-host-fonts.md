@@ -30,7 +30,7 @@ Fonts never change, so they want a long cache. A `fonts/` folder would fall thro
    ```
 
 2. Download every distinct `fonts.gstatic.com` file with `curl` (not Python's urllib, which has no CA certificates on your Mac) into `fonts/<family>/<subset>.woff2`, for example `fonts/oswald/latin.woff2`. Keep the Noto Emoji file as `fonts/noto-emoji/horns.woff2` since it holds one glyph.
-3. Write `css/fonts.css` with Google's `@font-face` rules unchanged except two things: each `url()` becomes relative (`../fonts/<family>/<subset>.woff2`), and the subset comments are capitalized (`/* Latin */`). Open it with a banner and a comment naming where and when the rules came from.
+3. Write `css/fonts.css` with Google's `@font-face` rules unchanged except in two ways. Each `url()` becomes relative (`../fonts/<family>/<subset>.woff2`), and the subset comments are capitalized (`/* Latin */`). Open it with a banner and a comment naming where and when the rules came from.
 4. In both pages, replace the Google Fonts links and both preconnects with one relative link to `css/fonts.css` (`../css/fonts.css` on Methodology), at the position of the first Google link, so the cascade is unchanged.
 5. Extend the asset rule on both servers to `^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico|woff2))$`, with the same `alias .../$1/$2` and 30-day cache. The family folder gets its own `[\w-]+` group, which cannot express `..`, and the filename class stays as it was. Confirm by requesting `fonts/../DEPLOY.md` and getting a 404.
 6. Add two tests: no tracked page, stylesheet, or script mentions `fonts.googleapis.com` or `fonts.gstatic.com`, and every `url()` in `css/fonts.css` names a file that exists.
@@ -38,11 +38,13 @@ Fonts never change, so they want a long cache. A `fonts/` folder would fall thro
 ## The sample-file review gate
 
 - HTML: `index.html` is the sample since it carries both Google links including the emoji subset. Swap its links, run the screenshot diff, and stop for approval before `methodology/index.html`.
-- CSS: There is one new file, so there is nothing to sample.
+- CSS: `css/fonts.css` is the sample, the one CSS file the step creates. Write it to the formatting rule, show it with the screenshot diff, and stop for approval.
 
 ## Done when
 
 The screenshot diff against `main` is pixel-identical (the files are byte for byte what Google serves), both suites pass, `check_overlaps.py` reports no overlaps, and in a browser on staging the console's `[...document.fonts].map(f => f.family + ' ' + f.weight + ' ' + f.status)` lists Oswald, Special Elite, Courier Prime, and Noto Emoji, with the weights the page uses `loaded`. Do not use `document.fonts.check()`, which returns true when no face is registered at all.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
 ## Rollback
 
@@ -64,6 +66,12 @@ Follow the README's sample-file review gate exactly. The first .py, .js,
 files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
+
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
 
 1. Confirm step 9B is merged and live. Branch off an up-to-date main as
    standards-self-host-fonts. Never work on main.

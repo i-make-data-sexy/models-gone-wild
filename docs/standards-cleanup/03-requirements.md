@@ -99,6 +99,6 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 4. Switch staging back to main with the README command.
 5. Mark step 3 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
-6. Tell me the next step is step 4, whose prompt is at the bottom of
-   docs/standards-cleanup/04-root-files.md.
+6. Tell me the next step is step F1, whose prompt is at the bottom of
+   docs/standards-cleanup/f1-css.md.
 ```
