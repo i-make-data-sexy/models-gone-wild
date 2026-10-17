@@ -25,7 +25,7 @@ Every file in AI Strategy meets these standards, and every file here must meet t
 
 - Values line up in columns, and a long line that keeps its column beats a short line that breaks it.
 - The stylesheet has one main value column and a second one for its long property names, with media queries sharing both.
-- A comment is one line, a short label of a few words, on its own line above the code. Docstring explanations and each Args and Returns entry are one line too. Only the About This File section runs longer.
+- The comments that stay are the About This File section, the section banners, and in Python the import group labels and the docstrings. Label comments above a rule or a line are deleted, not shortened, since they were notes for editing by hand. Annie set this on 2026-10-17 during step F1. Docstring explanations and each Args and Returns entry are one line. Only the About This File section runs longer.
 - No comment sits inside a block (a CSS rule, an object, or a dict), apart from short group labels in `:root`.
 - Every file opens with an About This File section. Python files also follow `filters.py`'s banners (Imports, Global Variables, then one per section) with no loose code.
 - Python, JavaScript, and HTML attributes use double quotes.

@@ -18,7 +18,7 @@ The app's own JavaScript lives inline until steps 9A and 9B move it into files. 
 | `index.html`, lines 218 to 2213 | 1,996 | 81 | 89 | 108 | 7 | 1 | 3 | 32 |
 | `methodology/index.html`, lines 135 to 152 | 18 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |
 
-`check_style.py` reports 18 comment-prose issues in these blocks: 17 in `index.html` (12 one-sentence comments ending in a period, and 5 lowercase labels in the `HAIR` table near line 926) and 1 in `methodology/index.html` at line 139. This step fixes all 18. Capitalize the `HAIR` labels and do not reword them.
+`check_style.py` reports 18 comment-prose issues in these blocks: 17 in `index.html` (12 one-sentence comments ending in a period, and 5 lowercase labels in the `HAIR` table near line 926) and 1 in `methodology/index.html` at line 139. This step clears all 18 by deleting the comments, the `HAIR` labels included.
 
 The one tracked `.js` file, `js/html2canvas.min.js`, is a vendored third-party library, minified and pinned by the SHA-256 test from step 3. It stays exactly as shipped and is out of scope.
 
@@ -34,7 +34,7 @@ Work on each block as a scratch `.js` file in the session scratchpad, then put i
 
 1. Alignment and spacing: Run `format_js.py`. Consecutive `const` lines align their `=`, object values align after the colon (siblings in a bracket share one column, a key that opens a nested block included), multi-line ternaries and conditions lead with their operators, and promise chains align their arrows. Banner spacing per the rule. Restore the `CASES` and `GLOSSARY` lines from `main` before writing the block back.
 2. Dead code and history: Run `strip_dead_comments.py`, printing every comment removed.
-3. One-line comments: A reviewed JSON list applied with `apply_comment_edits.py`. Every comment is one line, a short label, on its own line above the code. A one-line comment is `//`, never `/* */`, and nothing sits beside a line of code or between the lines of an object. The field comment above `CASES` stays as it is until step 9A.
+3. Label comments: Delete every comment except the section banners and the field comment above `CASES`, with a JSON list applied by `apply_comment_edits.py`, which prints each one removed. Label comments are deleted, not shortened (see "Formatting comes first" in the README). The `CASES` field comment documents the data the add-case skill writes, so it stays as it is until step 9A.
 
 The block gets no About This File section of its own. Step F4 gives each page one, and step 9B gives each script file it creates one.
 
@@ -91,12 +91,13 @@ a stop because a filetype changes in only one file.
    js/html2canvas.min.js alone.
 4. Sample-file review gate (JavaScript and HTML): run the three passes on
    the index.html block (alignment and spacing, dead code and history,
-   one-line comments, capitalizing the five HAIR labels without rewording
-   them), one commit per pass, writing it back between its tags. Prove it
-   with verify_equivalent.py js and node --check on the scratch file, and
-   git diff main -- index.html showing no line of CASES or GLOSSARY
-   changed. Give me a clickable link to index.html, a short summary, every
-   comment you deleted, and the git diff command, then STOP until I
+   then deleting every label comment, keeping only the section banners
+   and the CASES field comment), one commit per pass, writing it back
+   between its tags. Prove it with verify_equivalent.py js and node
+   --check on the scratch file, and git diff main -- index.html showing
+   no line of CASES or GLOSSARY changed. Give me a clickable link to
+   index.html, a short summary, a linked file listing the full text of
+   every comment you deleted, and the git diff command, then STOP until I
    approve. Carry any correction I ask for.
 5. On approval, do the methodology/index.html block the same way, then add
    js to scripts/git-hooks/format-languages in the last commit.
