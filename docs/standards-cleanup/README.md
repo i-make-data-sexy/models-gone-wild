@@ -75,8 +75,8 @@ These checked out fine, so they are not in the plan. With no Python serving page
 | 2 | The three headers on every page, from nginx at 127.0.0.1 | None of the three on any page, stylesheet, or script. Two `Cache-Control` headers on the page. |
 | 3 | Every line pinned with `==`, and `pip-audit` reports nothing | No requirements file of either kind. |
 | 4 | A root guard test fails on any other root file | Root holds `.gitignore`, `DEPLOY.md`, `UPDATE.md`, and `index.html`. No guard. |
-| 5 | `add_type_hints.py --missing` reports zero | 5 functions in 3 files (`check_overlaps.py:218`, `check_slugs.py:42`, `serve.py:68`, `serve.py:80`, and `serve.py:96`). |
-| 6 | `check_style.py` reports 0 | 75. 1 banner (CSS), 18 comment prose (17 in `index.html`, 1 in Methodology), and 56 docstring layout (scripts). |
+| 5 | `add_type_hints.py --missing` reports zero | 2 functions in 2 files (`check_overlaps.py:218` and `check_slugs.py:42`). The other 3, in `serve.py`, were hinted with the Python sample for the stricter review gate. |
+| 6 | `check_style.py` reports 0 | 70. 1 banner (CSS), 18 comment prose (17 in `index.html`, 1 in Methodology), and 51 docstring layout (scripts). `serve.py`'s 5 were fixed with the Python sample. |
 | 7 | The screenshot diff shows no change, no CSS file more than 800 lines | `css/styles.css` is 972 lines. No screenshot harness. |
 | 8 | `check_raw_values.py` reports zero raw colors, font sizes, and line heights in every CSS file | 90 in `css/styles.css` (5 hex colors, 14 `rgb()`/`rgba()`, 52 font sizes, 19 line heights). 14 tokens, 3 never used. 31 hex colors in `index.html` outside the checker's reach. No gate. |
 | 9A and 9B | A test fails on any inline style, handler, or script | 2 inline scripts (1,996 and 18 lines). No guard. |
@@ -152,8 +152,8 @@ Answer these before running the steps. Record each answer here because the step 
 | 2 | [02-security.md](02-security.md) | No security headers, duplicate `Cache-Control`, the token in the web root. | Small | Done 2026-10-16 (merge fc717de) |
 | 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Not started |
 | 4 | [04-root-files.md](04-root-files.md) | No root guard, workflow docs that skip staging, merged branches. | Small | Not started |
-| 5 | [05-python-structure.md](05-python-structure.md) | 5 functions without type hints. | Tiny | Not started |
-| 6 | [06-comment-style.md](06-comment-style.md) | 75 comment-style issues. | Small | Not started |
+| 5 | [05-python-structure.md](05-python-structure.md) | 2 functions without type hints, and loose top-level code in every script and test. | Small | Not started |
+| 6 | [06-comment-style.md](06-comment-style.md) | 70 comment-style issues. | Small | Not started |
 | 7 | [07-split-css.md](07-split-css.md) | 972-line stylesheet, no screenshot harness. | Medium | Not started |
 | 8 | [08-design-tokens.md](08-design-tokens.md) | 90 raw values in CSS, 31 colors in `index.html`, no gate. | Medium | Not started |
 | 8B | [08b-token-consolidation.md](08b-token-consolidation.md) | Near-duplicate colors and font sizes. | Medium | Skipped under decision 13a (marked 2026-10-16) |

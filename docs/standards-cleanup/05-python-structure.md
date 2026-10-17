@@ -6,7 +6,7 @@ Branch: `standards-type-hints`
 
 The baseline step splits any module that mixes setup, security, filters, and routes, and adds type hints to every function. This app has no application module. Its Python is eight standalone tools in `scripts/` (1,247 lines), each with one job and a `main()`, plus the test suite from step 1. None mixes setup, security, filters, and routes, so there is nothing to split. The four copies of the case loader in the check scripts are consolidated in step 9A, which has to touch them anyway.
 
-The type-hint half applies. On 2026-10-16, this command reported five functions:
+The type-hint half applies. On 2026-10-16, this command reported five functions. The three in `scripts/serve.py` were hinted with the Python sample for the stricter review gate, so two remain:
 
 ```
 python3 ~/.claude/skills/annielytics-comment-style/scripts/add_type_hints.py --missing $(git ls-files '*.py')
@@ -16,9 +16,6 @@ python3 ~/.claude/skills/annielytics-comment-style/scripts/add_type_hints.py --m
 |---|---|---|---|
 | `scripts/check_overlaps.py` | 218 | `log_message` | `*args` and the return |
 | `scripts/check_slugs.py` | 42 | `main` | the return |
-| `scripts/serve.py` | 68 | `do_GET` | the return |
-| `scripts/serve.py` | 80 | `redirect` | the return |
-| `scripts/serve.py` | 96 | `main` | the return |
 
 The tests written in steps 1 to 4 must carry hints too. Run the check on them as well.
 
@@ -41,13 +38,14 @@ The README's rule on functions applies too. On 2026-10-16, every Python file kep
 ## The changes
 
 1. Run `add_type_hints.py` (without `--missing`) on every tracked `.py` file to write the hints it can prove from the docstrings.
-2. Write the rest by hand, using the real types: `log_message(self, format: str, *args: object) -> None`, `do_GET(self) -> None`, `redirect(self, location: str) -> None`, and the two `main` functions' return types as their docstrings state (`int` where they return an exit status, `None` otherwise). Test functions return `None`, and fixtures name their real types (`pytest.MonkeyPatch`, Playwright's `Page`, `str`).
+2. Write the rest by hand, using the real types: `log_message(self, format: str, *args: object) -> None` and `check_slugs.py`'s `main` return type as its docstring states (`int` if it returns an exit status, `None` otherwise). Test functions return `None`, and fixtures name their real types (`pytest.MonkeyPatch`, Playwright's `Page`, `str`).
 3. Keep each docstring's `Args` and `Returns` types in step with the hints.
 4. Roll every file's top-level code into functions under the README's rule. Move each value only one function uses into that function, give `check_charges.py` and `check_quotes.py` a `main()` called under the entry-point guard, and leave only imports, shared settings, parametrize lists, markers, and the entry-point call at the top level. Prove each script unchanged by running it before and after and comparing its output and exit code, and prove the tests by the same pass count.
 
 ## The sample-file review gate
 
-`scripts/serve.py` is the Python sample since it holds three of the five and the handler methods whose types are least obvious. Hint it first and stop for approval before the rest.
+- Type hints: `scripts/check_overlaps.py` is the sample since its `log_message` takes `*args`, the least obvious type left. Hint it first and stop for approval before the rest.
+- Top-level code: `scripts/check_quotes.py` is the sample since it runs its whole job loose at the top level. Roll it up and stop for approval before the rest.
 
 ## Done when
 
@@ -82,7 +80,7 @@ a stop because a filetype changes in only one file.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass before any change. Run add_type_hints.py --missing
    on every tracked .py file and show me the count.
-3. Sample-file review gate (Python): hint scripts/serve.py first, keep its
+3. Sample-file review gate (Python): hint scripts/check_overlaps.py first, keep its
    docstrings in step, and give me a clickable link, a short summary, and
    the git diff command. STOP until I approve.
 4. After I approve, hint every other tracked .py file, the tests included.
