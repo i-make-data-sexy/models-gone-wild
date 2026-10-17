@@ -162,7 +162,6 @@ location /tools/models-gone-wild/ {
 
     alias /home/anniecushing/apps/models-gone-wild/;
     index index.html;
-    expires -1;
     add_header Cache-Control "no-cache, no-store, must-revalidate";
 }
 ```
@@ -336,7 +335,6 @@ location /tools/models-gone-wild/ {
 
     alias /home/anniecushing/apps/staging/models-gone-wild/;
     index index.html;
-    expires -1;
     add_header Cache-Control "no-cache, no-store, must-revalidate";
 }
 ```
