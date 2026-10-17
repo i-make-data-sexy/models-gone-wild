@@ -150,7 +150,7 @@ Answer these before running the steps. Record each answer here because the step 
 | 0B | [00b-staging.md](00b-staging.md) | No staging copy. | Small | Done 2026-10-16 (merge 4759143) |
 | 1 | [01-tests.md](01-tests.md) | No test suite. Adds one, proven by reverting the tooltip clamp fix (8e726b4). | Medium | Done 2026-10-16 (merge 7eafe8d) |
 | 2 | [02-security.md](02-security.md) | No security headers, duplicate `Cache-Control`, the token in the web root. | Small | Done 2026-10-16 (merge fc717de) |
-| 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Not started |
+| 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Done 2026-10-17 (merge 8243928) |
 | 4 | [04-root-files.md](04-root-files.md) | No root guard, workflow docs that skip staging, merged branches. | Small | Not started |
 | 5 | [05-python-structure.md](05-python-structure.md) | 2 functions without type hints, and loose top-level code in every script and test. | Small | Not started |
 | 6 | [06-comment-style.md](06-comment-style.md) | 70 comment-style issues. | Small | Not started |
