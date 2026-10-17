@@ -1,5 +1,4 @@
 /* Models Gone Wild.
-   Split out of index.html so the markup and the script are readable.
    The page links this RELATIVELY, as css/styles.css: the app is served
    at /tools/models-gone-wild/, so a leading slash would resolve to the
    site root and 404.
@@ -73,7 +72,7 @@ body::before {
      Site Header (Annielytics v2)
    =============================== */
 
-/* Ported from the canonical v2 mobile-header spec. The header sits
+/* The header sits
    INSIDE .wrap, so box-shadow projects the black band out to the
    viewport edges and clip-path crops that projection to the header's
    own height. The mobile menu below flows naturally as a flex-column
@@ -281,9 +280,7 @@ header.masthead {
 /* One container holding the view tabs and the filters, so the two
    read as different things. The tabs sit on the panel's top rule and
    switch what is shown; the filters sit in the opposite corner and
-   narrow what is shown. Previously both were rendered as chip rows
-   stacked on each other, which made the tabs look like a third
-   filter group. */
+   narrow what is shown. */
 .registry { margin-top: 36px; }
 
 .registry-bar {
@@ -533,10 +530,9 @@ header.masthead {
 }
 
 /* No focus ring on the selects. A clicked select keeps focus until
-   something else takes it, so the old red outline sat parked on the
-   control long after the choice was made. Chrome matches
-   :focus-visible on a select even for a mouse click, so scoping it
-   that way did not help.
+   something else takes it, so a ring would sit on the control
+   long after the choice was made. Chrome matches :focus-visible on a
+   select even for a mouse click.
 
    A chosen filter still shows its state through .is-active below,
    which darkens the control and bolds its text, so the control is
@@ -965,8 +961,7 @@ header.masthead {
 
 /* Two controls per card: the story that broke the case, and the
    wanted poster. Small outlined circles in the top-right corner, so
-   they read as a pair of buttons without the weight the filled
-   squares carried. Icons rather than labels keep the pair quiet; the
+   they read as a pair of buttons. Icons rather than labels keep the pair quiet; the
    tooltip and the aria-label both say what each one does. */
 .card-actions {
     position:            absolute;
@@ -1058,7 +1053,7 @@ header.masthead {
 
 /* One shared element rather than a ::after on each trigger. A pseudo
    element cannot be measured, so it cannot be kept inside anything;
-   these were spilling past the left edge of the reading column. This
+   these would spill past the left edge of the reading column. This
    one is measured and clamped by positionTip() in the script, and it
    sits above the poster overlay (z-index 50) so definitions still
    work inside an open poster. */
@@ -1280,8 +1275,8 @@ header.masthead {
 
 /* Suppress the browser's ring on :focus, not just :focus-visible. A
    click leaves the group focused without matching :focus-visible, so
-   the old rule never fired and the white and blue UA ring sat on the
-   dot after the poster closed and returned focus to it. Keyboard
+   a :focus-visible rule alone would leave the white and blue UA ring
+   on the dot after the poster closes and returns focus to it. Keyboard
    users still get the thicker ink stroke above. */
 .pt:focus { outline: none; }
 
