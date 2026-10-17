@@ -1,0 +1,22 @@
+#!/bin/sh
+# ========================================================================
+#   About This File
+# ========================================================================
+
+# The pre-commit hook. Runs the shared formatting gate on the staged files
+# of each language listed in format-languages, one per line, and skips
+# with a printed note on a machine without the gate.
+
+
+
+# ========================================================================
+#   Formatting Gate
+# ========================================================================
+
+gate="$HOME/.claude/formatting-tools/check_format.py"
+
+if [ -f "$gate" ]; then
+    python3 -I "$gate" --staged || exit 1
+else
+    echo "Formatting gate skipped: $gate not found on this machine"
+fi
