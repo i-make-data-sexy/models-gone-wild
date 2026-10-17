@@ -94,6 +94,12 @@ is blank.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
+Follow the README's sample-file review gate exactly. The first .py, .js,
+.css, and .html file you change or create is that filetype's sample, test
+files included. Finish each sample, give me a clickable link, a short
+summary, and the git diff command, and STOP until I approve it. Never skip
+a stop because a filetype changes in only one file.
+
 1. Confirm steps 0 and 0B are marked done in the README. Branch off an up-to-date main as standards-tests. Never work on
    main.
 2. Run the six check scripts in scripts/ and confirm each exits 0 before

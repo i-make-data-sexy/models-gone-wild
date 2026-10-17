@@ -59,6 +59,12 @@ exactly. Read docs/standards-cleanup/README.md and
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
+Follow the README's sample-file review gate exactly. The first .py, .js,
+.css, and .html file you change or create is that filetype's sample, test
+files included. Finish each sample, give me a clickable link, a short
+summary, and the git diff command, and STOP until I approve it. Never skip
+a stop because a filetype changes in only one file.
+
 1. Confirm step 9B is merged and live. Branch off an up-to-date main as
    standards-self-host-fonts. Never work on main.
 2. Run both suites and confirm they pass.

@@ -75,8 +75,8 @@ These checked out fine, so they are not in the plan. With no Python serving page
 | 2 | The three headers on every page, from nginx at 127.0.0.1 | None of the three on any page, stylesheet, or script. Two `Cache-Control` headers on the page. |
 | 3 | Every line pinned with `==`, and `pip-audit` reports nothing | No requirements file of either kind. |
 | 4 | A root guard test fails on any other root file | Root holds `.gitignore`, `DEPLOY.md`, `UPDATE.md`, and `index.html`. No guard. |
-| 5 | `add_type_hints.py --missing` reports zero | 5 functions in 3 files (`check_overlaps.py:218`, `check_slugs.py:42`, `serve.py:68`, `serve.py:80`, and `serve.py:96`). |
-| 6 | `check_style.py` reports 0 | 75. 1 banner (CSS), 18 comment prose (17 in `index.html`, 1 in Methodology), and 56 docstring layout (scripts). |
+| 5 | `add_type_hints.py --missing` reports zero | 2 functions in 2 files (`check_overlaps.py:218` and `check_slugs.py:42`). The other 3, in `serve.py`, were hinted with the Python sample for the stricter review gate. |
+| 6 | `check_style.py` reports 0 | 70. 1 banner (CSS), 18 comment prose (17 in `index.html`, 1 in Methodology), and 51 docstring layout (scripts). `serve.py`'s 5 were fixed with the Python sample. |
 | 7 | The screenshot diff shows no change, no CSS file more than 800 lines | `css/styles.css` is 972 lines. No screenshot harness. |
 | 8 | `check_raw_values.py` reports zero raw colors, font sizes, and line heights in every CSS file | 90 in `css/styles.css` (5 hex colors, 14 `rgb()`/`rgba()`, 52 font sizes, 19 line heights). 14 tokens, 3 never used. 31 hex colors in `index.html` outside the checker's reach. No gate. |
 | 9A and 9B | A test fails on any inline style, handler, or script | 2 inline scripts (1,996 and 18 lines). No guard. |
@@ -152,8 +152,8 @@ Answer these before running the steps. Record each answer here because the step 
 | 2 | [02-security.md](02-security.md) | No security headers, duplicate `Cache-Control`, the token in the web root. | Small | Done 2026-10-16 (merge fc717de) |
 | 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Not started |
 | 4 | [04-root-files.md](04-root-files.md) | No root guard, workflow docs that skip staging, merged branches. | Small | Not started |
-| 5 | [05-python-structure.md](05-python-structure.md) | 5 functions without type hints. | Tiny | Not started |
-| 6 | [06-comment-style.md](06-comment-style.md) | 75 comment-style issues. | Small | Not started |
+| 5 | [05-python-structure.md](05-python-structure.md) | 2 functions without type hints, and loose top-level code in every script and test. | Small | Not started |
+| 6 | [06-comment-style.md](06-comment-style.md) | 70 comment-style issues. | Small | Not started |
 | 7 | [07-split-css.md](07-split-css.md) | 972-line stylesheet, no screenshot harness. | Medium | Not started |
 | 8 | [08-design-tokens.md](08-design-tokens.md) | 90 raw values in CSS, 31 colors in `index.html`, no gate. | Medium | Not started |
 | 8B | [08b-token-consolidation.md](08b-token-consolidation.md) | Near-duplicate colors and font sizes. | Medium | Skipped under decision 13a (marked 2026-10-16) |
@@ -176,7 +176,8 @@ After step 13B, one server-wide pass remains outside this app: the nginx backups
 - Run the suite before touching anything, so a later failure is known to be new: `venv/bin/python3 -m pytest`. From step 1 on, the browser tests run too: `venv/bin/python3 -m pytest -m browser`.
 - Gate every deploy on the test exit code. Never put `pytest | tail` in a chain that ends in a push or deploy. Use `set -e` or `|| exit 1`.
 - Keep behavior identical unless the step or a decision says otherwise.
-- Follow the sample-file review gate. Whenever a step changes more than one file of the same filetype, apply the change to the named sample file first, give Annie a clickable link to it, a short summary of what changed, and the `git diff` command for it, and STOP. Change the rest of that filetype only after she approves the sample, carrying over any correction she asks for.
+- Put everything that can live in a function into one, in every `.py` and `.js` file a step changes or creates. A value used by only one function lives inside that function, and a value read once at startup comes from a function that remembers its result (`functools.lru_cache` in Python). The top level of a file holds only imports, the settings two or more functions share, test parametrize lists and markers (pytest reads them before any test runs), and the entry-point call. A script whose work runs loose at the top level gets a `main()` called under the entry-point guard. This holds the Functions and Global variables rules in `~/.claude/rules/formatting/code-formatting.md` strictly, and step 5 applies it to every existing script and test.
+- Follow the sample-file review gate, every step, with no exceptions. The first `.py`, `.js`, `.css`, and `.html` file a step changes or creates is that filetype's sample, even when it is the only file of its type the step touches. A new file counts, test files included. Use the sample the step file names; where it names none, the first file of each type the step reaches is the sample. Finish the sample, give Annie a clickable link to it, a short summary of what changed, and the `git diff` command for it, and STOP. Change or create anything else of that filetype only after she approves it, carrying over any correction she asks for. A step file saying a filetype changes in only one file is never a reason to skip the stop.
 - Deploy the branch to staging, confirm it is healthy, give the staging links, and stop. Production only on Annie's explicit word, every time.
 - Once a step reaches production, switch staging back to `main`.
 - New and moved code follows the house comment style and `~/.claude/rules/formatting/code-formatting.md`. Run `python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` before committing. From step 6 on, the expected count is 0.

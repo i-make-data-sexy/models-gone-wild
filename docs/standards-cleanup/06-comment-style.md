@@ -6,13 +6,13 @@ Apply the annielytics-comment-style skill, and delete every HTML comment from th
 
 ## Background
 
-On 2026-10-16, `python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` reported 75 issues:
+On 2026-10-16, `python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py` reported 75 issues. The 5 in `scripts/serve.py` were fixed with the Python sample for the stricter review gate, so 70 remain:
 
 | Category | Count | Where |
 |---|---|---|
 | Banners | 1 | `css/styles.css:896`, a 39-character label inside a 31-wide rule |
 | Comment prose | 18 | 17 in `index.html` (12 one-sentence comments ending in a period, 5 starting lowercase in the `HAIR` table near line 926), 1 in `methodology/index.html:139` |
-| Docstrings | 56 | `scout_seen.py` 16, `check_claims.py` 12, `check_overlaps.py` 11, `check_dates.py` 8, `serve.py` 5, `check_slugs.py` 4. Nearly all are a missing blank line before `Args:` or `Returns:`. |
+| Docstrings | 51 | `scout_seen.py` 16, `check_claims.py` 12, `check_overlaps.py` 11, `check_dates.py` 8, `check_slugs.py` 4. Nearly all are a missing blank line before `Args:` or `Returns:`. |
 | Dashes, trailing comments, JS block comments, annotations | 0 | |
 
 The checker prints at most 15 issues per category, so run it with the limit lifted to see every line (copy it to the scratchpad and change `issues[:15]` to `issues`). Tests added in steps 1 to 5 are in scope too.
@@ -52,6 +52,12 @@ docs/standards-cleanup/README.md and
 to delete the HTML comments outright.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
+
+Follow the README's sample-file review gate exactly. The first .py, .js,
+.css, and .html file you change or create is that filetype's sample, test
+files included. Finish each sample, give me a clickable link, a short
+summary, and the git diff command, and STOP until I approve it. Never skip
+a stop because a filetype changes in only one file.
 
 1. Confirm step 5 is merged and live. Branch off an up-to-date main as
    standards-comment-style. Never work on main.

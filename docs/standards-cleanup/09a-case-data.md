@@ -61,6 +61,12 @@ recorded in the README, and stop if any is blank.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
+Follow the README's sample-file review gate exactly. The first .py, .js,
+.css, and .html file you change or create is that filetype's sample, test
+files included. Finish each sample, give me a clickable link, a short
+summary, and the git diff command, and STOP until I approve it. Never skip
+a stop because a filetype changes in only one file.
+
 1. Confirm step 8 (and 8B, or its skip) is merged and live. Confirm neither
    update/claude nor update/sol still carries unmerged CASES edits, and stop
    if one does. Branch off an up-to-date main as standards-case-data. Never
