@@ -56,9 +56,7 @@ body::before {
     background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
 }
 
-/* Page shell. Matches the AI Timeline wrapper at 1200px with 30px of
-   side padding so the site header's logo and nav sit the same distance
-   from the viewport edge as they do everywhere else on the site. */
+/* Page wrapper */
 .wrap {
     position:            relative;
     z-index:             1;
@@ -67,26 +65,21 @@ body::before {
     padding:             0 30px 90px;
 }
 
-/* The registry keeps its original 920px reading width. Only the header
-   spans the wider shell above it, which is why the two are separate. */
+/* Reading column under the wider header */
 .content {
     max-width:           920px;
     margin:              0 auto;
 }
 
 
-/* ===============================
-     Site Header (Annielytics v2)
-   =============================== */
 
-/* The header sits
-   INSIDE .wrap, so box-shadow projects the black band out to the
-   viewport edges and clip-path crops that projection to the header's
-   own height. The mobile menu below flows naturally as a flex-column
-   child, never absolutely positioned, which is what keeps it from
-   being clipped behind the band on iOS. */
+/* ========================================================================
+     Site Header
+   ======================================================================== */
+
 .hidden { display: none; }
 
+/* Full-bleed band from box-shadow and clip-path */
 .site-header {
     background-color:    #000;
     z-index:             999;
@@ -105,8 +98,7 @@ body::before {
     padding:             0;
 }
 
-/* 250px cap matches AI Timeline. Without it the logo renders at its
-   natural 360px and overpowers the nav. */
+/* Logo cap so it never overpowers the nav */
 .header-logo {
     display:             block;
     width:               100%;
@@ -137,9 +129,7 @@ body::before {
     text-transform:      uppercase;
 }
 
-/* Sweep-right hover underline, desktop only. currentColor makes the
-   rule track the color transition, and content-box pins it to the
-   text rather than the padding box. */
+/* Sweep underline on hover, desktop only */
 @media (min-width:501px) {
     .nav-primary .menu a {
         background-image:    linear-gradient(currentColor,currentColor);
@@ -176,9 +166,10 @@ body::before {
 .nav-primary .menu.visible { padding: 0 20px 20px 0; }
 
 
-/* ===============================
+
+/* ========================================================================
      Masthead
-   =============================== */
+   ======================================================================== */
 
 header.masthead {
     text-align:          center;
@@ -217,9 +208,7 @@ header.masthead {
     color:               var(--ink-soft);
 }
 
-/* Monochrome, so it takes the subhead's ink rather than the
-   system palette. Nudged down slightly since the glyph sits high
-   on its baseline next to Special Elite. */
+/* Horns emoji in the subhead's ink */
 .horns {
     font-family:         'Noto Emoji',sans-serif;
     font-weight:         600;
@@ -228,10 +217,7 @@ header.masthead {
     vertical-align:      -.08em;
 }
 
-/* The intro reads as body copy rather than a centered display line, so
-   it is left-aligned inside the centered masthead. No max-width of its
-   own, which lets it run the full 920px of .content and line up with
-   the timeline below it. */
+/* Intro as left-aligned body copy */
 .intro {
     font-family:         'Special Elite',monospace;
     font-size:           14px;
@@ -241,12 +227,10 @@ header.masthead {
     line-height:         1.7;
 }
 
-/* The tap prompt is its own paragraph, tucked closer to the copy above
-   it than a full paragraph gap would put it */
+/* Tap prompt, tucked under the copy */
 .intro-cue { margin-top: 14px; }
 
-/* The masthead's one prose link. Stamp red with no underline marks it
-   as a link and keeps it distinct from a glossary term's dotted one */
+/* The masthead's one prose link */
 .intro a {
     color:               var(--stamp-red);
     text-decoration:     none;
@@ -262,8 +246,7 @@ header.masthead {
     outline-offset:      2px;
 }
 
-/* Three stamp-red dots, the quietest divider that still reads as
-   deliberate */
+/* Divider of three stamp-red dots */
 .flourish {
     display:             flex;
     justify-content:     center;
@@ -280,14 +263,12 @@ header.masthead {
 }
 
 
-/* ===============================
-     Registry Panel
-   =============================== */
 
-/* One container holding the view tabs and the filters, so the two
-   read as different things. The tabs sit on the panel's top rule and
-   switch what is shown; the filters sit in the opposite corner and
-   narrow what is shown. */
+/* ========================================================================
+     Registry Panel
+   ======================================================================== */
+
+/* Panel holding the view tabs and filters */
 .registry { margin-top: 36px; }
 
 .registry-bar {
@@ -304,6 +285,7 @@ header.masthead {
     gap:                 6px;
 }
 
+/* View tabs, pulled down onto the bar's rule */
 .tab {
     font-family:         'Oswald',sans-serif;
     font-weight:         600;
@@ -316,9 +298,6 @@ header.masthead {
     color:               var(--ink-soft);
     border:              1.5px solid transparent;
     border-bottom:       none;
-
-    /* Pulls the tab down onto the bar's rule so the selected one reads
-       as attached to the panel below it */
     margin-bottom:       -1.5px;
     transition:          background .15s,color .15s;
 }
@@ -331,22 +310,19 @@ header.masthead {
     border-color:        var(--stamp-red);
 }
 
-/* Ink rather than stamp red, since a red outline on the red selected
-   tab would be invisible */
+/* Ink ring, since red would vanish on the tab */
 .tab:focus-visible {
     outline:             2px solid var(--ink);
     outline-offset:      2px;
 }
 
 
-/* ===============================
-     Options Menu
-   =============================== */
 
-/* The three filters sit behind one sliders button in the bar's right
-   corner, the same pattern as the options menu in Treks and the City.
-   The bar anchors the panel, so it opens under the bar at its right
-   edge rather than under the 36px button. */
+/* ========================================================================
+     Options Menu
+   ======================================================================== */
+
+/* Bar anchors the options panel */
 .registry-bar { position: relative; }
 
 .options-menu {
@@ -354,9 +330,7 @@ header.masthead {
     padding-bottom:      7px;
 }
 
-/* Paper-deep square at rest, stamp red while open, matching the
-   selected tab. The knobs take the button's own fill so each rail
-   reads as passing behind its knob rather than through it. */
+/* Sliders button, stamp red while open */
 .options-button {
     --options-knob-fill: var(--paper-deep);
     position:            relative;
@@ -409,8 +383,7 @@ header.masthead {
 
 .line-icon-knob { fill: var(--options-knob-fill,var(--paper)); }
 
-/* A filter is set. Ringed in paper so it reads on both the resting
-   tan and the open red. */
+/* Dot marking a filter as set */
 .options-dot {
     position:            absolute;
     top:                 -5px;
@@ -425,8 +398,7 @@ header.masthead {
 
 .options-dot[hidden] { display: none; }
 
-/* Floats over the views like the case tooltips do, so the timeline
-   stays put while a filter is chosen */
+/* Panel floating over the views */
 .options-panel {
     position:            absolute;
     z-index:             40;
@@ -457,8 +429,7 @@ header.masthead {
     color:               var(--stamp-red);
 }
 
-/* Clicking outside or on the button already closes the panel, but
-   neither is obvious on sight. A small muted x says so plainly. */
+/* Close button on the panel */
 .options-close {
     display:             flex;
     align-items:         center;
@@ -503,6 +474,7 @@ header.masthead {
     color:               var(--ink-soft);
 }
 
+/* Selects, arrow image apart from background-color */
 .filter-select {
     font-family:         'Oswald',sans-serif;
     font-weight:         500;
@@ -516,13 +488,7 @@ header.masthead {
     padding:             8px 28px 8px 11px;
     cursor:              pointer;
     line-height:         1.2;
-
-    /* Each select fills the panel, so the three stack evenly */
     width:               100%;
-
-    /* Native arrow is suppressed so the control matches the poster
-       chrome. background-color is set separately above, since the
-       shorthand would wipe this image out. */
     -webkit-appearance:  none;
     appearance:          none;
     background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%233a362c' stroke-width='1.6'/%3E%3C/svg%3E");
@@ -536,18 +502,10 @@ header.masthead {
     color:               var(--ink);
 }
 
-/* No focus ring on the selects. A clicked select keeps focus until
-   something else takes it, so a ring would sit on the control
-   long after the choice was made. Chrome matches :focus-visible on a
-   select even for a mouse click.
-
-   A chosen filter still shows its state through .is-active below,
-   which darkens the control and bolds its text, so the control is
-   not silent about being set. */
+/* No focus ring on the selects */
 .filter-select:focus { outline: none; }
 
-/* A filter that is actually narrowing the list gets the ink border so
-   the state is visible without reading the option text */
+/* Ink border on a filter that narrows the list */
 .filter-select.is-active {
     border-color:        var(--ink);
     color:               var(--ink);
@@ -559,9 +517,7 @@ header.masthead {
     letter-spacing:      normal;
 }
 
-/* The Lab multi-select. Its summary borrows .filter-select so the
-   closed control matches the two selects around it; these rules only
-   undo what a <summary> brings with it. */
+/* Lab multi-select, summary reset */
 .multi-select summary {
     display:             block;
     list-style:          none;
@@ -569,7 +525,7 @@ header.masthead {
 
 .multi-select summary::-webkit-details-marker { display: none; }
 
-/* Flips the arrow while the list is open */
+/* Arrow flips while the list is open */
 .multi-select[open] summary {
     background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 6l4-4 4 4' fill='none' stroke='%233a362c' stroke-width='1.6'/%3E%3C/svg%3E");
     border-color:        var(--ink);
@@ -580,8 +536,7 @@ header.masthead {
     outline-offset:      2px;
 }
 
-/* Unfolds in place under the summary. Scrolls on its own past about
-   eight labs so a long list never pushes Clear filters off screen. */
+/* Lab list, scrolling past about eight labs */
 .multi-select-list {
     margin-top:          4px;
     padding:             6px 0;
@@ -625,13 +580,7 @@ header.masthead {
     font-weight:         600;
 }
 
-/* A full-width stamp-red button, so it reads as an action rather than
-   a link. It rests at 80% strength, which softens the red against the
-   card. On hover or focus a full-strength fill sweeps in from the left,
-   the same background-size sweep Cloud Kingdom uses on its links, here
-   at full height instead of a 1px underline. The 80% lives in the
-   background color rather than opacity, since opacity would also dim
-   the sweep and the text. */
+/* Clear button with a full-height sweep */
 .options-clear {
     display:             block;
     width:               100%;
@@ -664,8 +613,7 @@ header.masthead {
     background-size:     100% 100%;
 }
 
-/* Ink rather than stamp red, since a red outline on the red fill
-   would be invisible */
+/* Ink ring, since red would vanish on the fill */
 .options-clear:focus-visible {
     outline:             2px solid var(--ink);
     outline-offset:      2px;
@@ -685,9 +633,10 @@ header.masthead {
 .view.active { display: block; }
 
 
-/* ===============================
+
+/* ========================================================================
      Timeline
-   =============================== */
+   ======================================================================== */
 
 .timeline {
     position:            relative;
@@ -777,10 +726,7 @@ header.masthead {
     margin-bottom:       8px;
 }
 
-/* The gap between the escape and its disclosure, under the date. Set
-   in the same face and tracking as the date so the two read as one
-   tag, but soft and smaller, since the date is the fact and the lag
-   is the footnote to it. */
+/* Disclosure lag under the date */
 .lag-tag {
     font-family:         'Oswald',sans-serif;
     font-weight:         500;
@@ -792,17 +738,12 @@ header.masthead {
 }
 
 
-/* ===============================
+
+/* ========================================================================
      Card
-   =============================== */
+   ======================================================================== */
 
-/* The card itself is not interactive. Only the two icons at its foot
-   are, so there is no cursor change and no hover lift here, either of
-   which would promise a click the card does not answer.
-
-   No overflow:hidden. The card has square corners so it never needed
-   clipping, and the hover tooltips on the action icons have to be
-   able to paint outside the card's box. */
+/* Card, neither clickable nor clipped */
 .card {
     display:             block;
     width:               100%;
@@ -823,8 +764,7 @@ header.masthead {
     align-items:         stretch;
 }
 
-/* position:relative anchors the action circles to this box rather
-   than to the page */
+/* Anchor for the action circles */
 .card-text {
     position:            relative;
     padding:             12px 14px;
@@ -833,13 +773,12 @@ header.masthead {
 }
 
 
-/* ===============================
-     Lab Spine
-   =============================== */
 
-/* The lab reads bottom to top down a paper band, with the class
-   color carried by the inset rule on its outer edge. The card's org
-   line drops to the model alone, since the lab is named here. */
+/* ========================================================================
+     Lab Spine
+   ======================================================================== */
+
+/* Lab name down a band on the card's edge */
 .spine {
     width:               44px;
     flex:                none;
@@ -868,9 +807,7 @@ header.masthead {
 .spine.c2 span { color:      var(--class2);               }
 .spine.c1 span { color:      var(--class1);               }
 
-/* The card names the model and nothing else. The exact version lives
-   on the poster, a click away, since a line reading OPEN-WEIGHT or
-   MUSE SPARK 1.1 under the title was noise at a glance. */
+/* Model name, clear of the action circles */
 .card-alias {
     font-family:         'Oswald',sans-serif;
     font-weight:         700;
@@ -879,28 +816,19 @@ header.masthead {
     letter-spacing:      .01em;
     line-height:         1.05;
     margin:              0 0 9px;
-
-    /* Clears the two action circles so a long title wraps rather than
-       running underneath them */
     padding-right:       62px;
 }
 
+/* Charge with a four-line floor */
 .card-charge {
     font-size:           12.5px;
     color:               var(--ink-soft);
     line-height:         1.45;
     margin:              0;
-
-    /* A floor of four lines, so a charge that wraps short does not
-       shrink its card below the ones beside it. Set in em, so it
-       tracks the font size rather than a pixel guess. Only a floor:
-       narrow screens wrap past four lines and this stops binding. */
     min-height:          calc(4 * 1.45em);
 }
 
-/* Class badge and disclosure chip share this row. Wrapping is
-   allowed so a narrow card drops the chip below the badge instead of
-   squeezing it. */
+/* Row for the class badge and disclosure chip */
 .card-tags {
     display:             flex;
     flex-wrap:           wrap;
@@ -923,13 +851,7 @@ header.masthead {
     color:               #f4ecd8;
 }
 
-/* The disclosure chip is outlined rather than filled, so it stays
-   quieter than the class badge beside it and never competes with the
-   tier for attention.
-
-   margin-left:auto pins it to the right edge of the card, opposite
-   the class badge. If the row wraps on a narrow card, the chip keeps
-   its right alignment on the line below. */
+/* Outlined disclosure chip, pinned right */
 .disc-chip {
     display:             inline-block;
     margin-left:         auto;
@@ -952,8 +874,7 @@ header.masthead {
 .class-badge.c2 { background: var(--class2); }
 .class-badge.c1 { background: var(--class1); }
 
-/* The badge explains its own tier on hover. tabindex makes that
-   reachable by keyboard and by tap, where there is no hover. */
+/* Badge explains its tier on hover or tap */
 .class-badge[data-def] {
     cursor:              help;
     outline:             none;
@@ -962,14 +883,12 @@ header.masthead {
 .class-badge[data-def]:focus { box-shadow: 0 0 0 2px var(--card),0 0 0 4px var(--ink); }
 
 
-/* ===============================
-     Card Actions
-   =============================== */
 
-/* Two controls per card: the story that broke the case, and the
-   wanted poster. Small outlined circles in the top-right corner, so
-   they read as a pair of buttons. Icons rather than labels keep the pair quiet; the
-   tooltip and the aria-label both say what each one does. */
+/* ========================================================================
+     Card Actions
+   ======================================================================== */
+
+/* Story and poster buttons on each card */
 .card-actions {
     position:            absolute;
     top:                 12px;
@@ -1002,9 +921,7 @@ header.masthead {
     fill:                currentColor;
 }
 
-/* The circle stays small, but the hit area does not. This invisible
-   ring takes it out to 34px so the control is still tappable on a
-   phone at 22px of visible chrome. */
+/* Larger tap target around each circle */
 .icon-btn::before {
     content:             "";
     position:            absolute;
@@ -1024,21 +941,15 @@ header.masthead {
 }
 
 
-/* ===============================
-     Glossary Terms
-   =============================== */
 
-/* A dotted rule in the text's own color, so the cue is present
-   without pulling the eye. tabindex makes the definition reachable
-   by keyboard and by tap, since touch has no hover. */
+/* ========================================================================
+     Glossary Terms
+   ======================================================================== */
+
+/* Dotted term, rgba fallback before color-mix */
 .term {
     cursor:                      help;
     text-decoration:             underline dotted;
-
-    /* Barely there at rest. The literal rgba is the fallback for
-       browsers without color-mix; the color-mix line keeps the rule in
-       the text's own hue wherever the term sits. It firms up on hover
-       so the cue is still findable once you go looking. */
     text-decoration-color:       rgba(58,54,44,.4);
     text-decoration-color:       color-mix(in srgb, currentColor 40%, transparent);
     text-decoration-thickness:   1px;
@@ -1049,21 +960,16 @@ header.masthead {
 .term:hover { text-decoration-color: currentColor;     }
 .term:focus { text-decoration-color: var(--stamp-red); }
 
-/* A PNG cannot show a tooltip, so the dotted cue is a dead signal
-   there. The class is added for the html2canvas capture only. */
+/* No dotted cue in a downloaded poster */
 .exporting .term { text-decoration: none; }
 
 
-/* ===============================
-     Tooltip
-   =============================== */
 
-/* One shared element rather than a ::after on each trigger. A pseudo
-   element cannot be measured, so it cannot be kept inside anything;
-   these would spill past the left edge of the reading column. This
-   one is measured and clamped by positionTip() in the script, and it
-   sits above the poster overlay (z-index 50) so definitions still
-   work inside an open poster. */
+/* ========================================================================
+     Tooltip
+   ======================================================================== */
+
+/* One shared bubble, clamped by positionTip() */
 .tip {
     position:            fixed;
     top:                 0;
@@ -1086,7 +992,7 @@ header.masthead {
     visibility:          visible;
 }
 
-/* Definition style: prose, wraps, reads like the page */
+/* Definition bubble */
 .tip.tip-def {
     font-family:         'Special Elite',monospace;
     font-size:           11.5px;
@@ -1095,9 +1001,7 @@ header.masthead {
     max-width:           280px;
 }
 
-/* Score card. Wider than a definition, since it carries two labelled
-   metrics rather than a sentence, and the paragraphs are tight so the
-   block stays short enough to sit beside its point. */
+/* Score card bubble */
 .tip.tip-scores { max-width: 330px; }
 .tip-scores p   { margin:    0;     }
 
@@ -1129,16 +1033,13 @@ header.masthead {
     margin-bottom:       2px !important;
 }
 
-/* Score and Justification, colons included, carry the emphasis.
-   Special Elite ships one weight only, so this is the browser's
-   synthesised bold, which is why the color lifts to full paper
-   too: weight alone is a weak signal in a single-weight face. */
+/* Synthesized bold, so the color lifts too */
 .tip-row b {
     color:               var(--paper);
     font-weight:         700;
 }
 
-/* Label style: the short action labels on the card icons */
+/* Label bubble for the card icons */
 .tip.tip-label {
     font-family:         'Oswald',sans-serif;
     font-size:           10.5px;
@@ -1148,8 +1049,7 @@ header.masthead {
     white-space:         nowrap;
 }
 
-/* The arrow is offset by a variable so it keeps pointing at the
-   trigger even after the bubble has been pushed sideways */
+/* Arrow offset follows the trigger */
 .tip::after {
     content:             "";
     position:            absolute;
@@ -1177,9 +1077,10 @@ header.masthead {
 }
 
 
-/* ===============================
+
+/* ========================================================================
      Scatter
-   =============================== */
+   ======================================================================== */
 
 .scatter-wrap {
     margin:              40px auto 0;
@@ -1202,11 +1103,7 @@ header.masthead {
     stroke-width:        3;
 }
 
-/* Legend for the two dot fills. Below the chart on narrow screens.
-   The plot inside the SVG is not centred in it: 64 units of padding
-   on the left make room for the harm axis, against 40 on the right. So
-   the legend is nudged right by half the 24-unit difference, 12 of 700,
-   to line up with the plot rather than with the SVG around it. */
+/* Legend, nudged to center on the plot */
 .scatter-legend {
     display:             flex;
     justify-content:     center;
@@ -1222,8 +1119,7 @@ header.masthead {
     color:               var(--ink-soft);
 }
 
-/* On wider screens the legend stands to the right of the plot, stacked,
-   and the wrap widens to make room for it so the plot keeps its size */
+/* Legend beside the plot on wider screens */
 @media (min-width:801px) {
     .scatter-wrap {
         display:             flex;
@@ -1249,11 +1145,7 @@ header.masthead {
     }
 }
 
-/* The Threat Matrix spans the whole column with its legend above it,
-   on every screen width. The legend is centred over the plot rather
-   than the SVG: the plot sits 31 units right of centre, 64 units of
-   left margin against 2, so the legend shifts by that much. Below 700
-   the drawing scales, and the shift scales with it as 8.86%. */
+/* Threat Matrix legend, centered on the plot */
 .scatter-wrap.matrix-wrap {
     display:             block;
     max-width:           none;
@@ -1280,18 +1172,10 @@ header.masthead {
     flex:                none;
 }
 
-/* Suppress the browser's ring on :focus, not just :focus-visible. A
-   click leaves the group focused without matching :focus-visible, so
-   a :focus-visible rule alone would leave the white and blue UA ring
-   on the dot after the poster closes and returns focus to it. Keyboard
-   users still get the thicker ink stroke above. */
+/* Ring off on :focus, not only :focus-visible */
 .pt:focus { outline: none; }
 
-/* Axis and quadrant labels explain themselves on hover, tap, or
-   keyboard focus. The dotted rule is the same cue the glossary terms
-   use in prose, at the same weight. */
-/* Axis labels are marked with an info icon instead of a dotted rule,
-   so the two axes read as explainable without underlining a heading */
+/* Axis labels, marked with an info icon */
 .axis-note {
     cursor:              help;
     outline:             none;
@@ -1307,6 +1191,7 @@ header.masthead {
     fill:                var(--stamp-red);
 }
 
+/* Quadrant labels, dotted like glossary terms */
 .svg-note {
     cursor:                      help;
     outline:                     none;
@@ -1326,13 +1211,12 @@ header.masthead {
 }
 
 
-/* ===============================
-     Cases by Lab
-   =============================== */
 
-/* Each segment opens its case's wanted poster. The ink stroke on
-   hover and keyboard focus is the same cue the Threat Matrix dots
-   use, and the browser ring is suppressed for the same reason. */
+/* ========================================================================
+     Cases by Lab
+   ======================================================================== */
+
+/* Lab segments open their posters */
 .seg {
     cursor:              pointer;
     outline:             none;
@@ -1361,9 +1245,10 @@ header.masthead {
 }
 
 
-/* ===============================
-     Modal / Poster
-   =============================== */
+
+/* ========================================================================
+     Poster
+   ======================================================================== */
 
 .overlay {
     position:                    fixed;
@@ -1564,7 +1449,7 @@ header.masthead {
 
 .poster-footer b { color: var(--ink); }
 
-/* Side by side on a desktop poster, stacked once each button would be under 150px */
+/* Buttons side by side, stacked under 150px */
 .poster-actions {
     margin:              20px 24px 0;
     display:             flex;
@@ -1679,12 +1564,12 @@ footer.site-foot {
 footer.site-foot b { color: var(--ink); }
 
 
-/* ===============================
-     Methodology Page
-   =============================== */
 
-/* The Wanted title scaled down, since this page is a reference rather
-   than the poster board */
+/* ========================================================================
+     Methodology Page
+   ======================================================================== */
+
+/* Wanted title, scaled down */
 .page-title {
     font-family:         'Oswald',sans-serif;
     font-weight:         700;
@@ -1723,8 +1608,7 @@ footer.site-foot b { color: var(--ink); }
     line-height:         1.65;
 }
 
-/* Subsections under an H2, quieter than it: ink rather than red, and
-   no rule beneath */
+/* Subsections under an H2 */
 .method-section h3 {
     font-family:         'Oswald',sans-serif;
     font-weight:         600;
@@ -1745,7 +1629,7 @@ footer.site-foot b { color: var(--ink); }
     color:               var(--ink);
 }
 
-/* Small uppercase type marks it as a link, so it needs no underline */
+/* Back link in small caps, no underline */
 .back-link {
     font-family:         'Oswald',sans-serif;
     font-weight:         500;
@@ -1767,14 +1651,12 @@ footer.site-foot b { color: var(--ink); }
 }
 
 
-/* ===============================
-     Site Header Responsive (Annielytics v2)
-   =============================== */
 
-/* Tablet stacks the logo over a centered inline nav and hides the
-   MENU button. Mobile stacks the logo over a full-width MENU button
-   with the drawer expanding beneath it. Every padding value below is
-   from the canonical v2 spec and is load-bearing; do not trim them. */
+/* ========================================================================
+     Responsive Site Header
+   ======================================================================== */
+
+/* Header breakpoints, keep every padding value */
 @media only screen and (max-width:1023px) and (min-width:801px) {
     .site-header {
         flex-direction:      column;
@@ -1797,8 +1679,7 @@ footer.site-foot b { color: var(--ink); }
 }
 
 @media only screen and (max-width:800px) {
-    /* Phones keep the page's original 20px gutter rather than the 30px
-       desktop shell, since 30px on a narrow screen squeezes the posters */
+    /* 20px phone gutter */
     .wrap { padding: 0 20px 90px; }
 
     .site-header {
@@ -1817,9 +1698,7 @@ footer.site-foot b { color: var(--ink); }
         padding:             15px 0;
     }
 
-    /* No position:absolute here. There is no positioned ancestor in the
-       v2 structure, so absolute would pin the drawer to the viewport and
-       clip it behind the black band on iOS. */
+    /* Drawer flows in place, never absolute */
     .nav-primary {
         width:               100%;
         padding:             0;
@@ -1843,8 +1722,7 @@ footer.site-foot b { color: var(--ink); }
         float:               none;
     }
 
-    /* The -40px pairs with the 15px link padding to give a compact
-       stack. Do not change to 0; the items spread too far apart. */
+    /* Negative margin keeps the stack compact */
     .nav-primary .menu li {
         margin-bottom:       -40px;
         text-align:          center;
@@ -1863,9 +1741,7 @@ footer.site-foot b { color: var(--ink); }
         margin-bottom:       0;
     }
 
-    /* Tabs and the options button share one row on phones. The tabs
-       split what is left after the button, with tighter tracking so
-       Cases by Lab still fits on one line. */
+    /* Tabs and options button share one row */
     .registry-bar {
         flex-wrap:           nowrap;
         gap:                 8px;
