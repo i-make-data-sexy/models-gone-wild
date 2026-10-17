@@ -55,6 +55,8 @@ A link shared on social media shows no title card today.
 
 The URL list for the branch matches `main` except for the approved changes (the `Link` column, the meta description column, and the two `index.html` forms now 301), locally and at the staging origin. Both suites, the CSP walk, and the screenshot diff (pixel-identical since nothing visible changes) pass. After the ship, the Facebook Sharing Debugger shows the title card for the home page.
 
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
+
 ## Rollback
 
 Revert the commit. On each server, restore the config backup, remove `/etc/nginx/conf.d/models-gone-wild-canonical.conf`, run `sudo nginx -t`, reload, and add a PCI row. A canonical that shipped wrong should be fixed and redeployed rather than removed, so search engines see one consistent change.
@@ -75,6 +77,12 @@ Follow the README's sample-file review gate exactly. The first .py, .js,
 files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
+
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
 
 1. Confirm step 13A is merged and live. Branch off an up-to-date main as
    standards-canonicals. Never work on main.

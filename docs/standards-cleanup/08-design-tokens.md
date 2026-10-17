@@ -28,7 +28,7 @@ The checker scans CSS and Python only, so it reports both HTML pages clean. `ind
 
 Most of these repeat a CSS token. `#1c1a15` is `--ink`, `#3a362c` is `--ink-soft`, `#4a4438` is `--rule`, `#e6ddc6` is `--paper`, `#5a6b2a` is `--class1`, and `#8f1d16` is `--stamp-red`.
 
-There is no pre-commit hook and `core.hooksPath` is unset. A hook at `scripts/git-hooks/pre-commit` has no extension, so nginx would serve it from the web root. Its contents are a shell script calling the checker, which is harmless, and decision 23a takes it out of the web root in step 13A.
+Under decision 28a, step F1 installed `scripts/git-hooks/pre-commit` with the formatting gate and set `core.hooksPath`. (Under 28b there is no hook, and this step installs one.) The hook has no extension, so nginx serves it from the web root. Its contents are a shell script calling the checkers, which is harmless, and decision 23a takes it out of the web root in step 13A.
 
 ## The changes
 
@@ -39,7 +39,7 @@ There is no pre-commit hook and `core.hooksPath` is unset. A hook at `scripts/gi
    - At startup, read each color the script draws with from the CSS custom properties with `getComputedStyle(document.documentElement).getPropertyValue(...)`, trimmed, and assign them to the existing constants (`DISC_FILL`, `M_INK`, and the rest). The SVG the script builds keeps receiving literal colors, which matters because html2canvas renders a poster's SVG as an image and would not apply a stylesheet to it.
    - Replace the two legends' `fill="#..."` attributes with classes the stylesheet colors from the tokens (the legends are never captured by html2canvas), and drop the "keep in step with `DISC_FILL`" comments since both now read one source.
    - Add a test that fails on any hex color in `index.html` or `methodology/index.html`.
-5. Install the gate: `scripts/git-hooks/pre-commit` runs `python3 ~/.claude/skills/design-tokens/scripts/check_raw_values.py --staged --checks color,rgb,font-size,line-height` and exits non-zero on a finding. Set `git config core.hooksPath scripts/git-hooks`, and note in `UPDATE.md` that a fresh clone needs the same command.
+5. Add the gate to the hook: read `scripts/git-hooks/pre-commit` first, then append a call to `python3 ~/.claude/skills/design-tokens/scripts/check_raw_values.py --staged --checks color,rgb,font-size,line-height` that exits non-zero on a finding, keeping the formatting gate above it. Confirm `core.hooksPath` is `scripts/git-hooks`, and note in `UPDATE.md` that a fresh clone needs `git config core.hooksPath scripts/git-hooks`.
 6. Run the screenshot diff, and open a poster and press Download poster to confirm the PNG still renders (step 1's browser suite covers opening; the download is a manual check).
 
 ## The sample-file review gate
@@ -55,9 +55,11 @@ python3 ~/.claude/skills/design-tokens/scripts/check_raw_values.py --checks colo
 
 reports zero, the screenshot diff is pixel-identical at every width, the hook blocks a test commit that adds a raw hex to a CSS file (show it, then discard the commit), and both suites pass.
 
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
+
 ## Rollback
 
-Revert the commits. `git config --unset core.hooksPath` turns the gate off.
+Revert the commits, which takes the raw-value call back out of the hook and leaves the formatting gate. `git config --unset core.hooksPath` turns the whole hook off.
 
 ## Paste-ready prompt: build and stage
 
@@ -76,6 +78,12 @@ files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
 
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
+
 1. Confirm step 7 is merged and live. Branch off an up-to-date main as
    standards-design-tokens. Never work on main.
 2. Run both suites and confirm they pass. Run check_raw_values.py with
@@ -89,7 +97,8 @@ a stop because a filetype changes in only one file.
    unused tokens and the duplicate definition.
 5. Read the script's colors from the tokens at startup,
    move the legend fills to classes, and add the no-hex test for both pages.
-6. Install scripts/git-hooks/pre-commit, set core.hooksPath, note the
+6. Append the raw-value check to scripts/git-hooks/pre-commit (step F1's
+   hook, read it first), confirm core.hooksPath, note the
    command in UPDATE.md, and show me the hook blocking a raw hex.
 7. Run the screenshot diff (pixel-identical), both suites, the comment
    style checker (0), and check_raw_values.py (0), gating on each exit

@@ -37,7 +37,7 @@ Neither page has a `<style>` block, a `style=` attribute, or an `on*=` handler. 
 
 ## The changes
 
-1. Move each section into its file, byte for byte, and replace the inline script with one relative `<script src>` per file in the table's order (`../js/menu.js` on Methodology).
+1. Move each section into its file, byte for byte, give each new file an About This File section (step F2 formatted the code but gave the inline block none), and replace the inline script with one relative `<script src>` per file in the table's order (`../js/menu.js` on Methodology).
 2. Drop html2canvas's `<script>` from `<head>`. In `js/poster.js`, load it on the first Download poster press by appending a `<script>` element and awaiting its `load` event, with the button showing "Rendering…" as it already does while it works.
 3. Add `tests/test_inline.py`. It fails on any `<script>` without `src` (other than `type="application/json"`), any `<style>` block, any `style=` attribute, or any `on*=` attribute in `index.html` and `methodology/index.html` (and `404.html` once step 12 adds it), and on any `style=` or `on[a-z]+=` inside a template string in the app's own JS files.
 4. Update `UPDATE.md` ("Changing design or behavior" says "Everything lives in index.html"; "Where things live"; the traps) and `DEPLOY.md`'s file list.
@@ -50,6 +50,8 @@ Neither page has a `<style>` block, a `style=` attribute, or an `on*=` handler. 
 ## Done when
 
 `tests/test_inline.py` passes on both pages and fails when an inline `<script>` is added back (show both), both suites pass, the screenshot diff is pixel-identical, `scripts/check_overlaps.py` reports no overlaps, and a poster downloads as a PNG locally and on staging.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
 ## Rollback
 
@@ -70,6 +72,12 @@ Follow the README's sample-file review gate exactly. The first .py, .js,
 files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
+
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
 
 1. Confirm step 9A is merged and live. Branch off an up-to-date main as
    standards-inline-code. Never work on main.

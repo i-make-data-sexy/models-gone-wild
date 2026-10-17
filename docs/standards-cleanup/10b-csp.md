@@ -44,11 +44,14 @@ default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-sr
 
 - Python: `scripts/csp-walk/walk.py` is the sample since it carries the routes and the states. Write it with `run.sh`, run it against `main` (no policy, so zero violations by definition) and against the branch, and stop for approval before the test file.
 - HTML: `index.html` is the sample for the tag and the fallback frame. `methodology/index.html` follows after approval.
-- JavaScript and config: There is one new file of each, so there is nothing to sample.
+- JavaScript: `js/gtm.js` is the sample, the one script the step creates. Write it to the formatting rule and stop for approval.
+- Config: `deploy/nginx/headers.conf` is the one config file, and the rule has no format for it, so it has no stop.
 
 ## Done when
 
 `scripts/csp-walk/run.sh standards-csp` reports zero violations and zero JavaScript errors across every route and state, with a poster downloaded. `curl -skI` at the staging origin shows `Content-Security-Policy` on every page. Both suites pass. On staging, GTM's Preview mode (Tag Assistant) shows the Google Tag firing on the home page with no blocked request, and GA4's Realtime report shows the visit. After the ship, the browser console on production shows no violation on the home page, a poster, and Methodology.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
 ## Rollback
 
@@ -69,6 +72,12 @@ Follow the README's sample-file review gate exactly. The first .py, .js,
 files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
+
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
 
 1. Confirm step 10A is merged and live. Branch off an up-to-date main as
    standards-csp. Never work on main.

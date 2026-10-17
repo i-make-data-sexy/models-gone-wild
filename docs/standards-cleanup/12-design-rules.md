@@ -42,6 +42,8 @@ Each of the four rules stands differently here:
 
 Each rule's verifying checklist passes in a browser at desktop and 375 pixels wide (hover, keyboard focus, and the worst-case tooltip near a poster edge); at the staging origin `no-such-page/` returns 404 with the app's page and `.git/config` still returns 403; the CSP walk reports zero violations with the 404 page added to its routes; and both suites pass.
 
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
+
 ## Rollback
 
 Revert the commits. Restore the config backup on each server, run `sudo nginx -t`, reload, and add a PCI row.
@@ -62,6 +64,12 @@ Follow the README's sample-file review gate exactly. The first .py, .js,
 files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
+
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
 
 1. Confirm step 11 is merged and live. Branch off an up-to-date main as
    standards-design-rules. Never work on main.

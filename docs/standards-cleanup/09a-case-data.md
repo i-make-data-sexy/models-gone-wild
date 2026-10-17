@@ -6,7 +6,7 @@ The first half of the baseline's inline-code step. The case data moves on its ow
 
 ## Decisions this step reads
 
-Decision 11a (you publish or close the open scout branches first), decision 14a (plain `js/cases.js` and `js/glossary.js`), and decision 15a (html2canvas moves to `js/vendor/`, and only that folder and `img/` keep the 30-day cache), recorded in `docs/standards-cleanup/README.md` on 2026-10-16.
+Decision 11a (you publish or close the open scout branches first), decision 14a (plain `js/cases.js` and `js/glossary.js`), and decision 15a (html2canvas moves to `js/vendor/`, and only that folder and `img/` keep the 30-day cache), recorded in `docs/standards-cleanup/README.md` on 2026-10-16. Decision 30 (the case data's layout), recorded in the README. Stop if it is blank.
 
 ## Background
 
@@ -31,7 +31,7 @@ Nginx hard-caches everything under `js/` and `img/` for 30 days (`expires 30d`, 
 2. Narrow the long cache, under decision 15a.
    - `git mv js/html2canvas.min.js js/vendor/html2canvas.min.js`, move `js/VENDORED.md` beside it, and update the `<script src>`, the hash test, and `DEPLOY.md`.
    - Narrow the asset rule on both servers to `^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$`, aliasing `/home/anniecushing/apps/<staging/>models-gone-wild/$1/$2`, so `js/*.js` falls through to the no-cache page block like `css/`.
-3. Under decision 14a, move `CASES` and its field comment into `js/cases.js`, and `GLOSSARY` into `js/glossary.js`, as plain scripts with the same object syntax, byte for byte. Load both from `index.html` with relative `<script src>` tags before the inline script, so its top-level code sees them as before.
+3. Under decision 14a, move `CASES` and its field comment into `js/cases.js`, and `GLOSSARY` into `js/glossary.js`, as plain scripts with the same object syntax. Give each an About This File section. Under decision 30a, align the data as it moves (48 uneven runs in `CASES` and 1 in `GLOSSARY` on 2026-10-17) and update every pattern that reads the unaligned form, so the skill and the scout write aligned cases. Those patterns are in the loader in step 4, `tests/test_static.py`, `UPDATE.md`'s snippets, `check_quotes.py`'s `aka:` match, and both copies of the add-case skill. Under 30b, move the data byte for byte. Load both from `index.html` with relative `<script src>` tags before the inline script, so its top-level code sees them as before.
 4. Add `scripts/cases.py` with one loader, `load_cases_js()`, that returns the case source from `js/cases.js`. Point `check_charges.py`, `check_claims.py`, `check_dates.py`, and `check_slugs.py` at it, removing their four copies. Point `check_quotes.py` at `index.html`, `js/cases.js`, and `js/glossary.js`.
 5. Rewrite `UPDATE.md`'s second and third checks, "The case schema" and "Where things live", the add-case skill's loader snippet and every instruction that says the cases live in `index.html` (both copies, kept identical), and `scout/SCOUT.md` where it names `index.html`.
 6. Point `tests/test_static.py` at the shared loader, and add a test that `index.html` contains no `CASES = [` or `GLOSSARY = {`.
@@ -40,12 +40,14 @@ Nginx hard-caches everything under `js/` and `img/` for 30 days (`expires 30d`, 
 
 - Python: `scripts/check_dates.py` is the sample since its loader also feeds the date parsing the other checks lean on. Write `scripts/cases.py`, switch `check_dates.py` to it, run it, and stop for approval before the other four scripts.
 - Markdown: The repo copy of the add-case skill is the sample since it carries the most instructions about where the cases live. Update it, and stop for approval before `UPDATE.md`, `SCOUT.md`, and the home copy.
-- JavaScript: The data moves into new files byte for byte, so the sample is `js/cases.js` checked against the original lines with `diff`.
+- JavaScript: `js/cases.js` is the sample. Under decision 30a, prove it with the shared loader returning the same cases from `main`'s `index.html` and from the new file. Under 30b, prove it with `diff` against the original lines.
 - HTML: `index.html` only.
 
 ## Done when
 
 The five check scripts exit 0 reading the new location, both suites pass, the screenshot diff is pixel-identical, `index.html` no longer holds the data, and `curl -skI` shows `js/cases.js` with the no-cache header and `js/vendor/html2canvas.min.js` with the 30-day one at the staging origin.
+
+Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column. Under decision 30b, `js/cases.js` and `js/glossary.js` are the one exception, and the vendored `js/vendor/html2canvas.min.js` is never checked.
 
 ## Rollback
 
@@ -56,7 +58,7 @@ Revert the commits. Restore the config backup on each server, run `sudo nginx -t
 ```
 Run step 9A (move the case data) of the Models Gone Wild standards cleanup,
 following docs/standards-cleanup/09a-case-data.md exactly. Read
-docs/standards-cleanup/README.md first. Use decisions 1, 11, 14, and 15 as
+docs/standards-cleanup/README.md first. Use decisions 1, 11, 14, 15, and 30 as
 recorded in the README, and stop if any is blank.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
@@ -67,16 +69,29 @@ files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
 
+Hold the formatting gate. Every file you change or create ends clean on
+python3 -I ~/.claude/formatting-tools/check_format.py and
+python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
+matching AI Strategy. Run both on those files before every commit, fix
+every finding, and re-run the formatter where a change moved a column.
+
 1. Confirm step 8 (and 8B, or its skip) is merged and live. Confirm neither
    update/claude nor update/sol still carries unmerged CASES edits, and stop
    if one does. Branch off an up-to-date main as standards-case-data. Never
    work on main.
 2. Run both suites and the five check scripts, and confirm they pass.
-3. Move html2canvas to js/vendor/ with git mv, and
-   update its tag, the hash test, js/VENDORED.md's location, and DEPLOY.md.
+3. Confirm the formatting hook skips vendored minified files since the
+   rename stages js/html2canvas.min.js and a minified library can never
+   pass check_format.py. Stop if it does not. Then move html2canvas to
+   js/vendor/ with git mv, and update its tag, the hash test,
+   js/VENDORED.md's location, and DEPLOY.md.
 4. Move CASES and GLOSSARY out of the inline script into js/cases.js and
-   js/glossary.js, byte for byte, and load them before the inline script. Show me a diff of
-   js/cases.js against the original lines.
+   js/glossary.js, each with an About section, aligned under decision 30a
+   or byte for byte under 30b, and load them before the inline script.
+   Sample-file review gate (JavaScript): show me js/cases.js with its proof
+   (the shared loader's output under 30a, a diff against the original
+   lines under 30b), a clickable link, and the git diff command, and STOP
+   until I approve.
 5. Sample-file review gate (Python): write scripts/cases.py and switch
    scripts/check_dates.py to it. Run it and give me a clickable link, a
    short summary, and the git diff command, and STOP until I approve. Then
