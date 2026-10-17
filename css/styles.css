@@ -56,7 +56,6 @@ body::before {
     background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
 }
 
-/* Page wrapper */
 .wrap {
     position:            relative;
     z-index:             1;
@@ -65,7 +64,6 @@ body::before {
     padding:             0 30px 90px;
 }
 
-/* Reading column under the wider header */
 .content {
     max-width:           920px;
     margin:              0 auto;
@@ -79,7 +77,6 @@ body::before {
 
 .hidden { display: none; }
 
-/* Full-bleed band from box-shadow and clip-path */
 .site-header {
     background-color:    #000;
     z-index:             999;
@@ -98,7 +95,6 @@ body::before {
     padding:             0;
 }
 
-/* Logo cap so it never overpowers the nav */
 .header-logo {
     display:             block;
     width:               100%;
@@ -129,7 +125,6 @@ body::before {
     text-transform:      uppercase;
 }
 
-/* Sweep underline on hover, desktop only */
 @media (min-width:501px) {
     .nav-primary .menu a {
         background-image:    linear-gradient(currentColor,currentColor);
@@ -208,7 +203,6 @@ header.masthead {
     color:               var(--ink-soft);
 }
 
-/* Horns emoji in the subhead's ink */
 .horns {
     font-family:         'Noto Emoji',sans-serif;
     font-weight:         600;
@@ -217,7 +211,6 @@ header.masthead {
     vertical-align:      -.08em;
 }
 
-/* Intro as left-aligned body copy */
 .intro {
     font-family:         'Special Elite',monospace;
     font-size:           14px;
@@ -227,10 +220,8 @@ header.masthead {
     line-height:         1.7;
 }
 
-/* Tap prompt, tucked under the copy */
 .intro-cue { margin-top: 14px; }
 
-/* The masthead's one prose link */
 .intro a {
     color:               var(--stamp-red);
     text-decoration:     none;
@@ -246,7 +237,6 @@ header.masthead {
     outline-offset:      2px;
 }
 
-/* Divider of three stamp-red dots */
 .flourish {
     display:             flex;
     justify-content:     center;
@@ -268,7 +258,6 @@ header.masthead {
      Registry Panel
    ======================================================================== */
 
-/* Panel holding the view tabs and filters */
 .registry { margin-top: 36px; }
 
 .registry-bar {
@@ -285,7 +274,6 @@ header.masthead {
     gap:                 6px;
 }
 
-/* View tabs, pulled down onto the bar's rule */
 .tab {
     font-family:         'Oswald',sans-serif;
     font-weight:         600;
@@ -310,7 +298,6 @@ header.masthead {
     border-color:        var(--stamp-red);
 }
 
-/* Ink ring, since red would vanish on the tab */
 .tab:focus-visible {
     outline:             2px solid var(--ink);
     outline-offset:      2px;
@@ -322,7 +309,6 @@ header.masthead {
      Options Menu
    ======================================================================== */
 
-/* Bar anchors the options panel */
 .registry-bar { position: relative; }
 
 .options-menu {
@@ -330,7 +316,6 @@ header.masthead {
     padding-bottom:      7px;
 }
 
-/* Sliders button, stamp red while open */
 .options-button {
     --options-knob-fill: var(--paper-deep);
     position:            relative;
@@ -383,7 +368,6 @@ header.masthead {
 
 .line-icon-knob { fill: var(--options-knob-fill,var(--paper)); }
 
-/* Dot marking a filter as set */
 .options-dot {
     position:            absolute;
     top:                 -5px;
@@ -398,7 +382,6 @@ header.masthead {
 
 .options-dot[hidden] { display: none; }
 
-/* Panel floating over the views */
 .options-panel {
     position:            absolute;
     z-index:             40;
@@ -429,7 +412,6 @@ header.masthead {
     color:               var(--stamp-red);
 }
 
-/* Close button on the panel */
 .options-close {
     display:             flex;
     align-items:         center;
@@ -474,7 +456,6 @@ header.masthead {
     color:               var(--ink-soft);
 }
 
-/* Selects, arrow image apart from background-color */
 .filter-select {
     font-family:         'Oswald',sans-serif;
     font-weight:         500;
@@ -502,10 +483,8 @@ header.masthead {
     color:               var(--ink);
 }
 
-/* No focus ring on the selects */
 .filter-select:focus { outline: none; }
 
-/* Ink border on a filter that narrows the list */
 .filter-select.is-active {
     border-color:        var(--ink);
     color:               var(--ink);
@@ -517,7 +496,6 @@ header.masthead {
     letter-spacing:      normal;
 }
 
-/* Lab multi-select, summary reset */
 .multi-select summary {
     display:             block;
     list-style:          none;
@@ -525,7 +503,6 @@ header.masthead {
 
 .multi-select summary::-webkit-details-marker { display: none; }
 
-/* Arrow flips while the list is open */
 .multi-select[open] summary {
     background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 6l4-4 4 4' fill='none' stroke='%233a362c' stroke-width='1.6'/%3E%3C/svg%3E");
     border-color:        var(--ink);
@@ -536,7 +513,6 @@ header.masthead {
     outline-offset:      2px;
 }
 
-/* Lab list, scrolling past about eight labs */
 .multi-select-list {
     margin-top:          4px;
     padding:             6px 0;
@@ -580,7 +556,6 @@ header.masthead {
     font-weight:         600;
 }
 
-/* Clear button with a full-height sweep */
 .options-clear {
     display:             block;
     width:               100%;
@@ -613,7 +588,6 @@ header.masthead {
     background-size:     100% 100%;
 }
 
-/* Ink ring, since red would vanish on the fill */
 .options-clear:focus-visible {
     outline:             2px solid var(--ink);
     outline-offset:      2px;
@@ -726,7 +700,6 @@ header.masthead {
     margin-bottom:       8px;
 }
 
-/* Disclosure lag under the date */
 .lag-tag {
     font-family:         'Oswald',sans-serif;
     font-weight:         500;
@@ -743,7 +716,6 @@ header.masthead {
      Card
    ======================================================================== */
 
-/* Card, neither clickable nor clipped */
 .card {
     display:             block;
     width:               100%;
@@ -764,7 +736,6 @@ header.masthead {
     align-items:         stretch;
 }
 
-/* Anchor for the action circles */
 .card-text {
     position:            relative;
     padding:             12px 14px;
@@ -778,7 +749,6 @@ header.masthead {
      Lab Spine
    ======================================================================== */
 
-/* Lab name down a band on the card's edge */
 .spine {
     width:               44px;
     flex:                none;
@@ -807,7 +777,6 @@ header.masthead {
 .spine.c2 span { color:      var(--class2);               }
 .spine.c1 span { color:      var(--class1);               }
 
-/* Model name, clear of the action circles */
 .card-alias {
     font-family:         'Oswald',sans-serif;
     font-weight:         700;
@@ -819,7 +788,6 @@ header.masthead {
     padding-right:       62px;
 }
 
-/* Charge with a four-line floor */
 .card-charge {
     font-size:           12.5px;
     color:               var(--ink-soft);
@@ -828,7 +796,6 @@ header.masthead {
     min-height:          calc(4 * 1.45em);
 }
 
-/* Row for the class badge and disclosure chip */
 .card-tags {
     display:             flex;
     flex-wrap:           wrap;
@@ -851,7 +818,6 @@ header.masthead {
     color:               #f4ecd8;
 }
 
-/* Outlined disclosure chip, pinned right */
 .disc-chip {
     display:             inline-block;
     margin-left:         auto;
@@ -874,7 +840,6 @@ header.masthead {
 .class-badge.c2 { background: var(--class2); }
 .class-badge.c1 { background: var(--class1); }
 
-/* Badge explains its tier on hover or tap */
 .class-badge[data-def] {
     cursor:              help;
     outline:             none;
@@ -888,7 +853,6 @@ header.masthead {
      Card Actions
    ======================================================================== */
 
-/* Story and poster buttons on each card */
 .card-actions {
     position:            absolute;
     top:                 12px;
@@ -921,7 +885,6 @@ header.masthead {
     fill:                currentColor;
 }
 
-/* Larger tap target around each circle */
 .icon-btn::before {
     content:             "";
     position:            absolute;
@@ -946,7 +909,6 @@ header.masthead {
      Glossary Terms
    ======================================================================== */
 
-/* Dotted term, rgba fallback before color-mix */
 .term {
     cursor:                      help;
     text-decoration:             underline dotted;
@@ -960,7 +922,6 @@ header.masthead {
 .term:hover { text-decoration-color: currentColor;     }
 .term:focus { text-decoration-color: var(--stamp-red); }
 
-/* No dotted cue in a downloaded poster */
 .exporting .term { text-decoration: none; }
 
 
@@ -969,7 +930,6 @@ header.masthead {
      Tooltip
    ======================================================================== */
 
-/* One shared bubble, clamped by positionTip() */
 .tip {
     position:            fixed;
     top:                 0;
@@ -992,7 +952,6 @@ header.masthead {
     visibility:          visible;
 }
 
-/* Definition bubble */
 .tip.tip-def {
     font-family:         'Special Elite',monospace;
     font-size:           11.5px;
@@ -1001,7 +960,6 @@ header.masthead {
     max-width:           280px;
 }
 
-/* Score card bubble */
 .tip.tip-scores { max-width: 330px; }
 .tip-scores p   { margin:    0;     }
 
@@ -1033,13 +991,11 @@ header.masthead {
     margin-bottom:       2px !important;
 }
 
-/* Synthesized bold, so the color lifts too */
 .tip-row b {
     color:               var(--paper);
     font-weight:         700;
 }
 
-/* Label bubble for the card icons */
 .tip.tip-label {
     font-family:         'Oswald',sans-serif;
     font-size:           10.5px;
@@ -1049,7 +1005,6 @@ header.masthead {
     white-space:         nowrap;
 }
 
-/* Arrow offset follows the trigger */
 .tip::after {
     content:             "";
     position:            absolute;
@@ -1103,7 +1058,6 @@ header.masthead {
     stroke-width:        3;
 }
 
-/* Legend, nudged to center on the plot */
 .scatter-legend {
     display:             flex;
     justify-content:     center;
@@ -1119,7 +1073,6 @@ header.masthead {
     color:               var(--ink-soft);
 }
 
-/* Legend beside the plot on wider screens */
 @media (min-width:801px) {
     .scatter-wrap {
         display:             flex;
@@ -1145,7 +1098,6 @@ header.masthead {
     }
 }
 
-/* Threat Matrix legend, centered on the plot */
 .scatter-wrap.matrix-wrap {
     display:             block;
     max-width:           none;
@@ -1172,10 +1124,8 @@ header.masthead {
     flex:                none;
 }
 
-/* Ring off on :focus, not only :focus-visible */
 .pt:focus { outline: none; }
 
-/* Axis labels, marked with an info icon */
 .axis-note {
     cursor:              help;
     outline:             none;
@@ -1191,7 +1141,6 @@ header.masthead {
     fill:                var(--stamp-red);
 }
 
-/* Quadrant labels, dotted like glossary terms */
 .svg-note {
     cursor:                      help;
     outline:                     none;
@@ -1216,7 +1165,6 @@ header.masthead {
      Cases by Lab
    ======================================================================== */
 
-/* Lab segments open their posters */
 .seg {
     cursor:              pointer;
     outline:             none;
@@ -1449,7 +1397,6 @@ header.masthead {
 
 .poster-footer b { color: var(--ink); }
 
-/* Buttons side by side, stacked under 150px */
 .poster-actions {
     margin:              20px 24px 0;
     display:             flex;
@@ -1569,7 +1516,6 @@ footer.site-foot b { color: var(--ink); }
      Methodology Page
    ======================================================================== */
 
-/* Wanted title, scaled down */
 .page-title {
     font-family:         'Oswald',sans-serif;
     font-weight:         700;
@@ -1608,7 +1554,6 @@ footer.site-foot b { color: var(--ink); }
     line-height:         1.65;
 }
 
-/* Subsections under an H2 */
 .method-section h3 {
     font-family:         'Oswald',sans-serif;
     font-weight:         600;
@@ -1629,7 +1574,6 @@ footer.site-foot b { color: var(--ink); }
     color:               var(--ink);
 }
 
-/* Back link in small caps, no underline */
 .back-link {
     font-family:         'Oswald',sans-serif;
     font-weight:         500;
@@ -1656,7 +1600,6 @@ footer.site-foot b { color: var(--ink); }
      Responsive Site Header
    ======================================================================== */
 
-/* Header breakpoints, keep every padding value */
 @media only screen and (max-width:1023px) and (min-width:801px) {
     .site-header {
         flex-direction:      column;
@@ -1679,7 +1622,6 @@ footer.site-foot b { color: var(--ink); }
 }
 
 @media only screen and (max-width:800px) {
-    /* 20px phone gutter */
     .wrap { padding: 0 20px 90px; }
 
     .site-header {
@@ -1698,7 +1640,6 @@ footer.site-foot b { color: var(--ink); }
         padding:             15px 0;
     }
 
-    /* Drawer flows in place, never absolute */
     .nav-primary {
         width:               100%;
         padding:             0;
@@ -1722,7 +1663,6 @@ footer.site-foot b { color: var(--ink); }
         float:               none;
     }
 
-    /* Negative margin keeps the stack compact */
     .nav-primary .menu li {
         margin-bottom:       -40px;
         text-align:          center;
@@ -1741,7 +1681,6 @@ footer.site-foot b { color: var(--ink); }
         margin-bottom:       0;
     }
 
-    /* Tabs and options button share one row */
     .registry-bar {
         flex-wrap:           nowrap;
         gap:                 8px;
