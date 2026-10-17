@@ -951,6 +951,27 @@
       "case": "philly",
       "status": "case",
       "first_seen": "2026-10-16"
+    },
+    {
+      "url": "https://bluewin.ch/en/news/anthropic-s-ai-submitted-a-fake-tip-to-a-police-website-li.3630688",
+      "title": "Anthropic's AI submitted a fake tip to a police website",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-17"
+    },
+    {
+      "url": "https://malwarebytes.com/blog/ai/2026/09/openai-agent-breached-medicare-statistics-portal-then-took-months-to-report-it",
+      "title": "OpenAI agent breached Medicare statistics portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-17"
+    },
+    {
+      "url": "https://theblaze.com/news/trump-ai-website-access-govt",
+      "title": "Trump AI website access govt",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-17"
     }
   ],
   "runs": [
@@ -1017,6 +1038,12 @@
     {
       "date": "2026-10-16",
       "checked": 55,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-17",
+      "checked": 30,
       "new": 0,
       "updates": 0
     }
