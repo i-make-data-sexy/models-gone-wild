@@ -37,6 +37,28 @@ POSTER_BARE_RE = re.compile(r"^" + re.escape(PREFIX) + r"/poster/[\w-]+$")
 # the 301s in the nginx page block in DEPLOY.md.
 LEGACY_VIEWS = {"matrix": "threat-matrix", "labs": "lab-counts"}
 
+# The security headers nginx includes in every block, sent here too
+HEADERS_FILE = os.path.join(REPO, "deploy", "nginx", "headers.conf")
+ADD_HEADER   = re.compile(r'^\s*add_header\s+([\w-]+)\s+"([^"]*)"(?:\s+always)?\s*;')
+
+
+def read_headers(path: str = HEADERS_FILE) -> list[tuple[str, str]]:
+    """
+    Reads the add_header lines from the nginx headers snippet
+
+    Args:
+        path (str): The snippet's file path
+
+    Returns:
+        list[tuple[str, str]]: Each header's name and value, in file order
+    """
+
+    with open(path, encoding="utf-8") as handle:
+        return [match.groups() for match in map(ADD_HEADER.match, handle) if match]
+
+
+SECURITY_HEADERS = read_headers()
+
 
 # ========================================================================
 #   Request Handler
@@ -87,6 +109,21 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         self.send_response(301)
         self.send_header("Location", location)
         self.end_headers()
+
+    def end_headers(self) -> None:
+        """
+        Adds the security headers to every response, errors and redirects included
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+
+        for name, value in SECURITY_HEADERS:
+            self.send_header(name, value)
+        super().end_headers()
 
 
 # ========================================================================
