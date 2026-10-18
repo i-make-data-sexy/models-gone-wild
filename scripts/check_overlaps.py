@@ -31,7 +31,8 @@ import sys
 import tempfile
 import threading
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # The Mac path first, then the names Chrome goes by on Linux, which is
 # where the cloud scout runs
 CHROME = os.environ.get("CHROME") or next(
@@ -40,6 +41,7 @@ CHROME = os.environ.get("CHROME") or next(
      if p and os.path.exists(p)),
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 SUBPATH = "tools/models-gone-wild"
+
 
 
 # ========================================================================
@@ -202,6 +204,7 @@ frame.addEventListener('load', async ()=>{
 """
 
 
+
 # ========================================================================
 #   Running Chrome
 # ========================================================================
@@ -214,6 +217,7 @@ def serve(root: str) -> tuple:
     Returns:
         tuple: The server, so it can be shut down, and the port it bound
     """
+
     class Quiet(http.server.SimpleHTTPRequestHandler):
         def log_message(self, *args):
             """
@@ -221,11 +225,13 @@ def serve(root: str) -> tuple:
             Args:
                 *args: The format string and values the base class would log
             """
+
             pass
 
     handler = functools.partial(Quiet, directory=root)
-    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    server  = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
     threading.Thread(target=server.serve_forever, daemon=True).start()
+
     return server, server.server_address[1]
 
 
@@ -237,9 +243,11 @@ def chrome(args: list) -> str:
     Returns:
         str: Whatever Chrome printed to stdout
     """
+
     base = [CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars",
             "--window-size=1300,1000", "--virtual-time-budget=20000"]
-    run = subprocess.run(base + args, capture_output=True, text=True, timeout=120)
+    run  = subprocess.run(base + args, capture_output=True, text=True, timeout=120)
+
     return run.stdout
 
 
@@ -251,16 +259,20 @@ def build_site(width: int) -> str:
     Returns:
         str: The path of the web root
     """
+
     root = tempfile.mkdtemp(prefix="mgw-overlap-")
     os.makedirs(os.path.join(root, os.path.dirname(SUBPATH)))
     os.symlink(REPO, os.path.join(root, SUBPATH))
+
     with open(os.path.join(root, "harness.html"), "w") as f:
         f.write(HARNESS.replace("__SUBPATH__", SUBPATH).replace("__WIDTH__", str(width)))
+
     return root
 
 
+
 # ========================================================================
-#   Reporting
+#   Main
 # ========================================================================
 
 def main() -> int:
@@ -269,10 +281,12 @@ def main() -> int:
     Returns:
         int: 1 if anything overlapped or left the plot, 0 if the chart is clean
     """
+
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--shot", help="Write a PNG of the unfiltered chart to this path")
     ap.add_argument("--width", type=int, default=1300,
                     help="Page width in pixels. The chart fills its column, so check a phone width (390) as well")
+
     opts = ap.parse_args()
 
     if not os.path.exists(CHROME):
@@ -281,15 +295,19 @@ def main() -> int:
 
     root = build_site(opts.width)
     server, port = serve(root)
+
     try:
-        url = f"http://127.0.0.1:{port}/harness.html"
-        dom = chrome(["--dump-dom", url])
+        url   = f"http://127.0.0.1:{port}/harness.html"
+        dom   = chrome(["--dump-dom", url])
         found = re.search(r'<pre id="out">(.*?)</pre>', dom, re.S)
-        raw = html.unescape(found.group(1)) if found else "PENDING"
+        raw   = html.unescape(found.group(1)) if found else "PENDING"
+
         if raw == "PENDING":
             print("The harness never finished. The page may have thrown, or the fonts never loaded.")
             return 1
+
         results = json.loads(raw)
+
         if opts.shot:
             chrome([f"--screenshot={os.path.abspath(opts.shot)}", url + "?shot"])
     finally:
@@ -297,8 +315,10 @@ def main() -> int:
         shutil.rmtree(root, ignore_errors=True)
 
     bad = 0
+
     for r in results:
         view = f"class {r['classFilter']}, lab {r['labFilter']}, outcome {r.get('outcomeFilter', 'all')}, kind {r.get('kindFilter', 'all')}"
+
         if r["hits"]:
             bad += 1
             print(f"  OVERLAP  {view}  ({r['items']} items)")
@@ -308,10 +328,17 @@ def main() -> int:
             print(f"  OK       {view}  ({r['items']} items)")
 
     print(f"\n{len(results)} filter views checked, {bad} with overlaps")
+
     if opts.shot:
         print(f"screenshot: {opts.shot}")
+
     return 1 if bad else 0
 
+
+
+# ========================================================================
+#   Entry Point
+# ========================================================================
 
 if __name__ == "__main__":
     sys.exit(main())
