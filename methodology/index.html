@@ -7,18 +7,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Every local path on this page climbs one folder with ../ since the
-    page lives at /tools/models-gone-wild/methodology/. A leading slash
-    would resolve to the site root and 404. -->
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body>
     <div class="wrap">
 
-        <!-- Annielytics site header (v2), copied from index.html. Keep the two
-        in step. The logo path climbs one folder for the same reason as
-        the stylesheet. Do NOT add a click handler to .menu-toggle. -->
         <header class="site-header">
             <div class="title-area">
                 <a href="https://www.annielytics.com/">
@@ -96,8 +90,6 @@
                     <p>The sliders button in the corner of the registry opens four filters. They narrow the Case Timeline, the Threat Matrix, and the Cases by Lab chart all at once.</p>
                     <p>When you set more than one filter, a case has to match all of them to stay on the page. While a filter is narrowing the list, a red dot sits on the button and a line under the tabs says how many files are showing. A Clear filters button appears once any filter is set and resets all four.</p>
 
-                    <!-- The option names below must match the dropdowns in index.html.
-                    Change an option there and its entry here changes with it. -->
                     <h3 id="class">Class</h3>
                     <p>Class sorts cases by how far the model got into somebody else's systems. It's the colored badge on each card and the color down the card's left edge.</p>
                     <p>'Class I · No intrusion' means the model got out but never got inside anyone else's systems. It tried and failed, or it acted only through public pages and forms, such as filing a tip with a government agency.</p>
@@ -129,8 +121,8 @@
                 <a class="back-link" href="../">Back to the registry</a>
             </footer>
 
-        </div><!-- /.content -->
-    </div><!-- /.wrap -->
+        </div>
+    </div>
 
     <script src="../js/menu.js"></script>
 </body>
