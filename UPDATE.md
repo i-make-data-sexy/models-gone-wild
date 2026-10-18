@@ -75,9 +75,10 @@ Working dir: ~/Dropbox/Annielytics/Code/Python/Models Gone Wild
 Change:
   [describe what should look or behave differently]
 
-Branch off up-to-date main. The markup and the behavior live in index.html,
-the styles in css/styles.css, and the case data in js/cases.js and
-js/glossary.js, so tell me what you plan to touch before you touch it. Watch for the traps listed in
+Branch off up-to-date main. The markup lives in index.html, the behavior in
+the scripts in js/ that DEPLOY.md lists, the styles in css/styles.css, and
+the case data in js/cases.js and js/glossary.js, so tell me what you plan
+to touch before you touch it. Watch for the traps listed in
 UPDATE.md, especially relative paths and the poster overlay's stacking order.
 Run the checks, show me a local preview, and STOP for my sign-off before
 deploying.
@@ -220,7 +221,7 @@ Two things are manual. The footer's `Last updated: <date>` line has to be edited
 
 The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry. The Outcome and Kind dropdowns are hard-coded the same way, with a matching `OUTCOME_LABEL` or `KIND_LABEL` entry per value.
 
-The Methodology page at `methodology/index.html` explains the three tabs, the disclosure chip, the card dates, every wanted-poster row, and every filter option by its dropdown name. It is plain markup, so renaming, adding, or removing any of those means editing its entry there too. Its site header is a copy of the one in `index.html`; change one and change the other.
+The Methodology page at `methodology/index.html` explains the three tabs, the disclosure chip, the card dates, every wanted-poster row, and every filter option by its dropdown name. It is plain markup, so renaming, adding, or removing any of those means editing its entry there too. Its site header is a copy of the one in `index.html`; change one and change the other. Both pages load the mobile menu from `js/menu.js`.
 
 ## The glossary
 
@@ -260,14 +261,15 @@ Run all of these from the repo root. Each takes seconds.
 #    All three files, since the stylesheet carries url() references too.
 grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/styles.css methodology/index.html
 
-# 2. The page script and both data files still parse structurally, and
+# 2. Every script in js/ still parses structurally, and
 #    every case is well formed.
 python3 - <<'PY'
 import re, sys
+from pathlib import Path
 sys.path.insert(0, "scripts")
 from cases import case_blocks, load_cases_js
-page = re.search(r"<script>(.*?)</script>", open("index.html").read(), re.S).group(1)
-for name, js in [("index.html", page), ("js/cases.js", load_cases_js()), ("js/glossary.js", open("js/glossary.js").read())]:
+for path in sorted(Path("js").glob("*.js")):
+    name, js = str(path), path.read_text(encoding="utf-8")
     ok = js.count("{") == js.count("}") and js.count("(") == js.count(")") and js.count("`") % 2 == 0
     print(f"balance {name}:", "OK" if ok else "MISMATCH")
 req = {"id", "slug", "alias", "lab", "org", "date", "disclosed", "lag", "order", "cls",
@@ -315,7 +317,7 @@ ssh anniecushing@208.109.215.51 "cd ~/apps/models-gone-wild && git pull origin m
 
 That is the whole deploy. There is no service to restart, since nginx reads the file off disk on every request, and the page is served with no-cache headers so a reload shows the change immediately.
 
-Nginx only needs touching if a new kind of file is added, for example a new image directory or a stylesheet. The asset rule currently matches `js/` and `img/` only. See `DEPLOY.md` for that block.
+Nginx only needs touching if a new kind of file is added, for example a new image directory or a stylesheet. The asset rule currently matches `js/vendor/` and `img/` only. See `DEPLOY.md` for that block.
 
 ## Verifying the deploy
 
@@ -340,6 +342,8 @@ The stylesheet is linked relatively as `css/styles.css`. A leading slash would r
 ## Traps
 
 Paths to local files are relative, never starting with a slash. The app is served at `/tools/models-gone-wild/`, so a leading slash resolves to the site root and 404s. Check 1 above catches this.
+
+The scripts in `js/` are classic scripts that share one global scope and run in the order `index.html` lists them. A file can call a function from a later file inside a function or a listener, but not at its top level, since that runs before the later file loads. Startup calls belong in `js/main.js`, which loads last. A new script also needs its own `<script src>` in the right place.
 
 The poster overlay sits at `z-index: 50` and the page shell at `1`. Giving the site header a stacking context above 50 puts the black band on top of the open poster. If a `position` is ever added to `.site-header`, keep its `z-index` below 50.
 

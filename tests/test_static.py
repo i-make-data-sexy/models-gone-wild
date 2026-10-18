@@ -43,7 +43,7 @@ REQUIRED    = {
 }
 
 FOOTER_MAX = 392
-BALANCED   = ["index.html", "js/cases.js", "js/glossary.js"]
+BALANCED   = sorted(path.name for path in (REPO / "js").glob("*.js"))
 
 
 
@@ -63,20 +63,6 @@ def read(path: Path) -> str:
     """
 
     return path.read_text(encoding="utf-8")
-
-
-def script_block() -> str:
-    """
-    Pulls the inline script out of index.html the way the check scripts do
-
-    Args:
-        None
-
-    Returns:
-        str: The text between the first bare <script> tag and its close
-    """
-
-    return re.search(r"<script>(.*?)</script>", read(REPO / "index.html"), re.S).group(1)
 
 
 def site_header(path: Path) -> str:
@@ -145,13 +131,13 @@ def test_scripts_balance(name: str) -> None:
     Checks a script's braces, parentheses, and backticks pair up
 
     Args:
-        name (str): index.html for the page's inline script, or a data file's path
+        name (str): The name of one of the app's files in js/
 
     Returns:
         None
     """
 
-    js = script_block() if name == "index.html" else read(REPO / name)
+    js = read(REPO / "js" / name)
     assert js.count("{") == js.count("}")
     assert js.count("(") == js.count(")")
     assert js.count("`") % 2 == 0

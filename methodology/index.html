@@ -131,25 +131,6 @@
   </div><!-- /.content -->
 </div><!-- /.wrap -->
 
-<script>
-/* ================================================
-     Site Header Mobile Menu
-   ================================================ */
-
-/* Same as index.html: one change listener on the checkbox, and no
-   click handler on .menu-toggle, which breaks the drawer on iPhone
-   Safari. */
-(function(){
-  const checkbox = document.getElementById('menu-toggle-checkbox');
-  const menu = document.querySelector('.nav-primary .menu');
-  const toggle = document.querySelector('.menu-toggle');
-  if(!checkbox || !menu) return;
-  checkbox.addEventListener('change', function(){
-    if(this.checked) menu.classList.add('visible');
-    else menu.classList.remove('visible');
-    if(toggle) toggle.setAttribute('aria-expanded', this.checked ? 'true' : 'false');
-  });
-})();
-</script>
+<script src="../js/menu.js"></script>
 </body>
 </html>
