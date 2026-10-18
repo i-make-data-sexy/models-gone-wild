@@ -80,7 +80,7 @@ files included. Finish each sample, give me a clickable link, a short
 summary, and the git diff command, and STOP until I approve it. Never skip
 a stop because a filetype changes in only one file.
 
-1. Confirm step F2 is merged and live (marked done in the README). Branch
+1. Confirm step 9B is merged and live (marked done in the README). Branch
    off an up-to-date main as standards-format-python. Never work on main.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass before any change. Record both counts. Run every

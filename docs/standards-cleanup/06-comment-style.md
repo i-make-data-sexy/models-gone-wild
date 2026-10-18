@@ -18,7 +18,7 @@ On 2026-10-16, `python3 ~/.claude/skills/annielytics-comment-style/scripts/check
 | Comment prose | 18 | 17 in `index.html`'s inline script (12 one-sentence comments ending in a period, 5 lowercase labels in the `HAIR` table), 1 in `methodology/index.html:139` | Step F2 |
 | Docstrings | 51 | `scout_seen.py` 16, `check_claims.py` 12, `check_overlaps.py` 11, `check_dates.py` 8, `check_slugs.py` 4 | Step F3 |
 
-Step F4 also deleted the 20 HTML comments under decision 26 and added the guard test that keeps them out. Step F7 and step 4 then wrote code under the same gate.
+Steps F2 and F4 deleted the 20 HTML comments under decision 26 (the 15 in `index.html` in F2, at Annie's request, and Methodology's 5 in F4), and F4 added the guard test that keeps them out. Step F7 and step 4 then wrote code under the same gate.
 
 The checker prints at most 15 issues per category, so run it with the limit lifted to see every line (copy it to the scratchpad and change `issues[:15]` to `issues`). Nothing runs it automatically today, so a later edit could bring an issue back unseen.
 

@@ -73,7 +73,7 @@ python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py,
 matching AI Strategy. Run both on those files before every commit, fix
 every finding, and re-run the formatter where a change moved a column.
 
-1. Confirm step 9B is merged and live. Branch off an up-to-date main as
+1. Confirm step 8 is merged and live. Branch off an up-to-date main as
    standards-self-host-fonts. Never work on main.
 2. Run both suites and confirm they pass.
 3. Fetch each Google Fonts stylesheet with the Chrome user agent, download
