@@ -206,7 +206,7 @@ Answer these before running the steps. Record each answer here because the step 
 | 2 | [02-security.md](02-security.md) | No security headers, duplicate `Cache-Control`, the token in the web root. | Small | Done 2026-10-16 (merge fc717de) |
 | 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Done 2026-10-17 (merge 8243928) |
 | F1 | [f1-css.md](f1-css.md) | `css/styles.css` to AI Strategy's format, the screenshot harness, and the formatting pre-commit hook. | Medium | Done 2026-10-17 (merge df0fd2d) |
-| F2 | [f2-javascript.md](f2-javascript.md) | `index.html`'s inline script to AI Strategy's format and its long comments deleted, the case data left as is. Methodology's script and the `js` hook entry moved to 9B. | Medium | Not started |
+| F2 | [f2-javascript.md](f2-javascript.md) | `index.html`'s inline script to AI Strategy's format and its long comments deleted, the case data left as is. Methodology's script and the `js` hook entry moved to 9B. | Medium | Done 2026-10-17 (merge db0c0a6) |
 | 9A | [09a-case-data.md](09a-case-data.md) | The case data inside the inline script, and every tool that reads it there. Moved up under decision 31. | Medium | Not started |
 | 9B | [09b-inline-code.md](09b-inline-code.md) | The rest of both inline scripts, html2canvas in `<head>`, and the new files' formatting, including `js` on the hook. Moved up under decision 31. | Medium | Not started |
 | F3 | [f3-python.md](f3-python.md) | 8 Python files to the rule's spacing, comments, and docstrings, and `check_style.py` to 0. | Small | Not started |
