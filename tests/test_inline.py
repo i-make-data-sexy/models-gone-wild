@@ -87,6 +87,7 @@ def regex_end(js: str, i: int) -> int:
     """
 
     before = js[:i].rstrip()
+
     if before and before[-1] not in "(,=:[!&|?{};" and not before.endswith("return"):
         return -1
 
@@ -100,9 +101,11 @@ def regex_end(js: str, i: int) -> int:
             in_class = True
         elif js[i] == "]":
             in_class = False
+
         i += 1
 
     i += 1
+
     while i < len(js) and js[i].isalpha():
         i += 1
 
@@ -132,6 +135,7 @@ def template_text(js: str) -> str:
                 out.append(js[i:i + 2])
                 i += 2
                 continue
+
             if c == "`":
                 modes.pop()
                 out.append("\n")
@@ -141,6 +145,7 @@ def template_text(js: str) -> str:
                 continue
             else:
                 out.append(c)
+
             i += 1
             continue
 
@@ -152,8 +157,10 @@ def template_text(js: str) -> str:
             i = regex_end(js, i)
         elif c in "'\"":
             i += 1
+
             while js[i] != c:
                 i += 2 if js[i] == "\\" else 1
+
             i += 1
         elif c == "`":
             modes.append("template")

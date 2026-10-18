@@ -348,6 +348,7 @@ def main() -> int:
         if r["hits"]:
             bad += 1
             print(f"  OVERLAP  {view}  ({r['items']} items)")
+
             for h in r["hits"]:
                 print(f"           {h}")
         else:

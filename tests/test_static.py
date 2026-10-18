@@ -175,13 +175,16 @@ def test_poster_footer_fits_one_line() -> None:
     """
 
     too_wide = {}
+
     for cid, block in cases.case_blocks(cases.load_cases_js()).items():
         est   = " (EST.)" if re.search(r"estimated\s*:\s*true", block) else ""
         date  = "ESCAPED · " + cases.text_field(block, "date").upper() + est
         seen  = "LAST SEEN · " + cases.text_field(block, "lastSeen").upper()
         width = (len(date) + len(seen)) * 6.4 + 12
+
         if width >= FOOTER_MAX:
             too_wide[cid] = round(width)
+
     assert not too_wide, f"Shorten lastSeen for {too_wide}"
 
 

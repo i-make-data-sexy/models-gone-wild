@@ -71,19 +71,23 @@ def resolve_permalink(path: str) -> tuple[str | None, str | None]:
     views  = "|".join(view_slugs)
 
     target = None
+
     if bare.startswith(PREFIX + "/") and legacy:
         target = f"{PREFIX}/{legacy}/"
     elif bare in (f"{PREFIX}/{slug}" for slug in view_slugs) or re.match(rf"^{root}/poster/[\w-]+$", bare):
         target = bare + "/"
 
     served = bare.split("#", 1)[0]
+
     if served != PREFIX and not served.startswith(PREFIX + "/"):
         return target, None
 
     segment = (re.match(rf"^{root}/(?:{views})(/.*)?$", served)
             or re.match(rf"^{root}/poster/[\w-]+(/.*)?$", served))
+
     if segment:
         served = PREFIX + (segment.group(1) or "/")
+
     return target, served[len(PREFIX):] or "/"
 
 
@@ -133,8 +137,10 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         """
 
         _, served = resolve_permalink(path)
+
         if served is None:
             return os.path.join(REPO, "__outside_prefix__")
+
         return super().translate_path(served)
 
     def do_GET(self) -> None:
@@ -149,8 +155,10 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         """
 
         target, _ = resolve_permalink(self.path)
+
         if target:
             return self.redirect(target)
+
         return super().do_GET()
 
     def redirect(self, location: str) -> None:
@@ -181,6 +189,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
 
         for name, value in read_headers():
             self.send_header(name, value)
+
         super().end_headers()
 
 
@@ -208,6 +217,7 @@ def main() -> None:
     server  = ThreadingHTTPServer(("127.0.0.1", args.port), handler)
 
     print(f"Serving http://127.0.0.1:{args.port}{PREFIX}/")
+
     try:
         server.serve_forever()
     except KeyboardInterrupt:

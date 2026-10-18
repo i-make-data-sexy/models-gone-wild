@@ -65,6 +65,7 @@ def load_script(name: str) -> ModuleType:
 
     sys.modules[name] = module
     spec.loader.exec_module(module)
+
     return module
 
 
@@ -106,7 +107,9 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list) -> None:
 
     if config.getoption("markexpr"):
         return
+
     browser = [item for item in items if item.get_closest_marker(BROWSER)]
+
     if browser:
         config.hook.pytest_deselected(items=browser)
         items[:] = [item for item in items if not item.get_closest_marker(BROWSER)]
@@ -216,6 +219,7 @@ def fetch(server_port: int) -> Callable[[str], tuple]:
         """
 
         conn = http.client.HTTPConnection("127.0.0.1", server_port, timeout=10)
+
         try:
             conn.request("GET", f"{serve.PREFIX}{path}")
             response = conn.getresponse()
