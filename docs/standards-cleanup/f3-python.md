@@ -26,6 +26,8 @@ Measured with `audit_format.py` and `check_format.py` on 2026-10-17, read only. 
 
 Six of the eight also end with a newline. `check_style.py` reports 51 docstring issues in five of them, nearly all a missing blank line before `Args:` or `Returns:`: `scout_seen.py` 16, `check_claims.py` 12, `check_overlaps.py` 11, `check_dates.py` 8, and `check_slugs.py` 4. After F1 and F2 these are the last 51 of its 70, so this step brings it to 0.
 
+Step 9A changed this before F3 ran. It reformatted six of the eight files above as it moved the case data, and it added `scripts/cases.py`, while step F1 added `scripts/screenshot-diff/capture.py` and `diff.py`. When F3 started on 2026-10-18 there were 19 Python files, and only `scout_seen.py` and `check_overlaps.py` still failed the gate. The other 17 passed and needed only their label comments deleted (14, in `capture.py`, `serve.py`, and `test_browser.py`).
+
 The scripts are standalone tools with a `main()`, not modules of an app, so the closest models are AI Strategy's `leaderboard_assistant/scripts/csp-walk/walk.py` for a script and its `services/filters.py` for the banners and docstrings. The rules are the Python section of `~/.claude/rules/formatting/code-formatting.md`, and the worked example is `~/.claude/formatting-examples/03-python.py`. The comment-style skill governs banners and docstrings.
 
 ## The changes

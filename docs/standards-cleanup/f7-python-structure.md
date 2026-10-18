@@ -48,6 +48,7 @@ The model for the layout is AI Strategy's `services/filters.py` for the banners,
 2. Run `add_type_hints.py` (without `--missing`) on every tracked `.py` file to write the hints it can prove from the docstrings.
 3. Write the rest by hand, using the real types: `log_message(self, format: str, *args: object) -> None`, and `check_slugs.py`'s `main` return type as its docstring states (`int` if it returns an exit status, `None` otherwise). Test functions return `None`, and fixtures name their real types (`pytest.MonkeyPatch`, Playwright's `Page`, `str`). Python 3.11 runs the venv, so the `X | None` form is safe.
 4. Keep each docstring's `Args` and `Returns` types in step with the hints.
+5. In `scout_seen.py` and `check_overlaps.py`, build the `--help` description from `__doc__.strip().splitlines()[0]` rather than `__doc__.splitlines()[0]`, then move each About docstring's first sentence onto its own line below the opening quotes, as the other scripts have it. Step F3 left the sentence on the quote line so the help text stayed the same. Show `--help` unchanged for both scripts. In `check_overlaps.py` the sentence wraps onto a second line, so join it first or the help text keeps only its first half, which is what it prints today.
 
 One commit per area (the check scripts, `scout_seen.py`, and the tests), with the layout and the hints as separate commits in each.
 
