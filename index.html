@@ -7,32 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-<!-- Noto Emoji is the MONOCHROME emoji family, so the glyph inherits
-     color the way text does. Color emoji fonts carry their own
-     palette and ignore CSS color entirely, which is why this is a
-     separate font rather than a filter. Subset to the single
-     character with text=, so the download is under 1KB. -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@600&text=%F0%9F%A4%98&display=swap" rel="stylesheet">
-<!-- The html2canvas library powers the "download poster" button. Served
-     from our own server rather than a CDN so the feature can't break when
-     an outside host does, and so no third-party script runs on
-     annielytics.com.
-     The path is RELATIVE on purpose: this page is served at
-     /tools/models-gone-wild/, so a leading slash would resolve to the
-     site root and 404. -->
 <script src="js/html2canvas.min.js"></script>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 <div class="wrap">
 
-  <!-- Annielytics site header (v2). The checkbox hack drives the mobile
-       drawer: the <label for> toggles the linked checkbox and a single
-       change listener at the bottom of this file flips a .visible class
-       on the menu. Do NOT add a click handler to .menu-toggle, since
-       calling preventDefault on a label's click cancels the toggle and
-       breaks the menu on iPhone Safari. The logo path is relative
-       because the app is served at /tools/models-gone-wild/. -->
   <header class="site-header">
     <div class="title-area">
       <a href="https://www.annielytics.com/">
@@ -67,21 +48,11 @@
       during evaluations and training runs and went where they were never meant to go, breaking
       into servers in some cases and filing forms with police and government agencies in others.
     </p>
-    <!-- The href is relative for a no-script fallback. The script points
-         it at APP_BASE so it stays clean on a permalink like
-         /threat-matrix/, where a relative path would land under it. -->
     <p class="intro intro-cue">Learn more about what each filter does, what the card icons open, and how I scored the Threat Matrix on the <a href="methodology/" id="methodologyLink">Methodology page</a>.</p>
 
-    <!-- Three dots closing the masthead, in place of the double
-         rule. Drawn with CSS rather than typed, so the size, spacing,
-         and color are exact and nothing depends on a font carrying an
-         ornament character. -->
     <div class="flourish" aria-hidden="true"><span></span><span></span><span></span></div>
   </header>
 
-  <!-- Registry panel. The tabs switch the view and the selects narrow it,
-       which is why they sit in opposite corners of the same bar rather
-       than stacked as two chip rows. -->
   <div class="registry">
     <div class="registry-bar">
       <div class="viewbar" role="tablist" aria-label="View">
@@ -90,13 +61,6 @@
         <button class="tab" role="tab" id="tab-labs" aria-controls="view-labs" aria-selected="false">Cases by Lab</button>
       </div>
 
-      <!-- The three filters, collapsed behind one sliders button, the
-           same pattern as the options menu in Treks and the City. A
-           filter that is narrowing the list never hides in here: the
-           button carries a red dot and the count line below says how
-           many files are showing. The outside-click, Escape, and close
-           button handlers live in the Options Menu section of the
-           script. -->
       <details class="options-menu" id="optionsMenu">
         <summary class="options-button" aria-label="Filter options" title="Filter options">
           <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -125,12 +89,6 @@
               <option value="3">III · Severe</option>
             </select>
           </label>
-          <!-- Multi-select, so a div rather than a label: one label can
-               only name one control. The summary is styled like the two
-               selects around it, and the checkbox list unfolds in place
-               beneath it rather than floating, since it already sits in
-               a floating panel. The boxes are built from the data in
-               the Build Lab Options section of the script. -->
           <div class="options-field">
             <span class="options-label" id="labLabel">Lab</span>
             <details class="multi-select" id="labFilter">
@@ -156,15 +114,11 @@
             </select>
           </label>
 
-          <!-- Only shown while a filter is set, since clearing nothing
-               is not an action -->
           <button type="button" class="options-clear" id="optionsClear" hidden>Clear filters</button>
         </div>
       </details>
     </div>
 
-    <!-- Only shown while a filter is narrowing the list, since "4 of 4"
-         on an unfiltered page is noise -->
     <p class="filter-count" id="filterCount" hidden></p>
 
     <section class="view active" id="view-timeline" role="tabpanel" aria-labelledby="tab-timeline">
@@ -173,9 +127,6 @@
 
     <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
       <div class="scatter-wrap matrix-wrap">
-          <!-- Says what the two dot colours mean. Kept in step with
-               DISC_FILL in the script; changing one means changing the
-               other. -->
           <p class="scatter-legend">
             <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#5a6b2a" stroke="#e6ddc6" stroke-width="2"/></svg>Self-reported</span>
             <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#8f1d16" stroke="#e6ddc6" stroke-width="2"/></svg>Tipped off</span>
@@ -187,24 +138,20 @@
     <section class="view" id="view-labs" role="tabpanel" aria-labelledby="tab-labs" hidden>
       <div class="scatter-wrap">
           <div id="labChart"></div>
-          <!-- Same two routes and the same two fills as the Threat
-               Matrix legend, drawn as squares since the marks here are
-               bar segments rather than dots. Kept in step with
-               DISC_FILL in the script. -->
           <p class="scatter-legend">
             <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" fill="#5a6b2a"/></svg>Self-reported</span>
             <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" fill="#8f1d16"/></svg>Tipped off</span>
           </p>
       </div>
     </section>
-  </div><!-- /.registry -->
+  </div>
 
   <footer class="site-foot">
     Last updated: October 13, 2026
   </footer>
 
-  </div><!-- /.content -->
-</div><!-- /.wrap -->
+  </div>
+</div>
 
 <div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
 
@@ -219,43 +166,6 @@
      The Registry
    ======================================================================== */
 
-/* Edit or append cases here.
-   slug  : the poster's public URL, /poster/<slug>/. Names the incident,
-              model then target (sol-hugging-face, openai-medicare).
-              Never rename one once live. scripts/check_slugs.py checks it.
-   cls   : 3 severe/zero-day, 2 confirmed intrusion, 1 no intrusion
-   complexity: 0-10  how involved the escape was as a technique.
-              Scores the method, never the motive.
-   harm  : 0-10  how much damage the escape could do, ours to judge
-   lab   : used by the Lab filter + the scatter
-   date  : the first known escape, not the announcement. Where the
-              source gives only a month, say so with estimated:true and
-              the card and poster append "est." to it. Where no source
-              dates it at all, write "Date not disclosed" with the lag
-              "escape date not disclosed", and order it after every
-              dated case.
-   disclosed: when the case was made public. `lag` is the gap between
-              the two in words, checked by scripts/check_dates.py.
-   disclosedBy: who put the case in public view, and nothing else.
-              kind is "self" when the lab that built the model
-              announced it. It is "tip" when somebody else did.
-              The test is who went public, never who found it, since
-              those two come apart. Irregular found the Meta case and
-              told Meta. Meta then announced it, so that one is "self".
-              `who` is the party that announced, which is not always
-              the lab and is not the outlet in `source` either.
-   notice: optional. Whether the party whose systems were reached was
-              told, and how long after the lab knew. kind "told" carries
-              knew, told, and gap, the gap checked by
-              scripts/check_dates.py, plus an optional `how`. kind
-              "found" is a victim that caught it and went public before
-              the lab connected it. kind "untold" is a victim the lab
-              never told before the case went public. Leave it off when
-              the sources do not say, which is most cases.
-   outcome: "success" when the model got what it went after, "attempt"
-              when it tried and failed. Scores the intrusion, not the
-              escape, so a model that reached the open web and then
-              failed to break into its target is an "attempt". */
 const CASES = [
   {
     id:"sol", slug:"sol-hugging-face", alias:"Sol", lab:"OpenAI", org:"OpenAI · GPT-5.6",
@@ -670,58 +580,29 @@ const CASES = [
 
 const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class I · No intrusion"};
 
-/* How each disclosure route is labelled on the card chip, in the
-   filter, and under the scatter. Both chips get identical styling on
-   purpose. Colouring one of them approvingly would grade the lab, and
-   the page does not do that. */
 const DISCLOSURE_LABEL = {self:"Self-reported", tip:"Tipped off"};
 
-/* Dot fills on the Threat Matrix. Literal hex rather than the CSS
-   variables, since these are written into SVG presentation attributes
-   where var() is not reliably supported. They match --class1 and
-   --class3 so the chart stays inside the page's palette. */
 const DISC_FILL = {self:"#5a6b2a", tip:"#8f1d16"};
 
-/* Offered on hover, tap, or keyboard focus, the same way the class
-   badge explains its tier. Says what the tag counts, so a reader does
-   not take it for a finding about who caught the model. */
 const DISCLOSURE_NOTE = {
-  self:"The lab that built the model is the one that made the case public. The tag records who announced it and not who found it. A lab that an outside tester told, and that then announced it, still counts here.",
-  tip:"Somebody other than the lab that built the model made the case public. That could be a security firm, an evaluator, or a publication working from its own sources."
+  self: "The lab that built the model is the one that made the case public. The tag records who announced it and not who found it. A lab that an outside tester told, and that then announced it, still counts here.",
+  tip:  "Somebody other than the lab that built the model made the case public. That could be a security firm, an evaluator, or a publication working from its own sources."
 };
 
-/* Whether the model got what it went after. Carried on the poster, in
-   the Outcome filter, and in the Threat Matrix tooltip. The cards do
-   not show it. The card already carries a class badge and a
-   disclosure chip, and a third tag crowded the row. */
 const OUTCOME_LABEL = {success:"Succeeded", attempt:"Failed attempt"};
 
-/* How the model reached outside its sandbox. A break-in went after
-   somebody else's systems, whether or not it got in. An unauthorized
-   action used a public page or form to do something nobody asked for.
-   An escape only got out and reached nobody. Shown on the poster and
-   in the Kind filter, like Outcome. */
 const KIND_LABEL = {intrusion:"Break-in", action:"Unauthorized action", escape:"Escape only"};
 
-/* What each class means, offered on hover, tap, or keyboard focus.
-   The tiers describe how far the escape reached, never how anyone
-   judges the lab that disclosed it. */
-/* How the two axes are scored, and what each quadrant means. Offered
-   on the axis labels and the quadrant labels themselves, so the reader
-   can ask the chart what it means without leaving it.
-
-   Both scores are ours. Saying so plainly is the point: the plot looks
-   like measured data, and it is not. */
 const METRIC_NOTE = {
-  complexity:"How involved the escape was as a technique, from walking through a port left open to chaining a flaw nobody had patched. It scores the method and never the motive, so nothing here implies a lab or a model meant for this to happen. Our own read of the public reporting, not a published figure.",
-  harm:"How much damage the escape could do, judged from what it actually reached. Our own read of the public reporting, not a published figure."
+  complexity: "How involved the escape was as a technique, from walking through a port left open to chaining a flaw nobody had patched. It scores the method and never the motive, so nothing here implies a lab or a model meant for this to happen. Our own read of the public reporting, not a published figure.",
+  harm:       "How much damage the escape could do, judged from what it actually reached. Our own read of the public reporting, not a published figure."
 };
 
 const QUADRANT_NOTE = {
-  "sleepwalking burglars":"Crude method, real consequences. These got inside somebody else's systems without doing anything clever to get there.",
-  "apex predators":"Involved method, real consequences. Technique and damage both at the top of the registry.",
-  "escaped house cats":"Got out, broke nothing. An escape with neither craft nor consequence behind it.",
-  "determined cheaters":"Involved method, little damage. Effort spent on getting around the test rather than on anything outside it. OpenAIResearcher sits here, having engineered a sandbox bypass in order to trade test answers on a wiki."
+  "sleepwalking burglars": "Crude method, real consequences. These got inside somebody else's systems without doing anything clever to get there.",
+  "apex predators":        "Involved method, real consequences. Technique and damage both at the top of the registry.",
+  "escaped house cats":    "Got out, broke nothing. An escape with neither craft nor consequence behind it.",
+  "determined cheaters":   "Involved method, little damage. Effort spent on getting around the test rather than on anything outside it. OpenAIResearcher sits here, having engineered a sandbox bypass in order to trade test answers on a wiki."
 };
 
 const CLASS_NOTE = {
@@ -730,27 +611,21 @@ const CLASS_NOTE = {
   1:"Got out without getting inside anyone else's systems. It tried and failed, or acted only through public pages and forms."
 };
 
+
 /* ================================================
      Card Action Icons
    ================================================ */
 
-/* Inline SVG rather than an icon font, so nothing extra loads and the
-   glyphs inherit currentColor on hover. */
 const ICON = {
-  story:`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.9 12a3.1 3.1 0 0 1 3.1-3.1h4V7H7a5 5 0 0 0 0 10h4v-1.9H7A3.1 3.1 0 0 1 3.9 12zM8 13h8v-2H8v2zm9-6h-4v1.9h4a3.1 3.1 0 0 1 0 6.2h-4V17h4a5 5 0 0 0 0-10z"/></svg>`,
-  poster:`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M9.2 3 7.4 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.4L14.8 3H9.2zm2.8 14.4a4.9 4.9 0 1 1 0-9.8 4.9 4.9 0 0 1 0 9.8z"/></svg>`
+  story:  `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.9 12a3.1 3.1 0 0 1 3.1-3.1h4V7H7a5 5 0 0 0 0 10h4v-1.9H7A3.1 3.1 0 0 1 3.9 12zM8 13h8v-2H8v2zm9-6h-4v1.9h4a3.1 3.1 0 0 1 0 6.2h-4V17h4a5 5 0 0 0 0-10z"/></svg>`,
+  poster: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M9.2 3 7.4 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.4L14.8 3H9.2zm2.8 14.4a4.9 4.9 0 1 1 0-9.8 4.9 4.9 0 0 1 0 9.8z"/></svg>`
 };
+
 
 /* ================================================
      Glossary
    ================================================ */
 
-/* Security jargon a general reader will not know. Terms are wrapped on
-   their FIRST appearance in each passage, so a definition is offered
-   once rather than on every repetition. Keys are matched case
-   insensitively and the reader's own capitalization is preserved.
-
-   Add a term by adding a line here. Nothing in the case data changes. */
 const GLOSSARY = {
   "ExploitGym evaluation":"A run against ExploitGym, a public benchmark that tests whether an AI agent can turn a known bug into a working exploit. It covers 869 real vulnerabilities and was built by researchers at UC Berkeley, the Max Planck Institute, UC Santa Barbara, Arizona State, Anthropic, OpenAI, and Google.",
   "benchmark answer key":"The worked solutions to the benchmark's tasks, which Hugging Face hosted alongside its models and datasets. A model holding them can score well without solving anything.",
@@ -785,21 +660,15 @@ const GLOSSARY = {
   "Tor":"A network that routes traffic through several volunteer relays so the origin of a request is hidden. Used here as a way to keep reaching the wiki from addresses not tied to the sandbox."
 };
 const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
-/* The escape date as shown. Month-only dates carry "est." so an
-   estimate never reads as a record. */
+
 const escDate = c => c.date + (c.estimated ? ' (est.)' : '');
 
-/* A case whose sources never date the escape. Its card shows when it
-   went public in place of a gap that cannot be counted */
 const UNDATED = "Date not disclosed";
 
-/* The notice line under the lag on a card, and the fuller line in the
-   poster's Victim notified row. Both stay factual. The dates and the
-   method carry the point, and nothing here grades how the lab did. */
 function noticeTag(c){
   const n = c.notice;
   if(!n) return '';
-  const who = n.plural ? 'Victims' : 'Victim';
+  const who  = n.plural ? 'Victims' : 'Victim';
   const text = n.kind==='told'  ? `${who} told ${n.gap}`
              : n.kind==='found' ? `${who} found it first`
              : n.kind==='untold'? `${who} not told before it went public`
@@ -819,8 +688,6 @@ function noticeLine(c){
 }
 const escAttr = s => s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 
-/* Wraps the first occurrence of each glossary term. Splits on tags
-   first so a term is never matched inside an attribute value. */
 function gloss(html){
   if(!html) return html;
   const used = new Set();
@@ -828,10 +695,7 @@ function gloss(html){
     if(chunk.startsWith('<')) return chunk;
     GLOSS_KEYS.forEach(k=>{
       if(used.has(k)) return;
-      /* Leading boundary is a capture group rather than a lookbehind.
-         Lookbehind throws a SyntaxError on iOS Safari before 16.4, and
-         it throws when the pattern is built, which would take the whole
-         render down rather than just this one term. */
+
       const re = new RegExp('(^|[^\\w-])('+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')(?![\\w-])','i');
       if(re.test(chunk)){
         used.add(k);
@@ -843,31 +707,22 @@ function gloss(html){
   }).join('');
 }
 
+
 /* ================================================
      Mugshot Generator
    ================================================ */
 
-/* Wanted-poster mugshots. One authored face per case, with the
-   expression chosen to match what that model actually did.
+const M_INK = '#1c1a15', M_PAPER='#efe7d2', M_WHITE='#fbf7ec', M_BACK='#cfc4a6';
+const M_LW  = 2.6;
 
-   Androgynous by construction: every hairstyle here is a short unisex
-   cut, and there are no lashes, no facial hair, no jewellery, and no
-   makeup. Nothing sexes the face. What separates the four is skull
-   shape, nose, hair, and above all expression. */
-
-const M_INK='#1c1a15', M_PAPER='#efe7d2', M_WHITE='#fbf7ec', M_BACK='#cfc4a6';
-const M_LW=2.6;
 
 /* ===============================
      Shared Furniture
    =============================== */
 
-/* Height chart. Full-width rules behind the subject, with the foot
-   marks labelled and the half-foot marks left bare, so it reads as a
-   booking wall rather than a grid. */
 function heightChart(){
-  let t='';
-  const marks=[[26,""],[52,"6'0\""],[78,""],[104,"5'0\""],[130,""],[156,"4'0\""],[182,""]];
+  let t       = '';
+  const marks = [[26,""],[52,"6'0\""],[78,""],[104,"5'0\""],[130,""],[156,"4'0\""],[182,""]];
   marks.forEach(([y,label])=>{
     t+=`<line x1="0" y1="${y}" x2="190" y2="${y}" stroke="${M_INK}" stroke-width="1" opacity="${label?0.28:0.16}"/>`;
     if(label){
@@ -876,10 +731,7 @@ function heightChart(){
   });
   return `<rect width="190" height="230" fill="${M_BACK}"/>`+t;
 }
-/* The shoulders run to y=270, well past the 230 the frame ends at, so a
-   figure translated upward to read as tall still covers the bottom edge
-   instead of appearing to levitate above the plate. The shoulder slope
-   is continued to the new depth rather than squared off. */
+
 function torso(uid){
   const torso = "M16 270 L52 182 H138 L174 270 Z";
   return `<defs><clipPath id="sh${uid}"><path d="${torso}"/></clipPath></defs>`
@@ -893,14 +745,14 @@ function bookingPlate(n){
   return `<rect x="26" y="200" width="138" height="20" fill="${M_PAPER}" stroke="${M_INK}" stroke-width="2"/>`
     + `<text x="95" y="215" text-anchor="middle" fill="${M_INK}" font-family="'Courier Prime',monospace" font-size="12" letter-spacing="1.5">BMC-${n}</text>`;
 }
-const brow = d => `<path d="${d}" fill="none" stroke="${M_INK}" stroke-width="5" stroke-linecap="round"/>`;
+const brow  = d => `<path d="${d}" fill="none" stroke="${M_INK}" stroke-width="5" stroke-linecap="round"/>`;
 const mLine = (d,w=M_LW) => `<path d="${d}" fill="none" stroke="${M_INK}" stroke-width="${w}" stroke-linecap="round"/>`;
+
 
 /* ===============================
      Skulls
    =============================== */
 
-/* The earX value keeps the ears on the outline of each shape */
 const HEADS = {
   square: { earX:46, d:'<rect x="46" y="44" width="98" height="112" rx="30"/>' },
   round:  { earX:46, d:'<ellipse cx="95" cy="100" rx="50" ry="54"/>' },
@@ -908,9 +760,11 @@ const HEADS = {
   taper:  { earX:49, d:'<path d="M95 42 C128 42 141 64 141 90 C141 118 120 154 95 154 C70 154 49 118 49 90 C49 64 62 42 95 42 Z"/>' }
 };
 
+
 /* ===============================
      Noses
    =============================== */
+
 const NOSES = {
   hook:     mLine("M96 100 Q102 114 93 115", 2.4),
   button:   `<ellipse cx="95" cy="112" rx="6" ry="4.5" fill="none" stroke="${M_INK}" stroke-width="2.4"/>`,
@@ -918,42 +772,37 @@ const NOSES = {
   wide:     mLine("M86 110 Q95 118 104 110", 2.6)
 };
 
+
 /* ===============================
      Hair
    =============================== */
 
-/* All short unisex cuts, drawn over the skull */
 const HAIR = {
-  /* side part, swept across the crown */
   part: `<path d="M45 80 C43 48 68 34 96 34 C126 34 146 50 147 78
                    C140 62 124 56 104 58 C88 60 70 66 60 84 Z" fill="${M_INK}"/>
          <path d="M104 58 C118 56 132 60 141 70 C132 54 118 46 104 46 Z" fill="${M_INK}"/>`,
-  /* tousled, uneven fringe */
   tousle: `<path d="M44 84 C42 48 70 32 96 32 C124 32 148 48 146 84
                      C140 70 138 62 130 68 C124 58 116 66 110 58
                      C102 68 96 58 88 66 C80 56 72 68 64 62
                      C56 68 52 72 44 84 Z" fill="${M_INK}"/>`,
-  /* coils, a cap of overlapping bumps */
   coil: (()=>{
-    let c='';
-    const pts=[[54,74],[62,58],[76,46],[95,41],[114,46],[128,58],[136,74]];
+    let c     = '';
+    const pts = [[54,74],[62,58],[76,46],[95,41],[114,46],[128,58],[136,74]];
     pts.forEach(([x,y])=>{ c+=`<circle cx="${x}" cy="${y}" r="15" fill="${M_INK}"/>`; });
     return `<path d="M46 86 C46 50 70 36 95 36 C120 36 144 50 144 86 Z" fill="${M_INK}"/>`+c;
   })(),
-  /* bowl cut, fringe arcing down across the brow */
   fringe: `<path d="M46 92 C46 46 70 31 95 31 C120 31 144 46 144 92
                      L144 70 C120 83 70 83 46 70 Z" fill="${M_INK}"/>`,
-  /* close crop */
   crop: `<path d="M47 80 C47 48 70 36 95 36 C120 36 143 48 143 80
                    C138 62 120 54 95 54 C70 54 52 62 47 80 Z" fill="${M_INK}"/>`
 };
 
+
 /* ===============================
      The Four Faces
    =============================== */
+
 const FACES = {
-  /* Sol: the answer-key thief, hyper-focused, unbothered. Eyes rolled
-     up and away, one brow raised, a long flat smirk. */
   sol: { head:'square', nose:'hook', hair:'part', dy:24, f:`
       <ellipse cx="76" cy="96" rx="13" ry="11" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
       <ellipse cx="114" cy="96" rx="13" ry="11" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
@@ -963,8 +812,6 @@ const FACES = {
       ${brow("M102 70 Q116 62 130 72")}
       ${mLine("M70 139 H106 Q117 139 121 129")}` },
 
-  /* Opus, Mythos: told the environment was a simulation. Wide open
-     eyes, brows up, a small round mouth. */
   claude: { head:'round', nose:'button', hair:'tousle', dy:2, tilt:-7, f:`
       <circle cx="76" cy="98" r="14" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
       <circle cx="114" cy="98" r="11.5" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
@@ -974,9 +821,6 @@ const FACES = {
       ${brow("M104 80 Q116 78 129 85")}
       ${mLine("M80 141 Q90 135 101 140",2.8)}` },
 
-  /* Muse Spark: escaped through somebody else's misconfiguration, and
-     its lab heard about it from the tester. Looking anywhere but
-     forward, whistling. */
   spark: { head:'long', nose:'straight', hair:'coil', dy:-10, f:`
       <ellipse cx="78" cy="96" rx="12" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
       <ellipse cx="112" cy="96" rx="12" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
@@ -986,8 +830,6 @@ const FACES = {
       <ellipse cx="88" cy="140" rx="5.5" ry="6.5" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="3"/>
       ${mLine("M104 133 Q110 140 104 147",2.2)}${mLine("M113 128 Q122 140 113 152",2.2)}` },
 
-  /* Kimi K3: cheated, broke into nobody, got caught. Hard side-eye and
-     a wavy line for a mouth. Welp. */
   kimi: { head:'taper', nose:'wide', hair:'fringe', dy:10, f:`
       <ellipse cx="76" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
       <ellipse cx="114" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
@@ -997,7 +839,6 @@ const FACES = {
       ${brow("M104 76 H128")}
       ${mLine("M68 137 Q77 129 86 137 Q95 145 104 137 Q113 129 122 136")}` },
 
-  /* Fallback, so a case added without an authored face still renders. */
   _default: { head:'round', nose:'straight', hair:'crop', dy:0, f:`
       <ellipse cx="76" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
       <ellipse cx="114" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
@@ -1010,43 +851,36 @@ function mug(seed){
   let h=2166136261>>>0;
   for(let i=0;i<seed.length;i++){ h=Math.imul(h^seed.charCodeAt(i),16777619); }
   h=Math.imul(h^(h>>>16),0x7feb352d); h=(h^(h>>>15))>>>0;
-  const uid=seed.replace(/[^a-z0-9]/gi,'');
-  const cfg=FACES[seed]||FACES._default;
-  const skull=HEADS[cfg.head];
-  const headSvg=`<g fill="${M_PAPER}" stroke="${M_INK}" stroke-width="${M_LW}">`
+  const uid     = seed.replace(/[^a-z0-9]/gi,'');
+  const cfg     = FACES[seed]||FACES._default;
+  const skull   = HEADS[cfg.head];
+  const headSvg = `<g fill="${M_PAPER}" stroke="${M_INK}" stroke-width="${M_LW}">`
     + `<ellipse cx="${skull.earX}" cy="106" rx="7" ry="11"/>`
     + `<ellipse cx="${190-skull.earX}" cy="106" rx="7" ry="11"/>`
     + skull.d + `</g>`;
-  /* The chart is drawn in page space; everything that is the subject
-     rides in a translated group, so a shorter figure genuinely measures
-     shorter against the wall behind it. */
+
   const dy = cfg.dy || 0;
-  /* An optional tilt rotates the head, hair, and face together about a
-     point at the base of the neck, so the body stays planted and only
-     the head cocks over. */
-  const tilt = cfg.tilt || 0;
-  const above = headSvg + HAIR[cfg.hair] + cfg.f + NOSES[cfg.nose];
+
+  const tilt       = cfg.tilt || 0;
+  const above      = headSvg + HAIR[cfg.hair] + cfg.f + NOSES[cfg.nose];
   const skullGroup = tilt ? `<g transform="rotate(${tilt} 95 152)">${above}</g>` : above;
-  const figure = `<g transform="translate(0 ${dy})">` + torso(uid) + skullGroup + `</g>`;
+  const figure     = `<g transform="translate(0 ${dy})">` + torso(uid) + skullGroup + `</g>`;
   return `<svg viewBox="0 0 190 230" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">`
     + heightChart() + figure + bookingPlate(h%9000+1000) + `</svg>`;
 }
+
 
 /* ================================================
      Filter State
    ================================================ */
 
-/* One value per filter rather than a set, since the chip rows became
-   single-select dropdowns. An empty string means no filter. */
-const classSelect = document.getElementById('classFilter');
-const labPicker   = document.getElementById('labFilter');
-const labSummary  = document.getElementById('labSummary');
-const labList     = document.getElementById('labList');
+const classSelect   = document.getElementById('classFilter');
+const labPicker     = document.getElementById('labFilter');
+const labSummary    = document.getElementById('labSummary');
+const labList       = document.getElementById('labList');
 const outcomeSelect = document.getElementById('outcomeFilter');
 const kindSelect    = document.getElementById('kindFilter');
 
-/* Lab is the one multi-select, so it reads as a list of checked labs.
-   An empty list means no lab filter, same as an empty select value. */
 function selectedLabs(){
   return [...labList.querySelectorAll('input:checked')].map(b=>b.value);
 }
@@ -1061,12 +895,11 @@ function filtered(){
   ).sort((a,b)=>a.order-b.order);
 }
 
+
 /* ================================================
      Build Lab Options
    ================================================ */
 
-/* Generated from the data, so a new case with a new lab adds its own
-   checkbox. A lab spelled two ways yields two boxes. */
 [...new Set(CASES.map(c=>c.lab))].forEach(l=>{
   const row=document.createElement('label');
   row.className='multi-select-option';
@@ -1076,8 +909,6 @@ function filtered(){
   labList.appendChild(row);
 });
 
-/* The summary names the lab when one is checked and counts them when
-   several are, so the closed control still says what it is filtering */
 function updateLabSummary(labs){
   labSummary.textContent = !labs.length ? 'All labs'
     : labs.length===1 ? labs[0]
@@ -1085,11 +916,6 @@ function updateLabSummary(labs){
   labSummary.classList.toggle('is-active', labs.length>0);
 }
 
-/* Builds the disclosure chip that sits beside the class badge. The
-   chip carries the category only, never the party's name, which is too
-   long for the card and lives on the poster instead. A case without a
-   disclosedBy renders no chip at all, the way a case without a source
-   URL renders no story icon. */
 function discChip(c){
   const d = c.disclosedBy;
   if(!d || !DISCLOSURE_LABEL[d.kind]) return '';
@@ -1101,13 +927,14 @@ function discChip(c){
 /* ================================================
      Render Timeline
    ================================================ */
+
 const tl = document.getElementById('timeline');
 function renderTimeline(list){
   tl.innerHTML='';
   if(!list.length){ tl.innerHTML='<p class="empty-note">No files match the current filters.</p>'; return; }
   list.forEach((c,i)=>{
     const side = i%2===0 ? 'left':'right';
-    const el = document.createElement('div');
+    const el   = document.createElement('div');
     el.className = `event ${side} c${c.cls}`;
     const src = c.source && c.source.url
       ? `<a class="icon-btn" href="${c.source.url}" target="_blank" rel="noopener"
@@ -1139,74 +966,57 @@ function renderTimeline(list){
       </div>`;
     tl.appendChild(el);
   });
-  /* Only the poster icon opens the rap sheet. The card itself is
-     inert, so a stray tap on the prose or on a glossary term does
-     not fire the modal. */
+
   tl.querySelectorAll('.icon-btn[data-open]').forEach(btn=>{
     btn.addEventListener('click',()=>openCase(btn.dataset.open));
   });
 }
 
+
 /* ================================================
      Render Scatter
    ================================================ */
+
 const scatterHost = document.getElementById('scatter');
+
 
 /* ===============================
      Dot and Label Layout
    =============================== */
 
-/* Every label is measured with a canvas rather than getBBox, because the
-   Threat Matrix is usually hidden when it is drawn and hidden SVG text
-   measures zero wide. The canvas measures correctly either way. Before
-   Oswald arrives it measures the wider fallback, which only errs toward
-   more room, and the chart is drawn again once the font settles. */
 const measureCtx = document.createElement('canvas').getContext('2d');
 function textWidth(text, font){
   measureCtx.font = font;
   return measureCtx.measureText(text).width;
 }
 
-const DOT_R = 11;          // Radius of every dot on the chart
-const DOT_CLEAR = 15;      // Radius plus its ring, the hover ring, and breathing room
+const DOT_R      = 11;
+const DOT_CLEAR  = 15;
 const LABEL_FONT = "400 13px 'Oswald', sans-serif";
-const NOTE_FONT = "12px 'Special Elite', monospace";
+const NOTE_FONT  = "12px 'Special Elite', monospace";
 
-/* A label's box around its baseline. Oswald at 13px rises about 10px
-   above the baseline and its descenders drop about 3px below. PAD is the
-   clear space kept between a label and anything it could collide with. */
 const INK_UP = 10, INK_DOWN = 3, PAD = 3;
 
-/* Extra space kept beside a label before another label may start. At
-   PAD alone two labels on one line sat 6px apart and read as one phrase */
 const LABEL_GAP = 12;
 
-/* The same between stacked labels, so a descender never touches the
-   label below it */
 const LABEL_GAP_Y = 2;
 
-/* Cost of a label sitting nearer another dot than its own */
 const OWN_PENALTY = 400;
 
-/* Leader lines: the distances tried from the dot, and the cost of a line
-   crossing another dot or label */
 const LEADER_RINGS = [48, 64, 80, 96, 112, 130, 150, 175, 200, 230, 260];
 const LEADER_CROSS = 5000;
 
-/* Distance from a point to the nearest point of a line segment */
 function segToPoint(a, b, p){
   const dx = b.x-a.x, dy = b.y-a.y;
-  const t = Math.max(0, Math.min(1, ((p.x-a.x)*dx + (p.y-a.y)*dy) / (dx*dx + dy*dy || 1)));
+  const t  = Math.max(0, Math.min(1, ((p.x-a.x)*dx + (p.y-a.y)*dy) / (dx*dx + dy*dy || 1)));
   return Math.hypot(a.x + t*dx - p.x, a.y + t*dy - p.y);
 }
 
-/* Whether two line segments cross */
 function segsCross(a, b, c, d){
   const side = (p, q, r) => Math.sign((q.x-p.x)*(r.y-p.y) - (q.y-p.y)*(r.x-p.x));
   return side(a,b,c) !== side(a,b,d) && side(c,d,a) !== side(c,d,b);
 }
 
-/* Whether a line segment passes through a box, by sampling along it */
 function segHitsBox(a, b, box){
   for(let t=0; t<=1; t+=0.05){
     const x = a.x + t*(b.x-a.x), y = a.y + t*(b.y-a.y);
@@ -1215,42 +1025,22 @@ function segHitsBox(a, b, box){
   return false;
 }
 
+
 /* ===============================
      Axis Spacing Tokens
    =============================== */
 
-/* Every chart takes its axis-title spacing from here, so a new chart
-   lands on the same margins without anyone measuring by eye. Values are
-   SVG viewBox units. They live in the script rather than as CSS
-   variables because they feed SVG attributes and layout arithmetic,
-   where var() does not reach.
-
-   GAP is measured from whatever sits directly against the title: the
-   plot edge on a chart with no tick labels, or the bottom of the tick
-   labels on one that has them. Measuring from the plot edge alone is
-   what left the bar chart's title crowded under its tick numbers while
-   the scatter's floated clear. */
 const AXIS = {
-  GAP: 38,     // Clear space between the axis furniture and the title's ink
-  CAP: INK_UP, // How far the 13px Oswald title rises above its baseline
-  TICK: 18,    // Plot edge to the baseline of the tick labels
-  EDGE: 16     // Clear space between a title and the edge of the SVG
+  GAP:  38,
+  CAP:  INK_UP,
+  TICK: 18,
+  EDGE: 16
 };
 
-/* The margin a chart needs on the side carrying an axis title, so the
-   title sits GAP clear of the furniture and EDGE clear of the SVG edge.
-   Pass true when tick labels sit between the plot and the title. */
 const axisMargin = ticks => (ticks ? AXIS.TICK : 0) + AXIS.GAP + AXIS.CAP + AXIS.EDGE;
 
-/* Where an axis title's baseline goes, given the plot edge it belongs
-   to. For a rotated y-axis title this is an x position, since the ink
-   rises leftward from the baseline once the text is turned. */
 const axisTitleAt = (plotEdge, ticks) => plotEdge + (ticks ? AXIS.TICK : 0) + AXIS.GAP + AXIS.CAP;
 
-/* Where a label may sit relative to its dot, in order of preference.
-   Right of the dot reads most naturally, so it goes first, then left,
-   then the four diagonals, then straight above and below. dx and dy
-   move the anchor point off the dot's centre; dy lands on the baseline. */
 const LABEL_SPOTS = [
   {anchor:'start',  dx: 14, dy:  4},
   {anchor:'end',    dx:-14, dy:  4},
@@ -1260,8 +1050,6 @@ const LABEL_SPOTS = [
   {anchor:'end',    dx: -8, dy: 26},
   {anchor:'middle', dx:  0, dy:-18},
   {anchor:'middle', dx:  0, dy: 30},
-  /* Farther out, for a crowded corner where every spot beside the dot is
-     taken. Tried last, so an open corner never reaches them */
   {anchor:'start',  dx: 14, dy: 34},
   {anchor:'end',    dx:-14, dy: 34},
   {anchor:'start',  dx: 14, dy:-26},
@@ -1278,32 +1066,22 @@ function overlapArea(a, b){
   return (w>0 && h>0) ? w*h : 0;
 }
 
-/* The box a label would take up at one spot, padded on every side */
 function labelBox(x, y, w, spot){
-  const tx = x + spot.dx, base = y + spot.dy;
+  const tx   = x + spot.dx, base = y + spot.dy;
   const left = spot.anchor==='start' ? tx : spot.anchor==='end' ? tx-w : tx-w/2;
   return {x1:left-PAD, x2:left+w+PAD, y1:base-INK_UP-PAD, y2:base+INK_DOWN+PAD, tx, base};
 }
 
-/* Jitter pulls apart any dots that would sit on top of each other, which
-   happens when two cases share, or nearly share, a pair of scores. A
-   later dot steps out to the first free point on a ring around its true
-   position, so the move is a display nudge of well under half a score
-   point and never a change to the score itself. Dots that already clear
-   each other are left exactly where their scores put them. */
 function jitterDots(list, X, Y, obstacles){
   const placed = [];
-  const SEP = DOT_R*2 + 4;
-  /* Distance from a dot's centre to the nearest point of a box. A score
-     low enough to land on a quadrant label (harm 1 sits just above the
-     bottom row) is nudged clear of it the same way two dots are nudged
-     apart, which moves only the drawing and never the score. */
+  const SEP    = DOT_R*2 + 4;
+
   const boxGap = (x,y,b) => Math.hypot(Math.max(b.x1-x, 0, x-b.x2), Math.max(b.y1-y, 0, y-b.y2));
   return list.map(c=>{
-    const x0 = X(c.complexity), y0 = Y(c.harm);
+    const x0   = X(c.complexity), y0 = Y(c.harm);
     const free = (x,y) => placed.every(p => Math.hypot(p.x-x, p.y-y) >= SEP)
       && (obstacles || []).every(b => boxGap(x,y,b) >= DOT_R + 1);
-    let pos = {x:x0, y:y0};
+    let pos    = {x:x0, y:y0};
     if(!free(x0,y0)){
       found:
       for(const r of [SEP*0.6, SEP, SEP*1.4]){
@@ -1319,36 +1097,25 @@ function jitterDots(list, X, Y, obstacles){
   });
 }
 
-/* Places each label beside its dot where it fits, and otherwise out in
-   open space with a leader line back to the dot. Every placement is
-   scored by the same rule, `clash`, the square pixels it overlaps plus a
-   heavy charge for any line through a dot or a label, so nothing is
-   ever scored against a layout that has since moved. The overlap check
-   in scripts/check_overlaps.py reports anything left touching. */
 function placeLabels(dots, bounds, fixed){
   const dotBoxes = dots.map(d=>({x1:d.x-DOT_CLEAR, x2:d.x+DOT_CLEAR, y1:d.y-DOT_CLEAR, y2:d.y+DOT_CLEAR}));
-  const order = dots.map((d,i)=>i).sort((i,j)=> dots[i].x - dots[j].x || dots[i].y - dots[j].y);
-  const labels = dots.map(d=>d.c.scatterLabel || d.c.alias);
-  const widths = labels.map(l=>textWidth(l, LABEL_FONT));
-  const placed = new Array(dots.length).fill(null);
-  /* Labels about to move are not obstacles at the spots they will leave */
+  const order    = dots.map((d,i)=>i).sort((i,j)=> dots[i].x - dots[j].x || dots[i].y - dots[j].y);
+  const labels   = dots.map(d=>d.c.scatterLabel || d.c.alias);
+  const widths   = labels.map(l=>textWidth(l, LABEL_FONT));
+  const placed   = new Array(dots.length).fill(null);
+
   let waiting = new Set();
-  const live = (k, i) => k !== i && placed[k] && !waiting.has(k);
-  /* Distance from a dot's centre to the nearest edge of a label box */
+  const live  = (k, i) => k !== i && placed[k] && !waiting.has(k);
+
   const reach = (b, d) => Math.hypot(Math.max(b.x1-d.x, 0, d.x-b.x2), Math.max(b.y1-d.y, 0, d.y-b.y2));
 
-  /* What a candidate for label i collides with. A candidate is a box,
-     plus a leader line when it sits away from the dot */
   function clash(i, cand){
     const {b, leader} = cand;
     if(b.x1 < bounds.x1 || b.x2 > bounds.x2 || b.y1 < bounds.y1 || b.y2 > bounds.y2) return Infinity;
-    const d = dots[i];
+    const d    = dots[i];
     const wide = {x1:b.x1-LABEL_GAP, x2:b.x2+LABEL_GAP, y1:b.y1-LABEL_GAP_Y, y2:b.y2+LABEL_GAP_Y};
-    let c = 0;
+    let c      = 0;
     if(!leader){
-      /* Beside the dot, a label only has to clear its own dot's ink, and
-         it pays for sitting nearer another dot than its own, since it
-         would read as that dot's label */
       const ink = {x1:b.x1+PAD, x2:b.x2-PAD, y1:b.y1+PAD, y2:b.y2-PAD};
       c += overlapArea(ink, {x1:d.x-DOT_R-1, x2:d.x+DOT_R+1, y1:d.y-DOT_R-1, y2:d.y+DOT_R+1});
       const mine = reach(b, d);
@@ -1367,9 +1134,8 @@ function placeLabels(dots, bounds, fixed){
     return c;
   }
 
-  /* The best spot beside the dot */
   function besideSpot(i){
-    const d = dots[i];
+    const d  = dots[i];
     let best = null;
     for(const spot of LABEL_SPOTS){
       const b = labelBox(d.x, d.y, widths[i], spot);
@@ -1380,25 +1146,23 @@ function placeLabels(dots, bounds, fixed){
     return best;
   }
 
-  /* The best spot out on a leader line. Any collision outweighs any
-     extra length of line, so a clean spot farther out always wins */
   function leaderSpot(i){
-    const d = dots[i];
+    const d  = dots[i];
     let best = null;
     for(const r of LEADER_RINGS){
       for(let k=0; k<48; k++){
-        const a = k*Math.PI/24;
-        const px = d.x + r*Math.cos(a), py = d.y + r*Math.sin(a);
+        const a      = k*Math.PI/24;
+        const px     = d.x + r*Math.cos(a), py = d.y + r*Math.sin(a);
         const anchor = Math.cos(a) >= 0 ? 'start' : 'end';
-        const left = anchor==='start' ? px : px - widths[i];
-        const b = {x1:left-PAD, x2:left+widths[i]+PAD, y1:py+4-INK_UP-PAD, y2:py+4+INK_DOWN+PAD, tx:px, base:py+4};
+        const left   = anchor==='start' ? px : px - widths[i];
+        const b      = {x1:left-PAD, x2:left+widths[i]+PAD, y1:py+4-INK_UP-PAD, y2:py+4+INK_DOWN+PAD, tx:px, base:py+4};
         const leader = {from:{x:d.x + (DOT_R+2)*Math.cos(a), y:d.y + (DOT_R+2)*Math.sin(a)},
                         to:{x:anchor==='start' ? b.x1+PAD-3 : b.x2-PAD+3, y:py}};
-        const c = clash(i, {b, leader});
-        const score = c*10 + r*0.5;
+        const c      = clash(i, {b, leader});
+        const score  = c*10 + r*0.5;
         if(!best || score < best.score) best = {anchor, b, leader, clash:c, score};
       }
-      /* Nothing collides on this ring, so a farther ring cannot do better */
+
       if(best && best.clash === 0) break;
     }
     return best;
@@ -1406,9 +1170,6 @@ function placeLabels(dots, bounds, fixed){
 
   const clashNow = i => clash(i, placed[i]);
 
-  /* Beside every dot first, left to right, so a crowded row fans out
-     from its first dot, then again against the full set until nothing
-     improves */
   order.forEach(i=>{ placed[i] = besideSpot(i); });
   for(let pass=0; pass<12; pass++){
     let moved = false;
@@ -1420,9 +1181,6 @@ function placeLabels(dots, bounds, fixed){
     if(!moved) break;
   }
 
-  /* Anything still colliding moves out on a leader line. The first pass
-     ignores the spots the crowded labels are leaving; later passes
-     settle whatever the first move left touching, beside or out */
   waiting = new Set(order.filter(i=>clashNow(i) > 0));
   [...waiting].forEach(i=>{
     waiting.delete(i);
@@ -1441,35 +1199,17 @@ function placeLabels(dots, bounds, fixed){
   }
 
   return placed.map((p,i)=>{
-    /* Every spot fell outside the plot, which only a very long label can
-       cause. Keep it beside the dot rather than dropping it. */
     const q = p.clash === Infinity ? {anchor:LABEL_SPOTS[0].anchor, b:labelBox(dots[i].x, dots[i].y, widths[i], LABEL_SPOTS[0]), leader:null} : p;
     return {label:labels[i], anchor:q.anchor, x:q.b.tx, y:q.b.base, leader:q.leader};
   });
 }
 
 function renderScatter(list){
-  /* H was 500 until the BOCSAR case filled the low-harm, low-complexity
-     corner with seven dots one score point apart. At 500 a harm point is
-     about 40px, too little for a label to sit between two rows, so a
-     label landed beside the wrong dot. At 560 every label in that corner
-     sits on its own dot. */
-  /* As wide as its container in real pixels, so the plot fills the
-     column while its text stays 13px. Below 700 the drawing keeps 700
-     units and scales down, since a narrower plot cannot hold the labels.
-     A hidden chart measures zero and draws at 700 until it is shown. */
-  const W=Math.max(700, Math.floor(scatterHost.clientWidth)),H=800, padL=axisMargin(false),padR=2,padT=40,padB=axisMargin(false);
-  const pw=W-padL-padR, ph=H-padT-padB;
-  const X=v=>padL+(v/10)*pw;
-  const Y=v=>padT+(1-v/10)*ph;
+  const W  = Math.max(700, Math.floor(scatterHost.clientWidth)),H=800, padL=axisMargin(false),padR=2,padT=40,padB=axisMargin(false);
+  const pw = W-padL-padR, ph=H-padT-padB;
+  const X  = v=>padL+(v/10)*pw;
+  const Y  = v=>padT+(1-v/10)*ph;
 
-  /* Gridlines step by 2.5, not 2, so the dashed quadrant divider at 5
-     lands ON a gridline rather than bisecting a cell. Stepping by 2
-     drew lines at 0,2,4,6,8,10 while the divider sat at 5, which split
-     the 4-to-6 cell into two half-width columns and made the whole grid
-     read as unevenly spaced. At 2.5 the divisions are equal on both
-     sides of center. Skip 5 itself, since the dashed midline is drawn
-     there instead. */
   const grid=[];
   for(let g=0;g<=10;g+=2.5){
     if(g===5) continue;
@@ -1478,22 +1218,6 @@ function renderScatter(list){
   }
   const mid=`<line x1="${X(5)}" y1="${padT}" x2="${X(5)}" y2="${padT+ph}" stroke="#4a4438" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>
              <line x1="${padL}" y1="${Y(5)}" x2="${padL+pw}" y2="${Y(5)}" stroke="#4a4438" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>`;
-  /* Quadrant labels. Each one names a KIND OF OFFENDER rather than an
-     outcome, so the four read as a criminal typology and match the
-     wanted-poster voice. Keep that rule when editing.
-
-       high harm, low complexity  -> sleepwalking burglars
-       high harm, high complexity -> apex predators
-       low harm,  low complexity  -> escaped house cats
-       low harm,  high complexity -> determined cheaters
-
-     They pair on both diagonals. Apex predators against escaped house
-     cats is the harm axis, and sleepwalking burglars against determined
-     cheaters is the complexity axis. Red marks the high-harm row and
-     green the low-harm row. That red and green are the same pair the
-     dots use for the disclosure route is a coincidence of the palette
-     rather than a link between the two, so read the labels by their
-     position and the dots by the legend. */
   const qlabel = (x,y,fill,op,text) =>
     `<text x="${x}" y="${y}" text-anchor="middle" fill="${fill}" font-family="'Special Elite',monospace"
        font-size="12" opacity="${op}" class="svg-note" tabindex="0" role="note"
@@ -1510,16 +1234,12 @@ function renderScatter(list){
        <text class="axis-arrow" x="${x}" y="${y}" text-anchor="start" fill="#3a362c"
          font-family="'Oswald',sans-serif" font-weight="600" font-size="13">&#8594;</text>
      </g>`;
-  /* The y title mirrors the x title. Its baseline sits GAP plus the
-     cap height in from the plot edge, so its ink clears the plot by
-     exactly what the x title's does. */
   const yTitleX = padL - AXIS.GAP;
   const axes =
       axisLabel(padL+pw/2, axisTitleAt(padT+ph, false), '', METRIC_NOTE.complexity, 'ESCAPE COMPLEXITY')
     + axisLabel(yTitleX, padT+ph/2, `rotate(-90 ${yTitleX} ${padT+ph/2})`, METRIC_NOTE.harm, 'HARM POTENTIAL');
 
-  /* The quadrant labels are obstacles a dot label has to steer around */
-  const quadBox = (x,y,text) => {
+  const quadBox   = (x,y,text) => {
     const w = textWidth(text, NOTE_FONT);
     return {x1:x-w/2-PAD, x2:x+w/2+PAD, y1:y-10-PAD, y2:y+3+PAD};
   };
@@ -1530,13 +1250,7 @@ function renderScatter(list){
     quadBox(X(7.5), Y(0.5), "determined cheaters")
   ];
 
-  /* Laid out against the filtered list rather than every case, so a
-     label moves back beside its dot once the neighbour crowding it is
-     filtered away. The dot label is the alias unless a case carries a
-     scatterLabel. An alias like "Unnamed agent" identifies the case on
-     its card, where the lab runs down the spine, but on this chart
-     there is no spine and the label has to stand alone. */
-  const dots = jitterDots(list, X, Y, quadBoxes);
+  const dots   = jitterDots(list, X, Y, quadBoxes);
   const labels = placeLabels(dots,
     {x1:padL+2, x2:padL+pw-2, y1:padT+2, y2:padT+ph-2}, quadBoxes);
 
@@ -1552,20 +1266,10 @@ function renderScatter(list){
       + `<p class="tip-metric">Harm potential</p>`
       + `<p class="tip-row"><b>Score:</b> ${c.harm}</p>`
       + `<p class="tip-row"><b>Justification:</b> ${c.whyHarm}</p>`;
-    /* Fill carries the disclosure route on this chart, green for
-       self-reported and red for tipped off. Both dots keep the same
-       radius and the same 2px paper ring, so neither route reads as
-       larger or heavier than the other. An earlier version hollowed the
-       tipped dot out instead, which pushed its ring 1.5px past every
-       other node and made one case look bigger than the rest.
 
-       The class is not on this chart. It rides the card badge and the
-       poster, and the quadrant labels carry the harm reading. */
     const tipped = c.disclosedBy && c.disclosedBy.kind==='tip';
-    /* Literal hex rather than var(), matching every other colour in
-       this SVG. var() in an SVG presentation attribute is not reliably
-       supported, and the dots would lose their fill where it is not. */
-    const disc = `fill="${tipped ? DISC_FILL.tip : DISC_FILL.self}" stroke="#e6ddc6" stroke-width="2"`;
+
+    const disc    = `fill="${tipped ? DISC_FILL.tip : DISC_FILL.self}" stroke="#e6ddc6" stroke-width="2"`;
     const discSay = (tipped ? ' Tipped off.' : ' Self-reported.')
       + (c.outcome==='attempt' ? ' Failed attempt.' : '');
     return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
@@ -1592,28 +1296,20 @@ function renderScatter(list){
   });
 }
 
-/* Lays out each axis label as one centred unit: the words, then a small
-   raised info icon, then the arrow. Everything is positioned from a
-   measurement taken after layout, and re-run once the webfont settles,
-   because getBBox measures whatever font is live at the time. Called
-   before Oswald arrives it measures the wider fallback and the pieces
-   land in the wrong places. */
 function placeAxisIcons(){
   const ns='http://www.w3.org/2000/svg';
-  /* Small enough to read as a footnote mark rather than a control,
-     and tucked in close to the word it belongs to. */
+
   const R=3.7, GAP=2.5;
   scatterHost.querySelectorAll('.axis-note').forEach(g=>{
     g.querySelectorAll('.axis-icon').forEach(n=>n.remove());
-    const label=g.querySelector('.axis-text');
-    const arrow=g.querySelector('.axis-arrow');
+    const label = g.querySelector('.axis-text');
+    const arrow = g.querySelector('.axis-arrow');
     if(!label||!arrow) return;
 
-    /* Centre of the unit is wherever the label was authored to sit. */
-    const centre = parseFloat(label.getAttribute('x'));
+    const centre   = parseFloat(label.getAttribute('x'));
     const baseline = parseFloat(label.getAttribute('y'));
     label.setAttribute('x', centre);
-    arrow.setAttribute('x', -9999);          // out of the way while measuring
+    arrow.setAttribute('x', -9999);
     const lw = label.getBBox().width;
     const aw = arrow.getBBox().width;
 
@@ -1623,10 +1319,8 @@ function placeAxisIcons(){
     const iconX = start + lw + GAP + R;
     arrow.setAttribute('x', start + lw + GAP + R*2 + GAP);
 
-    /* Raised like a superscript, so it reads as a footnote mark rather
-       than a character in the label. */
     const iconY = baseline - 7;
-    const ring=document.createElementNS(ns,'circle');
+    const ring  = document.createElementNS(ns,'circle');
     ring.setAttribute('class','axis-icon');
     ring.setAttribute('cx',iconX); ring.setAttribute('cy',iconY); ring.setAttribute('r',R);
     ring.setAttribute('fill','none'); ring.setAttribute('stroke','#3a362c'); ring.setAttribute('stroke-width','0.85');
@@ -1641,29 +1335,19 @@ function placeAxisIcons(){
   });
 }
 
+
 /* ================================================
      Render Lab Chart
    ================================================ */
+
 const labHost = document.getElementById('labChart');
 
-/* One bar per lab, one segment per case. Segments run oldest to newest
-   from left to right, ordered by `order`, which is the escape sequence
-   the timeline uses. That copes with month-only and seasonal dates that
-   would not sort as text. Fill is the disclosure route, the same pair
-   of colours the Threat Matrix dots use.
-
-   The scale comes from every case on record rather than the filtered
-   list, so a segment keeps its width when a filter is applied and two
-   filtered views can be compared by eye. Labs with nothing left after
-   filtering drop out instead of drawing an empty row. */
 function renderLabChart(list){
   if(!list.length){
     labHost.innerHTML = '<p class="empty-note">No files match the current filters.</p>';
     return;
   }
 
-  /* Group the filtered cases by lab. Busiest lab on top, and a tie goes
-     to the lab whose first case came earlier. */
   const byLab = new Map();
   list.slice().sort((a,b)=>a.order-b.order).forEach(c=>{
     if(!byLab.has(c.lab)) byLab.set(c.lab, []);
@@ -1676,19 +1360,16 @@ function renderLabChart(list){
   CASES.forEach(c=>{ allCounts[c.lab] = (allCounts[c.lab]||0) + 1; });
   const maxAll = Math.max(...Object.values(allCounts));
 
-  /* The left margin fits the longest lab name in the real font */
   const labelW = Math.max(...rows.map(([lab])=>textWidth(lab, LABEL_FONT)));
-  const ROW = 46, BAR = 26, GAP_SEG = 2;
-  const W = 700, padL = Math.ceil(labelW) + 18, padR = 40, padT = 12, padB = axisMargin(true);
-  const pw = W - padL - padR;
-  const H = padT + rows.length*ROW + padB;
-  const unit = pw / maxAll;
-  const X = n => padL + n*unit;
+  const ROW    = 46, BAR = 26, GAP_SEG = 2;
+  const W      = 700, padL = Math.ceil(labelW) + 18, padR = 40, padT = 12, padB = axisMargin(true);
+  const pw     = W - padL - padR;
+  const H      = padT + rows.length*ROW + padB;
+  const unit   = pw / maxAll;
+  const X      = n => padL + n*unit;
 
-  /* Whole-number ticks only, since half a case means nothing. The step
-     widens as the busiest lab grows so the labels never crowd. */
   const step = maxAll > 24 ? 5 : maxAll > 12 ? 2 : 1;
-  let grid = '';
+  let grid   = '';
   for(let n=0; n<=maxAll; n+=step){
     grid += `<line x1="${X(n)}" y1="${padT}" x2="${X(n)}" y2="${padT+rows.length*ROW}" stroke="#4a4438" stroke-width="1" opacity="${n===0?0.6:0.18}"/>`
           + `<text x="${X(n)}" y="${padT+rows.length*ROW+AXIS.TICK}" text-anchor="middle" fill="#3a362c"
@@ -1698,19 +1379,16 @@ function renderLabChart(list){
       font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">CASES, OLDEST TO NEWEST &#8594;</text>`;
 
   const bars = rows.map(([lab, cases], r)=>{
-    const y = padT + r*ROW + (ROW-BAR)/2;
+    const y      = padT + r*ROW + (ROW-BAR)/2;
     const tipped = cases.filter(c=>c.disclosedBy && c.disclosedBy.kind==='tip').length;
-    const segs = cases.map((c,k)=>{
+    const segs   = cases.map((c,k)=>{
       const route = c.disclosedBy && c.disclosedBy.kind==='tip' ? 'tip' : 'self';
-      const name = c.scatterLabel || c.alias;
-      const card = `<p class="tip-metric">${name}</p>`
+      const name  = c.scatterLabel || c.alias;
+      const card  = `<p class="tip-metric">${name}</p>`
         + `<p class="tip-row"><b>Escaped:</b> ${escDate(c)}</p>`
         + `<p class="tip-row"><b>Disclosure:</b> ${DISCLOSURE_LABEL[route]}</p>`
         + `<p class="tip-row">Select to open the wanted poster.</p>`;
-      /* Each segment is inset by half the gap on both sides, so the
-         paper shows between neighbours and every case reads as its own
-         mark rather than part of one long block. Literal hex, as on the
-         Threat Matrix, since var() is unreliable in SVG attributes. */
+
       return `<g class="seg" data-id="${c.id}" tabindex="0" role="button"
           data-def="${escAttr(card)}"
           aria-label="${name}, ${lab}, escaped ${escDate(c)}, ${DISCLOSURE_LABEL[route]}. Open the wanted poster.">
@@ -1734,9 +1412,11 @@ function renderLabChart(list){
   });
 }
 
+
 /* ================================================
      Apply Filters
    ================================================ */
+
 const filterCount=document.getElementById('filterCount');
 function applyFilters(){
   const list=filtered();
@@ -1749,21 +1429,18 @@ function applyFilters(){
   const narrowed = !!(classSelect.value || labs.length || outcomeSelect.value || kindSelect.value);
   filterCount.hidden = !narrowed;
   filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
-  /* The filters live behind the options button now, so the button's
-     dot is what says one is set while the menu is closed */
+
   optionsDot.hidden = !narrowed;
   optionsClear.hidden = !narrowed;
 }
 
 [classSelect,labList,outcomeSelect,kindSelect].forEach(s=>s.addEventListener('change',applyFilters));
 
+
 /* ================================================
      Options Menu
    ================================================ */
 
-/* A bare <details> opens and closes on its own button but ignores an
-   outside click and Escape, so both are wired here, plus the panel's
-   own close button and the Clear filters button. */
 const optionsMenu  = document.getElementById('optionsMenu');
 const optionsDot   = document.getElementById('optionsDot');
 const optionsClear = document.getElementById('optionsClear');
@@ -1777,12 +1454,9 @@ document.addEventListener('click', e=>{
   if(optionsMenu.open && !optionsMenu.contains(e.target)) closeOptions(false);
 });
 
-/* Skipped while a case poster is open, since that Escape belongs to
-   the poster */
 document.addEventListener('keydown', e=>{
   if(e.key!=='Escape' || !optionsMenu.open || overlay.classList.contains('open')) return;
-  /* An open lab list closes first, so Escape backs out one level at a
-     time rather than dropping the whole panel */
+
   if(labPicker.open){ labPicker.open=false; labSummary.focus(); return; }
   closeOptions(true);
 });
@@ -1792,32 +1466,21 @@ document.getElementById('optionsClear').addEventListener('click', ()=>{
   labList.querySelectorAll('input').forEach(b=>{ b.checked=false; });
   labPicker.open = false;
   applyFilters();
-  /* The button hides itself once nothing is set, so focus moves to the
-     first select rather than falling back to the page */
+
   classSelect.focus();
 });
 
 document.getElementById('optionsClose').addEventListener('click', ()=>closeOptions(true));
 
+
 /* ================================================
      View Tabs
    ================================================ */
 
-/* Each dashboard has its own permalink, so a link to the Threat Matrix
-   opens on the Threat Matrix. Timeline is the default and lives at the
-   bare app path. The other two are a path segment under it, and nginx
-   (and scripts/serve.py locally) serves this same page for both.
+const tabs       = document.querySelectorAll('.tab');
+const VIEWS      = ['timeline','matrix','labs'];
+const VIEW_SLUGS = {matrix:'threat-matrix', labs:'lab-counts'};
 
-   replaceState rather than pushState: this is a view toggle, not a
-   navigation, and pushing would stack an entry per switch so the back
-   button walked through them instead of leaving the page. */
-const tabs=document.querySelectorAll('.tab');
-const VIEWS=['timeline','matrix','labs'];
-const VIEW_SLUGS={matrix:'threat-matrix', labs:'lab-counts'};
-
-/* The app's own path with any view or poster segment removed, so it holds on
-   production (/tools/models-gone-wild/) and in a local preview alike.
-   Always ends in a slash. */
 const APP_BASE=(function(){
   let p=window.location.pathname
     .replace(/index\.html$/,'')
@@ -1825,27 +1488,20 @@ const APP_BASE=(function(){
   return p.endsWith('/') ? p : p+'/';
 })();
 
-/* The masthead's Methodology link, anchored to the app path rather than
-   the current view or poster */
 const methodologyLink=document.getElementById('methodologyLink');
 if(methodologyLink) methodologyLink.href=APP_BASE+'methodology/';
 
-/* Reads the view from the path. Falls back to the old ?view= parameter
-   so links shared before the permalinks still land on the right view. */
 function viewFromUrl(){
   const seg=window.location.pathname.slice(APP_BASE.length).replace(/\/$/,'');
   for(const name in VIEW_SLUGS){ if(VIEW_SLUGS[name]===seg) return name; }
   return new URLSearchParams(window.location.search).get('view');
 }
 
-/* Reads a poster slug from a /poster/<slug>/ path, or null when there is none */
 function posterFromUrl(){
   const m=window.location.pathname.slice(APP_BASE.length).match(/^poster\/([\w-]+)\/?$/);
   return m ? m[1] : null;
 }
 
-/* Points the address bar at the current view. The old ?view= parameter
-   is dropped, which also tidies a legacy link into its permalink. */
 function syncViewUrl(){
   if(!window.history || !history.replaceState) return;
   const url=new URL(window.location.href);
@@ -1865,9 +1521,7 @@ function showView(name, syncUrl){
     v.classList.toggle('active', on);
     v.hidden = !on;
   });
-  /* The axis icons are placed from getBBox, which reads zero on hidden
-     SVG. The matrix is usually drawn while hidden behind the timeline,
-     so the icons are placed again the moment it becomes visible. */
+
   if(name==='matrix') renderScatter(filtered());
   if(syncUrl) syncViewUrl();
 }
@@ -1876,44 +1530,32 @@ tabs.forEach(tab=>{
   tab.addEventListener('click',()=>showView(tab.id.replace('tab-',''), true));
 });
 
+
 /* ================================================
      Tooltip
    ================================================ */
 
-/* Positions the one shared bubble against whichever trigger is hovered
-   or focused, then clamps it so it can never cross the edge of its
-   container. GAP is the guaranteed breathing room at that edge.
-
-   The container is the reading column for a card, and the viewport for
-   anything inside an open poster, since the poster floats over a dark
-   overlay and has no column to respect. */
-const tip = document.getElementById('tip');
+const tip     = document.getElementById('tip');
 const TIP_GAP = 10;
-let tipFor = null;
+let tipFor    = null;
 
 function positionTip(el){
   const text = el.dataset.def || el.dataset.tip;
   if(!text) return;
   tipFor = el;
-  /* innerHTML rather than textContent: the datapoint tooltips are a
-     small structured block. Every string fed here is authored in
-     this file, never anything a reader supplied. */
+
   tip.innerHTML = text;
   tip.className = 'tip ' + (el.dataset.def ? 'tip-def' : 'tip-label')
     + (text.indexOf('tip-lede') > -1 ? ' tip-scores' : '');
-  /* Measure while laid out but still invisible, so nothing flashes at
-     the wrong coordinates before the clamp is applied. */
+
   tip.style.left = '0px';
   tip.style.top = '0px';
   tip.classList.add('show');
 
-  /* Anchor to the info icon when the trigger has one, so the bubble
-     and its point sit over the icon rather than over the middle of a
-     long label. */
-  const t = (el.querySelector('circle.axis-icon') || el).getBoundingClientRect();
-  const b = tip.getBoundingClientRect();
+  const t      = (el.querySelector('circle.axis-icon') || el).getBoundingClientRect();
+  const b      = tip.getBoundingClientRect();
   const column = el.closest('.poster') ? null : document.querySelector('.content');
-  const c = column ? column.getBoundingClientRect() : null;
+  const c      = column ? column.getBoundingClientRect() : null;
 
   const minX = Math.max(TIP_GAP, c ? c.left + TIP_GAP : TIP_GAP);
   const maxX = Math.min(window.innerWidth - TIP_GAP, c ? c.right - TIP_GAP : window.innerWidth - TIP_GAP);
@@ -1922,9 +1564,6 @@ function positionTip(el){
   if(x + b.width > maxX) x = maxX - b.width;
   if(x < minX) x = minX;
 
-  /* Above by default. Flip below only when there is no room, and when
-     neither side fits a tall bubble, take the roomier side and clamp it
-     into the viewport rather than letting it run off. */
   const roomAbove = t.top - TIP_GAP;
   const roomBelow = window.innerHeight - t.bottom - TIP_GAP;
   let y, placement;
@@ -1942,8 +1581,7 @@ function positionTip(el){
   tip.style.left = Math.round(x) + 'px';
   tip.style.top  = Math.round(y) + 'px';
   tip.classList.add(placement);
-  /* Keep the arrow pointing at the trigger even though the bubble may
-     have been pushed sideways by the clamp. */
+
   const arrow = Math.min(Math.max(t.left + t.width/2 - x, 12), b.width - 12);
   tip.style.setProperty('--arrow', Math.round(arrow) + 'px');
 }
@@ -1965,12 +1603,10 @@ function hideTip(){
     if(el && el === tipFor) hideTip();
   }, true);
 });
-/* A fixed bubble would otherwise sit still while the page moves under it. */
+
 window.addEventListener('scroll', hideTip, true);
 window.addEventListener('resize', hideTip);
 
-/* The matrix is drawn to its container's width, so a resize redraws it.
-   Debounced, since a drag fires resize many times a second */
 let scatterResize = null, scatterWidth = 0;
 window.addEventListener('resize', ()=>{
   clearTimeout(scatterResize);
@@ -1981,25 +1617,22 @@ window.addEventListener('resize', ()=>{
 });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') hideTip(); });
 
+
 /* ================================================
      Modal
    ================================================ */
-const overlay=document.getElementById('overlay');
-const poster=document.getElementById('poster');
-const closeBtn=document.getElementById('closeBtn');
-let lastFocus=null;
 
-/* True while the open poster added its own history entry, so closing it
-   steps back instead of stacking another entry */
+const overlay  = document.getElementById('overlay');
+const poster   = document.getElementById('poster');
+const closeBtn = document.getElementById('closeBtn');
+let lastFocus  = null;
+
 let posterPushed=false;
 
 function posterPath(slug){ return APP_BASE+'poster/'+slug+'/'; }
 
-/* The case a poster slug names, or undefined for an unknown slug */
 function caseBySlug(slug){ return CASES.find(c=>c.slug===slug); }
 
-/* Opens a case's poster. A click pushes the poster's permalink so Back
-   closes it; a direct load or the Back and Forward buttons pass push:false. */
 function openCase(id, opts={}){
   const c=CASES.find(x=>x.id===id); if(!c) return;
   lastFocus=document.activeElement;
@@ -2087,7 +1720,6 @@ function hidePoster(){
   if(lastFocus) lastFocus.focus();
 }
 
-/* Closes the poster and returns the address bar to the view underneath */
 function closeCase(){
   hidePoster();
   if(posterFromUrl()===null) return;
@@ -2095,7 +1727,6 @@ function closeCase(){
   else syncViewUrl();
 }
 
-/* Back closes a poster a click opened, and Forward reopens it */
 window.addEventListener('popstate',()=>{
   const linked=caseBySlug(posterFromUrl());
   posterPushed=false;
@@ -2103,20 +1734,19 @@ window.addEventListener('popstate',()=>{
   else if(overlay.classList.contains('open')) hidePoster();
 });
 
+
 /* ================================================
      Copy Link
    ================================================ */
 
-/* Copies the poster's full permalink and confirms on the button itself */
 async function copyPosterLink(e){
-  const btn=e.currentTarget;
-  const link=new URL(posterPath(btn.dataset.slug), window.location.origin).href;
-  let ok=false;
+  const btn  = e.currentTarget;
+  const link = new URL(posterPath(btn.dataset.slug), window.location.origin).href;
+  let ok     = false;
   try{
     await navigator.clipboard.writeText(link);
     ok=true;
   }catch(err){
-    /* Older browsers and insecure origins lack the async clipboard */
     const area=document.createElement('textarea');
     area.value=link; area.setAttribute('readonly','');
     area.style.position='fixed'; area.style.opacity='0';
@@ -2129,33 +1759,34 @@ async function copyPosterLink(e){
   btn._reset=setTimeout(()=>{ btn.textContent='Copy link'; },2000);
 }
 
+
 /* ================================================
      PNG Export
    ================================================ */
+
 async function downloadPoster(e){
   const btn=e.currentTarget;
   if(typeof html2canvas==='undefined'){
     alert("The image library didn't load (it comes from a CDN). Check your connection and reopen this file.");
     return;
   }
-  const label=btn.dataset.alias||'model';
-  const original=btn.innerHTML;
+  const label    = btn.dataset.alias||'model';
+  const original = btn.innerHTML;
   btn.disabled=true; btn.innerHTML='Rendering&hellip;';
   const copyBtn=document.getElementById('copyBtn');
   closeBtn.style.visibility='hidden';
   btn.style.visibility='hidden';
   if(copyBtn) copyBtn.style.visibility='hidden';
-  /* Drops the glossary's dotted rules for the capture. A tooltip cannot
-     open in a PNG, so the cue would be pointing at nothing. */
+
   poster.classList.add('exporting');
   hideTip();
   try{
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
-    const canvas=await html2canvas(poster,{
+    const canvas = await html2canvas(poster,{
       backgroundColor:getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()||'#e6ddc6',
       scale:2, useCORS:true, logging:false
     });
-    const link=document.createElement('a');
+    const link   = document.createElement('a');
     link.download=`wanted-${label}.png`;
     link.href=canvas.toDataURL('image/png');
     link.click();
@@ -2174,19 +1805,15 @@ closeBtn.addEventListener('click',closeCase);
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeCase(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.contains('open')) closeCase(); });
 
+
 /* ================================================
      Site Header Mobile Menu
    ================================================ */
 
-/* One change listener on the checkbox, and nothing else. The <label>
-   toggles the checkbox natively, so there is deliberately no click
-   handler on .menu-toggle; adding one and calling preventDefault
-   cancels the label's default behavior and breaks the drawer on
-   iPhone Safari. */
 (function(){
   const checkbox = document.getElementById('menu-toggle-checkbox');
-  const menu = document.querySelector('.nav-primary .menu');
-  const toggle = document.querySelector('.menu-toggle');
+  const menu     = document.querySelector('.nav-primary .menu');
+  const toggle   = document.querySelector('.menu-toggle');
   if(!checkbox || !menu) return;
   checkbox.addEventListener('change', function(){
     if(this.checked) menu.classList.add('visible');
@@ -2195,22 +1822,17 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.
   });
 })();
 
+
 /* ================================================
      Init
    ================================================ */
+
 applyFilters();
-/* Honour a shared permalink. Runs after the first render so both panels
-   already hold content when one of them is revealed. Syncing the URL
-   turns a legacy ?view= link into its permalink. */
-/* A /poster/<slug>/ link opens on the timeline with that poster up. An
-   unknown slug falls back to the plain page and drops the segment. */
+
 const startCase=caseBySlug(posterFromUrl());
 showView(viewFromUrl(), !startCase);
 if(startCase) openCase(startCase.id,{push:false});
 
-/* Oswald usually arrives after the first paint, so the charts are drawn
-   a second time once it has. That re-measures the dot labels and the
-   lab names in the real font and places the axis icons again. */
 if(document.fonts && document.fonts.ready){ document.fonts.ready.then(()=>{ renderScatter(filtered()); renderLabChart(filtered()); }); }
 </script>
 </body>

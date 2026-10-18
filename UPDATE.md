@@ -84,7 +84,7 @@ deploying.
 
 ## The case schema
 
-Every case is one object in the `CASES` array near the top of the script block in `index.html`. There is a comment there marking where to append.
+Every case is one object in the `CASES` array near the top of the script block in `index.html`, and the table below is the only record of its fields.
 
 | Field | Where it shows | Constraints |
 |---|---|---|
@@ -245,7 +245,7 @@ Say what a model did and did not do. Do not grade the lab's response, its transp
 
 Suggestive rather than directive for anything diagnostic. The `caution` field in particular should say what the model did and did not do, not deliver a verdict.
 
-The quadrant labels on the scatter each name a kind of offender rather than an outcome. That rule is recorded in a comment above them. If a label is ever reworded, keep it an actor.
+The quadrant labels on the scatter each name a kind of offender rather than an outcome. If a label is ever reworded, keep it an actor.
 
 Nothing on the page tells the reader to tap anything. The controls say what they produce through their own tooltips, meaning "Wanted poster" on a card and "Open X's wanted poster" on a scatter point. Keep those concrete, and do not reintroduce a prose instruction to replace them.
 
