@@ -2,12 +2,13 @@
 
 Branch: `standards-format-js`
 
-The second formatting step. Read "Formatting comes first" in the README before anything else. The app's own JavaScript ends this step reading the way AI Strategy's scripts read.
+The second formatting step. Read "Formatting comes first" in the README before anything else. `index.html`'s inline script ends this step reading the way AI Strategy's scripts read. Under decision 31, Methodology's 18-line script and the `js` hook entry moved to step 9B, which replaces that script with a shared file and moves `index.html`'s into `js/`.
 
 ## Decisions this step reads
 
 - Decision 1a (staging), recorded 2026-10-16.
 - Decision 27 (how a formatting step reaches production) and decision 28 (the pre-commit hook), recorded in the README. Stop if either is blank.
+- Decision 31 (split the page right after this step), recorded 2026-10-17.
 
 ## Background
 
@@ -38,24 +39,24 @@ Work on each block as a scratch `.js` file in the session scratchpad, then put i
 
 The block gets no About This File section of its own. Step F4 gives each page one, and step 9B gives each script file it creates one.
 
-In the last commit, add `js` to `scripts/git-hooks/format-languages` (under decision 28a).
+Under decision 31, step 9B adds `js` to `scripts/git-hooks/format-languages` once every JavaScript file it creates passes the gate.
 
 ## The sample-file review gate
 
-- JavaScript: The `index.html` block is the sample, the code with the most findings and every pattern the rule covers (declarations, nested objects, event maps, promise chains, template strings, and long comment blocks). Run all three passes on it and stop for approval before the Methodology block.
+- JavaScript: The `index.html` block is the sample, the code with the most findings and every pattern the rule covers (declarations, nested objects, event maps, promise chains, template strings, and long comment blocks). Run all three passes on it and stop for approval. The Methodology block moved to step 9B.
 - HTML: The only change to either page is its script block, so `index.html` is the sample here too. Show its diff with the JavaScript sample.
 
 ## Proving it
 
-- For each block, `python3 -I ~/.claude/formatting-tools/verify_equivalent.py js` passes on the scratch file against the block on `main`, and `node --check` passes on the scratch file.
+- `python3 -I ~/.claude/formatting-tools/verify_equivalent.py js` passes on the scratch file against the block on `main`, and `node --check` passes on the scratch file.
 - `git diff main -- index.html` touches no line of `CASES` or `GLOSSARY`, and the five check scripts exit 0.
 - Both suites pass with the same counts before every commit. The browser suite opens the tabs, filters, a poster, and the glossary bubbles, so it catches a script that no longer runs.
 - `scripts/screenshot-diff/run.sh main standards-format-js` reports zero changed pixels, and `scripts/check_overlaps.py` reports no overlaps.
-- `check_format.py` exits 0 on each scratch file outside `CASES` and `GLOSSARY`, and `check_style.py` reports 51.
+- `check_format.py` finds nothing in the scratch file outside `CASES` and `GLOSSARY` but the missing About section, which step 9B adds, and `check_style.py` reports 52 (F3's 51 docstring issues and the one in Methodology's script, which step 9B deletes).
 
 ## Done when
 
-Each block passes `verify_equivalent.py js` and `node --check`, `check_format.py` passes on both blocks apart from `CASES` and `GLOSSARY`, which are unchanged, the screenshot diff shows no change, both suites pass with the same counts, and `check_style.py` reports 51.
+The `index.html` block passes `verify_equivalent.py js` and `node --check`, `check_format.py` finds nothing outside `CASES` and `GLOSSARY` but the About section, the data is unchanged, the screenshot diff shows no change, both suites pass with the same counts, and `check_style.py` reports 52.
 
 ## Rollback
 
@@ -71,7 +72,7 @@ first", then ~/.claude/rules/formatting/code-formatting.md,
 ~/.claude/formatting-examples/04-javascript.js, and
 ~/.claude/formatting-tools/HANDOFF-prompt.md. Open AI Strategy's
 leaderboard_assistant/static/js/network.js and static/js/page-tools.js as
-the model. Decisions 1, 27, and 28 apply; stop if 27 or 28 is blank.
+the model. Decisions 1, 27, 28, and 31 apply; stop if 27 or 28 is blank.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
@@ -91,21 +92,21 @@ a stop because a filetype changes in only one file.
    js/html2canvas.min.js alone.
 4. Sample-file review gate (JavaScript and HTML): run the three passes on
    the index.html block (alignment and spacing, dead code and history,
-   then deleting every label comment, keeping only the section banners
-   and the CASES field comment), one commit per pass, writing it back
+   then deleting every label comment, keeping only the section banners),
+   one commit per pass, writing it back
    between its tags. Prove it with verify_equivalent.py js and node
    --check on the scratch file, and git diff main -- index.html showing
    no line of CASES or GLOSSARY changed. Give me a clickable link to
    index.html, a short summary, a linked file listing the full text of
    every comment you deleted, and the git diff command, then STOP until I
    approve. Carry any correction I ask for.
-5. On approval, do the methodology/index.html block the same way, then add
-   js to scripts/git-hooks/format-languages in the last commit.
-6. Prove it: verify_equivalent.py js and node --check on both blocks, the
+5. Under decision 31, leave the methodology/index.html block and the js
+   hook entry for step 9B.
+6. Prove it: verify_equivalent.py js and node --check on the block, the
    five check scripts (exit 0), both suites (same counts), the screenshot
-   diff (zero changed pixels), check_overlaps.py, check_format.py on both
-   scratch files outside CASES and GLOSSARY, and check_style.py (51), each
-   gated on its exit code.
+   diff (zero changed pixels), check_overlaps.py, check_format.py on the
+   scratch file outside CASES and GLOSSARY (only the About section, which
+   step 9B adds), and check_style.py (52), each gated on its exit code.
 7. Push, deploy the branch to staging with the README command, and run
    the staging health check.
 8. Report what you verified and how, give me the staging links with a
@@ -142,6 +143,6 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    and the merge commit, commit, and push to main.
 7. Give me https://www.annielytics.com/tools/models-gone-wild/ and
    https://www.annielytics.com/tools/models-gone-wild/poster/sol-hugging-face/
-   to spot-check. Then tell me the next step is step F3, whose prompt is at
-   the bottom of docs/standards-cleanup/f3-python.md.
+   to spot-check. Then tell me the next step is step 9A, whose prompt is at
+   the bottom of docs/standards-cleanup/09a-case-data.md.
 ```

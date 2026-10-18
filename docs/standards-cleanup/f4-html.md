@@ -19,11 +19,11 @@ Measured with `audit_format.py` and `check_format.py` on 2026-10-17, read only. 
 | `index.html` | 2,216 | 15 | 12 | 12 | 33 |
 | `methodology/index.html` | 155 | 5 | 3 | 3 | 1 |
 
-Neither has an About This File section, and both end with a newline. Most of `index.html`'s banner problems are the inline script's banners, which step F2 fixes, so rerun the audit at the start.
+Neither has an About This File section, and both end with a newline. Most of `index.html`'s banner problems were the inline script's banners, which steps F2 and 9B removed from the page, so rerun the audit at the start.
 
 The rule turns HTML comments into Jinja comments so none reaches the page source. These pages have no Jinja, so decision 26 deletes all 20 instead. Step F2 already deleted the 15 in `index.html`, at Annie's request on 2026-10-17, so this step deletes Methodology's 5. Two of them carry a warning that keeps a line from being "fixed" wrongly. The page's paths stay relative because it is served under `/tools/models-gone-wild/`, and `.menu-toggle` must never get a click handler because that breaks the menu on iPhone Safari. Under decision 29a, each page's About section keeps those two as one-line notes.
 
-The markup is indented two spaces per level, and the contents of `<head>` and `<body>` start at column 0. The rule wants four spaces per level, with each tag inside another indented four from it. The inline `<script>` block keeps its lines exactly as step F2 left them since `CASES` and `GLOSSARY` sit inside it and the case loaders depend on their indentation.
+The markup is indented two spaces per level, and the contents of `<head>` and `<body>` start at column 0. The rule wants four spaces per level, with each tag inside another indented four from it. Step 9B moved every inline script into `js/` under decision 31, so the pages hold markup only.
 
 The model is AI Strategy's `templates/base.html` and `templates/index.html`. This app has no base template, so `index.html`, the page that carries the shared site header, stands in for it. The rules are the HTML section of `~/.claude/rules/formatting/code-formatting.md`, and the worked example is `~/.claude/formatting-examples/05-html-jinja.html`. Annie rejected stacked attributes on 2026-10-13, so every tag stays on one line, however long, with its attributes in their original order.
 
@@ -31,8 +31,8 @@ The model is AI Strategy's `templates/base.html` and `templates/index.html`. Thi
 
 One commit per pass, all of them on the sample first.
 
-1. Layout: Four spaces per level, with nested tags indented four from their parent. A tag split across lines is joined back onto one line. The inline `<script>` and its contents are left as they are.
-2. Comments: Delete every `<!-- -->` comment outright (decision 26), printing each one removed. The `/* */` and `//` comments inside the inline script stay, as step F2 left them.
+1. Layout: Four spaces per level, with nested tags indented four from their parent. A tag split across lines is joined back onto one line.
+2. Comments: Delete every `<!-- -->` comment outright (decision 26), printing each one removed. Only Methodology's 5 remain, since step F2 deleted `index.html`'s.
 3. About This File: Under decision 29a, add a short About This File banner as an HTML comment just below `<!DOCTYPE html>`, in the comment-style banner format, saying what the page is, with the two one-line warnings above. Under decision 29b, add none.
 4. The guard: Add a test to `tests/test_static.py` that fails if either page holds any HTML comment other than its About banner (or any at all under decision 29b), so a comment cannot come back.
 
@@ -88,8 +88,8 @@ a stop because a filetype changes in only one file.
    audit_format.py on both pages, and save every page and view as served
    by scripts/serve.py on main.
 3. Sample-file review gate (HTML): apply every pass to index.html (layout
-   to four spaces with the inline script untouched, every <!-- -->
-   comment deleted, and the About This File banner under decision 29),
+   to four spaces, any <!-- --> comment deleted, and the About This File
+   banner under decision 29),
    one commit per pass. Prove it with verify_equivalent.py html and the
    served-page comparison. Give me a clickable link, a short summary,
    every comment you deleted, and the git diff command, then STOP until I
