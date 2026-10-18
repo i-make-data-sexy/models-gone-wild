@@ -4,9 +4,10 @@
 
 # Tests that read the shipped files directly, with no server. They turn
 # the copy-and-paste checks in UPDATE.md into tests, keep the two copies
-# of the site header in step, keep every HTML comment but the About This
-# File section out of the pages, and guard against a POST form or a
-# cookie ever appearing, which would make the audit's CSRF finding real.
+# of the site header in step, keep the pages' HTML comments to the About
+# section and the page banner above <html>, and guard against a POST form
+# or a cookie ever appearing, which would make the audit's CSRF finding
+# real.
 
 
 
@@ -211,9 +212,9 @@ def test_site_headers_match() -> None:
 
 
 @pytest.mark.parametrize("path", PAGES, ids=lambda path: str(path.relative_to(REPO)))
-def test_only_about_comments(path: Path) -> None:
+def test_comments_only_above_html(path: Path) -> None:
     """
-    Checks a page's only HTML comments are its About This File section
+    Checks a page opens with its About banner and holds no comment inside <html>
 
     Args:
         path (Path): The page to read
@@ -222,9 +223,9 @@ def test_only_about_comments(path: Path) -> None:
         None
     """
 
-    about, _, rest = read(path).partition("<html")
-    assert "About This File" in about
-    assert re.sub(r"<!--.*?-->", "", about, flags=re.S).split() == ["<!DOCTYPE", "html>"]
+    top, _, rest = read(path).partition("<html")
+    assert "About This File" in top.split("-->", 1)[0]
+    assert re.sub(r"<!--.*?-->", "", top, flags=re.S).split() == ["<!DOCTYPE", "html>"]
     assert "<!--" not in rest
 
 
