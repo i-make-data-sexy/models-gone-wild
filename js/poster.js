@@ -144,15 +144,34 @@ async function copyPosterLink(e){
      PNG Export
    ================================================ */
 
+let html2canvasLoading=null;
+
+function loadHtml2canvas(){
+  if(typeof html2canvas!=='undefined') return Promise.resolve();
+  if(!html2canvasLoading){
+    html2canvasLoading=new Promise((resolve,reject)=>{
+      const script=document.createElement('script');
+      script.src=APP_BASE+'js/vendor/html2canvas.min.js';
+      script.addEventListener('load',()=>resolve());
+      script.addEventListener('error',()=>{ script.remove(); html2canvasLoading=null; reject(new Error('html2canvas did not load')); });
+      document.head.appendChild(script);
+    });
+  }
+  return html2canvasLoading;
+}
+
 async function downloadPoster(e){
   const btn=e.currentTarget;
-  if(typeof html2canvas==='undefined'){
-    alert("The image library didn't load (it comes from a CDN). Check your connection and reopen this file.");
-    return;
-  }
   const label    = btn.dataset.alias||'model';
   const original = btn.innerHTML;
   btn.disabled=true; btn.innerHTML='Rendering&hellip;';
+  try{
+    await loadHtml2canvas();
+  }catch(err){
+    btn.disabled=false; btn.innerHTML=original;
+    alert("The image library didn't load. Check your connection and try again.");
+    return;
+  }
   const copyBtn=document.getElementById('copyBtn');
   closeBtn.style.visibility='hidden';
   btn.style.visibility='hidden';
