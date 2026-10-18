@@ -110,13 +110,15 @@ every finding, and re-run the formatter where a change moved a column.
    reminder to hard-refresh and to download one poster, and STOP. Do not
    merge to main or touch production until I say so.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/08-design-tokens.md, copied exactly.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/08-design-tokens.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once you are happy with the step 8 report. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter at the end of the step 8 report. It needs no edits.
 
 ```
 Ship step 8 (design tokens, pass A) of the Models Gone Wild standards
@@ -137,5 +139,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 6. Mark step 8 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 7. Tell me the next step is step 10A (step 8B is skipped under decision
-   13a), whose prompt is at the bottom of docs/standards-cleanup/10a-self-host-fonts.md.
+   13a), and paste its build prompt from the bottom of
+   docs/standards-cleanup/10a-self-host-fonts.md in full, so I can start
+   the next session with it.
 ```

@@ -83,13 +83,15 @@ every finding, and re-run the formatter where a change moved a column.
 7. Report what you verified and how, and STOP. Do not merge to main or touch
    production until I say so.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/06-comment-style.md, copied exactly.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/06-comment-style.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once you are happy with the step 6 report. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter at the end of the step 6 report. It needs no edits.
 
 ```
 Ship step 6 (comment style) of the Models Gone Wild standards cleanup to
@@ -107,6 +109,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 4. Switch staging back to main with the README command.
 5. Mark step 6 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
-6. Tell me the next step is step 7, whose prompt is at the bottom of
-   docs/standards-cleanup/07-split-css.md.
+6. Tell me the next step is step 7, and paste its build prompt
+   from the bottom of docs/standards-cleanup/07-split-css.md in full, so I can
+   start the next session with it.
 ```

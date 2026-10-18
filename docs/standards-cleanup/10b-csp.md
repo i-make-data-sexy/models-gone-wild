@@ -113,13 +113,15 @@ every finding, and re-run the formatter where a change moved a column.
     poster, and check GTM Preview mode and GA4 Realtime for the visit. Then
     STOP. Do not merge to main or touch production until I say so.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/10b-csp.md, copied exactly.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/10b-csp.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once the console and Tag Assistant on staging are clean. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter, once the console and Tag Assistant on staging are clean. It needs no edits.
 
 ```
 Ship step 10B (Content Security Policy and the analytics tag) of the
@@ -149,6 +151,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 6. Switch staging back to main with the README command.
 7. Mark step 10B done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
-8. Tell me the next step is step 11, whose prompt is at the bottom of
-   docs/standards-cleanup/11-layout.md.
+8. Tell me the next step is step 11, and paste its build prompt
+   from the bottom of docs/standards-cleanup/11-layout.md in full, so I can
+   start the next session with it.
 ```

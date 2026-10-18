@@ -123,14 +123,15 @@ a stop because a filetype changes in only one file.
    touch production until I say so. The one exception is decision 27b:
    then run the ship prompt below yourself once every check passes.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/f7-python-structure.md, copied
-exactly, so I can paste it.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/f7-python-structure.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once you are happy with the step F7 report. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter at the end of the step F7 report. It needs no edits.
 
 ```
 Ship step F7 (Python structure and type hints) of the Models Gone Wild
@@ -150,5 +151,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 5. Mark step F7 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 6. Tell me the formatting steps are finished and the next step is step 4,
-   whose prompt is at the bottom of docs/standards-cleanup/04-root-files.md.
+   and paste its build prompt from the bottom of
+   docs/standards-cleanup/04-root-files.md in full, so I can start the
+   next session with it.
 ```

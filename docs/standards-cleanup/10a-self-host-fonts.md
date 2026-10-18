@@ -99,13 +99,15 @@ every finding, and re-run the formatter where a change moved a column.
    document.fonts console line to run, and STOP. Do not merge to main or
    touch production until I say so.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/10a-self-host-fonts.md, copied exactly.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/10a-self-host-fonts.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once the fonts check out on staging. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter, once the fonts check out on staging. It needs no edits.
 
 ```
 Ship step 10A (serve the fonts from the app) of the Models Gone Wild
@@ -132,6 +134,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    and the merge commit, commit, and push to main. Update the Models Gone
    Wild row in ~/.claude/rules/design/self-host-google-fonts.md's table to
    say it is fixed in production, with the merge commit.
-8. Tell me the next step is step 10B, whose prompt is at the bottom of
-   docs/standards-cleanup/10b-csp.md.
+8. Tell me the next step is step 10B, and paste its build prompt
+   from the bottom of docs/standards-cleanup/10b-csp.md in full, so I can
+   start the next session with it.
 ```
