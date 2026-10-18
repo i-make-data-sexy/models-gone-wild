@@ -6,15 +6,25 @@ Claude Code: read this entire file before taking any deployment action. Never pr
 
 ## What this app is
 
-Two HTML pages, one stylesheet, the case data in two scripts, and one vendored JavaScript library.
+Two HTML pages, one stylesheet, the case data in two scripts, the page's behavior in ten more, and one vendored JavaScript library.
 
 ```
-index.html                    the page: markup and behavior
+index.html                    the page's markup, loading the scripts below in order
 methodology/index.html        the Methodology page, explaining each filter
 css/styles.css                the stylesheet both pages share
 js/cases.js                   the case registry, CASES
 js/glossary.js                the glossary, GLOSSARY
-js/vendor/html2canvas.min.js  powers the "download poster" button
+js/labels.js                  the labels, notes, and icons the cards and posters show
+js/text.js                    the glossary markup and date helpers
+js/mugshot.js                 the booking photos, drawn as SVG
+js/timeline.js                the filters and the timeline view
+js/charts.js                  the Threat Matrix and Cases by Lab charts
+js/views.js                   applying the filters, the options menu, and the tabs
+js/tooltip.js                 the glossary and info-note tooltip
+js/poster.js                  the poster, its permalink, Copy link, and Download poster
+js/menu.js                    the mobile menu, shared with the Methodology page
+js/main.js                    starts the page, and loads last
+js/vendor/html2canvas.min.js  powers Download poster, loaded on its first press
 DEPLOY.md                     this file
 .gitignore
 ```
@@ -45,7 +55,7 @@ Do not create a systemd service for this app. There is no process to supervise.
 
 Four things have to be true before a deploy:
 
-- Every path to a local file in `index.html` is relative, never starting with a slash. See the next section.
+- Every path to a local file in the two pages is relative, never starting with a slash. See the next section.
 - The page opens correctly from a local web server, not just by double-clicking the file.
 - `git status` is clean and the work is committed on a branch.
 - The branch has been merged to main, since the server pulls main.
@@ -113,7 +123,7 @@ location ~ ^/tools/models-gone-wild/(threat-matrix|lab-counts)$ {
 # the browser requests as /threat-matrix/css/styles.css and so on. `last`
 # reruns location matching on the rewritten URI, so the 404, cache, and
 # .git rules all still apply to it. Keep the slug list in step with
-# VIEW_SLUGS in index.html and scripts/serve.py.
+# VIEW_SLUGS in js/views.js and scripts/serve.py.
 location ~ ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/ {
     rewrite ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/(.*)$ /tools/models-gone-wild/$1 last;
 }
@@ -121,7 +131,7 @@ location ~ ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/ {
 # The wanted-poster permalinks, /poster/<slug>/. Same page again, with
 # the poster read from the URL by the page's script, so they get the same
 # trailing-slash 301 and the same strip-and-rematch as the views. Keep the
-# slug pattern in step with posterFromUrl in index.html and scripts/serve.py.
+# slug pattern in step with posterFromUrl in js/views.js and scripts/serve.py.
 location ~ ^/tools/models-gone-wild/poster/([a-z0-9-]+)$ {
     return 301 /tools/models-gone-wild/poster/$1/;
 }
@@ -150,8 +160,7 @@ location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
 # walked out of the directory.
 location ~* ^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
     alias /home/anniecushing/apps/models-gone-wild/$1/$2;
-    expires 30d;
-    add_header Cache-Control "public, no-transform";
+    add_header Cache-Control "public, max-age=2592000, no-transform";
     include snippets/models-gone-wild-headers.conf;
 }
 
@@ -330,8 +339,7 @@ location ~* ^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|s
     deny all;
 
     alias /home/anniecushing/apps/staging/models-gone-wild/$1/$2;
-    expires 30d;
-    add_header Cache-Control "public, no-transform";
+    add_header Cache-Control "public, max-age=2592000, no-transform";
     include snippets/models-gone-wild-headers-staging.conf;
 }
 
@@ -378,7 +386,7 @@ If the current branch holds work Annie has not signed off on, stop and ask.
 
 The page 404s at the prefix but the file is on disk. Check that the `location` and `alias` trailing slashes match, then confirm nginx can traverse into `/home/anniecushing/apps/models-gone-wild/`.
 
-The page loads but the download button does nothing. The vendored library failed to load. Open the browser console, then request the js URL directly with curl. A 404 usually means a leading slash crept back into the script tag.
+Download poster shows "The image library didn't load". `js/poster.js` loads the vendored library on the first press, from `APP_BASE` plus `js/vendor/html2canvas.min.js`. Open the browser console, then request that URL directly with curl at the origin. A 404 means the file or the asset block moved.
 
 Fonts fall back to a plain monospace face. The page reaches out to `fonts.googleapis.com`, so check whether a Content-Security-Policy header on `annielytics.com` is blocking it. Nothing in this app sets a CSP, so any policy comes from the server config.
 
