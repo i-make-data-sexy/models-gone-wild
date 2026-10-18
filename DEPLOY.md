@@ -6,17 +6,20 @@ Claude Code: read this entire file before taking any deployment action. Never pr
 
 ## What this app is
 
-One self-contained HTML page plus one vendored JavaScript library.
+Two HTML pages, one stylesheet, the case data in two scripts, and one vendored JavaScript library.
 
 ```
-index.html                  the whole app: markup, CSS, data, and behavior
-methodology/index.html      the Methodology page, explaining each filter
-js/html2canvas.min.js       powers the "download poster" button
-DEPLOY.md                   this file
+index.html                    the page: markup and behavior
+methodology/index.html        the Methodology page, explaining each filter
+css/styles.css                the stylesheet both pages share
+js/cases.js                   the case registry, CASES
+js/glossary.js                the glossary, GLOSSARY
+js/vendor/html2canvas.min.js  powers the "download poster" button
+DEPLOY.md                     this file
 .gitignore
 ```
 
-The case data lives in a `CASES` array near the top of the script block in `index.html`. Adding an escapee means appending an object to that array and pushing. There is no admin screen and no database, by design.
+The case data lives in the `CASES` array in `js/cases.js`, and the glossary in `GLOSSARY` in `js/glossary.js`. Adding an escapee means appending an object to that array and pushing. There is no admin screen and no database, by design.
 
 ## App variables
 
@@ -49,7 +52,7 @@ Four things have to be true before a deploy:
 
 ## CRITICAL: the one URL rule that still matters
 
-The app is served at `/tools/models-gone-wild/`, not at the site root. That makes any path beginning with a slash a bug. A tag written as `src="/js/html2canvas.min.js"` resolves to `annielytics.com/js/html2canvas.min.js` and returns a 404, while `src="js/html2canvas.min.js"` correctly resolves to `annielytics.com/tools/models-gone-wild/js/html2canvas.min.js`.
+The app is served at `/tools/models-gone-wild/`, not at the site root. That makes any path beginning with a slash a bug. A tag written as `src="/js/cases.js"` resolves to `annielytics.com/js/cases.js` and returns a 404, while `src="js/cases.js"` correctly resolves to `annielytics.com/tools/models-gone-wild/js/cases.js`.
 
 None of the Python prefix machinery applies here. There is no `SCRIPT_NAME`, no `request.script_root`, no `url_for`, and no app-prefix meta tag, because there is no Flask to read them. Relative paths are the entire solution.
 
@@ -140,18 +143,21 @@ location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
     return 404;
 }
 
-# Unchanging assets cache hard. Also a regex, so it beats the prefix
-# block below, and the filename character class cannot express ".."
-# so it cannot be walked out of the directory.
-location ~* ^/tools/models-gone-wild/(js|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
+# Unchanging assets cache hard: the vendored library and the images.
+# The app's own scripts in js/ change with every case, so they are left
+# to the page block below. Also a regex, so it beats the prefix block,
+# and the filename character class cannot express ".." so it cannot be
+# walked out of the directory.
+location ~* ^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
     alias /home/anniecushing/apps/models-gone-wild/$1/$2;
     expires 30d;
     add_header Cache-Control "public, no-transform";
     include snippets/models-gone-wild-headers.conf;
 }
 
-# The page itself. It carries the case data inline, so a stale copy is a
-# wrong copy and it must never be cached.
+# The page itself, its stylesheet, and the app's own scripts, which
+# carry the case data, so a stale copy is a wrong copy and none of them
+# may be cached.
 #
 # The two ifs move links shared before the permalinks, when a view was a
 # ?view= parameter, to their permalink for good. An if whose only job is
@@ -173,7 +179,7 @@ The trailing slashes on both the `location` and the `alias` have to match. Dropp
 
 `try_files` is deliberately absent. The `alias` plus `index` pair already serves the page, a missing file 404s on its own, and `try_files` combined with `alias` has a long-standing resolution quirk. Adding it back buys nothing.
 
-The `css/` directory needs no rule of its own. The asset regex above covers `js/` and `img/` only, so a request for `css/styles.css` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheet changes whenever the design does, and a hard-cached copy would strand readers on an old one. Do not add `css` to the asset regex without also solving cache-busting.
+The `css/` directory and the app's own scripts in `js/` need no rule of their own. The asset regex above covers `js/vendor/` and `img/` only, so a request for `css/styles.css` or `js/cases.js` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheet changes whenever the design does and the data scripts change with every case, and a hard-cached copy would strand readers on an old one. Do not widen the asset regex to `css` or all of `js` without also solving cache-busting.
 
 The clone's `.git` directory and `.gitignore` need no rule here. The config already carries a `location ~ /\.git` block further down, and regex locations outrank the prefix block above.
 
@@ -191,7 +197,7 @@ Run this on the server, which bypasses Cloudflare by talking to nginx directly:
 
 ```bash
 H="Host: www.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
-for f in "" "methodology/" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "poster/sol-hugging-face/" "poster/sol-hugging-face/css/styles.css" "poster/sol-hugging-face/js/html2canvas.min.js" "poster/sol-hugging-face/DEPLOY.md" "js/html2canvas.min.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
+for f in "" "methodology/" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "poster/sol-hugging-face/" "poster/sol-hugging-face/css/styles.css" "poster/sol-hugging-face/js/vendor/html2canvas.min.js" "poster/sol-hugging-face/DEPLOY.md" "js/vendor/html2canvas.min.js" "js/cases.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
   printf "%-28s %s\n" "/$f" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B/$f")"
 done
 printf "%-28s %s\n" "bare path" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B")"
@@ -201,7 +207,7 @@ for q in "matrix" "labs"; do
 done
 ```
 
-Expected results, in order. The page, the Methodology page, and both view permalinks are 200, the stylesheet requested through a permalink is 200, the poster permalink and its stylesheet and script are 200, `DEPLOY.md` requested through the poster path is 404, both assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, the bare path is 301, and the bare poster path is 301 to `/poster/sol-hugging-face/`. The two old `?view=` links are 301 to `/threat-matrix/` and `/lab-counts/`. The redirect URL prints as `https://127.0.0.1/...`, since curl builds it from the address it called; the path is what to check.
+Expected results, in order. The page, the Methodology page, and both view permalinks are 200, the stylesheet requested through a permalink is 200, the poster permalink and its stylesheet and script are 200, `DEPLOY.md` requested through the poster path is 404, the three assets are 200, `DEPLOY.md` is 404, `.git/config` is 403, the bare path is 301, and the bare poster path is 301 to `/poster/sol-hugging-face/`. The two old `?view=` links are 301 to `/threat-matrix/` and `/lab-counts/`. The redirect URL prints as `https://127.0.0.1/...`, since curl builds it from the address it called; the path is what to check.
 
 Wait a couple of seconds after `systemctl reload nginx` before running this. A reload leaves the old workers draining, so a check fired immediately can still be answered by a worker running the previous config and show a stale result.
 
@@ -314,9 +320,10 @@ location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
     return 404;
 }
 
-# Unchanging assets cache hard. A regex beats the prefix block
-# below, and the extension whitelist keeps it to real assets.
-location ~* ^/tools/models-gone-wild/(js|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
+# Unchanging assets cache hard: the vendored library and the images.
+# A regex beats the prefix block below, and the extension whitelist
+# keeps it to real assets.
+location ~* ^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
     satisfy any;
     allow 127.0.0.1;
     allow ::1;
@@ -328,8 +335,9 @@ location ~* ^/tools/models-gone-wild/(js|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp
     include snippets/models-gone-wild-headers-staging.conf;
 }
 
-# The page itself. The case data lives inline, so a stale copy is a
-# wrong copy and it must never be cached.
+# The page itself, its stylesheet, and the app's own scripts, which
+# carry the case data, so a stale copy is a wrong copy and none of them
+# may be cached.
 location /tools/models-gone-wild/ {
     satisfy any;
     allow 127.0.0.1;

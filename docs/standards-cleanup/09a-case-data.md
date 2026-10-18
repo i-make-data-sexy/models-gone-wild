@@ -19,7 +19,7 @@ These read the cases by matching `<script>(.*?)</script>` in `index.html`, each 
 - Step 3 of the add-case skill (line 27), in both copies. `scout/SCOUT.md` loads the cases "with the snippet in Step 1" of that skill.
 - Step 1's `tests/test_static.py`, which carries the two `UPDATE.md` checks.
 
-`check_quotes.py` scans the whole of `index.html` for single-quoted quotations, so it has to scan the data file too. `check_overlaps.py` symlinks the whole repo and renders the page, so it keeps working.
+`check_quotes.py` scans the `CASES` span of `index.html` for single-quoted quotations, so it has to scan the data files instead. The script left in the page holds code, not copy, so it is not scanned. `check_overlaps.py` symlinks the whole repo and renders the page, so it keeps working.
 
 Two scout branches from 2026-10-07, `update/claude` and `update/sol`, edit `CASES` inside `index.html`. Merged after this step, they would put cases back in the wrong place, so decision 11 settles them first.
 
@@ -32,7 +32,7 @@ Nginx hard-caches everything under `js/` and `img/` for 30 days (`expires 30d`, 
    - `git mv js/html2canvas.min.js js/vendor/html2canvas.min.js`, move `js/VENDORED.md` beside it, and update the `<script src>`, the hash test, and `DEPLOY.md`.
    - Narrow the asset rule on both servers to `^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$`, aliasing `/home/anniecushing/apps/<staging/>models-gone-wild/$1/$2`, so `js/*.js` falls through to the no-cache page block like `css/`.
 3. Under decision 14a, move `CASES` into `js/cases.js`, and `GLOSSARY` into `js/glossary.js`, as plain scripts with the same object syntax. Give each an About This File section. Under decision 30a, align the data as it moves (48 uneven runs in `CASES` and 1 in `GLOSSARY` on 2026-10-17), re-indent it to four spaces under decision 31, and update every pattern that reads the unaligned form, so the skill and the scout write aligned cases. Those patterns are in the loader in step 4, `tests/test_static.py`, `UPDATE.md`'s snippets, `check_quotes.py`'s `aka:` match, and both copies of the add-case skill. Under 30b, move the data byte for byte. Load both from `index.html` with relative `<script src>` tags before the inline script, so its top-level code sees them as before.
-4. Add `scripts/cases.py` with one loader, `load_cases_js()`, that returns the case source from `js/cases.js`. Point `check_charges.py`, `check_claims.py`, `check_dates.py`, and `check_slugs.py` at it, removing their four copies. Point `check_quotes.py` at `index.html`, `js/cases.js`, and `js/glossary.js`.
+4. Add `scripts/cases.py` with one loader, `load_cases_js()`, that returns the case source from `js/cases.js`. Point `check_charges.py`, `check_claims.py`, `check_dates.py`, and `check_slugs.py` at it, removing their four copies. Point `check_quotes.py` at `js/cases.js` and `js/glossary.js`.
 5. Rewrite `UPDATE.md`'s second and third checks, "The case schema" and "Where things live", the add-case skill's loader snippet and every instruction that says the cases live in `index.html` (both copies, kept identical), and `scout/SCOUT.md` where it names `index.html`.
 6. Point `tests/test_static.py` at the shared loader, and add a test that `index.html` contains no `CASES = [` or `GLOSSARY = {`.
 

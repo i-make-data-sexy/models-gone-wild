@@ -28,12 +28,10 @@ import pytest
 HOME_TITLE        = "<title>Models Gone Wild: AI Containment Registry</title>"
 METHODOLOGY_TITLE = "<title>Methodology: Models Gone Wild</title>"
 
-# Pages the browser loads assets from
-ASSET_BASES = ["/", "/threat-matrix/", "/poster/sol-hugging-face/"]
-ASSETS      = ["css/styles.css", "js/html2canvas.min.js", "img/annielytics-logo.png"]
+ASSET_BASES       = ["/", "/threat-matrix/", "/poster/sol-hugging-face/"]
+ASSETS            = ["css/styles.css", "js/cases.js", "js/glossary.js", "js/vendor/html2canvas.min.js", "img/annielytics-logo.png"]
 
-# Old paths and their redirect targets
-REDIRECTS = [
+REDIRECTS         = [
     ("",                 "/tools/models-gone-wild/"),
     ("/threat-matrix",   "/tools/models-gone-wild/threat-matrix/"),
     ("/?view=matrix",    "/tools/models-gone-wild/threat-matrix/"),

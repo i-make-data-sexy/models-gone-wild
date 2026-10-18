@@ -33,13 +33,13 @@ EXPECTED = {
     "X-Frame-Options":        "SAMEORIGIN",
 }
 
-# Paths under the prefix, matching the step 2 "Done when" check
 PATHS = [
     "/",
     "/methodology/",
     "/poster/sol-hugging-face/",
     "/css/styles.css",
-    "/js/html2canvas.min.js",
+    "/js/cases.js",
+    "/js/vendor/html2canvas.min.js",
     "/no-such-page/",
 ]
 
