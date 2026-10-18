@@ -27,7 +27,7 @@ Then open http://127.0.0.1:8899/tools/models-gone-wild/
 #   Imports
 # ========================================================================
 
-# Python built-ins
+# Standard library
 import argparse
 import os
 import re
@@ -42,7 +42,6 @@ from urllib.parse import parse_qs, urlsplit
 #   Global Variables
 # ========================================================================
 
-# Repo root and the app's URL prefix
 REPO   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREFIX = "/tools/models-gone-wild"
 
@@ -63,7 +62,6 @@ def resolve_permalink(path: str) -> tuple[str | None, str | None]:
         tuple[str | None, str | None]: The 301 target or None, and the repo path to serve or None
     """
 
-    # View slugs and old ?view= links, as in DEPLOY.md
     view_slugs   = ("threat-matrix", "lab-counts")
     legacy_views = {"matrix": "threat-matrix", "labs": "lab-counts"}
 
@@ -72,19 +70,16 @@ def resolve_permalink(path: str) -> tuple[str | None, str | None]:
     root   = re.escape(PREFIX)
     views  = "|".join(view_slugs)
 
-    # Old ?view= links, then bare view and poster paths
     target = None
     if bare.startswith(PREFIX + "/") and legacy:
         target = f"{PREFIX}/{legacy}/"
     elif bare in (f"{PREFIX}/{slug}" for slug in view_slugs) or re.match(rf"^{root}/poster/[\w-]+$", bare):
         target = bare + "/"
 
-    # Nothing outside the prefix is served
     served = bare.split("#", 1)[0]
     if served != PREFIX and not served.startswith(PREFIX + "/"):
         return target, None
 
-    # Strip a view or poster segment, as nginx does
     segment = (re.match(rf"^{root}/(?:{views})(/.*)?$", served)
             or re.match(rf"^{root}/poster/[\w-]+(/.*)?$", served))
     if segment:

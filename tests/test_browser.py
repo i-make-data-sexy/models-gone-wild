@@ -33,20 +33,17 @@ sync_api = pytest.importorskip("playwright.sync_api")
 
 pytestmark = pytest.mark.browser
 
-DESKTOP = {"width": 1440, "height": 900}
-PHONE   = {"width": 375,  "height": 812}
+DESKTOP    = {"width": 1440, "height": 900}
+PHONE      = {"width": 375,  "height": 812}
 
-# Bubble clearance from the column edge
-TIP_GAP = 10
+TIP_GAP    = 10
 
-# Each tab and its permalink
-TABS = [
+TABS       = [
     ("timeline", ""),
     ("matrix",   "threat-matrix/"),
     ("labs",     "lab-counts/"),
 ]
 
-# Bubble gaps to each column edge
 TIP_GAPS_JS = """() => {
     const tip    = document.getElementById("tip").getBoundingClientRect();
     const column = document.querySelector(".content").getBoundingClientRect();
@@ -274,8 +271,6 @@ def test_glossary_bubbles_stay_in_column(open_page: Callable, viewport: dict) ->
     for index in range(3):
         card = page.locator("#timeline .card").nth(index)
         for term in card.locator(".term").all():
-
-            # Settle the scroll before hovering
             term.scroll_into_view_if_needed()
             page.wait_for_timeout(50)
             page.mouse.move(0, 0)
