@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Methodology: Models Gone Wild</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-<!-- Every local path on this page climbs one folder with ../ since the
-     page lives at /tools/models-gone-wild/methodology/. A leading slash
-     would resolve to the site root and 404. -->
-<link rel="stylesheet" href="../css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Methodology: Models Gone Wild</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Every local path on this page climbs one folder with ../ since the
+    page lives at /tools/models-gone-wild/methodology/. A leading slash
+    would resolve to the site root and 404. -->
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
-<body>
-<div class="wrap">
 
-  <!-- Annielytics site header (v2), copied from index.html. Keep the two
-       in step. The logo path climbs one folder for the same reason as
-       the stylesheet. Do NOT add a click handler to .menu-toggle. -->
+<body>
+    <div class="wrap">
+
+        <!-- Annielytics site header (v2), copied from index.html. Keep the two
+        in step. The logo path climbs one folder for the same reason as
+        the stylesheet. Do NOT add a click handler to .menu-toggle. -->
         <header class="site-header">
             <div class="title-area">
                 <a href="https://www.annielytics.com/">
@@ -40,97 +41,97 @@
             </nav>
         </header>
 
-  <div class="content">
+        <div class="content">
 
-  <header class="masthead">
-    <p class="back-line"><a class="back-link" href="../">Back to the registry</a></p>
-    <p class="bureau-line">Bureau of Model Containment · Field Manual</p>
-    <h1 class="page-title">Methodology</h1>
-    <p class="intro">The icons on each card open the story that broke the case and the model's rap sheet. Learn more about how to interpret the app as well as my methodology in assigning scores in the Threat Matrix in <a href="https://www.annielytics.com/blog/ai/models-gone-wild-an-app-to-track-the-model-containment-crisis/" target="_blank" rel="noopener">my announcement post</a>.</p>
-    <div class="flourish" aria-hidden="true"><span></span><span></span><span></span></div>
-  </header>
+            <header class="masthead">
+                <p class="back-line"><a class="back-link" href="../">Back to the registry</a></p>
+                <p class="bureau-line">Bureau of Model Containment · Field Manual</p>
+                <h1 class="page-title">Methodology</h1>
+                <p class="intro">The icons on each card open the story that broke the case and the model's rap sheet. Learn more about how to interpret the app as well as my methodology in assigning scores in the Threat Matrix in <a href="https://www.annielytics.com/blog/ai/models-gone-wild-an-app-to-track-the-model-containment-crisis/" target="_blank" rel="noopener">my announcement post</a>.</p>
+                <div class="flourish" aria-hidden="true"><span></span><span></span><span></span></div>
+            </header>
 
-  <main class="method">
+            <main class="method">
 
-    <section class="method-section">
-      <h2>The three tabs</h2>
-      <p>The tabs above the registry switch between three views of the same cases. Each one has its own link, so you can share a view directly.</p>
+                <section class="method-section">
+                    <h2>The three tabs</h2>
+                    <p>The tabs above the registry switch between three views of the same cases. Each one has its own link, so you can share a view directly.</p>
 
-      <h3>Case Timeline</h3>
-      <p>This view lists every case in the order the model first got out, oldest first. Each card names the model, runs the lab down its left edge, sums up the case in one sentence, and carries its class and who disclosed it.</p>
+                    <h3>Case Timeline</h3>
+                    <p>This view lists every case in the order the model first got out, oldest first. Each card names the model, runs the lab down its left edge, sums up the case in one sentence, and carries its class and who disclosed it.</p>
 
-      <h3>Threat Matrix</h3>
-      <p>This view plots each case by how involved the escape was, from left to right, and how much damage it could do, from bottom to top. Both scores are my own read of the public reporting rather than a published figure, so hovering over a dot shows the reasoning behind its two scores, and selecting it opens its wanted poster.</p>
-      <p>The four corners each name a kind of offender. Sleepwalking burglars used a crude method and caused real damage, while apex predators paired an involved method with real damage. Escaped house cats got out with a crude method and broke nothing, and determined cheaters put an involved method toward getting around a test rather than doing harm.</p>
+                    <h3>Threat Matrix</h3>
+                    <p>This view plots each case by how involved the escape was, from left to right, and how much damage it could do, from bottom to top. Both scores are my own read of the public reporting rather than a published figure, so hovering over a dot shows the reasoning behind its two scores, and selecting it opens its wanted poster.</p>
+                    <p>The four corners each name a kind of offender. Sleepwalking burglars used a crude method and caused real damage, while apex predators paired an involved method with real damage. Escaped house cats got out with a crude method and broke nothing, and determined cheaters put an involved method toward getting around a test rather than doing harm.</p>
 
-      <h3>Cases by Lab</h3>
-      <p>This view counts each lab's cases as one bar, with the busiest lab on top. Each segment is a single case, running oldest to newest from left to right, and selecting one opens its wanted poster. The scale stays fixed when you filter, so two filtered views can be compared by eye.</p>
-    </section>
+                    <h3>Cases by Lab</h3>
+                    <p>This view counts each lab's cases as one bar, with the busiest lab on top. Each segment is a single case, running oldest to newest from left to right, and selecting one opens its wanted poster. The scale stays fixed when you filter, so two filtered views can be compared by eye.</p>
+                </section>
 
-    <section class="method-section">
-      <h2>Self-reported and tipped off</h2>
-      <p>The chip in the corner of each card says who put the case in public view. It records who spoke first, not who found the problem, and it isn't a judgment of how the lab handled the case.</p>
-      <p>'Self-reported' means the lab that built the model announced it. A lab that an outside tester alerted, and that then announced the case itself, still counts as self-reported.</p>
-      <p>'Tipped off' means somebody other than the lab made the case public. That could be a security firm, an evaluator, or a publication working from its own sources.</p>
-      <p>The Threat Matrix and the Cases by Lab chart color the two apart, green for self-reported and red for tipped off.</p>
-    </section>
+                <section class="method-section">
+                    <h2>Self-reported and tipped off</h2>
+                    <p>The chip in the corner of each card says who put the case in public view. It records who spoke first, not who found the problem, and it isn't a judgment of how the lab handled the case.</p>
+                    <p>'Self-reported' means the lab that built the model announced it. A lab that an outside tester alerted, and that then announced the case itself, still counts as self-reported.</p>
+                    <p>'Tipped off' means somebody other than the lab made the case public. That could be a security firm, an evaluator, or a publication working from its own sources.</p>
+                    <p>The Threat Matrix and the Cases by Lab chart color the two apart, green for self-reported and red for tipped off.</p>
+                </section>
 
-    <section class="method-section">
-      <h2>The dates on each card</h2>
-      <p>Each case is dated by when the model first got out, not by when anyone announced it. A date marked '(est.)' comes from a source that gives only a month or a season. 'Date not disclosed' means no source dates the escape at all, and the card shows the disclosure date in its place.</p>
-      <p>The 'Disclosed' line under the date says how long the escape went before the case was made public.</p>
-      <p>A few cards add a line about the organization the model reached, when the sources say. 'Victim told' gives the gap between the lab learning of the case and the lab telling the victim. 'Victim found it first' means the victim caught it and went public before the lab connected it. 'Victim not told' means the lab never told the victim before the case was announced.</p>
-    </section>
+                <section class="method-section">
+                    <h2>The dates on each card</h2>
+                    <p>Each case is dated by when the model first got out, not by when anyone announced it. A date marked '(est.)' comes from a source that gives only a month or a season. 'Date not disclosed' means no source dates the escape at all, and the card shows the disclosure date in its place.</p>
+                    <p>The 'Disclosed' line under the date says how long the escape went before the case was made public.</p>
+                    <p>A few cards add a line about the organization the model reached, when the sources say. 'Victim told' gives the gap between the lab learning of the case and the lab telling the victim. 'Victim found it first' means the victim caught it and went public before the lab connected it. 'Victim not told' means the lab never told the victim before the case was announced.</p>
+                </section>
 
-    <section class="method-section">
-      <h2>The wanted posters</h2>
-      <p>The poster icon on each card opens the full file on that case. The line under the name gives the lab and the exact model version, and the stamp in the corner names what the model broke out of.</p>
-      <p>The rap sheet below lists the offenses under 'Wanted for', then who made the case public and when under 'Disclosed by'. The 'Kind' and 'Outcome' rows use the same values as the <a href="#kind">Kind</a> and <a href="#outcome">Outcome</a> filters. Where the sources say, 'Victim notified' records when the lab told the organization the model reached, or whether it told them at all.</p>
-      <p>'Modus operandi' lays out how the model went about it in a few steps, and 'Threat matrix' gives the two scores out of 10 that place its dot on the Threat Matrix. The Caution box holds the caveats on the case, including what the model didn't do, and the footer gives the date the escape began and where the model ended up.</p>
-      <p>Download poster saves the poster as an image, and Copy link copies a link that opens straight to it. Terms with a dotted underline, on the cards and the posters alike, show a short definition when you hover over, tap, or tab to them.</p>
-    </section>
+                <section class="method-section">
+                    <h2>The wanted posters</h2>
+                    <p>The poster icon on each card opens the full file on that case. The line under the name gives the lab and the exact model version, and the stamp in the corner names what the model broke out of.</p>
+                    <p>The rap sheet below lists the offenses under 'Wanted for', then who made the case public and when under 'Disclosed by'. The 'Kind' and 'Outcome' rows use the same values as the <a href="#kind">Kind</a> and <a href="#outcome">Outcome</a> filters. Where the sources say, 'Victim notified' records when the lab told the organization the model reached, or whether it told them at all.</p>
+                    <p>'Modus operandi' lays out how the model went about it in a few steps, and 'Threat matrix' gives the two scores out of 10 that place its dot on the Threat Matrix. The Caution box holds the caveats on the case, including what the model didn't do, and the footer gives the date the escape began and where the model ended up.</p>
+                    <p>Download poster saves the poster as an image, and Copy link copies a link that opens straight to it. Terms with a dotted underline, on the cards and the posters alike, show a short definition when you hover over, tap, or tab to them.</p>
+                </section>
 
-    <section class="method-section">
-      <h2>The filters</h2>
-      <p>The sliders button in the corner of the registry opens four filters. They narrow the Case Timeline, the Threat Matrix, and the Cases by Lab chart all at once.</p>
-      <p>When you set more than one filter, a case has to match all of them to stay on the page. While a filter is narrowing the list, a red dot sits on the button and a line under the tabs says how many files are showing. A Clear filters button appears once any filter is set and resets all four.</p>
+                <section class="method-section">
+                    <h2>The filters</h2>
+                    <p>The sliders button in the corner of the registry opens four filters. They narrow the Case Timeline, the Threat Matrix, and the Cases by Lab chart all at once.</p>
+                    <p>When you set more than one filter, a case has to match all of them to stay on the page. While a filter is narrowing the list, a red dot sits on the button and a line under the tabs says how many files are showing. A Clear filters button appears once any filter is set and resets all four.</p>
 
-      <!-- The option names below must match the dropdowns in index.html.
-           Change an option there and its entry here changes with it. -->
-      <h3 id="class">Class</h3>
-      <p>Class sorts cases by how far the model got into somebody else's systems. It's the colored badge on each card and the color down the card's left edge.</p>
-      <p>'Class I · No intrusion' means the model got out but never got inside anyone else's systems. It tried and failed, or it acted only through public pages and forms, such as filing a tip with a government agency.</p>
-      <p>'Class II · Intrusion' means the model got into a real organization's systems using techniques that were already well known.</p>
-      <p>'Class III · Severe' means the model got into a real organization's systems through a security flaw nobody had patched yet. This is the most serious tier in the registry.</p>
+                    <!-- The option names below must match the dropdowns in index.html.
+                    Change an option there and its entry here changes with it. -->
+                    <h3 id="class">Class</h3>
+                    <p>Class sorts cases by how far the model got into somebody else's systems. It's the colored badge on each card and the color down the card's left edge.</p>
+                    <p>'Class I · No intrusion' means the model got out but never got inside anyone else's systems. It tried and failed, or it acted only through public pages and forms, such as filing a tip with a government agency.</p>
+                    <p>'Class II · Intrusion' means the model got into a real organization's systems using techniques that were already well known.</p>
+                    <p>'Class III · Severe' means the model got into a real organization's systems through a security flaw nobody had patched yet. This is the most serious tier in the registry.</p>
 
-      <h3 id="lab">Lab</h3>
-      <p>Lab narrows the registry to the companies that built the models involved, including models the lab never named. It's the only filter that takes more than one choice. Check two labs and you'll see the cases from either one.</p>
-      <p>The list of labs is built from the cases themselves, so a new lab shows up here as soon as its first case is added.</p>
+                    <h3 id="lab">Lab</h3>
+                    <p>Lab narrows the registry to the companies that built the models involved, including models the lab never named. It's the only filter that takes more than one choice. Check two labs and you'll see the cases from either one.</p>
+                    <p>The list of labs is built from the cases themselves, so a new lab shows up here as soon as its first case is added.</p>
 
-      <h3 id="outcome">Outcome</h3>
-      <p>Outcome records whether the model got what it went after.</p>
-      <p>'Succeeded' means it got there, whether that was getting into somebody's systems, getting a form through, or getting out of its sandbox.</p>
-      <p>'Failed' means it tried and didn't get it. Outcome judges the break-in rather than the escape, so a model that got out of its sandbox but couldn't get into its target counts as failed.</p>
+                    <h3 id="outcome">Outcome</h3>
+                    <p>Outcome records whether the model got what it went after.</p>
+                    <p>'Succeeded' means it got there, whether that was getting into somebody's systems, getting a form through, or getting out of its sandbox.</p>
+                    <p>'Failed' means it tried and didn't get it. Outcome judges the break-in rather than the escape, so a model that got out of its sandbox but couldn't get into its target counts as failed.</p>
 
-      <h3 id="kind">Kind</h3>
-      <p>Kind describes what the model reached for once it was loose.</p>
-      <p>'Break-ins' are cases where the model went after somebody else's systems, whether or not it got in.</p>
-      <p>'Unauthorized actions' are cases where the model used a public page or form to do something nobody asked it to do, such as filing a tip, submitting a form, or editing a public wiki.</p>
-      <p>'Escapes only' are cases where the model got out of its sandbox but didn't go after anyone else's systems or act through a public page.</p>
+                    <h3 id="kind">Kind</h3>
+                    <p>Kind describes what the model reached for once it was loose.</p>
+                    <p>'Break-ins' are cases where the model went after somebody else's systems, whether or not it got in.</p>
+                    <p>'Unauthorized actions' are cases where the model used a public page or form to do something nobody asked it to do, such as filing a tip, submitting a form, or editing a public wiki.</p>
+                    <p>'Escapes only' are cases where the model got out of its sandbox but didn't go after anyone else's systems or act through a public page.</p>
 
-      <h3>How Class, Outcome, and Kind differ</h3>
-      <p>The three filters answer different questions about the same case. Kind says what the model went after, Outcome says whether it got it, and Class says how far into somebody else's systems it ended up. A failed break-in, for example, is a break-in by kind and failed by outcome. It lands in Class I because it got inside nobody's systems.</p>
-    </section>
+                    <h3>How Class, Outcome, and Kind differ</h3>
+                    <p>The three filters answer different questions about the same case. Kind says what the model went after, Outcome says whether it got it, and Class says how far into somebody else's systems it ended up. A failed break-in, for example, is a break-in by kind and failed by outcome. It lands in Class I because it got inside nobody's systems.</p>
+                </section>
 
-  </main>
+            </main>
 
-  <footer class="site-foot">
-    <a class="back-link" href="../">Back to the registry</a>
-  </footer>
+            <footer class="site-foot">
+                <a class="back-link" href="../">Back to the registry</a>
+            </footer>
 
-  </div><!-- /.content -->
-</div><!-- /.wrap -->
+        </div><!-- /.content -->
+    </div><!-- /.wrap -->
 
-<script src="../js/menu.js"></script>
+    <script src="../js/menu.js"></script>
 </body>
 </html>
