@@ -30,7 +30,8 @@ Each of the four rules stands differently here:
 4. Mark the sweep rule not applicable to prose links in the README (decision 20a), citing 27ce695. The nav keeps its sweep.
 5. Pin `text-decoration: none` on `.icon-btn` and its `:hover`, `:focus`, `:active`, and `:visited` states, per `~/.claude/rules/design/remove-underlines-from-buttons.md`.
 6. In `js/tooltip.js`, clamp to the `.poster` box when the trigger is inside an open poster, and to `.content` otherwise. Add `text-align: left` to `.tip`.
-7. Tests: an unknown path through the preview server returns 404 with the app's title; an unknown poster slug shows the notice and the robots tag (browser test); a glossary bubble inside an open poster sits at least 10px inside the poster at 375 and 1440 (browser test); `.tip` computes `text-align: left`.
+7. Tests: an unknown path through the preview server returns 404 with the app's title; an unknown poster slug shows the notice and the robots tag (browser test); a glossary bubble inside an open poster sits at least 10px inside the poster at 375 and 1440 (browser test); `.tip` computes `text-align: left`; and with html2canvas blocked, a Download poster press shows the message inside the poster and opens no dialog (browser test).
+8. Replace the two native `alert()` calls in `js/poster.js` (the library failing to load, and the render failing) with a short message shown inside the open poster, beneath the Download poster and Copy link buttons, in the poster's own type and stamp red, since the house rule bars native dialogs. It clears on the next press. Annie set this on 2026-10-17 during step 9B, which left both alerts as they were.
 
 ## The sample-file review gate
 
