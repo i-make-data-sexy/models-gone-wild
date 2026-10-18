@@ -1,4 +1,7 @@
-#!/usr/bin/env python3
+# ========================================================================
+#   About This File
+# ========================================================================
+
 """Reports anything on the Threat Matrix that is drawn on top of
 something else.
 
@@ -18,6 +21,14 @@ Writes a screenshot of the unfiltered chart to the path given with
 Exit status is 1 if anything overlaps or a dot label leaves the plot,
 0 otherwise.
 """
+
+
+
+# ========================================================================
+#   Imports
+# ========================================================================
+
+# Standard library
 import argparse
 import functools
 import html
@@ -30,6 +41,12 @@ import subprocess
 import sys
 import tempfile
 import threading
+
+
+
+# ========================================================================
+#   Global Variables
+# ========================================================================
 
 REPO   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
