@@ -972,6 +972,20 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-17"
+    },
+    {
+      "url": "https://news4jax.com/business/2026/10/10/anthropics-claude-ai-submits-a-false-tip-on-a-philadelphia-unsolved-homicide-case",
+      "title": "Anthropic's Claude AI submits a false tip on a Philadelphia unsolved homicide case",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-18"
+    },
+    {
+      "url": "https://kuwaittimes.com/article/51323/business/anthropic-reports-fake-police-tip-in-rogue-ai-cases/amp",
+      "title": "Anthropic reports fake police tip in rogue AI cases",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-18"
     }
   ],
   "runs": [
@@ -1044,6 +1058,12 @@
     {
       "date": "2026-10-17",
       "checked": 30,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-18",
+      "checked": 22,
       "new": 0,
       "updates": 0
     }
