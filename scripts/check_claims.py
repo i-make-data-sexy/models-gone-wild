@@ -183,9 +183,9 @@ REVIEW = [
     ("OpenAI \u00b7 unnamed agent",
      "Unnamed agent (Medicare), org",
      "OpenAI names the model behind the Medicare access"),
-    ("one of the three not yet reached when Anthropic published",
+    ("all affected parties notified by September 9, per Anthropic",
      "Opus, Mythos, notice",
-     "Anthropic reports reaching the third organization"),
+     "Anthropic dates when it reached the third organization, or METR's investigation says otherwise"),
     ("Hugging Face found it on its own and disclosed it July 16, 2026",
      "Sol, notice",
      "the Sol correction pass revises the escape date, the disclosure, or when OpenAI knew"),
@@ -237,6 +237,15 @@ REVIEW = [
     ("Last updated: <date>",
      "footer",
      "anything at all changes"),
+    ("has not named the third party or said when it was told",
+     "Opus 4.6, caution",
+     "Anthropic names the third party or dates the notice, which would earn a notice field"),
+    ("January 2026",
+     "Opus 4.6, date",
+     "Anthropic or METR dates the Opus 4.6 run more precisely"),
+    ("the same route to the open internet as one of the incidents in the July 30 case",
+     "Opus 4.6, mo",
+     "METR's investigation describes the Opus 4.6 route differently, or names the incident it shared"),
 ]
 
 
