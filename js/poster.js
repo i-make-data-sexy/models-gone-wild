@@ -1,3 +1,19 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The case poster, the WANTED file that opens over the page. It builds a
+   case's poster, keeps the poster's permalink in the address bar, copies
+   that link, and downloads the poster as a PNG, loading html2canvas on
+   the first Download poster press. Needs APP_BASE, gloss(), mug(), and
+   hideTip() from the scripts that load before it. */
+
+
+
+/* ========================================================================
+     Poster
+   ======================================================================== */
+
 /* ================================================
      Modal
    ================================================ */
