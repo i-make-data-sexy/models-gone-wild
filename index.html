@@ -1,176 +1,191 @@
 <!DOCTYPE html>
+
+
+
+<!-- ========================================================================
+       About This File
+     ======================================================================== -->
+
+<!-- The registry's home page. It holds the site header, the masthead, the
+     three views and their filter menu, the tooltip, and the poster overlay,
+     which the scripts in js/ fill in.
+
+     Paths stay relative since nginx serves the page under a prefix.
+     A click handler on .menu-toggle breaks the mobile menu on iPhone Safari. -->
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Models Gone Wild: AI Containment Registry</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@600&text=%F0%9F%A4%98&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models Gone Wild: AI Containment Registry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@600&text=%F0%9F%A4%98&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
-<div class="wrap">
+    <div class="wrap">
 
-  <header class="site-header">
-    <div class="title-area">
-      <a href="https://www.annielytics.com/">
-        <img class="header-logo" src="img/annielytics-logo.png" alt="Annielytics Logo" width="360" height="67">
-      </a>
-    </div>
+        <header class="site-header">
+            <div class="title-area">
+                <a href="https://www.annielytics.com/">
+                    <img class="header-logo" src="img/annielytics-logo.png" alt="Annielytics Logo" width="360" height="67">
+                </a>
+            </div>
 
-    <input type="checkbox" id="menu-toggle-checkbox" class="hidden">
-    <label for="menu-toggle-checkbox" class="menu-toggle" aria-expanded="false">MENU</label>
+            <input type="checkbox" id="menu-toggle-checkbox" class="hidden">
+            <label for="menu-toggle-checkbox" class="menu-toggle" aria-expanded="false">MENU</label>
 
-    <nav class="nav-primary">
-      <ul class="menu">
-        <li><a href="https://www.annielytics.com/about/">About</a></li>
-        <li><a href="https://www.annielytics.com/tools/">Tools</a></li>
-        <li><a href="https://www.annielytics.com/blog/">Blog</a></li>
-        <li><a href="https://www.annielytics.com/tips/">Tips</a></li>
-        <li><a href="https://www.annielytics.com/portfolio/">Portfolio</a></li>
-        <li><a href="https://www.annielytics.com/contact/">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+            <nav class="nav-primary">
+                <ul class="menu">
+                    <li><a href="https://www.annielytics.com/about/">About</a></li>
+                    <li><a href="https://www.annielytics.com/tools/">Tools</a></li>
+                    <li><a href="https://www.annielytics.com/blog/">Blog</a></li>
+                    <li><a href="https://www.annielytics.com/tips/">Tips</a></li>
+                    <li><a href="https://www.annielytics.com/portfolio/">Portfolio</a></li>
+                    <li><a href="https://www.annielytics.com/contact/">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
 
-  <div class="content">
+        <div class="content">
 
-  <header class="masthead">
-    <p class="bureau-line">Bureau of Model Containment · Field Registry 2026</p>
-    <h1 class="wanted-title">Wanted</h1>
-    <p class="subhead">Models Gone Wild <span class="horns">🤘</span></p>
-    <p class="intro">
-      Below is a running registry of the containment failures that have been littering headlines
-      since OpenAI's Sol model took a walk on the wild side in July. These models got loose
-      during evaluations and training runs and went where they were never meant to go, breaking
-      into servers in some cases and filing forms with police and government agencies in others.
-    </p>
-    <p class="intro intro-cue">Learn more about what each filter does, what the card icons open, and how I scored the Threat Matrix on the <a href="methodology/" id="methodologyLink">Methodology page</a>.</p>
+            <header class="masthead">
+                <p class="bureau-line">Bureau of Model Containment · Field Registry 2026</p>
+                <h1 class="wanted-title">Wanted</h1>
+                <p class="subhead">Models Gone Wild <span class="horns">🤘</span></p>
+                <p class="intro">
+                    Below is a running registry of the containment failures that have been littering headlines
+                    since OpenAI's Sol model took a walk on the wild side in July. These models got loose
+                    during evaluations and training runs and went where they were never meant to go, breaking
+                    into servers in some cases and filing forms with police and government agencies in others.
+                </p>
+                <p class="intro intro-cue">Learn more about what each filter does, what the card icons open, and how I scored the Threat Matrix on the <a href="methodology/" id="methodologyLink">Methodology page</a>.</p>
 
-    <div class="flourish" aria-hidden="true"><span></span><span></span><span></span></div>
-  </header>
+                <div class="flourish" aria-hidden="true"><span></span><span></span><span></span></div>
+            </header>
 
-  <div class="registry">
-    <div class="registry-bar">
-      <div class="viewbar" role="tablist" aria-label="View">
-        <button class="tab" role="tab" id="tab-timeline" aria-controls="view-timeline" aria-selected="true">Case Timeline</button>
-        <button class="tab" role="tab" id="tab-matrix" aria-controls="view-matrix" aria-selected="false">Threat Matrix</button>
-        <button class="tab" role="tab" id="tab-labs" aria-controls="view-labs" aria-selected="false">Cases by Lab</button>
-      </div>
+            <div class="registry">
+                <div class="registry-bar">
+                    <div class="viewbar" role="tablist" aria-label="View">
+                        <button class="tab" role="tab" id="tab-timeline" aria-controls="view-timeline" aria-selected="true">Case Timeline</button>
+                        <button class="tab" role="tab" id="tab-matrix" aria-controls="view-matrix" aria-selected="false">Threat Matrix</button>
+                        <button class="tab" role="tab" id="tab-labs" aria-controls="view-labs" aria-selected="false">Cases by Lab</button>
+                    </div>
 
-      <details class="options-menu" id="optionsMenu">
-        <summary class="options-button" aria-label="Filter options" title="Filter options">
-          <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 6h18M3 12h18M3 18h18"/>
-            <circle cx="8" cy="6" r="2.5" class="line-icon-knob"/>
-            <circle cx="17" cy="12" r="2.5" class="line-icon-knob"/>
-            <circle cx="10" cy="18" r="2.5" class="line-icon-knob"/>
-          </svg>
-          <span class="options-dot" id="optionsDot" aria-hidden="true" hidden></span>
-        </summary>
+                    <details class="options-menu" id="optionsMenu">
+                        <summary class="options-button" aria-label="Filter options" title="Filter options">
+                            <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M3 6h18M3 12h18M3 18h18"/>
+                                <circle cx="8" cy="6" r="2.5" class="line-icon-knob"/>
+                                <circle cx="17" cy="12" r="2.5" class="line-icon-knob"/>
+                                <circle cx="10" cy="18" r="2.5" class="line-icon-knob"/>
+                            </svg>
+                            <span class="options-dot" id="optionsDot" aria-hidden="true" hidden></span>
+                        </summary>
 
-        <div class="options-panel">
-          <div class="options-panel-header">
-            <p class="options-heading">Filters</p>
-            <button type="button" class="options-close" id="optionsClose" aria-label="Close filter options">
-              <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-            </button>
-          </div>
+                        <div class="options-panel">
+                            <div class="options-panel-header">
+                                <p class="options-heading">Filters</p>
+                                <button type="button" class="options-close" id="optionsClose" aria-label="Close filter options">
+                                    <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                                </button>
+                            </div>
 
-          <label class="options-field">
-            <span class="options-label">Class</span>
-            <select class="filter-select" id="classFilter">
-              <option value="">All classes</option>
-              <option value="1">I · No intrusion</option>
-              <option value="2">II · Intrusion</option>
-              <option value="3">III · Severe</option>
-            </select>
-          </label>
-          <div class="options-field">
-            <span class="options-label" id="labLabel">Lab</span>
-            <details class="multi-select" id="labFilter">
-              <summary class="filter-select" id="labSummary" aria-describedby="labLabel">All labs</summary>
-              <div class="multi-select-list" id="labList" role="group" aria-labelledby="labLabel"></div>
-            </details>
-          </div>
-          <label class="options-field">
-            <span class="options-label">Outcome</span>
-            <select class="filter-select" id="outcomeFilter">
-              <option value="">All outcomes</option>
-              <option value="success">Succeeded</option>
-              <option value="attempt">Failed</option>
-            </select>
-          </label>
-          <label class="options-field">
-            <span class="options-label">Kind</span>
-            <select class="filter-select" id="kindFilter">
-              <option value="">All kinds</option>
-              <option value="intrusion">Break-ins</option>
-              <option value="action">Unauthorized actions</option>
-              <option value="escape">Escapes only</option>
-            </select>
-          </label>
+                            <label class="options-field">
+                                <span class="options-label">Class</span>
+                                <select class="filter-select" id="classFilter">
+                                    <option value="">All classes</option>
+                                    <option value="1">I · No intrusion</option>
+                                    <option value="2">II · Intrusion</option>
+                                    <option value="3">III · Severe</option>
+                                </select>
+                            </label>
+                            <div class="options-field">
+                                <span class="options-label" id="labLabel">Lab</span>
+                                <details class="multi-select" id="labFilter">
+                                    <summary class="filter-select" id="labSummary" aria-describedby="labLabel">All labs</summary>
+                                    <div class="multi-select-list" id="labList" role="group" aria-labelledby="labLabel"></div>
+                                </details>
+                            </div>
+                            <label class="options-field">
+                                <span class="options-label">Outcome</span>
+                                <select class="filter-select" id="outcomeFilter">
+                                    <option value="">All outcomes</option>
+                                    <option value="success">Succeeded</option>
+                                    <option value="attempt">Failed</option>
+                                </select>
+                            </label>
+                            <label class="options-field">
+                                <span class="options-label">Kind</span>
+                                <select class="filter-select" id="kindFilter">
+                                    <option value="">All kinds</option>
+                                    <option value="intrusion">Break-ins</option>
+                                    <option value="action">Unauthorized actions</option>
+                                    <option value="escape">Escapes only</option>
+                                </select>
+                            </label>
 
-          <button type="button" class="options-clear" id="optionsClear" hidden>Clear filters</button>
+                            <button type="button" class="options-clear" id="optionsClear" hidden>Clear filters</button>
+                        </div>
+                    </details>
+                </div>
+
+                <p class="filter-count" id="filterCount" hidden></p>
+
+                <section class="view active" id="view-timeline" role="tabpanel" aria-labelledby="tab-timeline">
+                    <div class="timeline" id="timeline"></div>
+                </section>
+
+                <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
+                    <div class="scatter-wrap matrix-wrap">
+                        <p class="scatter-legend">
+                            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#5a6b2a" stroke="#e6ddc6" stroke-width="2"/></svg>Self-reported</span>
+                            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#8f1d16" stroke="#e6ddc6" stroke-width="2"/></svg>Tipped off</span>
+                        </p>
+                        <div id="scatter"></div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-labs" role="tabpanel" aria-labelledby="tab-labs" hidden>
+                    <div class="scatter-wrap">
+                        <div id="labChart"></div>
+                        <p class="scatter-legend">
+                            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" fill="#5a6b2a"/></svg>Self-reported</span>
+                            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" fill="#8f1d16"/></svg>Tipped off</span>
+                        </p>
+                    </div>
+                </section>
+            </div>
+
+            <footer class="site-foot">
+                Last updated: October 17, 2026
+            </footer>
+
         </div>
-      </details>
     </div>
 
-    <p class="filter-count" id="filterCount" hidden></p>
+    <div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
 
-    <section class="view active" id="view-timeline" role="tabpanel" aria-labelledby="tab-timeline">
-      <div class="timeline" id="timeline"></div>
-    </section>
+    <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="posterAlias">
+        <div class="poster" id="poster">
+            <button class="close-btn" id="closeBtn" aria-label="Close file">&times;</button>
+        </div>
+    </div>
 
-    <section class="view" id="view-matrix" role="tabpanel" aria-labelledby="tab-matrix" hidden>
-      <div class="scatter-wrap matrix-wrap">
-          <p class="scatter-legend">
-            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#5a6b2a" stroke="#e6ddc6" stroke-width="2"/></svg>Self-reported</span>
-            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#8f1d16" stroke="#e6ddc6" stroke-width="2"/></svg>Tipped off</span>
-          </p>
-          <div id="scatter"></div>
-      </div>
-    </section>
-
-    <section class="view" id="view-labs" role="tabpanel" aria-labelledby="tab-labs" hidden>
-      <div class="scatter-wrap">
-          <div id="labChart"></div>
-          <p class="scatter-legend">
-            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" fill="#5a6b2a"/></svg>Self-reported</span>
-            <span class="legend-item"><svg class="legend-dot" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" fill="#8f1d16"/></svg>Tipped off</span>
-          </p>
-      </div>
-    </section>
-  </div>
-
-  <footer class="site-foot">
-    Last updated: October 17, 2026
-  </footer>
-
-  </div>
-</div>
-
-<div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
-
-<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="posterAlias">
-  <div class="poster" id="poster">
-    <button class="close-btn" id="closeBtn" aria-label="Close file">&times;</button>
-  </div>
-</div>
-
-<script src="js/cases.js"></script>
-<script src="js/glossary.js"></script>
-<script src="js/labels.js"></script>
-<script src="js/text.js"></script>
-<script src="js/mugshot.js"></script>
-<script src="js/timeline.js"></script>
-<script src="js/charts.js"></script>
-<script src="js/views.js"></script>
-<script src="js/tooltip.js"></script>
-<script src="js/poster.js"></script>
-<script src="js/menu.js"></script>
-<script src="js/main.js"></script>
+    <script src="js/cases.js"></script>
+    <script src="js/glossary.js"></script>
+    <script src="js/labels.js"></script>
+    <script src="js/text.js"></script>
+    <script src="js/mugshot.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/views.js"></script>
+    <script src="js/tooltip.js"></script>
+    <script src="js/poster.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
