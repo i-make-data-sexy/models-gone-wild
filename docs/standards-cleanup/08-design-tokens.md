@@ -20,7 +20,7 @@ The checker prints only the first 40, so lift the `findings[:40]` limit in a scr
 
 `audit_tokens.py .` reported 14 tokens, 155 `var()` uses, and 3 tokens never used (`--stamp-red-bright`, `--amber`, and `--options-knob-fill`, which is also defined twice). `--stamp-red` and `--class3` hold the same value (`#8f1d16`). They name different roles (the stamp color and the severe class), so both stay in pass A.
 
-The checker scans CSS and Python only, so it reports both HTML pages clean. `index.html` holds 31 hex colors it cannot see:
+The checker scans CSS and Python only, so it reports both HTML pages and the JavaScript clean. `index.html` held 31 hex colors it cannot see on 2026-10-16. Steps 9A and 9B, which run before this step under decision 31, move the script's into `js/labels.js`, `js/mugshot.js`, and `js/charts.js`, so find each one again at the start:
 
 - JS constants: `DISC_FILL` (`#5a6b2a`, `#8f1d16`), and the mugshot palette `M_INK`, `M_PAPER`, `M_WHITE`, and `M_BACK` (`#1c1a15`, `#efe7d2`, `#fbf7ec`, `#cfc4a6`).
 - Template strings that draw SVG with `#3a362c` and `#4a4438` (6 each).
@@ -35,17 +35,18 @@ Under decision 28a, step F1 installed `scripts/git-hooks/pre-commit` with the fo
 1. Read `~/.claude/skills/design-tokens/SKILL.md` and follow pass A.
 2. In the seven CSS files from step 7, give every raw color, `rgb()`/`rgba()` value, font size, and line height a token in `variables.css` holding the exact literal, named for its role, and replace each use with `var()`. Keep values identical, including spelling (`.95em` stays `.95em`).
 3. Remove the three unused tokens, and the duplicate definition of `--options-knob-fill`, after grepping both pages and every CSS file to confirm nothing reads them.
-4. Under decision 12a, the 31 colors in `index.html` move onto the tokens.
+4. Under decision 12a, the 31 colors in `index.html` and the `js/` files move onto the tokens.
    - At startup, read each color the script draws with from the CSS custom properties with `getComputedStyle(document.documentElement).getPropertyValue(...)`, trimmed, and assign them to the existing constants (`DISC_FILL`, `M_INK`, and the rest). The SVG the script builds keeps receiving literal colors, which matters because html2canvas renders a poster's SVG as an image and would not apply a stylesheet to it.
    - Replace the two legends' `fill="#..."` attributes with classes the stylesheet colors from the tokens (the legends are never captured by html2canvas), and drop the "keep in step with `DISC_FILL`" comments since both now read one source.
-   - Add a test that fails on any hex color in `index.html` or `methodology/index.html`.
+   - Add a test that fails on any hex color in `index.html`, `methodology/index.html`, or the app's own `js/` files (not `js/vendor/`).
 5. Add the gate to the hook: read `scripts/git-hooks/pre-commit` first, then append a call to `python3 ~/.claude/skills/design-tokens/scripts/check_raw_values.py --staged --checks color,rgb,font-size,line-height` that exits non-zero on a finding, keeping the formatting gate above it. Confirm `core.hooksPath` is `scripts/git-hooks`, and note in `UPDATE.md` that a fresh clone needs `git config core.hooksPath scripts/git-hooks`.
 6. Run the screenshot diff, and open a poster and press Download poster to confirm the PNG still renders (step 1's browser suite covers opening; the download is a manual check).
 
 ## The sample-file review gate
 
 - CSS: `css/poster.css` is the sample since it carries the most raw values of the seven (28 of 90). Tokenize it, run the screenshot diff, and stop for approval before the other six.
-- HTML and JS: `index.html` is the only file with colors, so there is nothing further to sample.
+- JavaScript: The first `js/` file with colors is the sample. Stop for approval before the others.
+- HTML: `index.html` (the two legends) is the only page with colors, so there is nothing further to sample.
 
 ## Done when
 
@@ -135,6 +136,6 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 5. Switch staging back to main with the README command.
 6. Mark step 8 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
-7. Tell me the next step is step 9A (step 8B is skipped under decision
-   13a), whose prompt is at the bottom of docs/standards-cleanup/09a-case-data.md.
+7. Tell me the next step is step 10A (step 8B is skipped under decision
+   13a), whose prompt is at the bottom of docs/standards-cleanup/10a-self-host-fonts.md.
 ```

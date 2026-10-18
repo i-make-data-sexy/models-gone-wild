@@ -12,6 +12,8 @@ Reformatting every Python, HTML, CSS, and JavaScript file to match AI Strategy i
 
 Annie set the order on 2026-10-17. Formatting steps F1 to F7 run next, right after step 3, before step 4 or any later step starts, and every step after them keeps the files it touches formatted. The first draft of this plan formatted only the code each step moved, so the files no step touched would have kept their old layout, and every step in between would have kept writing into unformatted files.
 
+Annie revised the order on 2026-10-17, during step F2, under decision 31. The page is split into files right after F2, since formatting code that is about to leave the page does little good and the gate can only check JavaScript that lives in `.js` files. Step F2 formats the `index.html` script and ships, steps 9A and 9B then move the case data and the rest of both scripts into `js/`, and F3 to F7, step 4, and the rest follow.
+
 Read these before any formatting work:
 
 - The rules: The formatting rule at `~/.claude/rules/formatting/code-formatting.md`, with the column rules, the one-line comment rule, the file structure, and the sweep procedure, and the gate at `~/.claude/rules/formatting/format-gate.md`
@@ -32,7 +34,7 @@ Every file in AI Strategy meets these standards, and every file here must meet t
 - Every Python function carries full type hints.
 - Comments carry no history, no commented-out code, and no names.
 
-Three things set this app apart from AI Strategy. Its JavaScript is inline in the two pages until steps 9A and 9B move it into files, so step F2 formats it in place. The pages are static, with no template engine, so the 20 HTML comments are deleted under decision 26 rather than turned into Jinja comments. The `CASES` and `GLOSSARY` data inside the main script stays byte for byte through F2 and F6 since the check scripts, the tests, and the add-case skill parse it as written, and step 9A settles its format under decision 30.
+Three things set this app apart from AI Strategy. Its JavaScript is inline in the two pages until steps 9A and 9B move it into files, which run right after step F2 under decision 31. The pages are static, with no template engine, so the 20 HTML comments are deleted under decision 26 rather than turned into Jinja comments. The `CASES` and `GLOSSARY` data inside the main script stays byte for byte through F2 since the check scripts, the tests, and the add-case skill parse it as written, and step 9A settles its format under decision 30.
 
 The steps run in the order AI Strategy's sweep ran, measured with `audit_format.py` and `check_format.py` on 2026-10-17, read only:
 
@@ -41,12 +43,12 @@ The steps run in the order AI Strategy's sweep ran, measured with `audit_format.
 | F1 | 1 CSS file, `css/styles.css`, 972 lines | Not clean. No About section, 15 value columns where the rule allows 2, 135 uneven runs, 59 comments over one line, 64 wordy, 6 inside a rule, 3 history notes, 21 banner problems. No screenshot harness and no hook, so F1 adds both. |
 | F2 | The inline scripts, 2,014 lines (1,996 in `index.html`, 18 in `methodology/index.html`) | Neither clean. 82 uneven runs, 90 comments over one line, 109 wordy, 7 inside a block, 1 mixed placement, 3 history notes, 32 banner problems, and 18 of `check_style.py`'s 70 issues. The one `.js` file is the vendored html2canvas, which stays as shipped. |
 | F3 | 15 Python files, 2,508 lines | 7 clean (`serve.py` and six test files). The other 8 hold 25 uneven runs, 6 comments over one line, 8 wordy, 3 history notes, 8 banner problems, and 51 of `check_style.py`'s issues. 7 lack an About section and 6 end with a newline. Heaviest: `scripts/scout_seen.py`. |
-| F4 | 2 pages, 2,371 lines | Neither clean. Neither has an About section, both end with a newline, and they hold 15 comments over one line, 15 wordy, and the 20 HTML comments decision 26 deletes. Markup indented two spaces, where the rule wants four. |
+| F4 | 2 pages, 2,371 lines | Neither clean. Neither has an About section, both end with a newline, and they hold 15 comments over one line, 15 wordy, and the 20 HTML comments decision 26 deletes. Step F2 deleted the 15 in `index.html` at Annie's request on 2026-10-17. Markup indented two spaces, where the rule wants four. |
 | F5 | requirements, shell, editor settings | `requirements-dev.txt` (2 pins, not aligned), the 2 shell scripts F1 adds, and no `.vscode/settings.json`. |
 | F6 | Quotes | 27 single-quoted Python strings, all holding a double quote, so all stay. About 330 single-quoted strings in the inline scripts outside the data, about 8 of which stay. No single-quoted HTML attributes. |
 | F7 | Python structure and type hints, formerly step 5 | 2 functions without a hint. Every script and test except `serve.py` and `test_dependencies.py` keeps top-level names only one function uses, and `check_charges.py` and `check_quotes.py` run their whole job at the top level. |
 
-Once a language's F step ships, its files stay formatted for the rest of the cleanup. Every later step runs `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py` on each file it changes or creates, fixes every finding before it commits, and re-runs the formatter where a change moved a column (a token name longer than the value it replaced, say). A step is not done while a file it touched has a finding. Under decision 28a, the pre-commit hook from step F1 enforces the same on every commit, one language at a time as each F step adds it.
+Once a language's F step ships, its files stay formatted for the rest of the cleanup. Every later step runs `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py` on each file it changes or creates, fixes every finding before it commits, and re-runs the formatter where a change moved a column (a token name longer than the value it replaced, say). A step is not done while a file it touched has a finding. Under decision 28a, the pre-commit hook from step F1 enforces the same on every commit, one language at a time as each step adds it (step 9B adds `js`).
 
 ## This app is live, static, and indexed
 
@@ -191,6 +193,8 @@ Answer these before running the steps. Record each answer here because the step 
     Decision: a, recorded 2026-10-17.
 30. The case data's layout (step 9A). Decision 14a moves `CASES` and `GLOSSARY` into `js/cases.js` and `js/glossary.js` byte for byte, but the gate then checks the new files, and the data as written holds 48 uneven runs in `CASES` and 1 in `GLOSSARY`. a) Align the data as it moves, prove the shared loader returns the same cases and glossary before and after, and update every pattern that reads the unaligned form in the check scripts, the tests, `UPDATE.md`, and both copies of the add-case skill, so the skill and the scout write aligned cases from then on (recommended). b) Move the data byte for byte with only an About section added, and accept the two data files as the one known gap in the JavaScript gate.
     Decision: a, recorded 2026-10-17.
+31. When the page is split (steps 9A and 9B). a) Right after step F2. F2 ships what it did to the `index.html` script, 9A moves the case data (re-indented to four spaces as it is aligned), and 9B moves the rest, taking over F2's remainder (Methodology's script, the four-space re-indent of each new file, its About section, and `js` on the hook). F3 to F7 then run, and F4 and F6 work on the files rather than inline code (recommended). b) Keep 9A and 9B after step 8.
+    Decision: a, recorded 2026-10-17. Annie asked for it during step F2, since formatting inline code she wants out of the page does little good.
 
 ## The steps
 
@@ -202,11 +206,13 @@ Answer these before running the steps. Record each answer here because the step 
 | 2 | [02-security.md](02-security.md) | No security headers, duplicate `Cache-Control`, the token in the web root. | Small | Done 2026-10-16 (merge fc717de) |
 | 3 | [03-requirements.md](03-requirements.md) | No pinned file for the test tools, no record of the vendored library. | Tiny | Done 2026-10-17 (merge 8243928) |
 | F1 | [f1-css.md](f1-css.md) | `css/styles.css` to AI Strategy's format, the screenshot harness, and the formatting pre-commit hook. | Medium | Done 2026-10-17 (merge df0fd2d) |
-| F2 | [f2-javascript.md](f2-javascript.md) | The two inline scripts to AI Strategy's format, the case data left as is. | Medium | Not started |
+| F2 | [f2-javascript.md](f2-javascript.md) | `index.html`'s inline script to AI Strategy's format and its long comments deleted, the case data left as is. Methodology's script and the `js` hook entry moved to 9B. | Medium | Not started |
+| 9A | [09a-case-data.md](09a-case-data.md) | The case data inside the inline script, and every tool that reads it there. Moved up under decision 31. | Medium | Not started |
+| 9B | [09b-inline-code.md](09b-inline-code.md) | The rest of both inline scripts, html2canvas in `<head>`, and the new files' formatting, including `js` on the hook. Moved up under decision 31. | Medium | Not started |
 | F3 | [f3-python.md](f3-python.md) | 8 Python files to the rule's spacing, comments, and docstrings, and `check_style.py` to 0. | Small | Not started |
-| F4 | [f4-html.md](f4-html.md) | Both pages to AI Strategy's format, the 20 HTML comments deleted. | Small | Not started |
+| F4 | [f4-html.md](f4-html.md) | Both pages to AI Strategy's format, Methodology's 5 HTML comments deleted (`index.html`'s 15 went in F2). | Small | Not started |
 | F5 | [f5-other-files.md](f5-other-files.md) | The requirements and shell formatting, and the editor settings. | Tiny | Not started |
-| F6 | [f6-quotes.md](f6-quotes.md) | Double quotes in the inline JavaScript. | Small | Not started |
+| F6 | [f6-quotes.md](f6-quotes.md) | Double quotes in the app's JavaScript files. | Small | Not started |
 | F7 | [f7-python-structure.md](f7-python-structure.md) | `filters.py`'s layout on every Python file, 2 functions without type hints. Formerly step 5. | Small | Not started |
 | 4 | [04-root-files.md](04-root-files.md) | No root guard, workflow docs that skip staging, merged branches. | Small | Not started |
 | 5 | Moved to [f7-python-structure.md](f7-python-structure.md) | Now step F7. | | Moved 2026-10-17 |
@@ -214,8 +220,6 @@ Answer these before running the steps. Record each answer here because the step 
 | 7 | [07-split-css.md](07-split-css.md) | 972-line stylesheet. Reuses step F1's screenshot harness. | Medium | Not started |
 | 8 | [08-design-tokens.md](08-design-tokens.md) | 90 raw values in CSS, 31 colors in `index.html`, no gate. | Medium | Not started |
 | 8B | [08b-token-consolidation.md](08b-token-consolidation.md) | Near-duplicate colors and font sizes. | Medium | Skipped under decision 13a (marked 2026-10-16) |
-| 9A | [09a-case-data.md](09a-case-data.md) | The case data inside the inline script, and every tool that reads it there. | Medium | Not started |
-| 9B | [09b-inline-code.md](09b-inline-code.md) | The rest of both inline scripts, html2canvas in `<head>`. | Medium | Not started |
 | 10A | [10a-self-host-fonts.md](10a-self-host-fonts.md) | Google Fonts, which a policy would block under Cloudflare APO. | Small | Not started |
 | 10B | [10b-csp.md](10b-csp.md) | No Content Security Policy, no walk harness, no analytics tag. | Medium | Not started |
 | 11 | [11-layout.md](11-layout.md) | No `<main class="page-body">`, no pinned footer. | Medium | Not started |
@@ -223,7 +227,7 @@ Answer these before running the steps. Record each answer here because the step 
 | 13A | [13a-web-root.md](13a-web-root.md) | No URL list, the prefix mirrors, repo tooling in the web root. | Medium, highest SEO risk | Not started |
 | 13B | [13b-canonicals.md](13b-canonicals.md) | No canonicals, the `/index.html` duplicates, no share tags. | Small, SEO risk | Not started |
 
-Steps F1 to F7 sit right after step 3, the last step done when Annie moved the reformat to the front, so every later step works in formatted files. Step 0B sits after step 0 because every later step deploys to it. Step 9A comes before 9B so the data move, which touches the most tooling, lands on its own. Step 10A comes before 10B because the policy would block the Google Fonts rewrite. Step 13A builds the URL list that proves 13B's changes, and splits the baseline's URL step so each half fits one session.
+Steps F1 and F2 sit right after step 3, the last step done when Annie moved the reformat to the front. Steps 9A and 9B follow F2 under decision 31, so F3 to F7 and every later step work in formatted files, with the JavaScript already in `js/`. Step 0B sits after step 0 because every later step deploys to it. Step 9A comes before 9B so the data move, which touches the most tooling, lands on its own. Step 10A comes before 10B because the policy would block the Google Fonts rewrite. Step 13A builds the URL list that proves 13B's changes, and splits the baseline's URL step so each half fits one session.
 
 After step 13B, one server-wide pass remains outside this app, for the nginx backups and `server_tokens`. Its prompt is in [server-wide-followup.md](server-wide-followup.md).
 
@@ -317,7 +321,7 @@ Each step file ends with two prompts, both ready to paste with no edits:
 1. Build and stage. Claude builds the step, proves it, deploys it to staging, and stops. Its report ends with the second prompt, copied out for you.
 2. Ship to production. Paste it once you have checked staging. It merges to `main`, does that step's production-only work, deploys, switches staging back to `main`, marks the step done here, and names the next step.
 
-Ship every step before starting the next since each build prompt begins by confirming the previous step is live. The order is 0, 0B, 1, 2, 3, F1 to F7, then 4 and 6 onward (step 5 is retired into F7, and 8B is skipped). Step 0 has no ship prompt since it only touches your Mac.
+Ship every step before starting the next since each build prompt begins by confirming the previous step is live. The order is 0, 0B, 1, 2, 3, F1, F2, 9A, 9B, F3 to F7, then 4, 6, 7, 8, and 10A onward (step 5 is retired into F7, and 8B is skipped). Step 0 has no ship prompt since it only touches your Mac.
 
 ## Links to test
 

@@ -16,37 +16,37 @@ Counted on 2026-10-17, read only:
 | Language | Single-quoted | To convert | To keep, and why |
 |---|---|---|---|
 | Python | 27 strings in 7 files | 0 | All 27. Each holds a double quote, mostly a pattern that matches the page's JavaScript (`id:"`, `date:"([^"]*)"`), so it would need escaping. |
-| JavaScript, `index.html` outside `CASES` and `GLOSSARY` | About 330 | About 322 | About 8 that hold a double quote, mostly strings that build markup with double-quoted attributes. |
-| JavaScript, `methodology/index.html` | About 9 | About 9 | None expected. |
+| JavaScript, `index.html`'s script outside `CASES` and `GLOSSARY` (in `js/` since step 9B) | About 330 | About 322 | About 8 that hold a double quote, mostly strings that build markup with double-quoted attributes. |
+| JavaScript, `methodology/index.html` | About 9 | 0 | Step 9B replaced this script with `js/menu.js`, which shares `index.html`'s menu code. |
 | HTML attributes | 0 | 0 | None. |
 
 The JavaScript counts come from a rough pattern, so the step starts by counting exactly with a tokenizer.
 
-`CASES` and `GLOSSARY` are left exactly as they are. Step 9A moves them under decision 30, and `scripts/check_quotes.py` skips the single-quoted `aka:` field in `CASES` by matching it as written.
+Under decision 31, steps 9A and 9B ran before this step, so the JavaScript lives in `js/`. `js/cases.js` and `js/glossary.js` are left exactly as step 9A wrote them, since the add-case skill and `scripts/check_quotes.py` (which skips the single-quoted `aka:` field) match them as written. The vendored `js/vendor/` files are never touched.
 
 So this step converts JavaScript only. It confirms Python and HTML have nothing to convert and changes neither.
 
 ## The changes
 
-1. Count every single-quoted string in the two inline scripts with a tokenizer, outside `CASES` and `GLOSSARY`, and list each one that must stay single with its reason.
-2. Convert the rest to double quotes, one commit per page, the `index.html` block first. A string that holds a double quote stays single. So does any string a test or a check script matches as exact text, with its reason listed.
+1. Count every single-quoted string in the app's JavaScript files with a tokenizer (every file in `js/` except `cases.js`, `glossary.js`, and `vendor/`), and list each one that must stay single with its reason.
+2. Convert the rest to double quotes, one commit per file, the sample first. A string that holds a double quote stays single. So does any string a test or a check script matches as exact text, with its reason listed.
 
 ## The sample-file review gate
 
-- JavaScript: The `index.html` block is the sample, holding nearly every string. Convert it and stop for approval before the Methodology block.
-- HTML: The only change to either page is its script block, so `index.html` is the sample here too. Show its diff with the JavaScript sample.
+- JavaScript: The file in `js/` with the most single-quoted strings is the sample. Convert it and stop for approval before the others.
+- HTML: No page changes, since the pages hold no script after step 9B and no single-quoted attribute.
 - Python: No Python file changes.
 
 ## Proving it
 
-- A token comparison of each block against `main`, treating `'x'` and `"x"` as the same string, finds no other change, and `node --check` passes on each block.
-- `git diff main -- index.html` touches no line of `CASES` or `GLOSSARY`, and the five check scripts exit 0.
+- A token comparison of each file against `main`, treating `'x'` and `"x"` as the same string, finds no other change, and `node --check` passes on each file.
+- `git diff main` touches neither page, `js/cases.js`, nor `js/glossary.js`, and the five check scripts exit 0.
 - Both suites pass with the same counts before every commit, `scripts/screenshot-diff/run.sh main standards-format-quotes` reports zero changed pixels, and `scripts/check_overlaps.py` reports no overlaps.
-- `check_format.py` still exits 0 on both pages and both scratch blocks outside the data.
+- `check_format.py` still exits 0 on every JavaScript file and both pages.
 
 ## Done when
 
-Every JavaScript string outside `CASES` and `GLOSSARY` that can take double quotes has them, each kept single quote is on the list Annie approved, every proof above passes, and both suites pass with the same counts.
+Every string in the app's JavaScript files outside the case data that can take double quotes has them, each kept single quote is on the list Annie approved, every proof above passes, and both suites pass with the same counts.
 
 ## Rollback
 
@@ -75,20 +75,20 @@ a stop because a filetype changes in only one file.
    off an up-to-date main as standards-format-quotes. Never work on main.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass before any change. Record both counts. Count the
-   single-quoted strings in both inline scripts with a tokenizer, outside
-   CASES and GLOSSARY, and confirm the 27 Python strings each hold a double
-   quote and no HTML attribute is single-quoted.
-3. Sample-file review gate (JavaScript and HTML): convert the index.html
-   block, leaving CASES and GLOSSARY byte for byte, and prove it with the
-   token comparison, node --check, and git diff main -- index.html. Give
-   me a clickable link, a short summary, the list of quotes kept with the
-   reason for each, and the git diff command, then STOP until I approve.
-   Carry any correction I ask for.
-4. On approval, convert the methodology/index.html block in its own commit.
-5. Prove it: the token comparison and node --check on both blocks, the
+   single-quoted strings in every file in js/ except cases.js,
+   glossary.js, and vendor/ with a tokenizer, and confirm the 27 Python
+   strings each hold a double quote and no HTML attribute is
+   single-quoted.
+3. Sample-file review gate (JavaScript): convert the file with the most
+   single-quoted strings and prove it with the token comparison and node
+   --check. Give me a clickable link, a short summary, the list of quotes
+   kept with the reason for each, and the git diff command, then STOP
+   until I approve. Carry any correction I ask for.
+4. On approval, convert the other files, one commit each.
+5. Prove it: the token comparison and node --check on every file, the
    five check scripts, both suites (same counts), the screenshot diff
-   (zero changed pixels), check_overlaps.py, and check_format.py on both
-   pages, each gated on its exit code.
+   (zero changed pixels), check_overlaps.py, and check_format.py on every
+   JavaScript file and both pages, each gated on its exit code.
 6. Push, deploy the branch to staging with the README command, and run
    the staging health check.
 7. Report what you verified and how, give me the staging links with a
