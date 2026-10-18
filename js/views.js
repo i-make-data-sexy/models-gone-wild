@@ -1,3 +1,19 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* Applies the filters to every view, runs the options menu, and
+   switches between the timeline, Threat Matrix, and Cases by Lab tabs,
+   keeping each view's permalink in the address bar. It also works out
+   APP_BASE, the app's own path, which the other scripts build their
+   links from. */
+
+
+
+/* ========================================================================
+     Views
+   ======================================================================== */
+
 /* ================================================
      Apply Filters
    ================================================ */

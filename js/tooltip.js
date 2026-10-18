@@ -1,6 +1,18 @@
-/* ================================================
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The tooltip for glossary terms and info notes, one bubble that
+   positionTip() places beside its trigger, held 10px inside the reading
+   column and flipped below when it would run off the top of the window.
+   It hides on scroll, resize, and Escape, and the Threat Matrix redraws
+   when its width changes. */
+
+
+
+/* ========================================================================
      Tooltip
-   ================================================ */
+   ======================================================================== */
 
 const tip     = document.getElementById('tip');
 const TIP_GAP = 10;

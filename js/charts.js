@@ -1,3 +1,18 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The Threat Matrix scatter and the Cases by Lab chart, both drawn as
+   inline SVG. The scatter places each case by complexity and harm,
+   spreads dots that share a spot, and places each label clear of every
+   dot and every other label. */
+
+
+
+/* ========================================================================
+     Charts
+   ======================================================================== */
+
 /* ================================================
      Render Scatter
    ================================================ */

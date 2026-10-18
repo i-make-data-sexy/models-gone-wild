@@ -1,3 +1,18 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The filters and the timeline view. It reads the class, lab, outcome,
+   and kind filters, keeps the lab picker's summary current, and renders
+   the timeline of case cards. filtered() returns the cases the filters
+   keep, which every view reads. */
+
+
+
+/* ========================================================================
+     Timeline
+   ======================================================================== */
+
 /* ================================================
      Filter State
    ================================================ */

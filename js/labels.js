@@ -1,4 +1,16 @@
 /* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The registry's lookup tables. They hold the label each class,
+   disclosure, outcome, and kind tag shows, the definitions behind the
+   info notes, the disclosure tag colors, and the card action icons.
+   Loads after the case data and before every script that reads these
+   tables. */
+
+
+
+/* ========================================================================
      The Registry
    ======================================================================== */
 

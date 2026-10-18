@@ -1,6 +1,17 @@
-/* ================================================
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The site header's mobile menu, loaded by both pages. The MENU label
+   toggles a hidden checkbox, and one change listener shows or hides the
+   menu and keeps aria-expanded in step. A click handler on .menu-toggle
+   breaks the menu on iPhone, so the checkbox is the whole mechanism. */
+
+
+
+/* ========================================================================
      Site Header Mobile Menu
-   ================================================ */
+   ======================================================================== */
 
 (function(){
     const checkbox = document.getElementById('menu-toggle-checkbox');

@@ -1,6 +1,17 @@
-/* ================================================
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The text helpers the cards and posters share. gloss() marks each
+   glossary term in a case's prose, escAttr() escapes a value for an
+   HTML attribute, and the date and victim-notice helpers write out a
+   case's dates. Reads GLOSSARY from js/glossary.js. */
+
+
+
+/* ========================================================================
      Glossary
-   ================================================ */
+   ======================================================================== */
 
 const GLOSS_KEYS = Object.keys(GLOSSARY).sort((a,b)=>b.length-a.length);
 

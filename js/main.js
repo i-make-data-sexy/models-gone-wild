@@ -1,6 +1,17 @@
-/* ================================================
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* Starts the page once every other script has loaded. It applies the
+   filters, opens the view the address names and any poster it links to,
+   and redraws both charts once the fonts load so their labels measure
+   correctly. */
+
+
+
+/* ========================================================================
      Init
-   ================================================ */
+   ======================================================================== */
 
 applyFilters();
 
