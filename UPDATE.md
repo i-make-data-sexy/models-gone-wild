@@ -75,8 +75,9 @@ Working dir: ~/Dropbox/Annielytics/Code/Python/Models Gone Wild
 Change:
   [describe what should look or behave differently]
 
-Branch off up-to-date main. Everything lives in index.html, so tell me what
-you plan to touch before you touch it. Watch for the traps listed in
+Branch off up-to-date main. The markup and the behavior live in index.html,
+the styles in css/styles.css, and the case data in js/cases.js and
+js/glossary.js, so tell me what you plan to touch before you touch it. Watch for the traps listed in
 UPDATE.md, especially relative paths and the poster overlay's stacking order.
 Run the checks, show me a local preview, and STOP for my sign-off before
 deploying.
@@ -84,7 +85,7 @@ deploying.
 
 ## The case schema
 
-Every case is one object in the `CASES` array near the top of the script block in `index.html`, and the table below is the only record of its fields.
+Every case is one object in the `CASES` array in `js/cases.js`, and the table below is the only record of its fields. The object's braces sit at four spaces and its keys at eight. A field on a line of its own lines up on the value column the other cases share (`whyHarm:       "..."`), and fields packed several to a line keep single spacing (`id:"sol", slug:"sol-hugging-face"`). After adding or editing a case, run `python3 -I ~/.claude/formatting-tools/format_js.py js/cases.js js/glossary.js` to set the column, and `scripts/cases.py` is the one loader the checks use to read it.
 
 | Field | Where it shows | Constraints |
 |---|---|---|
@@ -223,7 +224,7 @@ The Methodology page at `methodology/index.html` explains the three tabs, the di
 
 ## The glossary
 
-Security jargon gets a dotted underline and a definition on hover, tap, or keyboard focus. The terms live in the `GLOSSARY` object in the script block, not in the case data.
+Security jargon gets a dotted underline and a definition on hover, tap, or keyboard focus. The terms live in the `GLOSSARY` object in `js/glossary.js`, not in the case data.
 
 Add a term by adding one line to that object. Every case, present and future, picks it up. A term is wrapped on its FIRST appearance in each passage, so a definition is offered once rather than on every repetition, and matching ignores case while preserving whatever capitalization the prose used.
 
@@ -259,32 +260,35 @@ Run all of these from the repo root. Each takes seconds.
 #    All three files, since the stylesheet carries url() references too.
 grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/styles.css methodology/index.html
 
-# 2. Script block still parses structurally, and every case is well formed.
+# 2. The page script and both data files still parse structurally, and
+#    every case is well formed.
 python3 - <<'PY'
-import re
-js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
-ok = js.count('{')==js.count('}') and js.count('(')==js.count(')') and js.count('`')%2==0
-print("balance:", "OK" if ok else "MISMATCH")
-req={'id','slug','alias','lab','org','date','disclosed','lag','order','cls',
-     'complexity','harm','charge','wantedFor','mo','caution',
-     'escapedFrom','lastSeen','disclosedBy','outcome','reach'}
-for cid in re.findall(r'id:"(\w+)"', js):
-    blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
-    missing=req-{m for m in req if re.search(m+r'\s*:', blk)}
-    print(f"  {cid:8} {'OK' if not missing else 'MISSING '+', '.join(sorted(missing))}")
+import re, sys
+sys.path.insert(0, "scripts")
+from cases import case_blocks, load_cases_js
+page = re.search(r"<script>(.*?)</script>", open("index.html").read(), re.S).group(1)
+for name, js in [("index.html", page), ("js/cases.js", load_cases_js()), ("js/glossary.js", open("js/glossary.js").read())]:
+    ok = js.count("{") == js.count("}") and js.count("(") == js.count(")") and js.count("`") % 2 == 0
+    print(f"balance {name}:", "OK" if ok else "MISMATCH")
+req = {"id", "slug", "alias", "lab", "org", "date", "disclosed", "lag", "order", "cls",
+       "complexity", "harm", "charge", "wantedFor", "mo", "caution",
+       "escapedFrom", "lastSeen", "disclosedBy", "outcome", "reach"}
+for cid, blk in case_blocks(load_cases_js()).items():
+    missing = req - {m for m in req if re.search(m + r"\s*:", blk)}
+    print(f"  {cid:8} {'OK' if not missing else 'MISSING ' + ', '.join(sorted(missing))}")
 PY
 
 # 3. Poster footer still fits on one line for every case.
 python3 - <<'PY'
-import re
-js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
-for cid in re.findall(r'id:"(\w+)"', js):
-    blk=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
-    est=" (EST.)" if re.search(r'estimated\s*:\s*true',blk) else ""
-    d="ESCAPED · "+re.search(r'date:"([^"]*)"',blk).group(1).upper()+est
-    s="LAST SEEN · "+re.search(r'lastSeen:"([^"]*)"',blk).group(1).upper()
-    w=(len(d)+len(s))*6.4+12
-    print(f"  {w:5.0f}px  {'one line' if w<392 else 'WRAPS, shorten lastSeen'}  {cid}")
+import re, sys
+sys.path.insert(0, "scripts")
+from cases import case_blocks, load_cases_js, text_field
+for cid, blk in case_blocks(load_cases_js()).items():
+    est = " (EST.)" if re.search(r"estimated\s*:\s*true", blk) else ""
+    d   = "ESCAPED · " + text_field(blk, "date").upper() + est
+    s   = "LAST SEEN · " + text_field(blk, "lastSeen").upper()
+    w   = (len(d) + len(s)) * 6.4 + 12
+    print(f"  {w:5.0f}px  {'one line' if w < 392 else 'WRAPS, shorten lastSeen'}  {cid}")
 PY
 ```
 
@@ -329,7 +333,7 @@ Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, wh
 
 ## Where things live
 
-`index.html` carries the markup and the script, including the `CASES` array. `methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/styles.css`), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
+`index.html` carries the markup and the script. `js/cases.js` holds the `CASES` array and `js/glossary.js` the `GLOSSARY` object, both loaded before the page script, and `scripts/cases.py` is the loader every check reads them through. `methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/styles.css`), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
 
 The stylesheet is linked relatively as `css/styles.css`. A leading slash would resolve to the site root and 404, which is what check 1 guards.
 

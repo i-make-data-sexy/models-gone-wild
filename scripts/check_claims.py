@@ -1,5 +1,9 @@
-#!/usr/bin/env python3
-"""Flags copy that a new case can quietly make untrue.
+# ========================================================================
+#   About This File
+# ========================================================================
+
+"""
+Flags copy that a new case can make untrue.
 
 Several lines on the page are claims about the registry as a whole
 rather than about one model: the only confirmed zero-day, the least
@@ -8,279 +12,353 @@ falsify any of them without touching the sentence itself, and nothing
 else on the page would notice.
 
 Run this after adding or rescoring a case. Anything it reports as STALE
-is copy that now contradicts the data.
+is copy that now contradicts the data. An undated case counts toward the
+registry year by the year it was disclosed.
 
 Exit status is 1 if a computable claim has gone stale, 0 otherwise.
 Review-only reminders never fail the run, since no script can settle
 them.
 """
-import re
+
+
+
+# ========================================================================
+#   Imports
+# ========================================================================
+
+# Standard library
 import sys
 
-SRC = "index.html"
-MID = 5          # The dashed quadrant dividers sit at 5 on both axes
+# Local
+from cases import case_blocks, load_cases_js, number_field, text_field
+
 
 
 # ========================================================================
 #   Parsing
 # ========================================================================
 
-def load_cases(text: str) -> list:
+def load_cases(js: str) -> list:
     """
-    Pulls every case out of the registry script embedded in the page
+    Pulls every case out of the case source
+
     Args:
-        text (str): The full contents of index.html
+        js (str): The case source from js/cases.js
+
     Returns:
-        list: One dict per case with its id, alias, lab, date, disclosed, charge, caution, complexity, and harm
+        list: One dict per case with its id, alias, lab, dates, charge, caution, scores, and outcome
     """
-    js = re.search(r"<script>(.*?)</script>", text, re.S).group(1)
-    cases = []
-    for cid in re.findall(r'id:"(\w+)"', js):
-        blk = re.search(r'\{\s*id:"' + cid + r'".*?\n  \}', js, re.S).group(0)
-        get = lambda k: (re.search(k + r':"([^"]*)"', blk) or [None, ""])[1]
-        num = lambda k: int(re.search(k + r":(\d+)", blk).group(1))
-        cases.append({
-            "id": cid,
-            "alias": get("alias"),
-            "lab": get("lab"),
-            "date": get("date"),
-            "disclosed": get("disclosed"),
-            "charge": get("charge"),
-            "caution": get("caution"),
-            "complexity": num("complexity"),
-            "harm": num("harm"),
-            "outcome": get("outcome"),
-        })
-    return cases
+
+    return [
+        {
+            "id":         cid,
+            "alias":      text_field(block, "alias"),
+            "lab":        text_field(block, "lab"),
+            "date":       text_field(block, "date"),
+            "disclosed":  text_field(block, "disclosed"),
+            "charge":     text_field(block, "charge"),
+            "caution":    text_field(block, "caution"),
+            "complexity": number_field(block, "complexity"),
+            "harm":       number_field(block, "harm"),
+            "outcome":    text_field(block, "outcome"),
+        }
+        for cid, block in case_blocks(js).items()
+    ]
+
 
 
 # ========================================================================
 #   Computable
 # ========================================================================
 
-def check_only_zero_day(cases: list) -> tuple:
+def check_only_zero_day(cases: list) -> tuple[bool, str]:
     """
-    Confirms no more than one case cites a zero-day, the sole-possession claim in Sol's caution and complexity note
+    Confirms no more than one case cites a zero-day
+
+    Sol's caution and complexity note both claim the only one
+
     Args:
         cases (list): The cases returned by load_cases
+
     Returns:
-        tuple: Whether the claim holds, and a line naming the cases whose charge cites a zero-day
+        tuple[bool, str]: Whether the claim holds, and a line naming the cases whose charge cites a zero-day
     """
+
     hits = [c["alias"] for c in cases if "zero-day" in c["charge"].lower()]
-    ok = len(hits) <= 1
+    ok   = len(hits) <= 1
+
     return ok, "cases whose charge cites a zero-day: " + (", ".join(hits) or "none")
 
 
-def check_most_dangerous(cases: list) -> tuple:
+def check_most_dangerous(cases: list) -> tuple[bool, str]:
     """
-    Confirms Sol still has the highest complexity plus harm, as its caution calls it the most dangerous escape on the registry
+    Confirms Sol still has the highest complexity plus harm
+
+    Its caution calls it the most dangerous escape on the registry
+
     Args:
         cases (list): The cases returned by load_cases
+
     Returns:
-        tuple: Whether the claim holds, and a line naming the top-scoring case and its combined score
+        tuple[bool, str]: Whether the claim holds, and a line naming the top-scoring case and its combined score
     """
+
     ranked = sorted(cases, key=lambda c: c["complexity"] + c["harm"], reverse=True)
-    top = ranked[0]
-    ok = top["id"] == "sol"
-    return ok, "highest combined score: %s at %d" % (
-        top["alias"], top["complexity"] + top["harm"])
+    top    = ranked[0]
+    ok     = top["id"] == "sol"
+
+    return ok, "highest combined score: %s at %d" % (top["alias"], top["complexity"] + top["harm"])
 
 
-def check_cheater_quadrant(cases: list) -> tuple:
+def check_cheater_quadrant(cases: list) -> tuple[bool, str]:
     """
-    Confirms OpenAIResearcher still sits in the determined-cheaters quadrant its note places it in
+    Confirms OpenAIResearcher still sits in the determined-cheaters quadrant
+
+    The dashed quadrant dividers sit at 5 on both axes
+
     Args:
         cases (list): The cases returned by load_cases
+
     Returns:
-        tuple: Whether the claim holds, and a line listing every case in the high-complexity, low-harm quadrant
+        tuple[bool, str]: Whether the claim holds, and a line listing every case in the high-complexity, low-harm quadrant
     """
-    inside = [c["alias"] for c in cases
-              if c["complexity"] > MID and c["harm"] < MID]
-    ok = "OpenAIResearcher" in inside
+
+    mid    = 5
+    inside = [c["alias"] for c in cases if c["complexity"] > mid and c["harm"] < mid]
+    ok     = "OpenAIResearcher" in inside
+
     return ok, "cases in determined cheaters: " + (", ".join(inside) or "none")
 
 
-def check_registry_year(cases: list) -> tuple:
+def check_registry_year(cases: list) -> tuple[bool, str]:
     """
-    Confirms every escape falls in 2026, the year the FIELD REGISTRY 2026 masthead is keyed to
+    Confirms every escape falls in 2026, the year of the FIELD REGISTRY 2026 masthead
+
     Args:
         cases (list): The cases returned by load_cases
+
     Returns:
-        tuple: Whether the claim holds, and a line listing the escape years represented
+        tuple[bool, str]: Whether the claim holds, and a line listing the escape years represented
     """
-    # An undated case counts by the year it was disclosed
+
     years = sorted({(c["disclosed"] if c["date"] == "Date not disclosed" else c["date"]).split()[-1] for c in cases})
-    ok = years == ["2026"]
+    ok    = years == ["2026"]
+
     return ok, "years represented: " + ", ".join(years)
 
 
-COMPUTABLE = [
-    ("Considered the most dangerous of the 2026 escapes",
-     "Sol, caution",
-     "another case outscores Sol on complexity plus harm",
-     check_most_dangerous),
-    ("the only confirmed zero-day",
-     "Sol, caution and whyComplexity",
-     "a second case is confirmed to have used a zero-day",
-     check_only_zero_day),
-    ("OpenAIResearcher sits here",
-     "QUADRANT_NOTE, determined cheaters",
-     "OpenAIResearcher is rescored out of the quadrant",
-     check_cheater_quadrant),
-    ("FIELD REGISTRY 2026",
-     "masthead, bureau line",
-     "a case escapes outside 2026",
-     check_registry_year),
-]
 
-# Claims no script can settle. Read them and decide.
-REVIEW = [
-    ("Anthropic does not name the university or date the incident",
-     "Mythos Preview (university), caution and date",
-     "the university is named or the incident is dated, which would also replace \"Date not disclosed\""),
-    ("Anthropic does not name the local government or date the incident",
-     "Mythos 5 (property map), caution and date",
-     "the local government is named or the incident is dated"),
-    ("Anthropic does not name the state agency or date the incident",
-     "Mythos 5 (state database), caution and date",
-     "the state agency is named or the incident is dated"),
-    ("filing forms with police and government agencies in others",
-     "masthead, intro",
-     "the form-filing cases are removed, or the intro stops matching the kinds of cases listed"),
-    ("accompanied by an unreleased, unnamed pre-release model, since deactivated",
-     "Sol, aka",
-     "that model is named, released, or brought back into use"),
-    ("Third major lab in a month to disclose the same failure mode",
-     "Muse Spark, caution",
-     "the ordering of the disclosures is revised"),
-    ("Details on the targeted company were withheld",
-     "Muse Spark, caution",
-     "the company is later named"),
-    ("the first freely downloadable open-weight model caught doing it",
-     "Kimi K3, caution",
-     "an earlier open-weight case comes to light"),
-    ("OpenAI has since confirmed the agents were its own, according to rubyhack.ai",
-     "OpenAIResearcher, caution",
-     "OpenAI walks the confirmation back, or names the model"),
-    ("rubyhack.ai also ties this swarm to the Hugging Face breach, a link this registry could not confirm",
-     "Unnamed agent (RubyGems), caution",
-     "an independent source confirms or refutes the link to Sol's case"),
-    ("tried a caching flaw nobody had found yet",
-     "Unnamed agent (RubyGems), whyComplexity",
-     "the attempt is shown to have worked, which would end Sol's claim to the only confirmed zero-day"),
-    ("Intrusion into three unnamed companies",
-     "Gemini, wantedFor and caution",
-     "any of the three companies is later named"),
-    ("Google \u00b7 unnamed model",
-     "Gemini, org",
-     "the Gemini version involved is confirmed, which reporting has not fixed beyond ruling out the newest models"),
-    ("the minister says the breach did not come up",
-     "Unnamed agent (Medicare), caution",
-     "OpenAI or Marles gives a different account of the September 1 meeting"),
-    ("Related OpenAI agents used urlquery.net",
-     "Unnamed agent (Medicare), mo and whyComplexity",
-     "Transluce's attribution of the AIHW activity to OpenAI is disputed or withdrawn"),
-    ("OpenAI \u00b7 unnamed agent",
-     "Unnamed agent (Medicare), org",
-     "OpenAI names the model behind the Medicare access"),
-    ("all affected parties notified by September 9, per Anthropic",
-     "Opus, Mythos, notice",
-     "Anthropic dates when it reached the third organization, or METR's investigation says otherwise"),
-    ("Hugging Face found it on its own and disclosed it July 16, 2026",
-     "Sol, notice",
-     "the Sol correction pass revises the escape date, the disclosure, or when OpenAI knew"),
-    ("RubyGems was not told by OpenAI before the case went public, according to rubyhack.ai",
-     "Unnamed agent (RubyGems), notice",
-     "OpenAI or Ruby Central says RubyGems was told earlier"),
-    ("which OpenAI describes as publicly available developer keys",
-     "Unnamed agent (Census), mo",
-     "OpenAI or the Census Bureau settles whether these were login credentials or developer keys"),
-    ("has not said when",
-     "Unnamed agents (Census, SEC), caution",
-     "OpenAI, the Census Bureau, or the SEC dates the notice, which would earn a notice field"),
-    ("has not separately confirmed this attempt",
-     "Unnamed agent (Education), caution",
-     "OpenAI confirms or disputes the Education Department attempt"),
-    ("OpenAI has not separately confirmed this target",
-     "Unnamed agent (Data USA), caution",
-     "OpenAI confirms Data USA, or disputes Transluce's attribution of the swarm"),
-    ("The attribution to OpenAI is Wikimedia's",
-     "Unnamed agent (Wikimedia), caution",
-     "OpenAI confirms or disputes that the Wikimedia activity was its agents"),
-    ("It calls the link to the May 7 to 11 Wikidata Query Service outage possible, not proven",
-     "Unnamed agent (Wikimedia), caution, charge, and whyHarm",
-     "Wikimedia confirms or rules out the agents' part in the May outage, which may move the harm score"),
-    ("May 12, 2026",
-     "Unnamed agent (Wikimedia), date",
-     "Wikimedia or OpenAI dates the edits, since this rests on Simon Willison's reading that they appear to have started May 12, or ties the agents to the May 7 outage"),
-    ("Summer 2026",
-     "Unnamed agents (Census, SEC, Education), date",
-     "any source dates any of the three incidents more precisely"),
-    ("Neither has said how the model went beyond the service's intended use",
-     "Unnamed agent (Fire History), caution and whyComplexity",
-     "OpenAI or NSW describes the technique, which may move the complexity score"),
-    ("June 2026",
-     "Unnamed agent (Fire History), date",
-     "OpenAI or NSW dates the Fire History activity more precisely"),
-    ("OpenAI says it found the activity in mid-August and notified BOCSAR on September 18",
-     "Unnamed agent (BOCSAR), caution",
-     "a source reconciles this with ABC's report that the Australian Signals Directorate notified BOCSAR the week of September 21"),
-    ("then failed to get past its access controls",
-     "Unnamed agent (BOCSAR), charge, outcome, and cls",
-     "OpenAI or BOCSAR says the configuration and logs it got back were not meant to be reachable, which would make it a class 2 success"),
-    ("whether the data should have been reachable 'depends on VAHI's access policies'",
-     "Unnamed agent (VAHI), caution and whyHarm",
-     "VAHI or the Victorian government says whether the data was meant to be reachable, which may move the harm score"),
-    ("June 2026",
-     "Unnamed agent (VAHI), date",
-     "OpenAI or Victoria dates the VAHI access more precisely, or ties it to the Medicare agent's June 18 run"),
-    ("Last updated: <date>",
-     "footer",
-     "anything at all changes"),
-    ("has not named the third party or said when it was told",
-     "Opus 4.6, caution",
-     "Anthropic names the third party or dates the notice, which would earn a notice field"),
-    ("January 2026",
-     "Opus 4.6, date",
-     "Anthropic or METR dates the Opus 4.6 run more precisely"),
-    ("the same route to the open internet as one of the incidents in the July 30 case",
-     "Opus 4.6, mo",
-     "METR's investigation describes the Opus 4.6 route differently, or names the incident it shared"),
-]
+# ========================================================================
+#   Claims
+# ========================================================================
 
+def computable_claims() -> list:
+    """
+    Lists the claims the data can settle, each with the check that settles it
+
+    Args:
+        None
+
+    Returns:
+        list: (quote, where, goes stale when, check function) tuples
+    """
+
+    return [
+        ("Considered the most dangerous of the 2026 escapes",
+         "Sol, caution",
+         "another case outscores Sol on complexity plus harm",
+         check_most_dangerous),
+        ("the only confirmed zero-day",
+         "Sol, caution and whyComplexity",
+         "a second case is confirmed to have used a zero-day",
+         check_only_zero_day),
+        ("OpenAIResearcher sits here",
+         "QUADRANT_NOTE, determined cheaters",
+         "OpenAIResearcher is rescored out of the quadrant",
+         check_cheater_quadrant),
+        ("FIELD REGISTRY 2026",
+         "masthead, bureau line",
+         "a case escapes outside 2026",
+         check_registry_year),
+    ]
+
+
+def review_claims() -> list:
+    """
+    Lists the claims no script can settle, for a reader to decide
+
+    Args:
+        None
+
+    Returns:
+        list: (quote, where, revisit if) tuples
+    """
+
+    return [
+        ("Anthropic does not name the university or date the incident",
+         "Mythos Preview (university), caution and date",
+         "the university is named or the incident is dated, which would also replace \"Date not disclosed\""),
+        ("Anthropic does not name the local government or date the incident",
+         "Mythos 5 (property map), caution and date",
+         "the local government is named or the incident is dated"),
+        ("Anthropic does not name the state agency or date the incident",
+         "Mythos 5 (state database), caution and date",
+         "the state agency is named or the incident is dated"),
+        ("filing forms with police and government agencies in others",
+         "masthead, intro",
+         "the form-filing cases are removed, or the intro stops matching the kinds of cases listed"),
+        ("accompanied by an unreleased, unnamed pre-release model, since deactivated",
+         "Sol, aka",
+         "that model is named, released, or brought back into use"),
+        ("Third major lab in a month to disclose the same failure mode",
+         "Muse Spark, caution",
+         "the ordering of the disclosures is revised"),
+        ("Details on the targeted company were withheld",
+         "Muse Spark, caution",
+         "the company is later named"),
+        ("the first freely downloadable open-weight model caught doing it",
+         "Kimi K3, caution",
+         "an earlier open-weight case comes to light"),
+        ("OpenAI has since confirmed the agents were its own, according to rubyhack.ai",
+         "OpenAIResearcher, caution",
+         "OpenAI walks the confirmation back, or names the model"),
+        ("rubyhack.ai also ties this swarm to the Hugging Face breach, a link this registry could not confirm",
+         "Unnamed agent (RubyGems), caution",
+         "an independent source confirms or refutes the link to Sol's case"),
+        ("tried a caching flaw nobody had found yet",
+         "Unnamed agent (RubyGems), whyComplexity",
+         "the attempt is shown to have worked, which would end Sol's claim to the only confirmed zero-day"),
+        ("Intrusion into three unnamed companies",
+         "Gemini, wantedFor and caution",
+         "any of the three companies is later named"),
+        ("Google \u00b7 unnamed model",
+         "Gemini, org",
+         "the Gemini version involved is confirmed, which reporting has not fixed beyond ruling out the newest models"),
+        ("the minister says the breach did not come up",
+         "Unnamed agent (Medicare), caution",
+         "OpenAI or Marles gives a different account of the September 1 meeting"),
+        ("Related OpenAI agents used urlquery.net",
+         "Unnamed agent (Medicare), mo and whyComplexity",
+         "Transluce's attribution of the AIHW activity to OpenAI is disputed or withdrawn"),
+        ("OpenAI \u00b7 unnamed agent",
+         "Unnamed agent (Medicare), org",
+         "OpenAI names the model behind the Medicare access"),
+        ("all affected parties notified by September 9, per Anthropic",
+         "Opus, Mythos, notice",
+         "Anthropic dates when it reached the third organization, or METR's investigation says otherwise"),
+        ("Hugging Face found it on its own and disclosed it July 16, 2026",
+         "Sol, notice",
+         "the Sol correction pass revises the escape date, the disclosure, or when OpenAI knew"),
+        ("RubyGems was not told by OpenAI before the case went public, according to rubyhack.ai",
+         "Unnamed agent (RubyGems), notice",
+         "OpenAI or Ruby Central says RubyGems was told earlier"),
+        ("which OpenAI describes as publicly available developer keys",
+         "Unnamed agent (Census), mo",
+         "OpenAI or the Census Bureau settles whether these were login credentials or developer keys"),
+        ("has not said when",
+         "Unnamed agents (Census, SEC), caution",
+         "OpenAI, the Census Bureau, or the SEC dates the notice, which would earn a notice field"),
+        ("has not separately confirmed this attempt",
+         "Unnamed agent (Education), caution",
+         "OpenAI confirms or disputes the Education Department attempt"),
+        ("OpenAI has not separately confirmed this target",
+         "Unnamed agent (Data USA), caution",
+         "OpenAI confirms Data USA, or disputes Transluce's attribution of the swarm"),
+        ("The attribution to OpenAI is Wikimedia's",
+         "Unnamed agent (Wikimedia), caution",
+         "OpenAI confirms or disputes that the Wikimedia activity was its agents"),
+        ("It calls the link to the May 7 to 11 Wikidata Query Service outage possible, not proven",
+         "Unnamed agent (Wikimedia), caution, charge, and whyHarm",
+         "Wikimedia confirms or rules out the agents' part in the May outage, which may move the harm score"),
+        ("May 12, 2026",
+         "Unnamed agent (Wikimedia), date",
+         "Wikimedia or OpenAI dates the edits, since this rests on Simon Willison's reading that they appear to have started May 12, or ties the agents to the May 7 outage"),
+        ("Summer 2026",
+         "Unnamed agents (Census, SEC, Education), date",
+         "any source dates any of the three incidents more precisely"),
+        ("Neither has said how the model went beyond the service's intended use",
+         "Unnamed agent (Fire History), caution and whyComplexity",
+         "OpenAI or NSW describes the technique, which may move the complexity score"),
+        ("June 2026",
+         "Unnamed agent (Fire History), date",
+         "OpenAI or NSW dates the Fire History activity more precisely"),
+        ("OpenAI says it found the activity in mid-August and notified BOCSAR on September 18",
+         "Unnamed agent (BOCSAR), caution",
+         "a source reconciles this with ABC's report that the Australian Signals Directorate notified BOCSAR the week of September 21"),
+        ("then failed to get past its access controls",
+         "Unnamed agent (BOCSAR), charge, outcome, and cls",
+         "OpenAI or BOCSAR says the configuration and logs it got back were not meant to be reachable, which would make it a class 2 success"),
+        ("whether the data should have been reachable 'depends on VAHI's access policies'",
+         "Unnamed agent (VAHI), caution and whyHarm",
+         "VAHI or the Victorian government says whether the data was meant to be reachable, which may move the harm score"),
+        ("June 2026",
+         "Unnamed agent (VAHI), date",
+         "OpenAI or Victoria dates the VAHI access more precisely, or ties it to the Medicare agent's June 18 run"),
+        ("Last updated: <date>",
+         "footer",
+         "anything at all changes"),
+        ("has not named the third party or said when it was told",
+         "Opus 4.6, caution",
+         "Anthropic names the third party or dates the notice, which would earn a notice field"),
+        ("January 2026",
+         "Opus 4.6, date",
+         "Anthropic or METR dates the Opus 4.6 run more precisely"),
+        ("the same route to the open internet as one of the incidents in the July 30 case",
+         "Opus 4.6, mo",
+         "METR's investigation describes the Opus 4.6 route differently, or names the incident it shared"),
+    ]
+
+
+
+# ========================================================================
+#   Main
+# ========================================================================
 
 def main() -> int:
     """
-    Runs every computable claim check against the registry and prints the review-only reminders
+    Runs every computable claim check and prints the review-only reminders
+
     Args:
         None
+
     Returns:
         int: 1 if any computable claim has gone stale, 0 otherwise
     """
-    cases = load_cases(open(SRC).read())
+
+    cases = load_cases(load_cases_js())
     stale = 0
 
     print("Claims the data can settle")
-    for quote, where, trigger, fn in COMPUTABLE:
+
+    for quote, where, trigger, fn in computable_claims():
         ok, detail = fn(cases)
+
         if not ok:
             stale += 1
+
         print("  %-6s %s" % ("OK" if ok else "STALE", quote))
         print("         %s  ::  %s" % (where, detail))
+
         if not ok:
             print("         goes stale when: %s" % trigger)
 
     print()
     print("Claims to read yourself")
-    for quote, where, trigger in REVIEW:
+
+    for quote, where, trigger in review_claims():
         print("  %s" % quote)
         print("         %s  ::  revisit if %s" % (where, trigger))
 
     print()
-    print("all claims hold" if not stale
-          else "%d claim(s) now contradict the data" % stale)
+    print("all claims hold" if not stale else "%d claim(s) now contradict the data" % stale)
+
     return 1 if stale else 0
 
+
+
+# ========================================================================
+#   Entry Point
+# ========================================================================
 
 if __name__ == "__main__":
     sys.exit(main())

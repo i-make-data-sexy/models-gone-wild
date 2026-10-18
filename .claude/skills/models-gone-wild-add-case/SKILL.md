@@ -19,16 +19,17 @@ Turns a headline and a few links into a sourced, scored, previewable case for th
 
 1. `cd` into the repo. Confirm `git status` is clean and `main` is up to date. Branch off main (`add-<id>`). Never work on main.
 2. Read `UPDATE.md` in full. It has the schema table, the `disclosedBy` test, the escape-date rule, the charge range, and the voice rules, including never praising or grading a lab.
-3. Print the current cases so every score is calibrated against them:
+3. Print the current cases so every score is calibrated against them. The cases live in the `CASES` array in `js/cases.js`, and `scripts/cases.py` is the one loader that reads them:
 
 ```bash
 python3 - <<'PY'
-import re
-js=re.search(r'<script>(.*?)</script>', open('index.html').read(), re.S).group(1)
-for cid in re.findall(r'id:"(\w+)"', js):
-    b=re.search(r'\{\s*id:"'+cid+r'".*?\n  \}', js, re.S).group(0)
-    g=lambda k:(re.search(k+r':"?([^",]*)',b) or [0,''])[1]
-    print(f"{cid:9} {g('alias'):18} {g('lab'):11} order {g('order'):2} cls {g('cls')} cx {g('complexity'):2} harm {g('harm'):2}  {g('date')} -> {g('disclosed')}")
+import sys
+sys.path.insert(0, "scripts")
+from cases import case_blocks, load_cases_js, number_field, text_field
+for cid, b in case_blocks(load_cases_js()).items():
+    t = lambda k: text_field(b, k)
+    n = lambda k: number_field(b, k)
+    print(f"{cid:9} {t('alias'):18} {t('lab'):11} order {n('order'):2} cls {n('cls')} cx {n('complexity'):2} harm {n('harm'):2}  {t('date')} -> {t('disclosed')}")
 PY
 ```
 
@@ -86,7 +87,14 @@ Set `reach` too, which feeds the Kind filter: `intrusion` when the model went af
 
 ## Step 5: Draft and stage
 
-Write the full case object, including `whyComplexity` and `whyHarm`, then any `GLOSSARY` terms the prose introduces. Insert it into `CASES` on the branch, renumber `order`, and add any `REVIEW` or `COMPUTABLE` entries. Do NOT commit.
+Write the full case object, including `whyComplexity` and `whyHarm`, then any `GLOSSARY` terms the prose introduces. Insert the case into `CASES` in `js/cases.js` and the terms into `GLOSSARY` in `js/glossary.js` on the branch, renumber `order`, and add any `REVIEW` or `COMPUTABLE` entries. Do NOT commit.
+
+Write the case the way the others are laid out: the object's braces at four spaces and its keys at eight, the fields that sit on a line of their own aligned on one value column (`whyHarm:       "..."`), and the fields packed several to a line left with single spacing (`id:"sol", slug:"sol-hugging-face"`). Then let the formatter set the column and confirm the gate passes both files:
+
+```bash
+python3 -I ~/.claude/formatting-tools/format_js.py js/cases.js js/glossary.js
+python3 -I ~/.claude/formatting-tools/check_format.py js/cases.js js/glossary.js
+```
 
 ### Update the footer date
 
@@ -142,7 +150,7 @@ Reply in the terminal, in this order. Keep it tight; Annie skims.
 1. TL;DR. Three or four sentences. What happened, the lag, and the recommended scores.
 2. Scores. A three-row table: field, score, one-line rationale naming the neighbors.
 3. The disclosure chain. Dated list with day counts.
-4. The case object, as it sits in `index.html`.
+4. The case object, as it sits in `js/cases.js`.
 5. What changed around it: new glossary terms, `order` shifts, new claim entries, checks run and their results, including the overlap check's view count and where each new label landed (for example, "below-right of its dot, since the row is full").
 6. Conflicts and unsourced items. What was resolved and how, and what is still thin.
 7. Decisions for Annie. Numbered questions with a recommendation for each. Ask them directly; do not bury a decision in a sentence.

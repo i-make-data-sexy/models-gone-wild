@@ -4,7 +4,7 @@
 
 # Tests that hold the app's two dependency records true. Every line of
 # requirements-dev.txt is an exact pin, and the vendored html2canvas file
-# still matches the SHA-256 recorded in js/VENDORED.md.
+# still matches the SHA-256 recorded in js/vendor/VENDORED.md.
 
 
 
@@ -58,7 +58,7 @@ def test_dev_requirements_are_pinned() -> None:
 
 def test_html2canvas_matches_recorded_hash() -> None:
     """
-    Checks js/html2canvas.min.js still hashes to the SHA-256 in VENDORED.md
+    Checks js/vendor/html2canvas.min.js still hashes to the SHA-256 in VENDORED.md
 
     Args:
         None
@@ -67,7 +67,7 @@ def test_html2canvas_matches_recorded_hash() -> None:
         None
     """
 
-    record   = (REPO / "js" / "VENDORED.md").read_text(encoding="utf-8")
+    record   = (REPO / "js" / "vendor" / "VENDORED.md").read_text(encoding="utf-8")
     recorded = re.search(r"SHA-256: `([0-9a-f]{64})`", record).group(1)
-    actual   = hashlib.sha256((REPO / "js" / "html2canvas.min.js").read_bytes()).hexdigest()
+    actual   = hashlib.sha256((REPO / "js" / "vendor" / "html2canvas.min.js").read_bytes()).hexdigest()
     assert actual == recorded

@@ -69,6 +69,7 @@ def load_script(name: str) -> ModuleType:
 
 
 serve       = load_script("serve")
+cases       = load_script("cases")
 check_slugs = load_script("check_slugs")
 
 

@@ -18,28 +18,32 @@ import re
 
 from pathlib import Path
 
+# Third party
+import pytest
+
+# Local
+from conftest import cases
+
 
 
 # ========================================================================
 #   Global Variables
 # ========================================================================
 
-REPO  = Path(__file__).resolve().parent.parent
-PAGES = [REPO / "index.html", REPO / "methodology" / "index.html"]
+REPO        = Path(__file__).resolve().parent.parent
+PAGES       = [REPO / "index.html", REPO / "methodology" / "index.html"]
 
-# The files a leading-slash path would break
 SLASH_FILES = PAGES + [REPO / "css" / "styles.css"]
 LEADING_RE  = re.compile(r"""(href|src|action|url\()\s*=?\s*["']/[^/]""")
 
-# Fields every case needs
-REQUIRED = {
+REQUIRED    = {
     "id", "slug", "alias", "lab", "org", "date", "disclosed", "lag", "order", "cls",
     "complexity", "harm", "charge", "wantedFor", "mo", "caution",
     "escapedFrom", "lastSeen", "disclosedBy", "outcome", "reach",
 }
 
-# Poster footer width limit in pixels
 FOOTER_MAX = 392
+BALANCED   = ["index.html", "js/cases.js", "js/glossary.js"]
 
 
 
@@ -73,24 +77,6 @@ def script_block() -> str:
     """
 
     return re.search(r"<script>(.*?)</script>", read(REPO / "index.html"), re.S).group(1)
-
-
-def case_blocks() -> dict:
-    """
-    Splits the CASES array into one text block per case
-
-    Args:
-        None
-
-    Returns:
-        dict: Each case's id mapped to the source text of its object
-    """
-
-    js = script_block()
-    return {
-        cid: re.search(r'\{\s*id:"' + cid + r'".*?\n  \}', js, re.S).group(0)
-        for cid in re.findall(r'id:"(\w+)"', js)
-    }
 
 
 def site_header(path: Path) -> str:
@@ -137,9 +123,9 @@ def test_no_leading_slash_paths() -> None:
 #   Case Data
 # ========================================================================
 
-def test_script_block_balances() -> None:
+def test_index_html_holds_no_case_data() -> None:
     """
-    Checks the inline script's braces, parentheses, and backticks pair up
+    Checks the case data stays out of index.html, in js/cases.js and js/glossary.js
 
     Args:
         None
@@ -148,7 +134,24 @@ def test_script_block_balances() -> None:
         None
     """
 
-    js = script_block()
+    page = read(REPO / "index.html")
+    assert "CASES = [" not in page
+    assert "GLOSSARY = {" not in page
+
+
+@pytest.mark.parametrize("name", BALANCED)
+def test_scripts_balance(name: str) -> None:
+    """
+    Checks a script's braces, parentheses, and backticks pair up
+
+    Args:
+        name (str): index.html for the page's inline script, or a data file's path
+
+    Returns:
+        None
+    """
+
+    js = script_block() if name == "index.html" else read(REPO / name)
     assert js.count("{") == js.count("}")
     assert js.count("(") == js.count(")")
     assert js.count("`") % 2 == 0
@@ -165,7 +168,7 @@ def test_every_case_has_required_fields() -> None:
         None
     """
 
-    blocks  = case_blocks()
+    blocks  = cases.case_blocks(cases.load_cases_js())
     missing = {
         cid: sorted(field for field in REQUIRED if not re.search(field + r"\s*:", block))
         for cid, block in blocks.items()
@@ -186,10 +189,10 @@ def test_poster_footer_fits_one_line() -> None:
     """
 
     too_wide = {}
-    for cid, block in case_blocks().items():
+    for cid, block in cases.case_blocks(cases.load_cases_js()).items():
         est   = " (EST.)" if re.search(r"estimated\s*:\s*true", block) else ""
-        date  = "ESCAPED · " + re.search(r'date:"([^"]*)"', block).group(1).upper() + est
-        seen  = "LAST SEEN · " + re.search(r'lastSeen:"([^"]*)"', block).group(1).upper()
+        date  = "ESCAPED · " + cases.text_field(block, "date").upper() + est
+        seen  = "LAST SEEN · " + cases.text_field(block, "lastSeen").upper()
         width = (len(date) + len(seen)) * 6.4 + 12
         if width >= FOOTER_MAX:
             too_wide[cid] = round(width)

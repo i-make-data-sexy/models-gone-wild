@@ -1,5 +1,9 @@
-#!/usr/bin/env python3
-"""Checks every case's poster slug in index.html.
+# ========================================================================
+#   About This File
+# ========================================================================
+
+"""
+Checks every case's poster slug in js/cases.js.
 
 Each slug becomes a public URL, /poster/<slug>/, so every case needs
 one, no two cases may share one, and each must be lowercase letters,
@@ -7,14 +11,22 @@ digits, and hyphens to match the nginx rewrite and posterFromUrl.
 Exits 1 on any failure.
 
 Usage:
-  python3 scripts/check_slugs.py
+    python3 scripts/check_slugs.py
 """
-import os
+
+
+
+# ========================================================================
+#   Imports
+# ========================================================================
+
+# Standard library
 import re
 import sys
 
-REPO    = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+# Local
+from cases import case_blocks, load_cases_js, text_field
+
 
 
 # ========================================================================
@@ -25,44 +37,56 @@ def read_cases() -> list:
     """
     Pulls each case's id and slug out of the CASES array
 
+    Args:
+        None
+
     Returns:
         list: (id, slug) tuples in array order, with slug None when missing
     """
 
-    html = open(os.path.join(REPO, "index.html"), encoding="utf-8").read()
-    js   = re.search(r"<script>(.*?)</script>", html, re.S).group(1)
-    out  = []
-    for cid in re.findall(r'\n    id:"(\w+)"', js):
-        block = re.search(r'\{\s*id:"' + cid + r'".*?\n  \}', js, re.S).group(0)
-        slug  = re.search(r'slug:"([^"]*)"', block)
-        out.append((cid, slug.group(1) if slug else None))
-    return out
+    return [(cid, text_field(block, "slug") or None) for cid, block in case_blocks(load_cases_js()).items()]
 
 
-def main():
+def main() -> int:
     """
-    Prints each slug with its verdict and exits 1 if any fails
+    Prints each slug with its verdict
+
+    Args:
+        None
+
+    Returns:
+        int: 1 when any slug fails, 0 otherwise
     """
 
-    cases  = read_cases()
-    seen   = {}
-    failed = False
-    for cid, slug in cases:
+    slug_re = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+    seen    = {}
+    failed  = False
+
+    for cid, slug in read_cases():
         if slug is None:
             verdict = "MISSING"
-        elif not SLUG_RE.match(slug):
+        elif not slug_re.match(slug):
             verdict = "BAD FORMAT, use lowercase letters, digits, and hyphens"
         elif slug in seen:
             verdict = f"DUPLICATE of {seen[slug]}"
         else:
             verdict = "OK"
+
         if slug:
             seen.setdefault(slug, cid)
+
         failed = failed or verdict != "OK"
         print(f"  {cid:10} {slug or '':28} {verdict}")
-    print("slugs FAILED" if failed else "slugs OK")
-    sys.exit(1 if failed else 0)
 
+    print("slugs FAILED" if failed else "slugs OK")
+
+    return 1 if failed else 0
+
+
+
+# ========================================================================
+#   Entry Point
+# ========================================================================
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -44,6 +44,7 @@ Neither page has a `<style>` block, a `style=` attribute, or an `on*=` handler. 
 3. Add `tests/test_inline.py`. It fails on any `<script>` without `src` (other than `type="application/json"`), any `<style>` block, any `style=` attribute, or any `on*=` attribute in `index.html` and `methodology/index.html` (and `404.html` once step 12 adds it), and on any `style=` or `on[a-z]+=` inside a template string in the app's own JS files.
 4. Update `UPDATE.md` ("Changing design or behavior" says "Everything lives in index.html"; "Where things live"; the traps) and `DEPLOY.md`'s file list.
 5. In the last commit, once every JavaScript file passes `check_format.py` (the vendored `js/vendor/` files are skipped), add `js` to `scripts/git-hooks/format-languages` under decision 28a.
+6. Give the vendored library one `Cache-Control` header (approved 2026-10-17 at the end of step 9A). This app's asset block, `(js/vendor|img)`, sets both `expires 30d` and `add_header Cache-Control "public, no-transform"`, so the library goes out with two `Cache-Control` headers, the same duplicate step 2 removed from the page block. On each server, replace those two lines with `add_header Cache-Control "public, max-age=2592000, no-transform";`, which keeps the 30 days and the `no-transform` that stops Cloudflare or a proxy rewriting the file. Make the same change in both nginx copies in `DEPLOY.md`.
 
 ## The sample-file review gate
 
@@ -52,13 +53,13 @@ Neither page has a `<style>` block, a `style=` attribute, or an `on*=` handler. 
 
 ## Done when
 
-`tests/test_inline.py` passes on both pages and fails when an inline `<script>` is added back (show both), both suites pass, the screenshot diff is pixel-identical, `scripts/check_overlaps.py` reports no overlaps, and a poster downloads as a PNG locally and on staging.
+`tests/test_inline.py` passes on both pages and fails when an inline `<script>` is added back (show both), both suites pass, the screenshot diff is pixel-identical, `scripts/check_overlaps.py` reports no overlaps, a poster downloads as a PNG locally and on staging, and `curl -skI` shows exactly one `Cache-Control` header, `public, max-age=2592000, no-transform`, on `js/vendor/html2canvas.min.js` and on `img/annielytics-logo.png` at each origin.
 
 Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and has no `check_style.py` issue, with the formatter re-run where a change moved a column. Each new file is indented four spaces and has an About section, `verify_equivalent.py js` passes on each against the code it came from, and `js` is on the hook.
 
 ## Rollback
 
-Revert the commits.
+Revert the commits. Restore the config backup on each server, run `sudo nginx -t`, reload, and add a PCI row.
 
 ## Paste-ready prompt: build and stage
 
@@ -109,10 +110,18 @@ every finding, and re-run the formatter where a change moved a column.
    file (exit 0), and the comment style checker (no issue in any file you
    changed), gating on each exit code. Download a poster locally. Then
    add js to scripts/git-hooks/format-languages in the last commit.
-8. Commit, push, and deploy the branch to staging with the
+8. On the server: back up
+   /etc/nginx/sites-available/staging.annielytics.conf, give this app's
+   asset block one Cache-Control header as the step file's change 6
+   shows, show me the diff, and STOP until I approve. Then sudo nginx -t,
+   reload, wait two seconds, and write the PCI change-log row yourself,
+   reading it back.
+9. Commit, push, and deploy the branch to staging with the
    README command, run the staging health check, and confirm every new JS
-   file returns 200 with the no-cache header at the staging origin.
-9. Report what you verified and how, give me the staging links with a
+   file returns 200 with the no-cache header at the staging origin, and
+   that js/vendor/html2canvas.min.js and img/annielytics-logo.png each
+   return one Cache-Control header.
+10. Report what you verified and how, give me the staging links with a
    reminder to hard-refresh and to download a poster, and STOP. Do not
    merge to main or touch production until I say so.
 
@@ -128,21 +137,28 @@ Paste this once you are happy with the step 9B report. It needs no edits.
 Ship step 9B (move the rest of the inline code) of the Models Gone Wild
 standards cleanup to production, following
 docs/standards-cleanup/09b-inline-code.md and the rules in
-docs/standards-cleanup/README.md. This is my go-ahead for step 9B only.
+docs/standards-cleanup/README.md. This is my go-ahead for step 9B only,
+including the production nginx change.
 
 Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 
 1. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    on standards-inline-code, gating on each exit code.
-2. Merge standards-inline-code to main and push.
-3. Deploy main to production with the README command, run the production
+2. Back up /etc/nginx/sites-available/annielytics.conf, give this app's
+   asset block one Cache-Control header as the step file's change 6
+   shows, run sudo nginx -t, reload, wait two seconds, and write the PCI
+   change-log row yourself, reading it back.
+3. Merge standards-inline-code to main and push.
+4. Deploy main to production with the README command, run the production
    health check, and confirm every new JS file returns 200 with the
-   no-cache header at the production origin.
-4. Remind me to hard-refresh, switch tabs, open the menu on my phone, and
+   no-cache header at the production origin, and that
+   js/vendor/html2canvas.min.js and img/annielytics-logo.png each return
+   one Cache-Control header.
+5. Remind me to hard-refresh, switch tabs, open the menu on my phone, and
    download a poster at https://www.annielytics.com/tools/models-gone-wild/.
-5. Switch staging back to main with the README command.
-6. Mark step 9B done in docs/standards-cleanup/README.md with today's date
+6. Switch staging back to main with the README command.
+7. Mark step 9B done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
-7. Tell me the next step is step F3, whose prompt is at the bottom of
+8. Tell me the next step is step F3, whose prompt is at the bottom of
    docs/standards-cleanup/f3-python.md.
 ```

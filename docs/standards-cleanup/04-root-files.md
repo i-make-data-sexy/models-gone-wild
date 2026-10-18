@@ -28,10 +28,10 @@ Three more items land here because they are hygiene rather than code:
 1. `tests/test_root.py`: lists the tracked files at the root with `git ls-files` and fails on any not in the allowlist. The allowlist is `.gitignore`, `index.html`, `requirements-dev.txt`, `DEPLOY.md`, and `UPDATE.md`. Tracked folders are not counted.
 2. Under decision 9a, rewrite the deploy flow in five files.
    - `UPDATE.md`: the three prompts and "Deploying the change", so each ends by deploying the branch to staging, giving the links, and stopping. Production then runs only on your word, with the commands from the README.
-   - `.claude/skills/models-gone-wild-add-case/SKILL.md` and `~/.claude/skills/models-gone-wild-add-case/SKILL.md`: the closing deploy step, the same way. Keep the two copies byte-identical since the cloud scout reads the repo copy.
+   - `.claude/skills/models-gone-wild-add-case/SKILL.md` and `~/.claude/skills/models-gone-wild-add-case/SKILL.md`: the closing deploy step, the same way. These are one file: `~/.claude/skills/models-gone-wild-add-case` is a symlink to the repo's skill folder (found 2026-10-17 in step 9A), so one edit covers both, and the cloud scout reads the repo copy.
    - `DEPLOY.md`: "Updating after the first deploy" and "Branch discipline", to name the staging leg.
    - `scout/SCOUT.md`: the publishing prompt, to name the staging leg.
-3. `tests/test_root.py` also asserts the repo's skill copy matches `~/.claude/skills/models-gone-wild-add-case/SKILL.md` when the home copy exists, and skips otherwise (the cloud has no home copy).
+3. `tests/test_root.py` also asserts `~/.claude/skills/models-gone-wild-add-case/SKILL.md` matches the repo's skill copy when the home path exists, and skips otherwise (the cloud has no home copy). Today the home path is a symlink to the repo's folder, so the test passes by construction; it guards against the link ever being replaced by a copy that drifts.
 4. Under decision 10a, delete the merged branches, keeping `main`, `scout-state`, every `update/*` and `candidate/*`, and the current branch. List them first with `git branch --merged main` and `git branch -r --merged origin/main`, show the list, and delete only after approval, with `git branch -d <name>` locally (never `-D`) and `git push origin --delete <name>` for the remote ones.
 
 ## The sample-file review gate
