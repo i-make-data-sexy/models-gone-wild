@@ -8,8 +8,9 @@ something else.
 The other checks read the case data as text. This one renders the real
 page in headless Chrome, so it sees what a reader sees: where each dot
 landed, where its label went, and whether the axis icons sit clear of
-their titles. It runs every combination of the Class, Lab, Outcome, and Kind filters,
-since a label can collide in one filtered view and not in another.
+their titles. It runs every combination of the Class, Lab, Outcome, and
+Kind filters, since a label can collide in one filtered view and not in
+another.
 
 Text is measured by its ink rather than its line box. The line box of
 a 13px label is taller than the glyphs in it, and comparing line boxes
@@ -49,9 +50,6 @@ import threading
 # ========================================================================
 
 REPO   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# The Mac path first, then the names Chrome goes by on Linux, which is
-# where the cloud scout runs
 CHROME = os.environ.get("CHROME") or next(
     (p for p in ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"]
      + [shutil.which(n) for n in ("google-chrome", "chromium", "chromium-browser")]
@@ -65,9 +63,6 @@ SUBPATH = "tools/models-gone-wild"
 #   The Harness
 # ========================================================================
 
-# Loaded in headless Chrome. It frames the app at its real subpath,
-# drives the filters and the Threat Matrix tab, measures, and writes
-# the findings into #out for the Python side to read back.
 HARNESS = r"""<!doctype html>
 <html><head><meta charset="utf-8">
 <style>html,body{margin:0}iframe{border:0;width:__WIDTH__px;height:1000px}</style>
@@ -229,8 +224,10 @@ frame.addEventListener('load', async ()=>{
 def serve(root: str) -> tuple:
     """
     Serves a directory over HTTP on a free local port, in a background thread
+
     Args:
         root (str): The directory to serve
+
     Returns:
         tuple: The server, so it can be shut down, and the port it bound
     """
@@ -239,8 +236,12 @@ def serve(root: str) -> tuple:
         def log_message(self, *args):
             """
             Drops the per-request log line so the report stays readable
+
             Args:
                 *args: The format string and values the base class would log
+
+            Returns:
+                None
             """
 
             pass
@@ -255,8 +256,10 @@ def serve(root: str) -> tuple:
 def chrome(args: list) -> str:
     """
     Runs headless Chrome with the given flags and a generous time budget for the fonts to arrive
+
     Args:
         args (list): Flags and the URL, appended after the fixed flags
+
     Returns:
         str: Whatever Chrome printed to stdout
     """
@@ -271,8 +274,10 @@ def chrome(args: list) -> str:
 def build_site(width: int) -> str:
     """
     Lays out a throwaway web root with the repo at its production subpath and the harness at the top
+
     Args:
         width (int): The page width to render at, in pixels
+
     Returns:
         str: The path of the web root
     """
@@ -295,6 +300,10 @@ def build_site(width: int) -> str:
 def main() -> int:
     """
     Renders the chart under every filter combination and prints each overlap found
+
+    Args:
+        None
+
     Returns:
         int: 1 if anything overlapped or left the plot, 0 if the chart is clean
     """
