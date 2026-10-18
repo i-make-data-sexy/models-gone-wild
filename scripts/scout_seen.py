@@ -1,4 +1,7 @@
-#!/usr/bin/env python3
+# ========================================================================
+#   About This File
+# ========================================================================
+
 """Keeps the scout's record of every story it has already looked at.
 
 The daily scout (see scout/SCOUT.md) searches for new escapes and
@@ -22,12 +25,27 @@ Subcommands:
 
 Exit status is 0 unless the arguments are wrong.
 """
+
+
+
+# ========================================================================
+#   Imports
+# ========================================================================
+
+# Standard library
 import argparse
 import json
 import os
 import sys
+
 from datetime     import date, timedelta
 from urllib.parse import urlsplit, urlunsplit
+
+
+
+# ========================================================================
+#   Global Variables
+# ========================================================================
 
 REPO     = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEDGER   = os.path.join(REPO, "scout", "seen.json")
