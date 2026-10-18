@@ -5,13 +5,17 @@
 """Keeps the scout's record of every story it has already looked at.
 
 The daily scout (see scout/SCOUT.md) searches for new escapes and
-emails Annie a proposal when it finds one. Without a memory it would
-find the same story every morning. This script is that memory: a JSON
-ledger of every URL the scout has judged, what it decided, and a log of
-each run, which the Monday note is built from.
+emails a proposal when it finds one. Without a memory it would find the
+same story every morning. This script is that memory: a JSON ledger of
+every URL the scout has judged, what it decided, and a log of each run,
+which the Monday note is built from.
 
 URLs are compared after normalizing, so the same article reached with a
 tracking parameter, a trailing slash, or "www." still counts as seen.
+
+A story's status records what the scout decided. 'case' means it is
+already in the registry, 'proposed' and 'answered' track an emailed
+candidate through the reply, and the rest close it out.
 
 Subcommands:
   check URL [URL ...]   Prints SEEN or NEW for each URL
@@ -61,8 +65,10 @@ STATUSES = ("case", "proposed", "answered", "rejected", "irrelevant",
 def normalize(url: str) -> str:
     """
     Reduces a URL to the form used for comparison, so trivial differences do not make an old story look new
+
     Args:
         url (str): Any URL as the search returned it
+
     Returns:
         str: Lowercased host without "www.", path without a trailing slash, and no query or fragment
     """
@@ -77,6 +83,10 @@ def normalize(url: str) -> str:
 def load() -> dict:
     """
     Reads the ledger, starting an empty one if the file does not exist yet
+
+    Args:
+        None
+
     Returns:
         dict: The ledger, with a "stories" list and a "runs" list
     """
@@ -91,8 +101,12 @@ def load() -> dict:
 def save(ledger: dict) -> None:
     """
     Writes the ledger back with stable formatting so its git diffs stay readable
+
     Args:
         ledger (dict): The ledger to write
+
+    Returns:
+        None
     """
 
     with open(LEDGER, "w") as f:
@@ -108,9 +122,13 @@ def save(ledger: dict) -> None:
 def check(ledger: dict, urls: list) -> None:
     """
     Prints whether each URL is already in the ledger
+
     Args:
         ledger (dict): The ledger
         urls (list): URLs to look up
+
+    Returns:
+        None
     """
 
     seen = {s["url"]: s for s in ledger["stories"]}
@@ -127,6 +145,7 @@ def check(ledger: dict, urls: list) -> None:
 def add(ledger: dict, url: str, status: str, case: str, title: str, today: str) -> None:
     """
     Records a story, or updates its status if the URL is already there
+
     Args:
         ledger (dict): The ledger
         url (str): The story's URL
@@ -134,6 +153,9 @@ def add(ledger: dict, url: str, status: str, case: str, title: str, today: str) 
         case (str): The registry or candidate id it belongs to, or an empty string
         title (str): The headline, for a person reading the file
         today (str): The date to stamp a new entry with, as YYYY-MM-DD
+
+    Returns:
+        None
     """
 
     key = normalize(url)
@@ -142,8 +164,6 @@ def add(ledger: dict, url: str, status: str, case: str, title: str, today: str) 
         if story["url"] == key:
             story["status"] = status
 
-            # One article can cover several cases (Politico broke both
-            # the Census and SEC cases), so ids accumulate
             ids = [c for c in (story.get("case") or "").split(",") if c]
 
             if case and case not in ids:
@@ -159,9 +179,11 @@ def add(ledger: dict, url: str, status: str, case: str, title: str, today: str) 
 def week(ledger: dict, today: date) -> str:
     """
     Builds the Monday note covering the seven days before the given date
+
     Args:
         ledger (dict): The ledger
         today (date): The Monday the note goes out
+
     Returns:
         str: The note's text, a few lines long
     """
@@ -195,6 +217,10 @@ def week(ledger: dict, today: date) -> str:
 def main() -> int:
     """
     Parses the subcommand and runs it against the ledger
+
+    Args:
+        None
+
     Returns:
         int: 0 on success, 2 when the arguments are wrong
     """
