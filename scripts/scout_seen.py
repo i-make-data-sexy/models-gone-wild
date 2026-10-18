@@ -31,10 +31,6 @@ from urllib.parse import urlsplit, urlunsplit
 
 REPO     = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEDGER   = os.path.join(REPO, "scout", "seen.json")
-
-# What the scout decided about a story. "case" means it is already in
-# the registry, "proposed" and "answered" track an emailed candidate
-# through Annie's reply, and the rest close it out.
 STATUSES = ("case", "proposed", "answered", "rejected", "irrelevant",
             "borderline", "update")
 
