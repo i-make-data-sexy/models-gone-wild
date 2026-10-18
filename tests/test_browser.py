@@ -33,20 +33,17 @@ sync_api = pytest.importorskip("playwright.sync_api")
 
 pytestmark = pytest.mark.browser
 
-DESKTOP = {"width": 1440, "height": 900}
-PHONE   = {"width": 375,  "height": 812}
+DESKTOP    = {"width": 1440, "height": 900}
+PHONE      = {"width": 375,  "height": 812}
 
-# Bubble clearance from the column edge
-TIP_GAP = 10
+TIP_GAP    = 10
 
-# Each tab and its permalink
-TABS = [
+TABS       = [
     ("timeline", ""),
     ("matrix",   "threat-matrix/"),
     ("labs",     "lab-counts/"),
 ]
 
-# Bubble gaps to each column edge
 TIP_GAPS_JS = """() => {
     const tip    = document.getElementById("tip").getBoundingClientRect();
     const column = document.querySelector(".content").getBoundingClientRect();
@@ -113,9 +110,11 @@ def open_page(browser: "sync_api.Browser", base_url: str) -> Iterator[Callable]:
         )
         page.goto(base_url)
         pages.append(page)
+
         return page, errors
 
     yield load
+
     for page in pages:
         page.close()
 
@@ -162,8 +161,10 @@ def test_tab_shows_view_and_permalink(open_page: Callable, base_url: str, view: 
     """
 
     page, _ = open_page(DESKTOP)
+
     if view == "timeline":
         page.click("#tab-matrix")
+
     page.click(f"#tab-{view}")
     assert page.locator(f"#view-{view}").is_visible()
     assert page.get_attribute(f"#tab-{view}", "aria-selected") == "true"
@@ -271,11 +272,11 @@ def test_glossary_bubbles_stay_in_column(open_page: Callable, viewport: dict) ->
     page, _ = open_page(viewport)
     checked = 0
     outside = []
+
     for index in range(3):
         card = page.locator("#timeline .card").nth(index)
-        for term in card.locator(".term").all():
 
-            # Settle the scroll before hovering
+        for term in card.locator(".term").all():
             term.scroll_into_view_if_needed()
             page.wait_for_timeout(50)
             page.mouse.move(0, 0)
@@ -284,7 +285,9 @@ def test_glossary_bubbles_stay_in_column(open_page: Callable, viewport: dict) ->
 
             gaps     = page.evaluate(TIP_GAPS_JS)
             checked += 1
+
             if min(gaps["left"], gaps["right"]) < TIP_GAP - 0.5:
                 outside.append(f"{term.text_content()!r}: {gaps}")
+
     assert checked > 0
     assert not outside, "\n".join(outside)

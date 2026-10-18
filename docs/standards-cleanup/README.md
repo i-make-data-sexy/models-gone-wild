@@ -46,7 +46,7 @@ The steps run in the order AI Strategy's sweep ran, measured with `audit_format.
 | F4 | 2 pages, 2,371 lines | Neither clean. Neither has an About section, both end with a newline, and they hold 15 comments over one line, 15 wordy, and the 20 HTML comments decision 26 deletes. Step F2 deleted the 15 in `index.html` at Annie's request on 2026-10-17. Markup indented two spaces, where the rule wants four. |
 | F5 | requirements, shell, editor settings | `requirements-dev.txt` (2 pins, not aligned), the 2 shell scripts F1 adds, and no `.vscode/settings.json`. |
 | F6 | Quotes | 27 single-quoted Python strings, all holding a double quote, so all stay. About 330 single-quoted strings in the inline scripts outside the data, about 8 of which stay. No single-quoted HTML attributes. |
-| F7 | Python structure and type hints, formerly step 5 | 2 functions without a hint. Every script and test except `serve.py` and `test_dependencies.py` keeps top-level names only one function uses, and `check_charges.py` and `check_quotes.py` run their whole job at the top level. |
+| F7 | Python structure and type hints, formerly step 5 | 1 function without a hint. 11 files keep top-level names only one function uses, `capture.py` the most with eight (remeasured 2026-10-18, after step 9A gave every script a `main()`). |
 
 Once a language's F step ships, its files stay formatted for the rest of the cleanup. Every later step runs `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py` on each file it changes or creates, fixes every finding before it commits, and re-runs the formatter where a change moved a column (a token name longer than the value it replaced, say). A step is not done while a file it touched has a finding. Under decision 28a, the pre-commit hook from step F1 enforces the same on every commit, one language at a time as each step adds it (step 9B adds `js`).
 
@@ -213,7 +213,7 @@ Answer these before running the steps. Record each answer here because the step 
 | F4 | [f4-html.md](f4-html.md) | Both pages to AI Strategy's format, Methodology's 5 HTML comments deleted (`index.html`'s 15 went in F2). | Small | Not started |
 | F5 | [f5-other-files.md](f5-other-files.md) | The requirements and shell formatting, and the editor settings. | Tiny | Not started |
 | F6 | [f6-quotes.md](f6-quotes.md) | Double quotes in the app's JavaScript files. | Small | Not started |
-| F7 | [f7-python-structure.md](f7-python-structure.md) | `filters.py`'s layout on every Python file, 2 functions without type hints. Formerly step 5. | Small | Not started |
+| F7 | [f7-python-structure.md](f7-python-structure.md) | `filters.py`'s layout on every Python file, 1 function without type hints. Formerly step 5. | Small | Not started |
 | 4 | [04-root-files.md](04-root-files.md) | No root guard, workflow docs that skip staging, merged branches. | Small | Not started |
 | 5 | Moved to [f7-python-structure.md](f7-python-structure.md) | Now step F7. | | Moved 2026-10-17 |
 | 6 | [06-comment-style.md](06-comment-style.md) | 70 comment-style issues, which steps F1 to F3 fix, so this step confirms 0 and keeps it there. | Tiny | Not started |

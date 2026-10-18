@@ -47,11 +47,9 @@ PREFIX        = "/tools/models-gone-wild"
 WIDTHS        = [375, 768, 1024, 1440]
 HEIGHT        = 900
 
-# Hosts a capture may reach
 LOCAL_HOSTS   = {"127.0.0.1", "localhost"}
 ALLOWED_HOSTS = LOCAL_HOSTS | {"fonts.googleapis.com", "fonts.gstatic.com"}
 
-# (name, path, selector to wait for)
 PAGES         = [
     ("home",          "/",                         None),
     ("threat-matrix", "/threat-matrix/",           None),
@@ -60,10 +58,8 @@ PAGES         = [
     ("methodology",   "/methodology/",             None),
 ]
 
-# Freeze motion and the caret
 FREEZE_CSS    = "*,*::before,*::after{transition:none!important;animation:none!important;caret-color:transparent!important}"
 
-# Rasterizer flags for identical text
 LAUNCH_ARGS   = [
     "--force-color-profile=srgb", "--disable-gpu", "--font-render-hinting=none",
     "--disable-lcd-text", "--disable-font-subpixel-positioning",
@@ -265,7 +261,6 @@ def main() -> None:
             print(name, notes.get(f"{name}@{WIDTHS[-1]}"), flush=True)
             (out / "_notes.json").write_text(json.dumps(notes, indent=1))
 
-    # Skip Chrome's slow shutdown
     os._exit(0)
 
 

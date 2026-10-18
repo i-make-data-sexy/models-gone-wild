@@ -82,5 +82,6 @@ def test_response_carries_security_headers(fetch: Callable, path: str) -> None:
     """
 
     _, headers, _ = fetch(path)
+
     for name, value in EXPECTED.items():
         assert headers.get(name) == value
