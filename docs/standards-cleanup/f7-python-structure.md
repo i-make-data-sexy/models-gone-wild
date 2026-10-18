@@ -13,23 +13,25 @@ The last formatting step, and the old step 5, retired into this one on 2026-10-1
 
 The baseline step splits any module that mixes setup, security, filters, and routes. This app has no application module. Its Python is eight standalone tools in `scripts/`, each with one job, plus the test suite. None mixes concerns, so there is nothing to split. The four copies of the case loader in the check scripts are consolidated in step 9A, which has to touch them anyway.
 
-The layout half applies to every file. On 2026-10-16, every Python file kept values at the top level that only one function uses, and two scripts ran their whole job there with no `main()`:
+The layout half applies to most files. Step 9A moved the case loader and most of the check scripts' constants into functions, and gave `check_charges.py` and `check_quotes.py` a `main()`, so no script runs loose at the top level any more. Measured on 2026-10-18 with an AST count, after step F3, these top-level names are still used by only one function:
 
-| File | Top-level names on 2026-10-16 |
+| File | Top-level names one function uses |
 |---|---|
-| `scripts/check_charges.py` | 3 names and 2 loose calls, no `main()` |
-| `scripts/check_quotes.py` | 7 names and 2 loose calls, no `main()` |
-| `scripts/check_claims.py` | `SRC`, `MID`, `COMPUTABLE`, `REVIEW` |
-| `scripts/check_dates.py` | `SRC`, `UNDATED`, `UNDATED_LAG` |
-| `scripts/check_overlaps.py` | `REPO`, `CHROME`, `SUBPATH`, `HARNESS` |
-| `scripts/check_slugs.py` | `REPO`, `SLUG_RE` |
-| `scripts/scout_seen.py` | `REPO`, `LEDGER`, `STATUSES` |
-| `tests/conftest.py` | `REPO`, `SCRIPTS`, `PYTHON`, `BROWSER`, and the two loaded scripts |
-| `tests/test_browser.py`, `test_checks.py`, `test_headers.py`, `test_pages.py`, `test_static.py` | Constants, parametrize lists, and markers |
+| `scripts/screenshot-diff/capture.py` | `PREFIX`, `WIDTHS`, `HEIGHT`, `LOCAL_HOSTS`, `ALLOWED_HOSTS`, `PAGES`, `FREEZE_CSS`, `LAUNCH_ARGS` |
+| `scripts/check_overlaps.py` | `REPO`, `SUBPATH`, `HARNESS` (`CHROME` is shared, so it stays) |
+| `scripts/scout_seen.py` | `STATUSES`, and `REPO`, which only builds `LEDGER` |
+| `scripts/cases.py` | `REPO` |
+| `scripts/check_quotes.py` | `REPO` |
+| `tests/conftest.py` | `REPO`, `SCRIPTS`, and the loaded `check_slugs` |
+| `tests/test_browser.py` | `TIP_GAP`, `TIP_GAPS_JS` |
+| `tests/test_checks.py` | `REPO`, `PYTHON` |
+| `tests/test_inline.py` | `REPO` |
+| `tests/test_pages.py` | `METHODOLOGY_TITLE` |
+| `tests/test_static.py` | `SLASH_FILES`, `LEADING_RE`, `REQUIRED`, `FOOTER_MAX` |
 
-`scripts/serve.py` was brought to `REPO` and `PREFIX` as step 5's Python sample, and `tests/test_dependencies.py` (step 3) keeps only `REPO`, so neither needs a layout change. The two harness files step F1 adds were written to the rule.
+Parametrize lists, `pytestmark`, and names two or more functions share stay where they are. `check_charges.py`, `check_claims.py`, `check_dates.py`, `check_slugs.py`, `diff.py`, `serve.py`, `test_dependencies.py`, and `test_headers.py` need no layout change. Read each name's uses before moving it, since the count treats a name a fixture or another constant reads as unused.
 
-The type-hint half applies too. This command reported two functions missing a hint on 2026-10-17:
+The type-hint half applies too. This command reported one function missing a hint on 2026-10-18 (step 9A hinted `check_slugs.py`'s `main`):
 
 ```
 python3 ~/.claude/skills/annielytics-comment-style/scripts/add_type_hints.py --missing $(git ls-files '*.py')
@@ -37,16 +39,15 @@ python3 ~/.claude/skills/annielytics-comment-style/scripts/add_type_hints.py --m
 
 | File | Line | Function | Missing |
 |---|---|---|---|
-| `scripts/check_overlaps.py` | 218 | `log_message` | `*args` and the return |
-| `scripts/check_slugs.py` | 42 | `main` | the return |
+| `scripts/check_overlaps.py` | 236 | `log_message` | `*args` and the return |
 
 The model for the layout is AI Strategy's `services/filters.py` for the banners, with `scripts/csp-walk/walk.py` for a standalone script, per the "File structure" section of `~/.claude/rules/formatting/code-formatting.md`. Under the README's functions rule, only imports, settings two or more functions share, test parametrize lists and markers, and the entry-point call may stay at the top level.
 
 ## The changes
 
-1. Give every Python file `filters.py`'s layout. Banners in order: About This File, Imports (grouped as standard library, third party, and local, each with a one-line label, `import` aligned in a run of `from X import` lines), Global Variables (constants aligned on `=`), then one banner per section. Move each value only one function uses into that function, and give `check_charges.py` and `check_quotes.py` a `main()` called under the entry-point guard. A wrapped signature puts one parameter per line with names and types aligned.
+1. Give every Python file `filters.py`'s layout. Banners in order: About This File, Imports (grouped as standard library, third party, and local, each with a one-line label, `import` aligned in a run of `from X import` lines), Global Variables (constants aligned on `=`), then one banner per section. Move each value only one function uses into that function. A wrapped signature puts one parameter per line with names and types aligned.
 2. Run `add_type_hints.py` (without `--missing`) on every tracked `.py` file to write the hints it can prove from the docstrings.
-3. Write the rest by hand, using the real types: `log_message(self, format: str, *args: object) -> None`, and `check_slugs.py`'s `main` return type as its docstring states (`int` if it returns an exit status, `None` otherwise). Test functions return `None`, and fixtures name their real types (`pytest.MonkeyPatch`, Playwright's `Page`, `str`). Python 3.11 runs the venv, so the `X | None` form is safe.
+3. Write the rest by hand, using the real types: `log_message(self, format: str, *args: object) -> None`. Test functions return `None`, and fixtures name their real types (`pytest.MonkeyPatch`, Playwright's `Page`, `str`). Python 3.11 runs the venv, so the `X | None` form is safe.
 4. Keep each docstring's `Args` and `Returns` types in step with the hints.
 5. In `scout_seen.py` and `check_overlaps.py`, build the `--help` description from `__doc__.strip().splitlines()[0]` rather than `__doc__.splitlines()[0]`, then move each About docstring's first sentence onto its own line below the opening quotes, as the other scripts have it. Step F3 left the sentence on the quote line so the help text stayed the same. Show `--help` unchanged for both scripts. In `check_overlaps.py` the sentence wraps onto a second line, so join it first or the help text keeps only its first half, which is what it prints today.
 
@@ -54,7 +55,7 @@ One commit per area (the check scripts, `scout_seen.py`, and the tests), with th
 
 ## The sample-file review gate
 
-- Layout: `scripts/check_quotes.py` is the sample since it runs its whole job loose at the top level. Roll it up, show its output and exit code unchanged, and stop for approval before the rest.
+- Layout: `scripts/screenshot-diff/capture.py` is the sample since it has the most single-use constants (eight). Move them into the functions that use them, show `scripts/screenshot-diff/run.sh main <branch>` still reporting 0 differences, and stop for approval before the rest.
 - Type hints: `scripts/check_overlaps.py` is the sample since its `log_message` takes `*args`, the least obvious type left. Hint it and stop for approval before the rest.
 
 ## Proving it
@@ -99,14 +100,15 @@ a stop because a filetype changes in only one file.
 2. Run venv/bin/python3 -m pytest and venv/bin/python3 -m pytest -m browser
    and confirm both pass before any change. Record both counts. Run the
    add_type_hints.py --missing command from the step file and record the
-   total (2 on 2026-10-17). Save an ast.dump of every tracked .py file with
+   total (1 on 2026-10-18). Save an ast.dump of every tracked .py file with
    annotations stripped, and every script's output and exit code
    (scout_seen.py through its read-only check and week --today 2026-10-17
    subcommands only), both in the session scratchpad.
-3. Sample-file review gate (layout): roll scripts/check_quotes.py into
-   filters.py's layout with a main() under the entry-point guard. Show its
-   output and exit code matching the saved ones, a clickable link, a short
-   summary, and the git diff command, then STOP until I approve.
+3. Sample-file review gate (layout): move the eight single-use constants
+   in scripts/screenshot-diff/capture.py into the functions that use them.
+   Show scripts/screenshot-diff/run.sh main <branch> still reporting 0
+   differences, a clickable link, a short summary, and the git diff
+   command, then STOP until I approve.
 4. Sample-file review gate (type hints): hint scripts/check_overlaps.py,
    keeping its docstrings in step, and give me a clickable link, a short
    summary, and the git diff command, then STOP until I approve.
