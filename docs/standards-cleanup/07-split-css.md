@@ -105,13 +105,15 @@ every finding, and re-run the formatter where a change moved a column.
    reminder to hard-refresh (Command-Shift-R), and STOP. Do not merge to
    main or touch production until I say so.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/07-split-css.md, copied exactly.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/07-split-css.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once you are happy with the step 7 report. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter at the end of the step 7 report. It needs no edits.
 
 ```
 Ship step 7 (split the stylesheet) of the Models Gone Wild standards
@@ -133,6 +135,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    and the merge commit, commit, and push to main.
 7. Give me https://www.annielytics.com/tools/models-gone-wild/ and
    https://www.annielytics.com/tools/models-gone-wild/methodology/ to
-   spot-check. Then tell me the next step is step 8, whose prompt is at the
-   bottom of docs/standards-cleanup/08-design-tokens.md.
+   spot-check. Then tell me the next step is step 8, and paste its build
+   prompt from the bottom of docs/standards-cleanup/08-design-tokens.md in
+   full, so I can start the next session with it.
 ```

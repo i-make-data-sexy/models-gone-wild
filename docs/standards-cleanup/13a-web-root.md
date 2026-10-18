@@ -107,13 +107,15 @@ every finding, and re-run the formatter where a change moved a column.
 9. Report what you verified and how, give me the staging links, and STOP.
    Do not merge to main or touch production until I say so.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/13a-web-root.md, copied exactly.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/13a-web-root.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once the staging URL list checks out. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter, once the staging URL list checks out. It needs no edits.
 
 ```
 Ship step 13A (the URL list and the web root) of the Models Gone Wild
@@ -142,6 +144,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 8. Mark step 13A done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
 9. Give me the production links to spot-check with a hard refresh. Then
-   tell me the next step is step 13B, whose prompt is at the bottom of
-   docs/standards-cleanup/13b-canonicals.md.
+   tell me the next step is step 13B, and paste its build prompt from the
+   bottom of docs/standards-cleanup/13b-canonicals.md in full, so I can
+   start the next session with it.
 ```

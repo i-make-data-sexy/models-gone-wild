@@ -114,13 +114,15 @@ every finding, and re-run the formatter where a change moved a column.
 9. Report what you verified and how, give me the staging links, and STOP.
    Do not merge to main or touch production until I say so.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/13b-canonicals.md, copied exactly.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/13b-canonicals.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once the staging URL list checks out. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter, once the staging URL list checks out. It needs no edits.
 
 ```
 Ship step 13B (canonicals and share tags) of the Models Gone Wild standards
@@ -149,5 +151,6 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    home page's share card. Then tell me the standards cleanup is finished,
    and that prompts 5 to 7 in
    ~/.claude/skills/app-refactor-audit/prompts.md (formatting, quotes, and
-   comment length) come next.
+   comment length) come next, and paste prompt 5 from that file in full,
+   so I can start the next session with it.
 ```

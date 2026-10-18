@@ -1,6 +1,6 @@
 # Models Gone Wild Standards Cleanup
 
-This folder brings Models Gone Wild up to the standards AI Strategy reached in October 2026, one step per file. Each step has the background, the exact changes, the "done when" check, a rollback, and two paste-ready prompts at the bottom, one to build and stage and one to ship to production. Run one step per Claude Code session, and let each step reach production before starting the next.
+This folder brings Models Gone Wild up to the standards AI Strategy reached in October 2026, one step per file. Each step has the background, the exact changes, the "done when" check, a rollback, and two prompts at the bottom: a build-and-stage prompt you paste into a fresh session, and a ship-to-production prompt Claude runs in that same session when you reply with its letter. Run one step per Claude Code session, and let each step reach production before starting the next.
 
 The steps are the fixed list in `~/.claude/skills/app-refactor-audit/baseline.md`, in its order, with none dropped, plus formatting steps F1 to F7, which run right after step 3 (see below). Step 5 is retired into step F7. The app has never had a cleanup, so the plan also turns every finding from a full audit into a step or a decision.
 
@@ -316,10 +316,10 @@ Healthy output is five 200s, then 404 for `DEPLOY.md`, 403 for `.git/config`, an
 
 ## Shipping a step to production
 
-Each step file ends with two prompts, both ready to paste with no edits:
+Each step file ends with two prompts, and the only one you copy is the first:
 
-1. Build and stage. Claude builds the step, proves it, deploys it to staging, and stops. Its report ends with the second prompt, copied out for you.
-2. Ship to production. Paste it once you have checked staging. It merges to `main`, does that step's production-only work, deploys, switches staging back to `main`, marks the step done here, and names the next step.
+1. Build and stage. Paste it into a fresh session. Claude builds the step, proves it, deploys it to staging, and stops. Its report ends with a lettered to-do that runs the second prompt.
+2. Ship to production. Once you have checked staging, reply with that letter, and Claude runs this prompt in the same session. It merges to `main`, does that step's production-only work, deploys, switches staging back to `main`, marks the step done here, names the next step, and pastes that step's build prompt in full for your next session.
 
 Ship every step before starting the next since each build prompt begins by confirming the previous step is live. The order is 0, 0B, 1, 2, 3, F1, F2, 9A, 9B, F3 to F7, then 4, 6, 7, 8, and 10A onward (step 5 is retired into F7, and 8B is skipped). Step 0 has no ship prompt since it only touches your Mac.
 

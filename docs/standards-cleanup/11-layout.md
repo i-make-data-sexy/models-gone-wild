@@ -132,13 +132,15 @@ every finding, and re-run the formatter where a change moved a column.
    reminder to hard-refresh and to try the menu on my phone, and STOP. Do
    not merge to main or touch production until I say so.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/11-layout.md, copied exactly.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/11-layout.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once you have approved the step 11 screenshots and checked staging. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter, once you have approved the step 11 screenshots and checked staging. It needs no edits.
 
 ```
 Ship step 11 (layout and the pinned footer) of the Models Gone Wild
@@ -160,6 +162,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    and the merge commit, commit, and push to main. Add Models Gone Wild to
    the list of finished apps in ~/.claude/rules/design/sticky-footer.md,
    with the merge commit.
-7. Tell me the next step is step 12, whose prompt is at the bottom of
-   docs/standards-cleanup/12-design-rules.md.
+7. Tell me the next step is step 12, and paste its build prompt
+   from the bottom of docs/standards-cleanup/12-design-rules.md in full, so I can
+   start the next session with it.
 ```

@@ -112,14 +112,15 @@ a stop because a filetype changes in only one file.
    touch production until I say so. The one exception is decision 27b:
    then run the ship prompt below yourself once every check passes.
 
-When you stop, end your report with the ship-to-production prompt from
-the bottom of docs/standards-cleanup/f3-python.md, copied exactly, so I
-can paste it.
+When you stop, end your report with a lettered to-do that runs the
+ship-to-production prompt at the bottom of
+docs/standards-cleanup/f3-python.md when I reply with
+its letter. Do not paste that prompt into the report.
 ```
 
-## Paste-ready prompt: ship to production
+## Ship-to-production prompt
 
-Paste this once you are happy with the step F3 report. It needs no edits.
+Claude runs this in the same session when you reply with the ship letter at the end of the step F3 report. It needs no edits.
 
 ```
 Ship step F3 (format the Python) of the Models Gone Wild standards cleanup
@@ -137,6 +138,7 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
 4. Switch staging back to main with the README command.
 5. Mark step F3 done in docs/standards-cleanup/README.md with today's date
    and the merge commit, commit, and push to main.
-6. Tell me the next step is step F4, whose prompt is at the bottom of
-   docs/standards-cleanup/f4-html.md.
+6. Tell me the next step is step F4, and paste its build prompt
+   from the bottom of docs/standards-cleanup/f4-html.md in full, so I can
+   start the next session with it.
 ```
