@@ -233,12 +233,12 @@ def serve(root: str) -> tuple:
     """
 
     class Quiet(http.server.SimpleHTTPRequestHandler):
-        def log_message(self, *args):
+        def log_message(self, *args: object) -> None:
             """
             Drops the per-request log line so the report stays readable
 
             Args:
-                *args: The format string and values the base class would log
+                *args (object): The format string and values the base class would log
 
             Returns:
                 None
