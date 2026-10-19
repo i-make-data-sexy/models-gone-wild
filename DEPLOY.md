@@ -414,6 +414,8 @@ Something stops working and the console names the Content Security Policy. The m
 
 GA4 Realtime shows no visit. Open GTM's Preview mode (Tag Assistant) on the page and confirm the Google Tag fires. A request the console shows as refused needs its host added to `connect-src` or `img-src`.
 
+With GTM's Preview mode connected, the console shows one refused `data:` font under `font-src 'self'`. It is Tag Assistant's own badge font, not one of the app's, and it loads only during a Preview session, so the policy leaves it refused. The tag still fires, and a visit without Preview mode logs nothing. Google's [Tag Manager CSP guide](https://developers.google.com/tag-platform/security/guides/csp) lists the extra sources a fully clean Preview session would need.
+
 An edit is live on disk but the browser shows the old page. Confirm the git pull actually landed, then hard-refresh. The no-cache headers should make this rare.
 
 ```bash
