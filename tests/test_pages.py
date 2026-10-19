@@ -44,12 +44,12 @@ REDIRECTS         = [
 # ========================================================================
 
 @pytest.mark.parametrize("path", ["/", "/threat-matrix/", "/lab-counts/"])
-def test_home_and_views_render(fetch: Callable, path: str) -> None:
+def test_home_and_views_render(fetch: Callable[[str], tuple], path: str) -> None:
     """
     Checks the home page and both view permalinks return 200 with the home title
 
     Args:
-        fetch (Callable): Requests a path on the preview server
+        fetch (Callable[[str], tuple]): Requests a path on the preview server
         path (str): The page's path under the prefix
 
     Returns:
@@ -61,12 +61,12 @@ def test_home_and_views_render(fetch: Callable, path: str) -> None:
     assert HOME_TITLE in body
 
 
-def test_methodology_renders(fetch: Callable) -> None:
+def test_methodology_renders(fetch: Callable[[str], tuple]) -> None:
     """
     Checks the Methodology page returns 200 with its own title
 
     Args:
-        fetch (Callable): Requests a path on the preview server
+        fetch (Callable[[str], tuple]): Requests a path on the preview server
 
     Returns:
         None
@@ -79,12 +79,12 @@ def test_methodology_renders(fetch: Callable) -> None:
     assert title in body
 
 
-def test_poster_permalink_renders(fetch: Callable, slug: str) -> None:
+def test_poster_permalink_renders(fetch: Callable[[str], tuple], slug: str) -> None:
     """
     Checks every case's poster permalink returns 200 with the home title
 
     Args:
-        fetch (Callable): Requests a path on the preview server
+        fetch (Callable[[str], tuple]): Requests a path on the preview server
         slug (str): One case's poster slug
 
     Returns:
@@ -103,12 +103,12 @@ def test_poster_permalink_renders(fetch: Callable, slug: str) -> None:
 
 @pytest.mark.parametrize("base", ASSET_BASES)
 @pytest.mark.parametrize("asset", ASSETS)
-def test_asset_loads(fetch: Callable, base: str, asset: str) -> None:
+def test_asset_loads(fetch: Callable[[str], tuple], base: str, asset: str) -> None:
     """
     Checks each asset loads from the home page, a view, and a poster permalink
 
     Args:
-        fetch (Callable): Requests a path on the preview server
+        fetch (Callable[[str], tuple]): Requests a path on the preview server
         base (str): The page path the browser resolves the asset against
         asset (str): The asset's relative path
 
@@ -127,12 +127,12 @@ def test_asset_loads(fetch: Callable, base: str, asset: str) -> None:
 # ========================================================================
 
 @pytest.mark.parametrize("path, location", REDIRECTS)
-def test_redirect(fetch: Callable, path: str, location: str) -> None:
+def test_redirect(fetch: Callable[[str], tuple], path: str, location: str) -> None:
     """
     Checks an unslashed or old ?view= path gets a 301 to its permalink
 
     Args:
-        fetch (Callable): Requests a path on the preview server
+        fetch (Callable[[str], tuple]): Requests a path on the preview server
         path (str): The old path under the prefix
         location (str): Where the redirect should point
 
@@ -145,12 +145,12 @@ def test_redirect(fetch: Callable, path: str, location: str) -> None:
     assert headers["Location"] == location
 
 
-def test_unknown_path_is_404(fetch: Callable) -> None:
+def test_unknown_path_is_404(fetch: Callable[[str], tuple]) -> None:
     """
     Checks a path that matches no page returns 404
 
     Args:
-        fetch (Callable): Requests a path on the preview server
+        fetch (Callable[[str], tuple]): Requests a path on the preview server
 
     Returns:
         None
