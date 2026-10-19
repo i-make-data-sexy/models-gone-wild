@@ -403,7 +403,7 @@ The page 404s at the prefix but the file is on disk. Check that the `location` a
 
 Download poster shows "The image library didn't load". `js/poster.js` loads the vendored library on the first press, from `APP_BASE` plus `js/vendor/html2canvas.min.js`. Open the browser console, then request that URL directly with curl at the origin. A 404 means the file or the asset block moved.
 
-Fonts fall back to a plain monospace face. The page reaches out to `fonts.googleapis.com`, so check whether a Content-Security-Policy header on `annielytics.com` is blocking it. Nothing in this app sets a CSP, so any policy comes from the server config.
+Fonts fall back to a plain monospace face. The app serves its own fonts, with `css/fonts.css` pointing at the woff2 files in `fonts/`. Request one of those files at the origin with curl. A 404 means a file or the asset block moved. In the browser console, `[...document.fonts].map(f => f.family + ' ' + f.weight + ' ' + f.status)` lists each registered face and whether it loaded.
 
 An edit is live on disk but the browser shows the old page. Confirm the git pull actually landed, then hard-refresh. The no-cache headers should make this rare.
 

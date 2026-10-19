@@ -2,12 +2,12 @@
      About This File
    ======================================================================== */
 
-/* The custom properties both pages share. Both pages link seven stylesheets
-   in a fixed order, starting with this one, then base, registry, charts,
-   poster, methodology, and responsive, so the cascade runs top to bottom and
-   responsive.css overrides the rules before it. Every link is a relative
-   path since the app lives under /tools/models-gone-wild/ and a leading
-   slash would point at the site root.
+/* The custom properties both pages share. Both pages link eight stylesheets
+   in a fixed order, starting with fonts and this one, then base, registry,
+   charts, poster, methodology, and responsive, so the cascade runs top to
+   bottom and responsive.css overrides the rules before it. Every link is a
+   relative path since the app lives under /tools/models-gone-wild/ and a
+   leading slash would point at the site root.
 
    Every color, font size, and line height the stylesheets use is a token
    here, named for its role, and every other file reads it with var(). A
