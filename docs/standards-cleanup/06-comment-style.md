@@ -33,7 +33,7 @@ The checker prints at most 15 issues per category, so run it with the limit lift
 
 ## Done when
 
-`check_style.py` reports 0 with the limit lifted, the new test passes and fails with an issue put back, `grep -c '<!--' index.html methodology/index.html` prints 1 for each under decision 29a (the About banner) or 0 under 29b, and both suites pass.
+`check_style.py` reports 0 with the limit lifted, the new test passes and fails with an issue put back, `grep -c '<!--' index.html methodology/index.html` prints 3 for each under decision 29a (the About banner, its note, and the page banner below it, all above the doctype, as step F4 shipped them) or 0 under 29b, and both suites pass.
 
 Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
@@ -75,7 +75,7 @@ every finding, and re-run the formatter where a change moved a column.
    show it passing and failing with one issue put back, give me a clickable
    link, a short summary, and the git diff command, and STOP until I
    approve.
-5. Confirm grep -c '<!--' on both pages prints 1 each under decision 29a or
+5. Confirm grep -c '<!--' on both pages prints 3 each under decision 29a or
    0 under 29b. Run check_style.py (must report 0) and both suites, gating
    on each exit code.
 6. Commit, push, and deploy the branch to staging with the
