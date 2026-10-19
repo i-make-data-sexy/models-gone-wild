@@ -18,7 +18,7 @@ python3 ~/.claude/skills/design-tokens/scripts/check_raw_values.py --checks colo
 
 The checker prints only the first 40, so lift the `findings[:40]` limit in a scratchpad copy to see them all. The 90 are 5 hex colors (`#4ea3e0`, `#f4ecd8`, `#c9c2b0`, `#e6ddc6`, `#211e18`), 14 `rgb()`/`rgba()` colors, 52 font sizes, and 19 line heights. The default `--checks color` alone reports only the 5 hex colors, so always pass all four. Mapped onto step 7's files, the 90 fall in `poster.css` (28), `registry.css` (22), `charts.css` (18), `base.css` (13), `methodology.css` (7), and `responsive.css` (2).
 
-`audit_tokens.py .` reported 14 tokens, 155 `var()` uses, and 3 tokens never used (`--stamp-red-bright`, `--amber`, and `--options-knob-fill`, which is also defined twice). `--stamp-red` and `--class3` hold the same value (`#8f1d16`). They name different roles (the stamp color and the severe class), so both stay in pass A.
+`audit_tokens.py .` reported 14 tokens, 155 `var()` uses, and 3 tokens never used: `--stamp-red-bright`, `--amber`, and `--options-knob-fill`. The first two are unused. The third is not, which a grep found on 2026-10-19. `registry.css` sets it on the options button twice, once for the closed menu (`--paper-deep`) and once for the open menu (`--stamp-red`), and `.line-icon-knob` reads it to fill the three knob circles in `index.html`. The audit misses that read because it is written with a fallback, `var(--options-knob-fill,var(--paper))`. `--stamp-red` and `--class3` hold the same value (`#8f1d16`). They name different roles (the stamp color and the severe class), so both stay in pass A.
 
 The checker scans CSS and Python only, so it reports both HTML pages and the JavaScript clean. `index.html` held 31 hex colors it cannot see on 2026-10-16. Steps 9A and 9B, which run before this step under decision 31, move the script's into `js/labels.js`, `js/mugshot.js`, and `js/charts.js`, so find each one again at the start:
 
@@ -34,7 +34,7 @@ Under decision 28a, step F1 installed `scripts/git-hooks/pre-commit` with the fo
 
 1. Read `~/.claude/skills/design-tokens/SKILL.md` and follow pass A.
 2. In the seven CSS files from step 7, give every raw color, `rgb()`/`rgba()` value, font size, and line height a token in `variables.css` holding the exact literal, named for its role, and replace each use with `var()`. Keep values identical, including spelling (`.95em` stays `.95em`).
-3. Remove the three unused tokens, and the duplicate definition of `--options-knob-fill`, after grepping both pages and every CSS file to confirm nothing reads them.
+3. Remove `--stamp-red-bright` and `--amber` after grepping both pages, every CSS file, and `js/` to confirm nothing reads them. Keep `--options-knob-fill`, the options button's state token.
 4. Under decision 12a, the 31 colors in `index.html` and the `js/` files move onto the tokens.
    - At startup, read each color the script draws with from the CSS custom properties with `getComputedStyle(document.documentElement).getPropertyValue(...)`, trimmed, and assign them to the existing constants (`DISC_FILL`, `M_INK`, and the rest). The SVG the script builds keeps receiving literal colors, which matters because html2canvas renders a poster's SVG as an image and would not apply a stylesheet to it.
    - Replace the two legends' `fill="#..."` attributes with classes the stylesheet colors from the tokens (the legends are never captured by html2canvas), and drop the "keep in step with `DISC_FILL`" comments since both now read one source.
@@ -94,8 +94,8 @@ every finding, and re-run the formatter where a change moved a column.
    unchanged, and run scripts/screenshot-diff/run.sh main
    standards-design-tokens. Give me a clickable link, a short summary, the
    diff result, and the git diff command, and STOP until I approve.
-4. After I approve, tokenize the other six CSS files and remove the three
-   unused tokens and the duplicate definition.
+4. After I approve, tokenize the other six CSS files and remove the two
+   unused tokens, keeping --options-knob-fill.
 5. Read the script's colors from the tokens at startup,
    move the legend fills to classes, and add the no-hex test for both pages.
 6. Append the raw-value check to scripts/git-hooks/pre-commit (step F1's

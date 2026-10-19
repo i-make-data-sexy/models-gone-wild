@@ -14,6 +14,20 @@
    ======================================================================== */
 
 /* ================================================
+     Colors
+   ================================================ */
+
+const CHART_COLOR = {
+    rule:    cssToken("--rule"),
+    ink:     cssToken("--ink"),
+    inkSoft: cssToken("--ink-soft"),
+    paper:   cssToken("--paper"),
+    danger:  cssToken("--class3"),
+    benign:  cssToken("--class1")
+};
+
+
+/* ================================================
      Render Scatter
    ================================================ */
 
@@ -253,25 +267,25 @@ function renderScatter(list){
     const grid=[];
     for(let g=0;g<=10;g+=2.5){
         if(g===5) continue;
-        grid.push(`<line x1="${X(g)}" y1="${padT}" x2="${X(g)}" y2="${padT+ph}" stroke="#4a4438" stroke-width="1" opacity="0.18"/>`);
-        grid.push(`<line x1="${padL}" y1="${Y(g)}" x2="${padL+pw}" y2="${Y(g)}" stroke="#4a4438" stroke-width="1" opacity="0.18"/>`);
+        grid.push(`<line x1="${X(g)}" y1="${padT}" x2="${X(g)}" y2="${padT+ph}" stroke="${CHART_COLOR.rule}" stroke-width="1" opacity="0.18"/>`);
+        grid.push(`<line x1="${padL}" y1="${Y(g)}" x2="${padL+pw}" y2="${Y(g)}" stroke="${CHART_COLOR.rule}" stroke-width="1" opacity="0.18"/>`);
     }
-    const mid=`<line x1="${X(5)}" y1="${padT}" x2="${X(5)}" y2="${padT+ph}" stroke="#4a4438" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>
-               <line x1="${padL}" y1="${Y(5)}" x2="${padL+pw}" y2="${Y(5)}" stroke="#4a4438" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>`;
+    const mid=`<line x1="${X(5)}" y1="${padT}" x2="${X(5)}" y2="${padT+ph}" stroke="${CHART_COLOR.rule}" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>
+               <line x1="${padL}" y1="${Y(5)}" x2="${padL+pw}" y2="${Y(5)}" stroke="${CHART_COLOR.rule}" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.5"/>`;
     const qlabel = (x,y,fill,op,text) =>
         `<text x="${x}" y="${y}" text-anchor="middle" fill="${fill}" font-family="'Special Elite',monospace"
            font-size="12" opacity="${op}" class="svg-note" tabindex="0" role="note"
            data-def="${escAttr(QUADRANT_NOTE[text])}">${text}</text>`;
     const ql=
-        qlabel(X(2.5), Y(9.4), "#8f1d16", "0.8", "sleepwalking burglars")
-    + qlabel(X(7.5), Y(9.4), "#8f1d16", "0.8", "apex predators")
-    + qlabel(X(2.5), Y(0.5), "#5a6b2a", "0.8", "escaped house cats")
-    + qlabel(X(7.5), Y(0.5), "#5a6b2a", "0.8", "determined cheaters");
+        qlabel(X(2.5), Y(9.4), CHART_COLOR.danger, "0.8", "sleepwalking burglars")
+    + qlabel(X(7.5), Y(9.4), CHART_COLOR.danger, "0.8", "apex predators")
+    + qlabel(X(2.5), Y(0.5), CHART_COLOR.benign, "0.8", "escaped house cats")
+    + qlabel(X(7.5), Y(0.5), CHART_COLOR.benign, "0.8", "determined cheaters");
     const axisLabel = (x,y,rot,note,text) =>
         `<g class="axis-note" tabindex="0" role="note" data-def="${escAttr(note)}"${rot?` transform="${rot}"`:""}>
-           <text class="axis-text" x="${x}" y="${y}" text-anchor="middle" fill="#3a362c"
+           <text class="axis-text" x="${x}" y="${y}" text-anchor="middle" fill="${CHART_COLOR.inkSoft}"
              font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">${text}</text>
-           <text class="axis-arrow" x="${x}" y="${y}" text-anchor="start" fill="#3a362c"
+           <text class="axis-arrow" x="${x}" y="${y}" text-anchor="start" fill="${CHART_COLOR.inkSoft}"
              font-family="'Oswald',sans-serif" font-weight="600" font-size="13">&#8594;</text>
          </g>`;
     const yTitleX = padL - AXIS.GAP;
@@ -309,13 +323,13 @@ function renderScatter(list){
 
         const tipped = c.disclosedBy && c.disclosedBy.kind==="tip";
 
-        const disc    = `fill="${tipped ? DISC_FILL.tip : DISC_FILL.self}" stroke="#e6ddc6" stroke-width="2"`;
+        const disc    = `fill="${tipped ? DISC_FILL.tip : DISC_FILL.self}" stroke="${CHART_COLOR.paper}" stroke-width="2"`;
         const discSay = (tipped ? " Tipped off." : " Self-reported.")
             + (c.outcome==="attempt" ? " Failed attempt." : "");
         return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
             data-def="${escAttr(scoreCard)}"
             aria-label="${label}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10.${discSay} Open the wanted poster.">
-            ${labels[i].leader ? `<line class="leader" x1="${labels[i].leader.from.x}" y1="${labels[i].leader.from.y}" x2="${labels[i].leader.to.x}" y2="${labels[i].leader.to.y}" stroke="#4a4438" stroke-width="1" opacity="0.6"/>` : ""}
+            ${labels[i].leader ? `<line class="leader" x1="${labels[i].leader.from.x}" y1="${labels[i].leader.from.y}" x2="${labels[i].leader.to.x}" y2="${labels[i].leader.to.y}" stroke="${CHART_COLOR.rule}" stroke-width="1" opacity="0.6"/>` : ""}
             <circle cx="${cx}" cy="${cy}" r="${DOT_R}" ${disc}/>
             <text x="${labels[i].x}" y="${labels[i].y}" text-anchor="${anchor}">${label}</text>
         </g>`;
@@ -323,7 +337,7 @@ function renderScatter(list){
 
     scatterHost.innerHTML = list.length
         ? `<svg class="scatter-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-                <rect x="${padL}" y="${padT}" width="${pw}" height="${ph}" fill="none" stroke="#1c1a15" stroke-width="1.5"/>
+                <rect x="${padL}" y="${padT}" width="${pw}" height="${ph}" fill="none" stroke="${CHART_COLOR.ink}" stroke-width="1.5"/>
                 ${grid.join("")}${mid}${ql}${axes}${pts}
             </svg>`
         : '<p class="empty-note">No files match the current filters.</p>';
@@ -363,11 +377,11 @@ function placeAxisIcons(){
         const ring  = document.createElementNS(ns,"circle");
         ring.setAttribute("class","axis-icon");
         ring.setAttribute("cx",iconX); ring.setAttribute("cy",iconY); ring.setAttribute("r",R);
-        ring.setAttribute("fill","none"); ring.setAttribute("stroke","#3a362c"); ring.setAttribute("stroke-width","0.85");
+        ring.setAttribute("fill","none"); ring.setAttribute("stroke",CHART_COLOR.inkSoft); ring.setAttribute("stroke-width","0.85");
         const i=document.createElementNS(ns,"text");
         i.setAttribute("class","axis-icon");
         i.setAttribute("x",iconX); i.setAttribute("y",iconY+1.9);
-        i.setAttribute("text-anchor","middle"); i.setAttribute("fill","#3a362c");
+        i.setAttribute("text-anchor","middle"); i.setAttribute("fill",CHART_COLOR.inkSoft);
         i.setAttribute("font-family","'Oswald',sans-serif");
         i.setAttribute("font-size","5.4"); i.setAttribute("font-weight","600");
         i.textContent="i";
@@ -411,11 +425,11 @@ function renderLabChart(list){
     const step = maxAll > 24 ? 5 : maxAll > 12 ? 2 : 1;
     let grid   = "";
     for(let n=0; n<=maxAll; n+=step){
-        grid += `<line x1="${X(n)}" y1="${padT}" x2="${X(n)}" y2="${padT+rows.length*ROW}" stroke="#4a4438" stroke-width="1" opacity="${n===0?0.6:0.18}"/>`
-                    + `<text x="${X(n)}" y="${padT+rows.length*ROW+AXIS.TICK}" text-anchor="middle" fill="#3a362c"
+        grid += `<line x1="${X(n)}" y1="${padT}" x2="${X(n)}" y2="${padT+rows.length*ROW}" stroke="${CHART_COLOR.rule}" stroke-width="1" opacity="${n===0?0.6:0.18}"/>`
+                    + `<text x="${X(n)}" y="${padT+rows.length*ROW+AXIS.TICK}" text-anchor="middle" fill="${CHART_COLOR.inkSoft}"
                          font-family="'Oswald',sans-serif" font-size="12">${n}</text>`;
     }
-    const axis = `<text x="${padL+pw/2}" y="${axisTitleAt(padT+rows.length*ROW, true)}" text-anchor="middle" fill="#3a362c"
+    const axis = `<text x="${padL+pw/2}" y="${axisTitleAt(padT+rows.length*ROW, true)}" text-anchor="middle" fill="${CHART_COLOR.inkSoft}"
             font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">CASES, OLDEST TO NEWEST &#8594;</text>`;
 
     const bars = rows.map(([lab, cases], r)=>{

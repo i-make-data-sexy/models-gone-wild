@@ -13,7 +13,7 @@
      Mugshot Generator
    ======================================================================== */
 
-const M_INK = "#1c1a15", M_PAPER="#efe7d2", M_WHITE="#fbf7ec", M_BACK="#cfc4a6";
+const M_INK = cssToken("--ink"), M_PAPER=cssToken("--mug-paper"), M_WHITE=cssToken("--mug-white"), M_BACK=cssToken("--mug-wall");
 const M_LW  = 2.6;
 
 

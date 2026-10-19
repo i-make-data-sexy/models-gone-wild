@@ -16,7 +16,7 @@
     inset:                       0;
     z-index:                     50;
     display:                     none;
-    background:                  rgba(18,14,6,.78);
+    background:                  var(--overlay-backdrop);
     padding:                     24px 16px;
     overflow-y:                  auto;
     -webkit-tap-highlight-color: transparent;
@@ -35,7 +35,7 @@
     margin:          auto;
     background:      var(--paper);
     border:          2px solid var(--ink);
-    box-shadow:      0 30px 70px rgba(0,0,0,.6);
+    box-shadow:      0 30px 70px var(--shadow-poster);
     padding:         0 0 26px;
 }
 
@@ -57,7 +57,7 @@
     font-weight:     500;
     letter-spacing:  .34em;
     text-transform:  uppercase;
-    font-size:       10px;
+    font-size:       var(--font-size-poster-eyebrow);
     color:           var(--ink-soft);
     margin-bottom:   12px;
     padding-left:    .34em;
@@ -67,15 +67,15 @@
     font-family:     'Oswald',sans-serif;
     font-weight:     700;
     text-transform:  uppercase;
-    font-size:       64px;
-    line-height:     .82;
+    font-size:       var(--font-size-poster-wanted);
+    line-height:     var(--line-height-poster-wanted);
     letter-spacing:  .04em;
     margin:          0;
 }
 
 .poster-for {
     font-family:     'Special Elite',monospace;
-    font-size:       13px;
+    font-size:       var(--font-size-poster-for);
     letter-spacing:  .3em;
     text-transform:  uppercase;
     margin-top:      6px;
@@ -88,7 +88,7 @@
     height:          230px;
     margin:          18px auto 6px;
     border:          2px solid var(--ink);
-    background:      #211e18;
+    background:      var(--mug-backdrop);
     overflow:        hidden;
 }
 
@@ -102,8 +102,8 @@
     font-family:     'Oswald',sans-serif;
     font-weight:     700;
     text-transform:  uppercase;
-    font-size:       30px;
-    line-height:     1;
+    font-size:       var(--font-size-poster-alias);
+    line-height:     var(--line-height-solid);
     margin:          16px 20px 2px;
     text-align:      center;
     letter-spacing:  .01em;
@@ -111,7 +111,7 @@
 
 .poster-org {
     text-align:      center;
-    font-size:       12px;
+    font-size:       var(--font-size-poster-byline);
     letter-spacing:  .14em;
     text-transform:  uppercase;
     color:           var(--stamp-red);
@@ -123,7 +123,7 @@
 .poster-aka {
     text-align:      center;
     font-family:     'Special Elite',monospace;
-    font-size:       12px;
+    font-size:       var(--font-size-poster-byline);
     color:           var(--ink-soft);
     margin:          6px 24px 0;
 }
@@ -134,7 +134,7 @@
 }
 
 .poster-class .class-badge {
-    font-size:       11px;
+    font-size:       var(--font-size-poster-label);
     padding:         5px 14px;
     margin-top:      0;
 }
@@ -152,14 +152,14 @@
     font-weight:     600;
     letter-spacing:  .14em;
     text-transform:  uppercase;
-    font-size:       11px;
+    font-size:       var(--font-size-poster-label);
     color:           var(--stamp-red);
     margin-bottom:   3px;
 }
 
 .rap-val {
-    font-size:       13px;
-    line-height:     1.55;
+    font-size:       var(--font-size-poster-body);
+    line-height:     var(--line-height-poster-body);
     color:           var(--ink);
 }
 
@@ -174,7 +174,7 @@
     display:         flex;
     gap:             18px;
     margin:          4px 0 0;
-    font-size:       12px;
+    font-size:       var(--font-size-poster-matrix);
     font-family:     'Oswald',sans-serif;
     letter-spacing:  .06em;
     text-transform:  uppercase;
@@ -186,12 +186,12 @@
 .caution {
     margin:          20px 24px 0;
     border:          2px solid var(--stamp-red);
-    background:      rgba(143,29,22,.06);
+    background:      var(--caution-wash);
     padding:         12px 14px;
 }
 
-.caution .rap-label { color:     var(--stamp-red); }
-.caution .rap-val   { font-size: 12.5px;           }
+.caution .rap-label { color:     var(--stamp-red);                }
+.caution .rap-val   { font-size: var(--font-size-poster-caution); }
 
 .poster-footer {
     margin:          20px 24px 0;
@@ -201,7 +201,7 @@
     justify-content: space-between;
     gap:             12px;
     flex-wrap:       wrap;
-    font-size:       11px;
+    font-size:       var(--font-size-poster-label);
     letter-spacing:  .08em;
     text-transform:  uppercase;
     font-family:     'Oswald',sans-serif;
@@ -225,7 +225,7 @@
     font-weight:     600;
     letter-spacing:  .14em;
     text-transform:  uppercase;
-    font-size:       12px;
+    font-size:       var(--font-size-poster-button);
     padding:         13px;
     cursor:          pointer;
     background:      var(--ink);
@@ -262,7 +262,7 @@
     right:           14px;
     font-family:     'Oswald',sans-serif;
     font-weight:     700;
-    font-size:       13px;
+    font-size:       var(--font-size-stamp);
     letter-spacing:  .1em;
     text-transform:  uppercase;
     color:           var(--stamp-red);
@@ -272,13 +272,13 @@
     transform:       rotate(9deg);
     opacity:         .72;
     text-align:      center;
-    line-height:     1.1;
+    line-height:     var(--line-height-stamp);
     pointer-events:  none;
 }
 
 .stamp small {
     display:         block;
-    font-size:       9px;
+    font-size:       var(--font-size-stamp-small);
     letter-spacing:  .14em;
     font-weight:     400;
 }
@@ -294,13 +294,13 @@
     background:      var(--ink);
     color:           var(--paper);
     border:          2px solid var(--paper);
-    font-size:       22px;
-    line-height:     1;
+    font-size:       var(--font-size-close-button);
+    line-height:     var(--line-height-solid);
     cursor:          pointer;
     display:         flex;
     align-items:     center;
     justify-content: center;
-    box-shadow:      0 4px 14px rgba(0,0,0,.5);
+    box-shadow:      0 4px 14px var(--shadow-close-button);
     font-family:     'Oswald',sans-serif;
 }
 
@@ -315,9 +315,9 @@ footer.site-foot {
     padding-top:     26px;
     border-top:      3px double var(--rule);
     text-align:      center;
-    font-size:       11.5px;
+    font-size:       var(--font-size-site-footer);
     color:           var(--ink-soft);
-    line-height:     1.7;
+    line-height:     var(--line-height-site-footer);
     font-family:     'Special Elite',monospace;
 }
 
