@@ -81,7 +81,7 @@ def prepare_folders(out: Path) -> Path:
 #   Request Routing
 # ========================================================================
 
-def make_route_filter(cache: Path) -> Callable:
+def make_route_filter(cache: Path) -> Callable[[Route], None]:
     """
     Builds the request handler that serves local pages, replays cached fonts, and aborts the rest
 
@@ -89,7 +89,7 @@ def make_route_filter(cache: Path) -> Callable:
         cache (Path): The font cache folder
 
     Returns:
-        Callable: The handler to pass to a Playwright context's route
+        Callable[[Route], None]: The handler to pass to a Playwright context's route
     """
 
     local_hosts   = {"127.0.0.1", "localhost"}
@@ -148,7 +148,7 @@ def capture_one(
     browser:      Browser,
     base:         str,
     out:          Path,
-    route_filter: Callable,
+    route_filter: Callable[[Route], None],
     name:         str,
     path:         str,
     ready:        str | None,
@@ -161,7 +161,7 @@ def capture_one(
         browser (Browser): The running Chromium
         base (str): The base URL of the server
         out (Path): The output folder
-        route_filter (Callable): The request handler for the context
+        route_filter (Callable[[Route], None]): The request handler for the context
         name (str): The page name
         path (str): The path under the prefix to load
         ready (str | None): A selector to wait for before the capture, or None
