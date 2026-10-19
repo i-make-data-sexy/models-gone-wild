@@ -36,19 +36,11 @@ pytestmark = pytest.mark.browser
 DESKTOP    = {"width": 1440, "height": 900}
 PHONE      = {"width": 375,  "height": 812}
 
-TIP_GAP    = 10
-
 TABS       = [
     ("timeline", ""),
     ("matrix",   "threat-matrix/"),
     ("labs",     "lab-counts/"),
 ]
-
-TIP_GAPS_JS = """() => {
-    const tip    = document.getElementById("tip").getBoundingClientRect();
-    const column = document.querySelector(".content").getBoundingClientRect();
-    return {left: tip.left - column.left, right: column.right - tip.right};
-}"""
 
 
 
@@ -269,6 +261,13 @@ def test_glossary_bubbles_stay_in_column(open_page: Callable, viewport: dict) ->
         None
     """
 
+    tip_gap     = 10
+    tip_gaps_js = """() => {
+        const tip    = document.getElementById("tip").getBoundingClientRect();
+        const column = document.querySelector(".content").getBoundingClientRect();
+        return {left: tip.left - column.left, right: column.right - tip.right};
+    }"""
+
     page, _ = open_page(viewport)
     checked = 0
     outside = []
@@ -283,10 +282,10 @@ def test_glossary_bubbles_stay_in_column(open_page: Callable, viewport: dict) ->
             term.hover()
             page.wait_for_selector("#tip.show")
 
-            gaps     = page.evaluate(TIP_GAPS_JS)
+            gaps     = page.evaluate(tip_gaps_js)
             checked += 1
 
-            if min(gaps["left"], gaps["right"]) < TIP_GAP - 0.5:
+            if min(gaps["left"], gaps["right"]) < tip_gap - 0.5:
                 outside.append(f"{term.text_content()!r}: {gaps}")
 
     assert checked > 0

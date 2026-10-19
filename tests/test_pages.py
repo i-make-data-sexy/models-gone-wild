@@ -26,7 +26,6 @@ import pytest
 # ========================================================================
 
 HOME_TITLE        = "<title>Models Gone Wild: AI Containment Registry</title>"
-METHODOLOGY_TITLE = "<title>Methodology: Models Gone Wild</title>"
 
 ASSET_BASES       = ["/", "/threat-matrix/", "/poster/sol-hugging-face/"]
 ASSETS            = ["css/styles.css", "js/cases.js", "js/glossary.js", "js/vendor/html2canvas.min.js", "img/annielytics-logo.png"]
@@ -73,9 +72,11 @@ def test_methodology_renders(fetch: Callable) -> None:
         None
     """
 
+    title           = "<title>Methodology: Models Gone Wild</title>"
     status, _, body = fetch("/methodology/")
+
     assert status == 200
-    assert METHODOLOGY_TITLE in body
+    assert title in body
 
 
 def test_poster_permalink_renders(fetch: Callable, slug: str) -> None:
