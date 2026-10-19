@@ -27,49 +27,99 @@
        ================================================ */
 
     /* Palette */
-    --paper:                     #e6ddc6;
-    --paper-deep:                #d8cdb0;
-    --ink:                       #1c1a15;
-    --ink-soft:                  #3a362c;
-    --stamp-red:                 #8f1d16;
-    --stamp-red-bright:          #b52d20;
-    --amber:                     #9a6a12;
-    --rule:                      #4a4438;
-    --card:                      #eee6d2;
-    --shadow:                    rgba(20,16,8,.35);
-    --class3:                    #8f1d16;
-    --class2:                    #a35a12;
-    --class1:                    #5a6b2a;
+    --paper:                      #e6ddc6;
+    --paper-deep:                 #d8cdb0;
+    --ink:                        #1c1a15;
+    --ink-soft:                   #3a362c;
+    --stamp-red:                  #8f1d16;
+    --rule:                       #4a4438;
+    --card:                       #eee6d2;
+    --shadow:                     rgba(20,16,8,.35);
+    --class3:                     #8f1d16;
+    --class2:                     #a35a12;
+    --class1:                     #5a6b2a;
+
+    /* Page and header */
+    --paper-vignette-light:       rgba(0,0,0,.06);
+    --paper-vignette:             rgba(0,0,0,.08);
+    --nav-focus:                  #4ea3e0;
+    --shadow-title:               rgba(0,0,0,.12);
+
+    /* Registry */
+    --options-clear-fill:         rgba(143,29,22,.8);
+    --badge-text:                 #f4ecd8;
+    --icon-btn-border:            rgba(74,68,56,.5);
+    --dotted-underline:           rgba(58,54,44,.4);
+
+    /* Tooltips */
+    --shadow-tip:                 rgba(0,0,0,.35);
+    --tip-lede-text:              #c9c2b0;
+    --tip-divider:                rgba(230,221,198,.22);
 
     /* Poster */
-    --overlay-backdrop:          rgba(18,14,6,.78);
-    --shadow-poster:             rgba(0,0,0,.6);
-    --mug-backdrop:              #211e18;
-    --caution-wash:              rgba(143,29,22,.06);
-    --shadow-close-button:       rgba(0,0,0,.5);
+    --overlay-backdrop:           rgba(18,14,6,.78);
+    --shadow-poster:              rgba(0,0,0,.6);
+    --mug-backdrop:               #211e18;
+    --caution-wash:               rgba(143,29,22,.06);
+    --shadow-close-button:        rgba(0,0,0,.5);
 
 
     /* ================================================
          Font Sizes
        ================================================ */
 
+    /* Page and header */
+    --font-size-nav:              14px;
+    --font-size-menu-toggle:      14px;
+    --font-size-bureau-line:      12px;
+    --font-size-horns:            .95em;
+    --font-size-intro:            14px;
+
+    /* Registry */
+    --font-size-tab:              12px;
+    --font-size-tab-mobile:       11px;
+    --font-size-options-heading:  14px;
+    --font-size-options-label:    12px;
+    --font-size-filter-control:   11px;
+    --font-size-filter-count:     12px;
+    --font-size-date-tag:         12px;
+    --font-size-lag-tag:          10px;
+    --font-size-spine:            12px;
+    --font-size-card-alias:       19px;
+    --font-size-card-charge:      12.5px;
+    --font-size-card-badge:       10px;
+
+    /* Charts and tooltips */
+    --font-size-tip:              11.5px;
+    --font-size-tip-lede:         11px;
+    --font-size-tip-label:        10.5px;
+    --font-size-empty-note:       14px;
+    --font-size-chart-legend:     11px;
+    --font-size-chart-label:      13px;
+
     /* Poster */
-    --font-size-poster-eyebrow:  10px;
-    --font-size-poster-wanted:   64px;
-    --font-size-poster-for:      13px;
-    --font-size-poster-alias:    30px;
-    --font-size-poster-byline:   12px;
-    --font-size-poster-label:    11px;
-    --font-size-poster-body:     13px;
-    --font-size-poster-matrix:   12px;
-    --font-size-poster-caution:  12.5px;
-    --font-size-poster-button:   12px;
-    --font-size-stamp:           13px;
-    --font-size-stamp-small:     9px;
-    --font-size-close-button:    22px;
+    --font-size-poster-eyebrow:   10px;
+    --font-size-poster-wanted:    64px;
+    --font-size-poster-for:       13px;
+    --font-size-poster-alias:     30px;
+    --font-size-poster-byline:    12px;
+    --font-size-poster-label:     11px;
+    --font-size-poster-body:      13px;
+    --font-size-poster-matrix:    12px;
+    --font-size-poster-caution:   12.5px;
+    --font-size-poster-button:    12px;
+    --font-size-stamp:            13px;
+    --font-size-stamp-small:      9px;
+    --font-size-close-button:     22px;
+
+    /* Methodology */
+    --font-size-method-h2:        18px;
+    --font-size-method-body:      15px;
+    --font-size-method-h3:        15px;
+    --font-size-back-link:        12px;
 
     /* Site footer */
-    --font-size-site-footer:     11.5px;
+    --font-size-site-footer:      11.5px;
 
 
     /* ================================================
@@ -77,13 +127,31 @@
        ================================================ */
 
     /* Shared */
-    --line-height-solid:         1;
+    --line-height-solid:          1;
+
+    /* Page and header */
+    --line-height-body:           1.5;
+    --line-height-wanted-title:   .86;
+    --line-height-intro:          1.7;
+
+    /* Registry */
+    --line-height-filter-control: 1.2;
+    --line-height-card-alias:     1.05;
+    --line-height-card-charge:    1.45;
+
+    /* Charts and tooltips */
+    --line-height-tip:            1.5;
+    --line-height-tip-def:        1.55;
 
     /* Poster */
-    --line-height-poster-wanted: .82;
-    --line-height-poster-body:   1.55;
-    --line-height-stamp:         1.1;
+    --line-height-poster-wanted:  .82;
+    --line-height-poster-body:    1.55;
+    --line-height-stamp:          1.1;
+
+    /* Methodology */
+    --line-height-page-title:     .95;
+    --line-height-method-body:    1.65;
 
     /* Site footer */
-    --line-height-site-footer:   1.7;
+    --line-height-site-footer:    1.7;
 }

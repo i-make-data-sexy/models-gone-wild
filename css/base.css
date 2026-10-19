@@ -17,12 +17,12 @@ html { scroll-behavior: smooth;     }
 
 body {
     margin:                 0;
-    background:             radial-gradient(circle at 20% 10%, rgba(0,0,0,.06), transparent 40%),
-                            radial-gradient(circle at 85% 80%, rgba(0,0,0,.08), transparent 45%),
+    background:             radial-gradient(circle at 20% 10%, var(--paper-vignette-light), transparent 40%),
+                            radial-gradient(circle at 85% 80%, var(--paper-vignette), transparent 45%),
                             var(--paper);
     color:                  var(--ink);
     font-family:            'Courier Prime','Courier New',monospace;
-    line-height:            1.5;
+    line-height:            var(--line-height-body);
     -webkit-font-smoothing: antialiased;
 }
 
@@ -93,7 +93,7 @@ body::before {
     display:             flex;
     gap:                 30px;
     justify-content:     flex-end;
-    line-height:         1;
+    line-height:         var(--line-height-solid);
     float:               right;
 }
 
@@ -101,7 +101,7 @@ body::before {
     color:               antiquewhite;
     text-decoration:     none;
     font-family:         'Oswald',sans-serif;
-    font-size:           14px;
+    font-size:           var(--font-size-nav);
     letter-spacing:      .08em;
     text-transform:      uppercase;
 }
@@ -120,7 +120,7 @@ body::before {
     .nav-primary .menu a:hover,
     .nav-primary .menu a:focus-visible {
         background-size:     100% 1px;
-        color:               #4ea3e0;
+        color:               var(--nav-focus);
         text-decoration:     none;
     }
 }
@@ -130,7 +130,7 @@ body::before {
     font-family:         'Oswald',sans-serif;
     font-weight:         600;
     letter-spacing:      .14em;
-    font-size:           14px;
+    font-size:           var(--font-size-menu-toggle);
     color:               antiquewhite;
     background:          transparent;
     border:              none;
@@ -157,7 +157,7 @@ header.masthead {
     font-weight:         500;
     letter-spacing:      .42em;
     text-transform:      uppercase;
-    font-size:           12px;
+    font-size:           var(--font-size-bureau-line);
     color:               var(--ink-soft);
     margin:              0 0 14px;
     padding-left:        .42em;
@@ -169,10 +169,10 @@ header.masthead {
     text-transform:      uppercase;
     letter-spacing:      .06em;
     font-size:           clamp(58px,15vw,132px);
-    line-height:         .86;
+    line-height:         var(--line-height-wanted-title);
     margin:              0;
     color:               var(--ink);
-    text-shadow:         2px 2px 0 rgba(0,0,0,.12);
+    text-shadow:         2px 2px 0 var(--shadow-title);
 }
 
 .subhead {
@@ -187,18 +187,18 @@ header.masthead {
 .horns {
     font-family:         'Noto Emoji',sans-serif;
     font-weight:         600;
-    font-size:           .95em;
+    font-size:           var(--font-size-horns);
     color:               inherit;
     vertical-align:      -.08em;
 }
 
 .intro {
     font-family:         'Special Elite',monospace;
-    font-size:           14px;
+    font-size:           var(--font-size-intro);
     text-align:          left;
     margin:              26px 0 0;
     color:               var(--ink-soft);
-    line-height:         1.7;
+    line-height:         var(--line-height-intro);
 }
 
 .intro-cue { margin-top: 14px; }

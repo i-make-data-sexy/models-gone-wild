@@ -33,7 +33,7 @@
     font-weight:         600;
     letter-spacing:      .14em;
     text-transform:      uppercase;
-    font-size:           12px;
+    font-size:           var(--font-size-tab);
     padding:             11px 20px;
     cursor:              pointer;
     background:          transparent;
@@ -162,7 +162,7 @@
     font-weight:         600;
     letter-spacing:      .14em;
     text-transform:      uppercase;
-    font-size:           14px;
+    font-size:           var(--font-size-options-heading);
     color:               var(--stamp-red);
 }
 
@@ -206,7 +206,7 @@
     display:             block;
     margin:              0 0 4px;
     font-family:         'Special Elite',monospace;
-    font-size:           12px;
+    font-size:           var(--font-size-options-label);
     color:               var(--ink-soft);
 }
 
@@ -215,14 +215,14 @@
     font-weight:         500;
     letter-spacing:      .08em;
     text-transform:      uppercase;
-    font-size:           11px;
+    font-size:           var(--font-size-filter-control);
     color:               var(--ink-soft);
     background-color:    var(--paper-deep);
     border:              1.5px solid var(--rule);
     border-radius:       2px;
     padding:             8px 28px 8px 11px;
     cursor:              pointer;
-    line-height:         1.2;
+    line-height:         var(--line-height-filter-control);
     width:               100%;
     -webkit-appearance:  none;
     appearance:          none;
@@ -287,7 +287,7 @@
     font-weight:         500;
     letter-spacing:      .08em;
     text-transform:      uppercase;
-    font-size:           11px;
+    font-size:           var(--font-size-filter-control);
     color:               var(--ink-soft);
 }
 
@@ -319,10 +319,10 @@
     font-weight:         600;
     letter-spacing:      .14em;
     text-transform:      uppercase;
-    font-size:           11px;
-    line-height:         1.2;
+    font-size:           var(--font-size-filter-control);
+    line-height:         var(--line-height-filter-control);
     color:               var(--paper);
-    background-color:    rgba(143,29,22,.8);
+    background-color:    var(--options-clear-fill);
     background-image:    linear-gradient(var(--stamp-red),var(--stamp-red));
     background-repeat:   no-repeat;
     background-position: left center;
@@ -350,7 +350,7 @@
 .filter-count {
     text-align:          right;
     font-family:         'Special Elite',monospace;
-    font-size:           12px;
+    font-size:           var(--font-size-filter-count);
     color:               var(--ink-soft);
     margin:              10px 0 0;
 }
@@ -449,7 +449,7 @@
     font-weight:         600;
     letter-spacing:      .14em;
     text-transform:      uppercase;
-    font-size:           12px;
+    font-size:           var(--font-size-date-tag);
     color:               var(--stamp-red);
     margin-bottom:       8px;
 }
@@ -459,7 +459,7 @@
     font-weight:         500;
     letter-spacing:      .12em;
     text-transform:      uppercase;
-    font-size:           10px;
+    font-size:           var(--font-size-lag-tag);
     color:               var(--ink-soft);
     margin:              -5px 0 8px;
 }
@@ -518,7 +518,7 @@
     transform:           rotate(180deg);
     font-family:         'Oswald',sans-serif;
     font-weight:         600;
-    font-size:           12px;
+    font-size:           var(--font-size-spine);
     letter-spacing:      .2em;
     text-transform:      uppercase;
     white-space:         nowrap;
@@ -535,17 +535,17 @@
     font-family:         'Oswald',sans-serif;
     font-weight:         700;
     text-transform:      uppercase;
-    font-size:           19px;
+    font-size:           var(--font-size-card-alias);
     letter-spacing:      .01em;
-    line-height:         1.05;
+    line-height:         var(--line-height-card-alias);
     margin:              0 0 9px;
     padding-right:       62px;
 }
 
 .card-charge {
-    font-size:           12.5px;
+    font-size:           var(--font-size-card-charge);
     color:               var(--ink-soft);
-    line-height:         1.45;
+    line-height:         var(--line-height-card-charge);
     margin:              0;
     min-height:          calc(4 * 1.45em);
 }
@@ -566,10 +566,10 @@
     padding:             3px 9px;
     font-family:         'Oswald',sans-serif;
     font-weight:         600;
-    font-size:           10px;
+    font-size:           var(--font-size-card-badge);
     letter-spacing:      .12em;
     text-transform:      uppercase;
-    color:               #f4ecd8;
+    color:               var(--badge-text);
 }
 
 .disc-chip {
@@ -578,7 +578,7 @@
     padding:             2px 8px;
     font-family:         'Oswald',sans-serif;
     font-weight:         600;
-    font-size:           10px;
+    font-size:           var(--font-size-card-badge);
     letter-spacing:      .12em;
     text-transform:      uppercase;
     color:               var(--ink-soft);
@@ -624,7 +624,7 @@
     align-items:         center;
     justify-content:     center;
     background:          none;
-    border:              1px solid rgba(74,68,56,.5);
+    border:              1px solid var(--icon-btn-border);
     border-radius:       50%;
     color:               var(--ink-soft);
     cursor:              pointer;
@@ -666,7 +666,7 @@
 .term {
     cursor:                    help;
     text-decoration:           underline dotted;
-    text-decoration-color:     rgba(58,54,44,.4);
+    text-decoration-color:     var(--dotted-underline);
     text-decoration-color:     color-mix(in srgb, currentColor 40%, transparent);
     text-decoration-thickness: 1px;
     text-underline-offset:     3px;
