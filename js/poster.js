@@ -18,23 +18,23 @@
      Modal
    ================================================ */
 
-const overlay  = document.getElementById('overlay');
-const poster   = document.getElementById('poster');
-const closeBtn = document.getElementById('closeBtn');
+const overlay  = document.getElementById("overlay");
+const poster   = document.getElementById("poster");
+const closeBtn = document.getElementById("closeBtn");
 let lastFocus  = null;
 
 let posterPushed=false;
 
-function posterPath(slug){ return APP_BASE+'poster/'+slug+'/'; }
+function posterPath(slug){ return APP_BASE+"poster/"+slug+"/"; }
 
 function caseBySlug(slug){ return CASES.find(c=>c.slug===slug); }
 
 function openCase(id, opts={}){
     const c=CASES.find(x=>x.id===id); if(!c) return;
     lastFocus=document.activeElement;
-    poster.querySelector('.poster-content')?.remove();
-    const div=document.createElement('div');
-    div.className='poster-content';
+    poster.querySelector(".poster-content")?.remove();
+    const div=document.createElement("div");
+    div.className="poster-content";
     div.innerHTML=`
         <div class="stamp">Escaped<small>${c.escapedFrom}</small></div>
         <div class="poster-top">
@@ -55,20 +55,20 @@ function openCase(id, opts={}){
             </div>
             ${c.disclosedBy ? `<div class="rap-row">
                 <div class="rap-label">Disclosed by</div>
-                <div class="rap-val">${c.disclosedBy.who}${c.disclosed ? ` · ${c.disclosed} · ${c.lag}` : ''}</div>
-            </div>` : ''}
+                <div class="rap-val">${c.disclosedBy.who}${c.disclosed ? ` · ${c.disclosed} · ${c.lag}` : ""}</div>
+            </div>` : ""}
             ${KIND_LABEL[c.reach] ? `<div class="rap-row">
                 <div class="rap-label">Kind</div>
                 <div class="rap-val">${KIND_LABEL[c.reach]}</div>
-            </div>` : ''}
+            </div>` : ""}
             ${OUTCOME_LABEL[c.outcome] ? `<div class="rap-row">
                 <div class="rap-label">Outcome</div>
                 <div class="rap-val">${OUTCOME_LABEL[c.outcome]}</div>
-            </div>` : ''}
+            </div>` : ""}
             ${c.notice ? `<div class="rap-row">
                 <div class="rap-label">Victim notified</div>
                 <div class="rap-val">${noticeLine(c)}</div>
-            </div>` : ''}
+            </div>` : ""}
             <div class="rap-row">
                 <div class="rap-label">Modus operandi</div>
                 <div class="rap-val"><ul>${c.mo.map(m=>`<li>${gloss(m)}</li>`).join("")}</ul></div>
@@ -93,26 +93,26 @@ function openCase(id, opts={}){
         </div>
 
         <div class="poster-actions">
-            <button class="dl-btn" id="dlBtn" data-alias="${c.alias.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}">Download poster</button>
+            <button class="dl-btn" id="dlBtn" data-alias="${c.alias.replace(/[^a-z0-9]+/gi,"-").toLowerCase()}">Download poster</button>
             <button class="dl-btn copy-btn" id="copyBtn" data-slug="${c.slug}">Copy link</button>
         </div>`;
     poster.appendChild(div);
-    overlay.classList.add('open');
-    document.body.style.overflow='hidden';
-    document.getElementById('dlBtn').addEventListener('click',downloadPoster);
-    document.getElementById('copyBtn').addEventListener('click',copyPosterLink);
+    overlay.classList.add("open");
+    document.body.style.overflow="hidden";
+    document.getElementById("dlBtn").addEventListener("click",downloadPoster);
+    document.getElementById("copyBtn").addEventListener("click",copyPosterLink);
     closeBtn.focus();
     if(opts.push!==false && window.history && history.pushState && posterFromUrl()!==c.slug){
         const url=new URL(window.location.href);
         url.pathname=posterPath(c.slug);
-        history.pushState({poster:c.slug},'',url);
+        history.pushState({poster:c.slug},"",url);
         posterPushed=true;
     }
 }
 
 function hidePoster(){
-    overlay.classList.remove('open');
-    document.body.style.overflow='';
+    overlay.classList.remove("open");
+    document.body.style.overflow="";
     if(lastFocus) lastFocus.focus();
 }
 
@@ -123,11 +123,11 @@ function closeCase(){
     else syncViewUrl();
 }
 
-window.addEventListener('popstate',()=>{
+window.addEventListener("popstate",()=>{
     const linked=caseBySlug(posterFromUrl());
     posterPushed=false;
     if(linked) openCase(linked.id,{push:false});
-    else if(overlay.classList.contains('open')) hidePoster();
+    else if(overlay.classList.contains("open")) hidePoster();
 });
 
 
@@ -143,16 +143,16 @@ async function copyPosterLink(e){
         await navigator.clipboard.writeText(link);
         ok=true;
     }catch(err){
-        const area=document.createElement('textarea');
-        area.value=link; area.setAttribute('readonly','');
-        area.style.position='fixed'; area.style.opacity='0';
+        const area=document.createElement("textarea");
+        area.value=link; area.setAttribute("readonly","");
+        area.style.position="fixed"; area.style.opacity="0";
         document.body.appendChild(area); area.select();
-        try{ ok=document.execCommand('copy'); }catch(_){ ok=false; }
+        try{ ok=document.execCommand("copy"); }catch(_){ ok=false; }
         area.remove();
     }
-    btn.textContent=ok ? 'Link copied' : "Couldn't copy";
+    btn.textContent=ok ? "Link copied" : "Couldn't copy";
     clearTimeout(btn._reset);
-    btn._reset=setTimeout(()=>{ btn.textContent='Copy link'; },2000);
+    btn._reset=setTimeout(()=>{ btn.textContent="Copy link"; },2000);
 }
 
 
@@ -163,13 +163,13 @@ async function copyPosterLink(e){
 let html2canvasLoading=null;
 
 function loadHtml2canvas(){
-    if(typeof html2canvas!=='undefined') return Promise.resolve();
+    if(typeof html2canvas!=="undefined") return Promise.resolve();
     if(!html2canvasLoading){
         html2canvasLoading=new Promise((resolve,reject)=>{
-            const script=document.createElement('script');
-            script.src=APP_BASE+'js/vendor/html2canvas.min.js';
-            script.addEventListener('load',()=>resolve());
-            script.addEventListener('error',()=>{ script.remove(); html2canvasLoading=null; reject(new Error('html2canvas did not load')); });
+            const script=document.createElement("script");
+            script.src=APP_BASE+"js/vendor/html2canvas.min.js";
+            script.addEventListener("load",()=>resolve());
+            script.addEventListener("error",()=>{ script.remove(); html2canvasLoading=null; reject(new Error("html2canvas did not load")); });
             document.head.appendChild(script);
         });
     }
@@ -178,9 +178,9 @@ function loadHtml2canvas(){
 
 async function downloadPoster(e){
     const btn      = e.currentTarget;
-    const label    = btn.dataset.alias||'model';
+    const label    = btn.dataset.alias||"model";
     const original = btn.innerHTML;
-    btn.disabled=true; btn.innerHTML='Rendering&hellip;';
+    btn.disabled=true; btn.innerHTML="Rendering&hellip;";
     try{
         await loadHtml2canvas();
     }catch(err){
@@ -188,34 +188,34 @@ async function downloadPoster(e){
         alert("The image library didn't load. Check your connection and try again.");
         return;
     }
-    const copyBtn=document.getElementById('copyBtn');
-    closeBtn.style.visibility='hidden';
-    btn.style.visibility='hidden';
-    if(copyBtn) copyBtn.style.visibility='hidden';
+    const copyBtn=document.getElementById("copyBtn");
+    closeBtn.style.visibility="hidden";
+    btn.style.visibility="hidden";
+    if(copyBtn) copyBtn.style.visibility="hidden";
 
-    poster.classList.add('exporting');
+    poster.classList.add("exporting");
     hideTip();
     try{
         if(document.fonts && document.fonts.ready) await document.fonts.ready;
         const canvas = await html2canvas(poster,{
-            backgroundColor:getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()||'#e6ddc6',
+            backgroundColor:getComputedStyle(document.documentElement).getPropertyValue("--paper").trim()||"#e6ddc6",
             scale:2, useCORS:true, logging:false
         });
-        const link   = document.createElement('a');
+        const link   = document.createElement("a");
         link.download=`wanted-${label}.png`;
-        link.href=canvas.toDataURL('image/png');
+        link.href=canvas.toDataURL("image/png");
         link.click();
     }catch(err){
         alert("Couldn't generate the image: "+err.message);
     }finally{
-        poster.classList.remove('exporting');
-        closeBtn.style.visibility='';
-        btn.style.visibility='';
-        if(copyBtn) copyBtn.style.visibility='';
+        poster.classList.remove("exporting");
+        closeBtn.style.visibility="";
+        btn.style.visibility="";
+        if(copyBtn) copyBtn.style.visibility="";
         btn.disabled=false; btn.innerHTML=original;
     }
 }
 
-closeBtn.addEventListener('click',closeCase);
-overlay.addEventListener('click',e=>{ if(e.target===overlay) closeCase(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&overlay.classList.contains('open')) closeCase(); });
+closeBtn.addEventListener("click",closeCase);
+overlay.addEventListener("click",e=>{ if(e.target===overlay) closeCase(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&overlay.classList.contains("open")) closeCase(); });
