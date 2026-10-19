@@ -1,0 +1,9 @@
+{
+    "[python]":     { "editor.wordWrap": "off" },
+    "[javascript]": { "editor.wordWrap": "off" },
+    "[css]":        { "editor.wordWrap": "off" },
+    "[sql]":        { "editor.wordWrap": "off" },
+    "[html]":       { "editor.wordWrap": "off" },
+    "[jinja-html]": { "editor.wordWrap": "off" },
+    "[json]":       { "editor.wordWrap": "off" }
+}

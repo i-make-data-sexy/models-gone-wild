@@ -34,7 +34,7 @@ REPO = Path(__file__).resolve().parent.parent
 
 def test_dev_requirements_are_pinned() -> None:
     """
-    Checks every line of requirements-dev.txt is a name==version pin
+    Checks every line of requirements-dev.txt is an exact == pin, aligned or not
 
     Args:
         None
@@ -43,7 +43,7 @@ def test_dev_requirements_are_pinned() -> None:
         None
     """
 
-    pin_re = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*==[A-Za-z0-9.+!-]+$")
+    pin_re = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]* *==[A-Za-z0-9.+!-]+$")
     text   = (REPO / "requirements-dev.txt").read_text(encoding="utf-8")
     lines  = [line.strip() for line in text.splitlines()]
     pins   = [line for line in lines if line and not line.startswith("#")]

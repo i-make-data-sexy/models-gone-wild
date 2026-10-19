@@ -9,7 +9,7 @@
 # git refs, then diffs the two image sets pixel for pixel.
 #
 # Usage: scripts/screenshot-diff/run.sh <before-ref> <after-ref>
-#        e.g. run.sh main standards-format-css
+#        e.g., run.sh main standards-format-css
 #        run.sh main main   checks the harness itself (must be clean)
 #
 # Runs locally because Cloudflare blocks automated browsers on staging
@@ -60,7 +60,7 @@ git worktree add -q --detach "$WORK/wt-after" "$AFTER" || exit 2
 
 
 # ================================================
-#   Capture one side at a time
+#   Capture One Side at a Time
 # ================================================
 
 free_port() {
@@ -83,7 +83,7 @@ capture() {
     wait "$srv" 2>/dev/null
 }
 
-# A fresh font cache per run: the before side records, the after side replays
+# A fresh font cache per run, recorded by the before side and replayed by the after
 rm -rf "$WORK/font-cache"
 capture before
 capture after
