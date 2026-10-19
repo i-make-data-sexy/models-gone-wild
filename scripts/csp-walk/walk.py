@@ -146,6 +146,37 @@ def route_filter(route: Route, entry: dict) -> None:
 
 
 # ========================================================================
+#   Waiting
+# ========================================================================
+
+def wait_until(page: Page, expression: str, arg: object = None, timeout_ms: int = 15000) -> None:
+    """
+    Polls an expression with page.evaluate, which the policy never sees, until it is truthy
+
+    Args:
+        page (Page): The page to poll
+        expression (str): A JavaScript expression, or a function taking arg
+        arg (object): The argument for a function expression, or None
+        timeout_ms (int): How long to keep polling
+
+    Returns:
+        None
+
+    Raises:
+        TimeoutError: When the expression is still falsy at the deadline
+    """
+
+    for _ in range(timeout_ms // 250):
+        if page.evaluate(expression, arg):
+            return
+
+        page.wait_for_timeout(250)
+
+    raise TimeoutError(f"still false after {timeout_ms}ms: {expression[:60]}")
+
+
+
+# ========================================================================
 #   Home Page Actions
 # ========================================================================
 
@@ -311,7 +342,7 @@ def act_copy_link(page: Page) -> str:
 
     open_poster(page)
     page.click("#copyBtn")
-    page.wait_for_function("document.getElementById('copyBtn').textContent === 'Link copied'")
+    wait_until(page, "document.getElementById('copyBtn').textContent === 'Link copied'")
 
     copied = page.evaluate("navigator.clipboard.readText()")
 
@@ -470,9 +501,7 @@ def check_tag(page: Page) -> str:
     if not container:
         return ""
 
-    page.wait_for_function(
-        "id => window.google_tag_manager && window.google_tag_manager[id]", arg=container, timeout=15000,
-    )
+    wait_until(page, "id => !!(window.google_tag_manager && window.google_tag_manager[id])", container)
 
     return "GTM loaded"
 
