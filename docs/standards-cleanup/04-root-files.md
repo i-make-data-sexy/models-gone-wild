@@ -34,6 +34,7 @@ Three more items land here because they are hygiene rather than code:
 3. `tests/test_root.py` also asserts `~/.claude/skills/models-gone-wild-add-case/SKILL.md` matches the repo's skill copy when the home path exists, and skips otherwise (the cloud has no home copy). Today the home path is a symlink to the repo's folder, so the test passes by construction; it guards against the link ever being replaced by a copy that drifts.
 4. Under decision 10a, delete the merged branches, keeping `main`, `scout-state`, every `update/*` and `candidate/*`, and the current branch. List them first with `git branch --merged main` and `git branch -r --merged origin/main`, show the list, and delete only after approval, with `git branch -d <name>` locally (never `-D`) and `git push origin --delete <name>` for the remote ones.
    - Also delete `standards-step5-layout`, local and remote (Annie, 2026-10-17). It is not merged, but its one commit, `d3a5be6`, edits only `docs/standards-cleanup/05-python-structure.md`, the plan for step 5, which was retired into step F7. Show the commit with `git log --stat origin/main..standards-step5-layout`, and delete it after approval with `git branch -D standards-step5-layout` and `git push origin --delete standards-step5-layout`. This is the one branch `-D` is allowed for, since `-d` refuses an unmerged branch. `d3a5be6` stays recoverable by hash.
+   - Also delete the merged branches in the two server checkouts, `~/apps/staging/models-gone-wild` and `~/apps/models-gone-wild`, which keep a local copy of every branch deployed to staging (12 in the staging checkout on 2026-10-19, none in production). Run `git fetch --prune origin` in each, list them with `git branch --merged origin/main` alongside the others, keep the same names plus each checkout's current branch, and delete only after approval with `git branch -d <name>` (never `-D`).
 
 ## The sample-file review gate
 
@@ -86,10 +87,12 @@ every finding, and re-run the formatter where a change moved a column.
    until I approve. Then do both copies of the add-case skill (identical),
    DEPLOY.md, and scout/SCOUT.md the same way.
 5. List the merged local and remote branches you would
-   delete, plus the unmerged standards-step5-layout with its one commit,
-   and STOP until I approve the list. Then delete the merged ones with
-   git branch -d and git push origin --delete, and standards-step5-layout
-   with git branch -D and git push origin --delete, as the step file says.
+   delete, the merged branches in the staging and production checkouts
+   on the server, plus the unmerged standards-step5-layout with its one
+   commit, and STOP until I approve the list. Then delete the merged ones
+   with git branch -d (on the server too) and git push origin --delete,
+   and standards-step5-layout with git branch -D and git push origin
+   --delete, as the step file says.
 6. Run both suites and the comment style checker, gating on each exit code,
    commit, push, and deploy the branch to staging with the
    README command and run the staging health check.
