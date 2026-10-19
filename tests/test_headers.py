@@ -4,7 +4,8 @@
 
 # Security header tests. The preview server reads the same snippet nginx
 # includes, so each page, asset, and 404 a reader can reach must carry
-# all three headers with the values below.
+# all three headers with the values below. tests/test_csp.py covers the
+# Content Security Policy the same snippet carries.
 
 
 
@@ -51,7 +52,7 @@ PATHS = [
 
 def test_snippet_lists_the_three_headers() -> None:
     """
-    Checks deploy/nginx/headers.conf holds exactly the three expected headers
+    Checks deploy/nginx/headers.conf holds the three expected headers beside the policy
 
     Args:
         None
@@ -60,7 +61,10 @@ def test_snippet_lists_the_three_headers() -> None:
         None
     """
 
-    assert dict(serve.read_headers()) == EXPECTED
+    headers = dict(serve.read_headers())
+    headers.pop("Content-Security-Policy", None)
+
+    assert headers == EXPECTED
 
 
 
