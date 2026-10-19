@@ -69,12 +69,12 @@ def test_snippet_lists_the_three_headers() -> None:
 # ========================================================================
 
 @pytest.mark.parametrize("path", PATHS)
-def test_response_carries_security_headers(fetch: Callable, path: str) -> None:
+def test_response_carries_security_headers(fetch: Callable[[str], tuple], path: str) -> None:
     """
     Checks a page, an asset, or a 404 returns all three security headers
 
     Args:
-        fetch (Callable): Requests a path on the preview server
+        fetch (Callable[[str], tuple]): Requests a path on the preview server
         path (str): The path under the prefix
 
     Returns:

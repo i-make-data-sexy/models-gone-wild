@@ -32,20 +32,9 @@ from conftest import cases
 #   Global Variables
 # ========================================================================
 
-REPO        = Path(__file__).resolve().parent.parent
-PAGES       = [REPO / "index.html", REPO / "methodology" / "index.html"]
-
-SLASH_FILES = PAGES + [REPO / "css" / "styles.css"]
-LEADING_RE  = re.compile(r"""(href|src|action|url\()\s*=?\s*["']/[^/]""")
-
-REQUIRED    = {
-    "id", "slug", "alias", "lab", "org", "date", "disclosed", "lag", "order", "cls",
-    "complexity", "harm", "charge", "wantedFor", "mo", "caution",
-    "escapedFrom", "lastSeen", "disclosedBy", "outcome", "reach",
-}
-
-FOOTER_MAX = 392
-BALANCED   = sorted(path.name for path in (REPO / "js").glob("*.js"))
+REPO     = Path(__file__).resolve().parent.parent
+PAGES    = [REPO / "index.html", REPO / "methodology" / "index.html"]
+BALANCED = sorted(path.name for path in (REPO / "js").glob("*.js"))
 
 
 
@@ -97,11 +86,14 @@ def test_no_leading_slash_paths() -> None:
         None
     """
 
+    slash_files = PAGES + [REPO / "css" / "styles.css"]
+    leading_re  = re.compile(r"""(href|src|action|url\()\s*=?\s*["']/[^/]""")
+
     hits = [
         f"{path.relative_to(REPO)}:{number}: {line.strip()}"
-        for path in SLASH_FILES
+        for path in slash_files
         for number, line in enumerate(read(path).splitlines(), 1)
-        if LEADING_RE.search(line)
+        if leading_re.search(line)
     ]
     assert not hits, "\n".join(hits)
 
@@ -156,9 +148,15 @@ def test_every_case_has_required_fields() -> None:
         None
     """
 
+    required = {
+        "id", "slug", "alias", "lab", "org", "date", "disclosed", "lag", "order", "cls",
+        "complexity", "harm", "charge", "wantedFor", "mo", "caution",
+        "escapedFrom", "lastSeen", "disclosedBy", "outcome", "reach",
+    }
+
     blocks  = cases.case_blocks(cases.load_cases_js())
     missing = {
-        cid: sorted(field for field in REQUIRED if not re.search(field + r"\s*:", block))
+        cid: sorted(field for field in required if not re.search(field + r"\s*:", block))
         for cid, block in blocks.items()
     }
     assert blocks
@@ -176,7 +174,8 @@ def test_poster_footer_fits_one_line() -> None:
         None
     """
 
-    too_wide = {}
+    footer_max = 392
+    too_wide   = {}
 
     for cid, block in cases.case_blocks(cases.load_cases_js()).items():
         est   = " (EST.)" if re.search(r"estimated\s*:\s*true", block) else ""
@@ -184,7 +183,7 @@ def test_poster_footer_fits_one_line() -> None:
         seen  = "LAST SEEN · " + cases.text_field(block, "lastSeen").upper()
         width = (len(date) + len(seen)) * 6.4 + 12
 
-        if width >= FOOTER_MAX:
+        if width >= footer_max:
             too_wide[cid] = round(width)
 
     assert not too_wide, f"Shorten lastSeen for {too_wide}"

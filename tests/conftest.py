@@ -38,9 +38,6 @@ import pytest
 #   Global Variables
 # ========================================================================
 
-REPO    = Path(__file__).resolve().parent.parent
-SCRIPTS = REPO / "scripts"
-PYTHON  = REPO / "venv" / "bin" / "python3"
 BROWSER = "browser"
 
 
@@ -60,8 +57,9 @@ def load_script(name: str) -> ModuleType:
         ModuleType: The imported module
     """
 
-    spec   = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
-    module = importlib.util.module_from_spec(spec)
+    scripts = Path(__file__).resolve().parent.parent / "scripts"
+    spec    = importlib.util.spec_from_file_location(name, scripts / f"{name}.py")
+    module  = importlib.util.module_from_spec(spec)
 
     sys.modules[name] = module
     spec.loader.exec_module(module)
@@ -69,9 +67,8 @@ def load_script(name: str) -> ModuleType:
     return module
 
 
-serve       = load_script("serve")
-cases       = load_script("cases")
-check_slugs = load_script("check_slugs")
+serve = load_script("serve")
+cases = load_script("cases")
 
 
 
@@ -132,7 +129,8 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     """
 
     if "slug" in metafunc.fixturenames:
-        slugs = [slug for _, slug in check_slugs.read_cases()]
+        check_slugs = load_script("check_slugs")
+        slugs       = [slug for _, slug in check_slugs.read_cases()]
         metafunc.parametrize("slug", slugs)
 
 
@@ -171,7 +169,8 @@ def server_port() -> Iterator[int]:
         Iterator[int]: The port the server listens on
     """
 
-    handler = partial(QuietHandler, directory=str(REPO))
+    repo    = Path(__file__).resolve().parent.parent
+    handler = partial(QuietHandler, directory=str(repo))
     server  = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     thread  = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()

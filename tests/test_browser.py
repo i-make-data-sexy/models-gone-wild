@@ -36,19 +36,11 @@ pytestmark = pytest.mark.browser
 DESKTOP    = {"width": 1440, "height": 900}
 PHONE      = {"width": 375,  "height": 812}
 
-TIP_GAP    = 10
-
 TABS       = [
     ("timeline", ""),
     ("matrix",   "threat-matrix/"),
     ("labs",     "lab-counts/"),
 ]
-
-TIP_GAPS_JS = """() => {
-    const tip    = document.getElementById("tip").getBoundingClientRect();
-    const column = document.querySelector(".content").getBoundingClientRect();
-    return {left: tip.left - column.left, right: column.right - tip.right};
-}"""
 
 
 
@@ -75,7 +67,7 @@ def browser() -> Iterator["sync_api.Browser"]:
 
 
 @pytest.fixture
-def open_page(browser: "sync_api.Browser", base_url: str) -> Iterator[Callable]:
+def open_page(browser: "sync_api.Browser", base_url: str) -> Iterator[Callable[[dict], tuple]]:
     """
     Gives a helper that opens the home page at a viewport and records its errors
 
@@ -84,7 +76,7 @@ def open_page(browser: "sync_api.Browser", base_url: str) -> Iterator[Callable]:
         base_url (str): The home page URL on the preview server
 
     Returns:
-        Iterator[Callable]: Takes a viewport dict and returns the loaded page and its error list
+        Iterator[Callable[[dict], tuple]]: Takes a viewport dict and returns the loaded page and its error list
     """
 
     pages = []
@@ -124,12 +116,12 @@ def open_page(browser: "sync_api.Browser", base_url: str) -> Iterator[Callable]:
 #   Page Load
 # ========================================================================
 
-def test_home_loads_without_errors(open_page: Callable) -> None:
+def test_home_loads_without_errors(open_page: Callable[[dict], tuple]) -> None:
     """
     Checks the home page loads with no console errors and draws its cards
 
     Args:
-        open_page (Callable): Opens the home page at a viewport
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
 
     Returns:
         None
@@ -146,12 +138,17 @@ def test_home_loads_without_errors(open_page: Callable) -> None:
 # ========================================================================
 
 @pytest.mark.parametrize("view, path", TABS)
-def test_tab_shows_view_and_permalink(open_page: Callable, base_url: str, view: str, path: str) -> None:
+def test_tab_shows_view_and_permalink(
+    open_page: Callable[[dict], tuple],
+    base_url:  str,
+    view:      str,
+    path:      str,
+) -> None:
     """
     Checks each tab shows its view and puts its permalink in the address bar
 
     Args:
-        open_page (Callable): Opens the home page at a viewport
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
         base_url (str): The home page URL on the preview server
         view (str): The view's name, as used in its tab and panel ids
         path (str): The permalink path the view should show
@@ -171,12 +168,12 @@ def test_tab_shows_view_and_permalink(open_page: Callable, base_url: str, view: 
     assert page.url == base_url + path
 
 
-def test_poster_opens_and_escape_closes(open_page: Callable, base_url: str) -> None:
+def test_poster_opens_and_escape_closes(open_page: Callable[[dict], tuple], base_url: str) -> None:
     """
     Checks a case's poster puts its permalink in the address bar and Escape restores it
 
     Args:
-        open_page (Callable): Opens the home page at a viewport
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
         base_url (str): The home page URL on the preview server
 
     Returns:
@@ -200,12 +197,12 @@ def test_poster_opens_and_escape_closes(open_page: Callable, base_url: str) -> N
 #   Filters
 # ========================================================================
 
-def test_class_filter_narrows_timeline(open_page: Callable) -> None:
+def test_class_filter_narrows_timeline(open_page: Callable[[dict], tuple]) -> None:
     """
     Checks the Class filter narrows the timeline and shows the count line
 
     Args:
-        open_page (Callable): Opens the home page at a viewport
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
 
     Returns:
         None
@@ -228,12 +225,12 @@ def test_class_filter_narrows_timeline(open_page: Callable) -> None:
 #   Mobile Menu
 # ========================================================================
 
-def test_menu_opens_and_closes_on_phone(open_page: Callable) -> None:
+def test_menu_opens_and_closes_on_phone(open_page: Callable[[dict], tuple]) -> None:
     """
     Checks the MENU label opens and closes the drawer at phone width
 
     Args:
-        open_page (Callable): Opens the home page at a viewport
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
 
     Returns:
         None
@@ -257,17 +254,27 @@ def test_menu_opens_and_closes_on_phone(open_page: Callable) -> None:
 # ========================================================================
 
 @pytest.mark.parametrize("viewport", [DESKTOP, PHONE], ids=["1440", "375"])
-def test_glossary_bubbles_stay_in_column(open_page: Callable, viewport: dict) -> None:
+def test_glossary_bubbles_stay_in_column(
+    open_page: Callable[[dict], tuple],
+    viewport:  dict,
+) -> None:
     """
     Checks every glossary bubble in the first three cards sits 10px inside the column
 
     Args:
-        open_page (Callable): Opens the home page at a viewport
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
         viewport (dict): The width and height in pixels
 
     Returns:
         None
     """
+
+    tip_gap     = 10
+    tip_gaps_js = """() => {
+        const tip    = document.getElementById("tip").getBoundingClientRect();
+        const column = document.querySelector(".content").getBoundingClientRect();
+        return {left: tip.left - column.left, right: column.right - tip.right};
+    }"""
 
     page, _ = open_page(viewport)
     checked = 0
@@ -283,10 +290,10 @@ def test_glossary_bubbles_stay_in_column(open_page: Callable, viewport: dict) ->
             term.hover()
             page.wait_for_selector("#tip.show")
 
-            gaps     = page.evaluate(TIP_GAPS_JS)
+            gaps     = page.evaluate(tip_gaps_js)
             checked += 1
 
-            if min(gaps["left"], gaps["right"]) < TIP_GAP - 0.5:
+            if min(gaps["left"], gaps["right"]) < tip_gap - 0.5:
                 outside.append(f"{term.text_content()!r}: {gaps}")
 
     assert checked > 0

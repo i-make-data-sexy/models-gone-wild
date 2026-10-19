@@ -26,9 +26,6 @@ import pytest
 #   Global Variables
 # ========================================================================
 
-REPO   = Path(__file__).resolve().parent.parent
-PYTHON = REPO / "venv" / "bin" / "python3"
-
 CHECKS = [
     "check_charges",
     "check_claims",
@@ -56,9 +53,12 @@ def test_check_script_passes(script: str) -> None:
         None
     """
 
+    repo   = Path(__file__).resolve().parent.parent
+    python = repo / "venv" / "bin" / "python3"
+
     result = subprocess.run(
-        [str(PYTHON), f"scripts/{script}.py"],
-        cwd            = REPO,
+        [str(python), f"scripts/{script}.py"],
+        cwd            = repo,
         capture_output = True,
         text           = True,
         timeout        = 600,

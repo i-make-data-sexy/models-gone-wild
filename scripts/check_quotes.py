@@ -33,14 +33,6 @@ from pathlib import Path
 
 
 # ========================================================================
-#   Global Variables
-# ========================================================================
-
-REPO = Path(__file__).resolve().parent.parent
-
-
-
-# ========================================================================
 #   Scanning
 # ========================================================================
 
@@ -90,11 +82,12 @@ def main() -> int:
         int: 1 when any span is a quotation in single quotes, 0 otherwise
     """
 
+    repo      = Path(__file__).resolve().parent.parent
     max_words = 2
     failed    = 0
 
     for name in ("js/cases.js", "js/glossary.js"):
-        for line, span, words in quote_spans((REPO / name).read_text(encoding="utf-8")):
+        for line, span, words in quote_spans((repo / name).read_text(encoding="utf-8")):
             if words > max_words:
                 failed += 1
                 print(f"  QUOTE  {name} line {line}  {span}  ({words} words, use double quotes)")

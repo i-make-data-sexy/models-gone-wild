@@ -40,38 +40,6 @@ from playwright.sync_api import Browser, Route, sync_playwright
 
 
 # ========================================================================
-#   Global Variables
-# ========================================================================
-
-PREFIX        = "/tools/models-gone-wild"
-WIDTHS        = [375, 768, 1024, 1440]
-HEIGHT        = 900
-
-LOCAL_HOSTS   = {"127.0.0.1", "localhost"}
-ALLOWED_HOSTS = LOCAL_HOSTS | {"fonts.googleapis.com", "fonts.gstatic.com"}
-
-PAGES         = [
-    ("home",          "/",                         None),
-    ("threat-matrix", "/threat-matrix/",           None),
-    ("lab-counts",    "/lab-counts/",              None),
-    ("poster",        "/poster/sol-hugging-face/", "#overlay.open"),
-    ("methodology",   "/methodology/",             None),
-]
-
-FREEZE_CSS    = "*,*::before,*::after{transition:none!important;animation:none!important;caret-color:transparent!important}"
-
-LAUNCH_ARGS   = [
-    "--force-color-profile=srgb", "--disable-gpu", "--font-render-hinting=none",
-    "--disable-lcd-text", "--disable-font-subpixel-positioning",
-    "--disable-skia-runtime-opts", "--disable-partial-raster",
-    "--disable-checker-imaging", "--disable-threaded-animation",
-    "--disable-threaded-scrolling", "--disable-renderer-backgrounding",
-    "--force-device-scale-factor=1", "--disable-features=PaintHolding",
-]
-
-
-
-# ========================================================================
 #   Arguments and Folders
 # ========================================================================
 
@@ -113,7 +81,7 @@ def prepare_folders(out: Path) -> Path:
 #   Request Routing
 # ========================================================================
 
-def make_route_filter(cache: Path) -> Callable:
+def make_route_filter(cache: Path) -> Callable[[Route], None]:
     """
     Builds the request handler that serves local pages, replays cached fonts, and aborts the rest
 
@@ -121,8 +89,11 @@ def make_route_filter(cache: Path) -> Callable:
         cache (Path): The font cache folder
 
     Returns:
-        Callable: The handler to pass to a Playwright context's route
+        Callable[[Route], None]: The handler to pass to a Playwright context's route
     """
+
+    local_hosts   = {"127.0.0.1", "localhost"}
+    allowed_hosts = local_hosts | {"fonts.googleapis.com", "fonts.gstatic.com"}
 
     def route_filter(route: Route) -> None:
         """
@@ -138,11 +109,11 @@ def make_route_filter(cache: Path) -> Callable:
         url  = route.request.url
         host = urlparse(url).hostname or ""
 
-        if host in LOCAL_HOSTS:
+        if host in local_hosts:
             route.continue_()
             return
 
-        if host not in ALLOWED_HOSTS:
+        if host not in allowed_hosts:
             route.abort()
             return
 
@@ -177,7 +148,7 @@ def capture_one(
     browser:      Browser,
     base:         str,
     out:          Path,
-    route_filter: Callable,
+    route_filter: Callable[[Route], None],
     name:         str,
     path:         str,
     ready:        str | None,
@@ -190,7 +161,7 @@ def capture_one(
         browser (Browser): The running Chromium
         base (str): The base URL of the server
         out (Path): The output folder
-        route_filter (Callable): The request handler for the context
+        route_filter (Callable[[Route], None]): The request handler for the context
         name (str): The page name
         path (str): The path under the prefix to load
         ready (str | None): A selector to wait for before the capture, or None
@@ -200,8 +171,12 @@ def capture_one(
         tuple: The key for the notes file and the note for this capture
     """
 
+    prefix     = "/tools/models-gone-wild"
+    height     = 900
+    freeze_css = "*,*::before,*::after{transition:none!important;animation:none!important;caret-color:transparent!important}"
+
     key = f"{name}@{width}"
-    ctx = browser.new_context(viewport={"width": width, "height": HEIGHT},
+    ctx = browser.new_context(viewport={"width": width, "height": height},
                               device_scale_factor=1, reduced_motion="reduce",
                               timezone_id="UTC", locale="en-US")
     ctx.set_default_timeout(15000)
@@ -211,8 +186,8 @@ def capture_one(
     note = ""
 
     try:
-        resp = page.goto(base + PREFIX + path, wait_until="load", timeout=30000)
-        page.add_style_tag(content=FREEZE_CSS)
+        resp = page.goto(base + prefix + path, wait_until="load", timeout=30000)
+        page.add_style_tag(content=freeze_css)
         page.evaluate("document.fonts.ready")
 
         if ready:
@@ -246,19 +221,36 @@ def main() -> None:
         None
     """
 
+    widths      = [375, 768, 1024, 1440]
+    pages       = [
+        ("home",          "/",                         None),
+        ("threat-matrix", "/threat-matrix/",           None),
+        ("lab-counts",    "/lab-counts/",              None),
+        ("poster",        "/poster/sol-hugging-face/", "#overlay.open"),
+        ("methodology",   "/methodology/",             None),
+    ]
+    launch_args = [
+        "--force-color-profile=srgb", "--disable-gpu", "--font-render-hinting=none",
+        "--disable-lcd-text", "--disable-font-subpixel-positioning",
+        "--disable-skia-runtime-opts", "--disable-partial-raster",
+        "--disable-checker-imaging", "--disable-threaded-animation",
+        "--disable-threaded-scrolling", "--disable-renderer-backgrounding",
+        "--force-device-scale-factor=1", "--disable-features=PaintHolding",
+    ]
+
     base, out    = parse_args()
     route_filter = make_route_filter(prepare_folders(out))
     notes        = {}
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, args=LAUNCH_ARGS)
+        browser = p.chromium.launch(headless=True, args=launch_args)
 
-        for name, path, ready in PAGES:
-            for width in WIDTHS:
+        for name, path, ready in pages:
+            for width in widths:
                 key, note  = capture_one(browser, base, out, route_filter, name, path, ready, width)
                 notes[key] = note
 
-            print(name, notes.get(f"{name}@{WIDTHS[-1]}"), flush=True)
+            print(name, notes.get(f"{name}@{widths[-1]}"), flush=True)
             (out / "_notes.json").write_text(json.dumps(notes, indent=1))
 
     os._exit(0)

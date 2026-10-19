@@ -2,7 +2,8 @@
 #   About This File
 # ========================================================================
 
-"""Keeps the scout's record of every story it has already looked at.
+"""
+Keeps the scout's record of every story it has already looked at.
 
 The daily scout (see scout/SCOUT.md) searches for new escapes and
 emails a proposal when it finds one. Without a memory it would find the
@@ -19,7 +20,7 @@ candidate through the reply, and the rest close it out.
 
 Subcommands:
   check URL [URL ...]   Prints SEEN or NEW for each URL
-  add URL --status S    Records a URL (statuses listed in STATUSES)
+  add URL --status S    Records a URL (add --help lists the statuses)
   status CASE --status S
                         Changes the status of every URL for a candidate
   run --checked N --new N --updates N
@@ -51,10 +52,7 @@ from urllib.parse import urlsplit, urlunsplit
 #   Global Variables
 # ========================================================================
 
-REPO     = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LEDGER   = os.path.join(REPO, "scout", "seen.json")
-STATUSES = ("case", "proposed", "answered", "rejected", "irrelevant",
-            "borderline", "update")
+LEDGER = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scout", "seen.json")
 
 
 
@@ -149,7 +147,7 @@ def add(ledger: dict, url: str, status: str, case: str, title: str, today: str) 
     Args:
         ledger (dict): The ledger
         url (str): The story's URL
-        status (str): One of STATUSES
+        status (str): One of the statuses main accepts
         case (str): The registry or candidate id it belongs to, or an empty string
         title (str): The headline, for a person reading the file
         today (str): The date to stamp a new entry with, as YYYY-MM-DD
@@ -225,7 +223,9 @@ def main() -> int:
         int: 0 on success, 2 when the arguments are wrong
     """
 
-    ap  = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    statuses = ("case", "proposed", "answered", "rejected", "irrelevant", "borderline", "update")
+
+    ap  = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     p   = sub.add_parser("check")
@@ -233,13 +233,13 @@ def main() -> int:
 
     p = sub.add_parser("add")
     p.add_argument("url")
-    p.add_argument("--status", required=True, choices=STATUSES)
+    p.add_argument("--status", required=True, choices=statuses)
     p.add_argument("--case", default="")
     p.add_argument("--title", default="")
 
     p = sub.add_parser("status")
     p.add_argument("case")
-    p.add_argument("--status", required=True, choices=STATUSES)
+    p.add_argument("--status", required=True, choices=statuses)
 
     p = sub.add_parser("run")
     p.add_argument("--checked", type=int, required=True)
