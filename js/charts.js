@@ -17,14 +17,14 @@
      Render Scatter
    ================================================ */
 
-const scatterHost = document.getElementById('scatter');
+const scatterHost = document.getElementById("scatter");
 
 
 /* ===============================
      Dot and Label Layout
    =============================== */
 
-const measureCtx = document.createElement('canvas').getContext('2d');
+const measureCtx = document.createElement("canvas").getContext("2d");
 function textWidth(text, font){
     measureCtx.font = font;
     return measureCtx.measureText(text).width;
@@ -82,18 +82,18 @@ const axisMargin = ticks => (ticks ? AXIS.TICK : 0) + AXIS.GAP + AXIS.CAP + AXIS
 const axisTitleAt = (plotEdge, ticks) => plotEdge + (ticks ? AXIS.TICK : 0) + AXIS.GAP + AXIS.CAP;
 
 const LABEL_SPOTS = [
-    {anchor:'start',  dx: 14, dy:  4},
-    {anchor:'end',    dx:-14, dy:  4},
-    {anchor:'start',  dx:  8, dy:-15},
-    {anchor:'start',  dx:  8, dy: 26},
-    {anchor:'end',    dx: -8, dy:-15},
-    {anchor:'end',    dx: -8, dy: 26},
-    {anchor:'middle', dx:  0, dy:-18},
-    {anchor:'middle', dx:  0, dy: 30},
-    {anchor:'start',  dx: 14, dy: 34},
-    {anchor:'end',    dx:-14, dy: 34},
-    {anchor:'start',  dx: 14, dy:-26},
-    {anchor:'end',    dx:-14, dy:-26}
+    {anchor:"start",  dx: 14, dy:  4},
+    {anchor:"end",    dx:-14, dy:  4},
+    {anchor:"start",  dx:  8, dy:-15},
+    {anchor:"start",  dx:  8, dy: 26},
+    {anchor:"end",    dx: -8, dy:-15},
+    {anchor:"end",    dx: -8, dy: 26},
+    {anchor:"middle", dx:  0, dy:-18},
+    {anchor:"middle", dx:  0, dy: 30},
+    {anchor:"start",  dx: 14, dy: 34},
+    {anchor:"end",    dx:-14, dy: 34},
+    {anchor:"start",  dx: 14, dy:-26},
+    {anchor:"end",    dx:-14, dy:-26}
 ];
 
 function boxesHit(a, b){
@@ -108,7 +108,7 @@ function overlapArea(a, b){
 
 function labelBox(x, y, w, spot){
     const tx   = x + spot.dx, base = y + spot.dy;
-    const left = spot.anchor==='start' ? tx : spot.anchor==='end' ? tx-w : tx-w/2;
+    const left = spot.anchor==="start" ? tx : spot.anchor==="end" ? tx-w : tx-w/2;
     return {x1:left-PAD, x2:left+w+PAD, y1:base-INK_UP-PAD, y2:base+INK_DOWN+PAD, tx, base};
 }
 
@@ -193,11 +193,11 @@ function placeLabels(dots, bounds, fixed){
             for(let k=0; k<48; k++){
                 const a      = k*Math.PI/24;
                 const px     = d.x + r*Math.cos(a), py = d.y + r*Math.sin(a);
-                const anchor = Math.cos(a) >= 0 ? 'start' : 'end';
-                const left   = anchor==='start' ? px : px - widths[i];
+                const anchor = Math.cos(a) >= 0 ? "start" : "end";
+                const left   = anchor==="start" ? px : px - widths[i];
                 const b      = {x1:left-PAD, x2:left+widths[i]+PAD, y1:py+4-INK_UP-PAD, y2:py+4+INK_DOWN+PAD, tx:px, base:py+4};
                 const leader = {from:{x:d.x + (DOT_R+2)*Math.cos(a), y:d.y + (DOT_R+2)*Math.sin(a)},
-                                                to:{x:anchor==='start' ? b.x1+PAD-3 : b.x2-PAD+3, y:py}};
+                                                to:{x:anchor==="start" ? b.x1+PAD-3 : b.x2-PAD+3, y:py}};
                 const c      = clash(i, {b, leader});
                 const score  = c*10 + r*0.5;
                 if(!best || score < best.score) best = {anchor, b, leader, clash:c, score};
@@ -268,7 +268,7 @@ function renderScatter(list){
     + qlabel(X(2.5), Y(0.5), "#5a6b2a", "0.8", "escaped house cats")
     + qlabel(X(7.5), Y(0.5), "#5a6b2a", "0.8", "determined cheaters");
     const axisLabel = (x,y,rot,note,text) =>
-        `<g class="axis-note" tabindex="0" role="note" data-def="${escAttr(note)}"${rot?` transform="${rot}"`:''}>
+        `<g class="axis-note" tabindex="0" role="note" data-def="${escAttr(note)}"${rot?` transform="${rot}"`:""}>
            <text class="axis-text" x="${x}" y="${y}" text-anchor="middle" fill="#3a362c"
              font-family="'Oswald',sans-serif" font-weight="600" font-size="13" letter-spacing="2">${text}</text>
            <text class="axis-arrow" x="${x}" y="${y}" text-anchor="start" fill="#3a362c"
@@ -276,8 +276,8 @@ function renderScatter(list){
          </g>`;
     const yTitleX = padL - AXIS.GAP;
     const axes =
-            axisLabel(padL+pw/2, axisTitleAt(padT+ph, false), '', METRIC_NOTE.complexity, 'ESCAPE COMPLEXITY')
-        + axisLabel(yTitleX, padT+ph/2, `rotate(-90 ${yTitleX} ${padT+ph/2})`, METRIC_NOTE.harm, 'HARM POTENTIAL');
+            axisLabel(padL+pw/2, axisTitleAt(padT+ph, false), "", METRIC_NOTE.complexity, "ESCAPE COMPLEXITY")
+        + axisLabel(yTitleX, padT+ph/2, `rotate(-90 ${yTitleX} ${padT+ph/2})`, METRIC_NOTE.harm, "HARM POTENTIAL");
 
     const quadBox   = (x,y,text) => {
         const w = textWidth(text, NOTE_FONT);
@@ -299,7 +299,7 @@ function renderScatter(list){
         const {label, anchor} = labels[i];
         const scoreCard =
             `<p class="tip-lede">Below are the scores and rationale for the metrics we created using the details of the misdeed.</p>`
-            + (c.outcome==='attempt' ? `<p class="tip-row"><b>Outcome:</b> Failed attempt</p>` : '')
+            + (c.outcome==="attempt" ? `<p class="tip-row"><b>Outcome:</b> Failed attempt</p>` : "")
             + `<p class="tip-metric">Escape complexity</p>`
             + `<p class="tip-row"><b>Score:</b> ${c.complexity}</p>`
             + `<p class="tip-row"><b>Justification:</b> ${c.whyComplexity}</p>`
@@ -307,15 +307,15 @@ function renderScatter(list){
             + `<p class="tip-row"><b>Score:</b> ${c.harm}</p>`
             + `<p class="tip-row"><b>Justification:</b> ${c.whyHarm}</p>`;
 
-        const tipped = c.disclosedBy && c.disclosedBy.kind==='tip';
+        const tipped = c.disclosedBy && c.disclosedBy.kind==="tip";
 
         const disc    = `fill="${tipped ? DISC_FILL.tip : DISC_FILL.self}" stroke="#e6ddc6" stroke-width="2"`;
-        const discSay = (tipped ? ' Tipped off.' : ' Self-reported.')
-            + (c.outcome==='attempt' ? ' Failed attempt.' : '');
+        const discSay = (tipped ? " Tipped off." : " Self-reported.")
+            + (c.outcome==="attempt" ? " Failed attempt." : "");
         return `<g class="pt" data-id="${c.id}" tabindex="0" role="button"
             data-def="${escAttr(scoreCard)}"
             aria-label="${label}, complexity ${c.complexity} of 10, harm potential ${c.harm} of 10.${discSay} Open the wanted poster.">
-            ${labels[i].leader ? `<line class="leader" x1="${labels[i].leader.from.x}" y1="${labels[i].leader.from.y}" x2="${labels[i].leader.to.x}" y2="${labels[i].leader.to.y}" stroke="#4a4438" stroke-width="1" opacity="0.6"/>` : ''}
+            ${labels[i].leader ? `<line class="leader" x1="${labels[i].leader.from.x}" y1="${labels[i].leader.from.y}" x2="${labels[i].leader.to.x}" y2="${labels[i].leader.to.y}" stroke="#4a4438" stroke-width="1" opacity="0.6"/>` : ""}
             <circle cx="${cx}" cy="${cy}" r="${DOT_R}" ${disc}/>
             <text x="${labels[i].x}" y="${labels[i].y}" text-anchor="${anchor}">${label}</text>
         </g>`;
@@ -330,47 +330,47 @@ function renderScatter(list){
 
     placeAxisIcons();
 
-    scatterHost.querySelectorAll('.pt').forEach(g=>{
-        g.addEventListener('click',()=>openCase(g.dataset.id));
-        g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();openCase(g.dataset.id);} });
+    scatterHost.querySelectorAll(".pt").forEach(g=>{
+        g.addEventListener("click",()=>openCase(g.dataset.id));
+        g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();openCase(g.dataset.id);} });
     });
 }
 
 function placeAxisIcons(){
-    const ns='http://www.w3.org/2000/svg';
+    const ns="http://www.w3.org/2000/svg";
 
     const R=3.7, GAP=2.5;
-    scatterHost.querySelectorAll('.axis-note').forEach(g=>{
-        g.querySelectorAll('.axis-icon').forEach(n=>n.remove());
-        const label = g.querySelector('.axis-text');
-        const arrow = g.querySelector('.axis-arrow');
+    scatterHost.querySelectorAll(".axis-note").forEach(g=>{
+        g.querySelectorAll(".axis-icon").forEach(n=>n.remove());
+        const label = g.querySelector(".axis-text");
+        const arrow = g.querySelector(".axis-arrow");
         if(!label||!arrow) return;
 
-        const centre   = parseFloat(label.getAttribute('x'));
-        const baseline = parseFloat(label.getAttribute('y'));
-        label.setAttribute('x', centre);
-        arrow.setAttribute('x', -9999);
+        const centre   = parseFloat(label.getAttribute("x"));
+        const baseline = parseFloat(label.getAttribute("y"));
+        label.setAttribute("x", centre);
+        arrow.setAttribute("x", -9999);
         const lw = label.getBBox().width;
         const aw = arrow.getBBox().width;
 
         const total = lw + GAP + R*2 + GAP + aw;
         const start = centre - total/2;
-        label.setAttribute('x', start + lw/2);
+        label.setAttribute("x", start + lw/2);
         const iconX = start + lw + GAP + R;
-        arrow.setAttribute('x', start + lw + GAP + R*2 + GAP);
+        arrow.setAttribute("x", start + lw + GAP + R*2 + GAP);
 
         const iconY = baseline - 7;
-        const ring  = document.createElementNS(ns,'circle');
-        ring.setAttribute('class','axis-icon');
-        ring.setAttribute('cx',iconX); ring.setAttribute('cy',iconY); ring.setAttribute('r',R);
-        ring.setAttribute('fill','none'); ring.setAttribute('stroke','#3a362c'); ring.setAttribute('stroke-width','0.85');
-        const i=document.createElementNS(ns,'text');
-        i.setAttribute('class','axis-icon');
-        i.setAttribute('x',iconX); i.setAttribute('y',iconY+1.9);
-        i.setAttribute('text-anchor','middle'); i.setAttribute('fill','#3a362c');
-        i.setAttribute('font-family',"'Oswald',sans-serif");
-        i.setAttribute('font-size','5.4'); i.setAttribute('font-weight','600');
-        i.textContent='i';
+        const ring  = document.createElementNS(ns,"circle");
+        ring.setAttribute("class","axis-icon");
+        ring.setAttribute("cx",iconX); ring.setAttribute("cy",iconY); ring.setAttribute("r",R);
+        ring.setAttribute("fill","none"); ring.setAttribute("stroke","#3a362c"); ring.setAttribute("stroke-width","0.85");
+        const i=document.createElementNS(ns,"text");
+        i.setAttribute("class","axis-icon");
+        i.setAttribute("x",iconX); i.setAttribute("y",iconY+1.9);
+        i.setAttribute("text-anchor","middle"); i.setAttribute("fill","#3a362c");
+        i.setAttribute("font-family","'Oswald',sans-serif");
+        i.setAttribute("font-size","5.4"); i.setAttribute("font-weight","600");
+        i.textContent="i";
         g.appendChild(ring); g.appendChild(i);
     });
 }
@@ -380,7 +380,7 @@ function placeAxisIcons(){
      Render Lab Chart
    ================================================ */
 
-const labHost = document.getElementById('labChart');
+const labHost = document.getElementById("labChart");
 
 function renderLabChart(list){
     if(!list.length){
@@ -409,7 +409,7 @@ function renderLabChart(list){
     const X      = n => padL + n*unit;
 
     const step = maxAll > 24 ? 5 : maxAll > 12 ? 2 : 1;
-    let grid   = '';
+    let grid   = "";
     for(let n=0; n<=maxAll; n+=step){
         grid += `<line x1="${X(n)}" y1="${padT}" x2="${X(n)}" y2="${padT+rows.length*ROW}" stroke="#4a4438" stroke-width="1" opacity="${n===0?0.6:0.18}"/>`
                     + `<text x="${X(n)}" y="${padT+rows.length*ROW+AXIS.TICK}" text-anchor="middle" fill="#3a362c"
@@ -420,9 +420,9 @@ function renderLabChart(list){
 
     const bars = rows.map(([lab, cases], r)=>{
         const y      = padT + r*ROW + (ROW-BAR)/2;
-        const tipped = cases.filter(c=>c.disclosedBy && c.disclosedBy.kind==='tip').length;
+        const tipped = cases.filter(c=>c.disclosedBy && c.disclosedBy.kind==="tip").length;
         const segs   = cases.map((c,k)=>{
-            const route = c.disclosedBy && c.disclosedBy.kind==='tip' ? 'tip' : 'self';
+            const route = c.disclosedBy && c.disclosedBy.kind==="tip" ? "tip" : "self";
             const name  = c.scatterLabel || c.alias;
             const card  = `<p class="tip-metric">${name}</p>`
                 + `<p class="tip-row"><b>Escaped:</b> ${escDate(c)}</p>`
@@ -434,20 +434,20 @@ function renderLabChart(list){
                     aria-label="${name}, ${lab}, escaped ${escDate(c)}, ${DISCLOSURE_LABEL[route]}. Open the wanted poster.">
                     <rect x="${X(k)+GAP_SEG/2}" y="${y}" width="${Math.max(unit-GAP_SEG, 1)}" height="${BAR}" fill="${DISC_FILL[route]}"/>
                 </g>`;
-        }).join('');
+        }).join("");
         return `<text class="lab-name" x="${padL-10}" y="${y+BAR/2+4.5}" text-anchor="end">${lab}</text>
             ${segs}
             <text class="lab-total" x="${X(cases.length)+8}" y="${y+BAR/2+4.5}"
-                aria-label="${cases.length} ${cases.length===1?'case':'cases'}, ${tipped} tipped off">${cases.length}</text>`;
-    }).join('');
+                aria-label="${cases.length} ${cases.length===1?"case":"cases"}, ${tipped} tipped off">${cases.length}</text>`;
+    }).join("");
 
     labHost.innerHTML =
         `<svg class="scatter-svg lab-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
             ${grid}${bars}${axis}
         </svg>`;
 
-    labHost.querySelectorAll('.seg').forEach(g=>{
-        g.addEventListener('click',()=>openCase(g.dataset.id));
-        g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();openCase(g.dataset.id);} });
+    labHost.querySelectorAll(".seg").forEach(g=>{
+        g.addEventListener("click",()=>openCase(g.dataset.id));
+        g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();openCase(g.dataset.id);} });
     });
 }

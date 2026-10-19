@@ -13,7 +13,7 @@
      Mugshot Generator
    ======================================================================== */
 
-const M_INK = '#1c1a15', M_PAPER='#efe7d2', M_WHITE='#fbf7ec', M_BACK='#cfc4a6';
+const M_INK = "#1c1a15", M_PAPER="#efe7d2", M_WHITE="#fbf7ec", M_BACK="#cfc4a6";
 const M_LW  = 2.6;
 
 
@@ -22,7 +22,7 @@ const M_LW  = 2.6;
    ================================================ */
 
 function heightChart(){
-    let t       = '';
+    let t       = "";
     const marks = [[26,""],[52,"6'0\""],[78,""],[104,"5'0\""],[130,""],[156,"4'0\""],[182,""]];
     marks.forEach(([y,label])=>{
         t+=`<line x1="0" y1="${y}" x2="190" y2="${y}" stroke="${M_INK}" stroke-width="1" opacity="${label?0.28:0.16}"/>`;
@@ -39,7 +39,7 @@ function torso(uid){
         + `<path d="M78 146 H112 V192 H78 Z" fill="${M_PAPER}" stroke="${M_INK}" stroke-width="${M_LW}"/>`
         + `<path d="${torso}" fill="${M_PAPER}" stroke="${M_INK}" stroke-width="${M_LW}"/>`
         + `<g clip-path="url(#sh${uid})">`
-        + [192,204,216,228,240,252,264].map(y=>`<line x1="10" y1="${y}" x2="180" y2="${y}" stroke="${M_INK}" stroke-width="7"/>`).join('')
+        + [192,204,216,228,240,252,264].map(y=>`<line x1="10" y1="${y}" x2="180" y2="${y}" stroke="${M_INK}" stroke-width="7"/>`).join("")
         + `</g>`;
 }
 function bookingPlate(n){
@@ -87,7 +87,7 @@ const HAIR = {
                        C102 68 96 58 88 66 C80 56 72 68 64 62
                        C56 68 52 72 44 84 Z" fill="${M_INK}"/>`,
     coil: (()=>{
-        let c     = '';
+        let c     = "";
         const pts = [[54,74],[62,58],[76,46],[95,41],[114,46],[128,58],[136,74]];
         pts.forEach(([x,y])=>{ c+=`<circle cx="${x}" cy="${y}" r="15" fill="${M_INK}"/>`; });
         return `<path d="M46 86 C46 50 70 36 95 36 C120 36 144 50 144 86 Z" fill="${M_INK}"/>`+c;
@@ -104,7 +104,7 @@ const HAIR = {
    ================================================ */
 
 const FACES = {
-    sol: { head:'square', nose:'hook', hair:'part', dy:24, f:`
+    sol: { head:"square", nose:"hook", hair:"part", dy:24, f:`
             <ellipse cx="76" cy="96" rx="13" ry="11" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <ellipse cx="114" cy="96" rx="13" ry="11" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <circle cx="80" cy="88" r="5" fill="${M_INK}"/><circle cx="118" cy="88" r="5" fill="${M_INK}"/>
@@ -113,7 +113,7 @@ const FACES = {
             ${brow("M102 70 Q116 62 130 72")}
             ${mLine("M70 139 H106 Q117 139 121 129")}` },
 
-    claude: { head:'round', nose:'button', hair:'tousle', dy:2, tilt:-7, f:`
+    claude: { head:"round", nose:"button", hair:"tousle", dy:2, tilt:-7, f:`
             <circle cx="76" cy="98" r="14" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <circle cx="114" cy="98" r="11.5" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <circle cx="76" cy="95" r="5" fill="${M_INK}"/><circle cx="114" cy="97" r="4.6" fill="${M_INK}"/>
@@ -122,7 +122,7 @@ const FACES = {
             ${brow("M104 80 Q116 78 129 85")}
             ${mLine("M80 141 Q90 135 101 140",2.8)}` },
 
-    spark: { head:'long', nose:'straight', hair:'coil', dy:-10, f:`
+    spark: { head:"long", nose:"straight", hair:"coil", dy:-10, f:`
             <ellipse cx="78" cy="96" rx="12" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <ellipse cx="112" cy="96" rx="12" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <circle cx="71" cy="91" r="4.4" fill="${M_INK}"/><circle cx="105" cy="91" r="4.4" fill="${M_INK}"/>
@@ -131,7 +131,7 @@ const FACES = {
             <ellipse cx="88" cy="140" rx="5.5" ry="6.5" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="3"/>
             ${mLine("M104 133 Q110 140 104 147",2.2)}${mLine("M113 128 Q122 140 113 152",2.2)}` },
 
-    kimi: { head:'taper', nose:'wide', hair:'fringe', dy:10, f:`
+    kimi: { head:"taper", nose:"wide", hair:"fringe", dy:10, f:`
             <ellipse cx="76" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <ellipse cx="114" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <circle cx="86" cy="100" r="5" fill="${M_INK}"/><circle cx="124" cy="100" r="5" fill="${M_INK}"/>
@@ -140,7 +140,7 @@ const FACES = {
             ${brow("M104 76 H128")}
             ${mLine("M68 137 Q77 129 86 137 Q95 145 104 137 Q113 129 122 136")}` },
 
-    _default: { head:'round', nose:'straight', hair:'crop', dy:0, f:`
+    _default: { head:"round", nose:"straight", hair:"crop", dy:0, f:`
             <ellipse cx="76" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <ellipse cx="114" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <circle cx="76" cy="98" r="4.6" fill="${M_INK}"/><circle cx="114" cy="98" r="4.6" fill="${M_INK}"/>
@@ -152,7 +152,7 @@ function mug(seed){
     let h=2166136261>>>0;
     for(let i=0;i<seed.length;i++){ h=Math.imul(h^seed.charCodeAt(i),16777619); }
     h=Math.imul(h^(h>>>16),0x7feb352d); h=(h^(h>>>15))>>>0;
-    const uid     = seed.replace(/[^a-z0-9]/gi,'');
+    const uid     = seed.replace(/[^a-z0-9]/gi,"");
     const cfg     = FACES[seed]||FACES._default;
     const skull   = HEADS[cfg.head];
     const headSvg = `<g fill="${M_PAPER}" stroke="${M_INK}" stroke-width="${M_LW}">`
