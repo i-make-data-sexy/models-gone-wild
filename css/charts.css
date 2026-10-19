@@ -205,6 +205,10 @@
     flex:                none;
 }
 
+.legend-dot circle { stroke: var(--paper);     }
+.legend-self       { fill:   var(--disc-self); }
+.legend-tip        { fill:   var(--disc-tip);  }
+
 .pt:focus { outline: none; }
 
 .axis-note {

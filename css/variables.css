@@ -39,6 +39,10 @@
     --class2:                     #a35a12;
     --class1:                     #5a6b2a;
 
+    /* Disclosure route, also read by the script */
+    --disc-self:                  #5a6b2a;
+    --disc-tip:                   #8f1d16;
+
     /* Page and header */
     --paper-vignette-light:       rgba(0,0,0,.06);
     --paper-vignette:             rgba(0,0,0,.08);

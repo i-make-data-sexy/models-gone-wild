@@ -6,7 +6,23 @@
    disclosure, outcome, and kind tag shows, the definitions behind the
    info notes, the disclosure tag colors, and the card action icons.
    Loads after the case data and before every script that reads these
-   tables. */
+   tables.
+
+   cssToken() reads a color from the design tokens in css/variables.css,
+   so the script draws with the stylesheet's values. Every later script
+   reads its colors through it, and they stay literal in the SVG the
+   script builds since html2canvas draws a poster's SVG as an image,
+   with no stylesheet applied. */
+
+
+
+/* ========================================================================
+     Design Tokens
+   ======================================================================== */
+
+function cssToken(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
 
 
 
@@ -18,7 +34,7 @@ const CLASS_LABEL = {3:"Class III · Severe",2:"Class II · Intrusion",1:"Class 
 
 const DISCLOSURE_LABEL = {self:"Self-reported", tip:"Tipped off"};
 
-const DISC_FILL = {self:"#5a6b2a", tip:"#8f1d16"};
+const DISC_FILL = {self:cssToken("--disc-self"), tip:cssToken("--disc-tip")};
 
 const DISCLOSURE_NOTE = {
     self: "The lab that built the model is the one that made the case public. The tag records who announced it and not who found it. A lab that an outside tester told, and that then announced it, still counts here.",
