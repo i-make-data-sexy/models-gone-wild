@@ -67,6 +67,11 @@
     --caution-wash:               rgba(143,29,22,.06);
     --shadow-close-button:        rgba(0,0,0,.5);
 
+    /* Mugshot, read by the script */
+    --mug-paper:                  #efe7d2;
+    --mug-white:                  #fbf7ec;
+    --mug-wall:                   #cfc4a6;
+
 
     /* ================================================
          Font Sizes

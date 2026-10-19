@@ -262,6 +262,14 @@ Nothing on the page tells the reader to tap anything. The controls say what they
 
 ## Checks before committing
 
+The pre-commit hook in `scripts/git-hooks/pre-commit` runs two gates on every commit: the formatting gate, and the design-tokens check, which blocks a raw color, font size, or line height anywhere outside `css/variables.css`. Git does not turn on a repo's hooks by itself, so a fresh clone needs this once:
+
+```bash
+git config core.hooksPath scripts/git-hooks
+```
+
+A new color, font size, or line height becomes a token in `css/variables.css`, named for its role, and the stylesheet reads it with `var()`. The pages color through classes, and the scripts read a color with `cssToken("--name")` from `js/labels.js`, so `tests/test_design_tokens.py` fails on any hex in the pages or in `js/`.
+
 Run all of these from the repo root. Each takes seconds.
 
 ```bash

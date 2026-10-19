@@ -5,8 +5,10 @@
 # ========================================================================
 
 # The pre-commit hook. Runs the shared formatting gate on the staged files
-# of each language listed in format-languages, one per line, and skips
-# with a printed note on a machine without the gate.
+# of each language listed in format-languages, one per line, then the
+# design-tokens check, which blocks a raw color, font size, or line height
+# outside css/variables.css. Each skips with a printed note on a machine
+# without it.
 
 
 
@@ -20,4 +22,18 @@ if [ -f "$gate" ]; then
     python3 -I "$gate" --staged || exit 1
 else
     echo "Formatting gate skipped: $gate not found on this machine"
+fi
+
+
+
+# ========================================================================
+#   Design Tokens Gate
+# ========================================================================
+
+tokens="$HOME/.claude/skills/design-tokens/scripts/check_raw_values.py"
+
+if [ -f "$tokens" ]; then
+    python3 -I "$tokens" --staged --checks color,rgb,font-size,line-height || exit 1
+else
+    echo "Design tokens gate skipped: $tokens not found on this machine"
 fi

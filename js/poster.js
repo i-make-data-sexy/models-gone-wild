@@ -198,7 +198,7 @@ async function downloadPoster(e){
     try{
         if(document.fonts && document.fonts.ready) await document.fonts.ready;
         const canvas = await html2canvas(poster,{
-            backgroundColor:getComputedStyle(document.documentElement).getPropertyValue("--paper").trim()||"#e6ddc6",
+            backgroundColor:cssToken("--paper"),
             scale:2, useCORS:true, logging:false
         });
         const link   = document.createElement("a");
