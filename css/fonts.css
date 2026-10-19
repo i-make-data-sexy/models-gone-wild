@@ -6,9 +6,8 @@
    Prime, and the one Noto Emoji glyph in the masthead, served from this
    app so Cloudflare's APO has no Google Fonts link to rewrite into an
    inline <style>, which a Content Security Policy would block. Fetched
-   from fonts.googleapis.com on 2026-10-19 (Oswald v57, Special Elite v20,
-   Courier Prime v11, Noto Emoji v65). Only the URLs and the subset labels
-   changed. */
+   from Google Fonts on 2026-10-19 (Oswald v57, Special Elite v20, Courier
+   Prime v11, Noto Emoji v65). Only the URLs and the subset labels changed. */
 
 
 
