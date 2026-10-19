@@ -426,7 +426,7 @@ def open_context(browser: Browser, base: str, entry: dict) -> BrowserContext:
     ctx.grant_permissions(["clipboard-read", "clipboard-write"], origin=base)
     ctx.expose_binding("__mgwCsp", lambda source, v, e=entry: e["violations"].append(v))
     ctx.add_init_script(listener)
-    ctx.route("**/*", lambda route, e=entry: route_filter(route, e))
+    ctx.route("**/*", lambda route: route_filter(route, entry))
 
     return ctx
 
