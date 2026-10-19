@@ -216,7 +216,7 @@ Answer these before running the steps. Record each answer here because the step 
 | F7 | [f7-python-structure.md](f7-python-structure.md) | `filters.py`'s layout on every Python file, 1 function without type hints. Formerly step 5. | Small | Done 2026-10-19 (merge 754cb52) |
 | 4 | [04-root-files.md](04-root-files.md) | No root guard, workflow docs that skip staging, merged branches. | Small | Done 2026-10-19 (merge e4ee40d) |
 | 5 | Moved to [f7-python-structure.md](f7-python-structure.md) | Now step F7. | | Moved 2026-10-17 |
-| 6 | [06-comment-style.md](06-comment-style.md) | 70 comment-style issues, which steps F1 to F3 fix, so this step confirms 0 and keeps it there. | Tiny | Not started |
+| 6 | [06-comment-style.md](06-comment-style.md) | 70 comment-style issues, which steps F1 to F3 fix, so this step confirms 0 and keeps it there. | Tiny | Done 2026-10-19 (merge 307570d) |
 | 7 | [07-split-css.md](07-split-css.md) | 972-line stylesheet. Reuses step F1's screenshot harness. | Medium | Not started |
 | 8 | [08-design-tokens.md](08-design-tokens.md) | 90 raw values in CSS, 31 colors in `index.html`, no gate. | Medium | Not started |
 | 8B | [08b-token-consolidation.md](08b-token-consolidation.md) | Near-duplicate colors and font sizes. | Medium | Skipped under decision 13a (marked 2026-10-16) |
