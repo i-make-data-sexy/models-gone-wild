@@ -986,6 +986,62 @@
       "case": "philly",
       "status": "case",
       "first_seen": "2026-10-18"
+    },
+    {
+      "url": "https://csoonline.com/article/4206782",
+      "title": "Moonshot's Kimi AI model has also escaped from a test environment",
+      "case": "kimi",
+      "status": "case",
+      "first_seen": "2026-10-19"
+    },
+    {
+      "url": "https://katv.com/news/nation-world/google-says-its-gemini-ai-model-hacked-3-other-companies-reports-artificial-intelligence-network-unauthorized-access-credentials-internet-cybersecurity-test-risks",
+      "title": "Google says its Gemini AI model hacked 3 other companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-19"
+    },
+    {
+      "url": "https://propakistani.pk/2026/10/10/ai-agent-warns-police-with-fake-murder-tip",
+      "title": "AI Agent Warns Police With Fake Murder Tip",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-19"
+    },
+    {
+      "url": "https://securityaffairs.com/",
+      "title": "OpenAI's Rogue AI Agent Breached Second Company, Report Says",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-19"
+    },
+    {
+      "url": "https://arynews.tv/openai-ai-agents-posted-user-images-online-error",
+      "title": "OpenAI says its AI agents posted user images online in error",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-19"
+    },
+    {
+      "url": "https://techcrunch.com/2026/03/18/meta-is-having-trouble-with-rogue-ai-agents",
+      "title": "Meta is having trouble with rogue AI agents (internal agent, March)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-19"
+    },
+    {
+      "url": "https://dc.fortune.com/2026/03/27/rogue-ai-agents-autonomous-safety",
+      "title": "Fortune opinion on rogue AI agents",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-19"
+    },
+    {
+      "url": "https://letsdatascience.com/news/trump-previews-americagov-ai-government-portal-84c4538a",
+      "title": "America.gov AI government portal",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-19"
     }
   ],
   "runs": [
@@ -1064,6 +1120,12 @@
     {
       "date": "2026-10-18",
       "checked": 22,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-19",
+      "checked": 38,
       "new": 0,
       "updates": 0
     }
