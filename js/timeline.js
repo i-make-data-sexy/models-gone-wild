@@ -17,15 +17,15 @@
      Filter State
    ================================================ */
 
-const classSelect   = document.getElementById('classFilter');
-const labPicker     = document.getElementById('labFilter');
-const labSummary    = document.getElementById('labSummary');
-const labList       = document.getElementById('labList');
-const outcomeSelect = document.getElementById('outcomeFilter');
-const kindSelect    = document.getElementById('kindFilter');
+const classSelect   = document.getElementById("classFilter");
+const labPicker     = document.getElementById("labFilter");
+const labSummary    = document.getElementById("labSummary");
+const labList       = document.getElementById("labList");
+const outcomeSelect = document.getElementById("outcomeFilter");
+const kindSelect    = document.getElementById("kindFilter");
 
 function selectedLabs(){
-    return [...labList.querySelectorAll('input:checked')].map(b=>b.value);
+    return [...labList.querySelectorAll("input:checked")].map(b=>b.value);
 }
 
 function filtered(){
@@ -44,24 +44,24 @@ function filtered(){
    ================================================ */
 
 [...new Set(CASES.map(c=>c.lab))].forEach(l=>{
-    const row=document.createElement('label');
-    row.className='multi-select-option';
-    const box=document.createElement('input');
-    box.type='checkbox'; box.value=l;
+    const row=document.createElement("label");
+    row.className="multi-select-option";
+    const box=document.createElement("input");
+    box.type="checkbox"; box.value=l;
     row.append(box, document.createTextNode(l));
     labList.appendChild(row);
 });
 
 function updateLabSummary(labs){
-    labSummary.textContent = !labs.length ? 'All labs'
+    labSummary.textContent = !labs.length ? "All labs"
         : labs.length===1 ? labs[0]
         : `${labs.length} labs`;
-    labSummary.classList.toggle('is-active', labs.length>0);
+    labSummary.classList.toggle("is-active", labs.length>0);
 }
 
 function discChip(c){
     const d = c.disclosedBy;
-    if(!d || !DISCLOSURE_LABEL[d.kind]) return '';
+    if(!d || !DISCLOSURE_LABEL[d.kind]) return "";
     return `<span class="disc-chip d-${d.kind}" tabindex="0" role="note"
        data-def="${escAttr(DISCLOSURE_NOTE[d.kind])}">${DISCLOSURE_LABEL[d.kind]}</span>`;
 }
@@ -71,23 +71,23 @@ function discChip(c){
      Render Timeline
    ================================================ */
 
-const tl = document.getElementById('timeline');
+const tl = document.getElementById("timeline");
 function renderTimeline(list){
-    tl.innerHTML='';
+    tl.innerHTML="";
     if(!list.length){ tl.innerHTML='<p class="empty-note">No files match the current filters.</p>'; return; }
     list.forEach((c,i)=>{
-        const side = i%2===0 ? 'left':'right';
-        const el   = document.createElement('div');
+        const side = i%2===0 ? "left":"right";
+        const el   = document.createElement("div");
         el.className = `event ${side} c${c.cls}`;
         const src = c.source && c.source.url
             ? `<a class="icon-btn" href="${c.source.url}" target="_blank" rel="noopener"
-                        data-tip="Story &middot; ${c.source.outlet||'read more'}"
-                        aria-label="Read the story that broke this case${c.source.outlet?', '+c.source.outlet:''}, opens in a new tab">${ICON.story}</a>`
-            : '';
+                        data-tip="Story &middot; ${c.source.outlet||"read more"}"
+                        aria-label="Read the story that broke this case${c.source.outlet?", "+c.source.outlet:""}, opens in a new tab">${ICON.story}</a>`
+            : "";
         el.innerHTML = `
             <div class="node"></div>
             <div class="date-tag">${escDate(c)}</div>
-            ${c.disclosed ? `<div class="lag-tag">Disclosed ${c.date===UNDATED ? c.disclosed : c.lag}</div>` : ''}
+            ${c.disclosed ? `<div class="lag-tag">Disclosed ${c.date===UNDATED ? c.disclosed : c.lag}</div>` : ""}
             ${noticeTag(c)}
             <div class="card" data-id="${c.id}">
                 <div class="card-body">
@@ -110,7 +110,7 @@ function renderTimeline(list){
         tl.appendChild(el);
     });
 
-    tl.querySelectorAll('.icon-btn[data-open]').forEach(btn=>{
-        btn.addEventListener('click',()=>openCase(btn.dataset.open));
+    tl.querySelectorAll(".icon-btn[data-open]").forEach(btn=>{
+        btn.addEventListener("click",()=>openCase(btn.dataset.open));
     });
 }
