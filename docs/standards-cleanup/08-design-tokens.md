@@ -94,7 +94,7 @@ every finding, and re-run the formatter where a change moved a column.
    unchanged, and run scripts/screenshot-diff/run.sh main
    standards-design-tokens. Give me a clickable link, a short summary, the
    diff result, and the git diff command, and STOP until I approve.
-4. After I approve, tokenize the other six CSS files and remove the three
+4. After I approve, tokenize the other six CSS files and remove the two
    unused tokens, keeping --options-knob-fill.
 5. Read the script's colors from the tokens at startup,
    move the legend fills to classes, and add the no-hex test for both pages.
