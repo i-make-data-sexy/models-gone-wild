@@ -86,7 +86,7 @@ def test_no_leading_slash_paths() -> None:
         None
     """
 
-    slash_files = PAGES + [REPO / "css" / "styles.css"]
+    slash_files = PAGES + sorted((REPO / "css").glob("*.css"))
     leading_re  = re.compile(r"""(href|src|action|url\()\s*=?\s*["']/[^/]""")
 
     hits = [
@@ -96,6 +96,30 @@ def test_no_leading_slash_paths() -> None:
         if leading_re.search(line)
     ]
     assert not hits, "\n".join(hits)
+
+
+
+# ========================================================================
+#   Stylesheets
+# ========================================================================
+
+def test_no_stylesheet_over_800_lines() -> None:
+    """
+    Checks every file in css/ stays at or under 800 lines
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
+    limit  = 800
+    sheets = sorted((REPO / "css").glob("*.css"))
+    long   = [f"{path.name}: {count} lines" for path in sheets if (count := len(read(path).splitlines())) > limit]
+
+    assert sheets
+    assert not long, "\n".join(long)
 
 
 

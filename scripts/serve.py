@@ -9,7 +9,7 @@ The plain python3 -m http.server cannot serve the dashboard or poster
 permalinks, since /threat-matrix/, /lab-counts/, and /poster/<id>/ are not
 folders on disk. This server does what the nginx rewrite does in production.
 It strips that segment, so /tools/models-gone-wild/lab-counts/ serves
-index.html and /tools/models-gone-wild/lab-counts/css/styles.css serves the
+index.html and /tools/models-gone-wild/lab-counts/css/base.css serves the
 real stylesheet. Old ?view= links get the same 301 to their permalink that
 nginx sends, and every response carries the security headers from
 deploy/nginx/headers.conf. Serving at the subpath also exercises the

@@ -37,7 +37,7 @@ PATHS = [
     "/",
     "/methodology/",
     "/poster/sol-hugging-face/",
-    "/css/styles.css",
+    "/css/base.css",
     "/js/cases.js",
     "/js/vendor/html2canvas.min.js",
     "/no-such-page/",
