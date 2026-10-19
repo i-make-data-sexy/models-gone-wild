@@ -58,7 +58,7 @@ Four things have to be true before a deploy:
 - Every path to a local file in the two pages is relative, never starting with a slash. See the next section.
 - The page opens correctly from a local web server, not just by double-clicking the file.
 - `git status` is clean and the work is committed on a branch.
-- The branch has been merged to main, since the server pulls main.
+- For production, the branch has been checked on staging and merged to main on Annie's word, since production pulls main.
 
 ## CRITICAL: the one URL rule that still matters
 
@@ -224,10 +224,19 @@ Then open the page in a real browser, which is the only way to confirm the last 
 
 ## Updating after the first deploy
 
+Every update goes to staging first and reaches production only on Annie's word. "Deploying the change" in `UPDATE.md` has the full commands, and the order never changes:
+
+1. Push the branch, deploy it to staging (see "Staging" below), run the staging health check, and give Annie the staging links.
+2. Stop until she says to ship it.
+3. Merge the branch to `main`, push, and pull `main` on production.
+4. Switch staging back to `main` (see "Staging").
+
+The production pull, run only after step 2:
+
 ```bash
-ssh anniecushing@208.109.215.51
-cd ~/apps/models-gone-wild
-git pull origin main
+ssh -i ~/.ssh/id_ed25519_imds anniecushing@208.109.215.51 \
+  "set -e; cd ~/apps/models-gone-wild && git fetch origin && git checkout main \
+   && git pull --ff-only origin main && git log --oneline -1"
 ```
 
 That is the whole deploy. There is no service to restart, because nginx reads the file fresh on every request. The no-cache headers mean a reload in the browser shows the change immediately.
@@ -367,10 +376,10 @@ When a production block changes, make the same change here so the two stay compa
 
 ## Branch discipline
 
-Before creating any new branch, the current branch has to be merged to main so the new branch starts from an up-to-date main. Skipping this strands unmerged work.
+Before creating any new branch, the current branch has to be merged to main so the new branch starts from an up-to-date main. Skipping this strands unmerged work. A branch merges only after it has been checked on staging and Annie has signed off, since merging is what sends it to production.
 
 ```bash
-# Merge the current branch, only after Annie signs off
+# Merge the current branch, only after staging and Annie's sign-off
 git checkout main
 git pull origin main
 git merge <current-branch> --no-edit

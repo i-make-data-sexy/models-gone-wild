@@ -161,4 +161,6 @@ Then STOP. Nothing is committed until Annie approves.
 
 ## After approval
 
-Apply her edits and rerun the checks. If the deploy falls on a later day than the draft, run the footer-date step again so `Last updated` matches the day it goes live. Commit, then deploy and verify exactly as `UPDATE.md` describes. Finish with the live URL: `https://www.annielytics.com/tools/models-gone-wild/`.
+Apply her edits and rerun the checks. Commit and push the branch, then deploy it to staging exactly as "Deploying the change" in `UPDATE.md` describes. Give Annie the staging links, including the new case's poster (`https://staging.annielytics.com/tools/models-gone-wild/poster/<slug>/`), and STOP. Nothing merges to `main` or reaches production until she says so.
+
+When she does, and the ship falls on a later day than the draft, run the footer-date step again so `Last updated` matches the day it goes live, and commit that on the branch. Then finish the deploy and verify production exactly as `UPDATE.md` describes. Finish with the live URL: `https://www.annielytics.com/tools/models-gone-wild/`.
