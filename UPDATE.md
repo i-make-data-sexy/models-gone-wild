@@ -41,9 +41,12 @@ scripts/check_overlaps.py, which reports anything drawn on top of
 something else on the Threat Matrix, and scripts/check_slugs.py, which
 confirms the poster slug is present, well formed, and unique, and
 scripts/check_quotes.py, which catches a quotation in single quotes. Fix
-anything they report. Then
-update the "Last updated" line in the footer, commit, push, and deploy.
-Give me the live URL when it is done.
+anything they report. Then update the "Last updated" line in the footer,
+commit, and push the branch. Deploy it to staging as "Deploying the change"
+in UPDATE.md describes, give me the staging links, including the new case's
+poster, and STOP. Do not merge to main or deploy to production until I say
+so. When I do, finish the deploy as that section describes and give me the
+live URL.
 ```
 
 ### Changing copy
@@ -60,7 +63,11 @@ Change:
 
 Branch off up-to-date main. Check whether the old wording appears anywhere
 else, since a phrase in one place is often referenced in another, and tell me
-if it does. Run the checks in UPDATE.md, commit, push, and deploy.
+if it does. Run the checks in UPDATE.md, commit, and push the branch. Deploy
+it to staging as "Deploying the change" in UPDATE.md describes, give me the
+staging links, and STOP. Do not merge to main or deploy to production until
+I say so. When I do, finish the deploy as that section describes and give me
+the live URL.
 ```
 
 ### Changing design or behavior
@@ -80,8 +87,10 @@ the scripts in js/ that DEPLOY.md lists, the styles in css/styles.css, and
 the case data in js/cases.js and js/glossary.js, so tell me what you plan
 to touch before you touch it. Watch for the traps listed in
 UPDATE.md, especially relative paths and the poster overlay's stacking order.
-Run the checks, show me a local preview, and STOP for my sign-off before
-deploying.
+Run the checks, commit, and push the branch. Deploy it to staging as
+"Deploying the change" in UPDATE.md describes, give me the staging links,
+and STOP. Do not merge to main or deploy to production until I say so. When
+I do, finish the deploy as that section describes and give me the live URL.
 ```
 
 ## The case schema
@@ -307,15 +316,51 @@ Click through both tabs, open the new case's poster, and download it. There is n
 
 ## Deploying the change
 
+Every change goes to staging first and reaches production only on Annie's word. There is no service to restart, since nginx reads the files off disk on every request, and the pages are served with no-cache headers so a reload shows the change immediately.
+
+### Deploy the branch to staging
+
+Run the checks above first and stop on any failure. Never pipe a check through `tail` in a chain that ends in a push or a deploy, since the pipe hides the exit code.
+
 ```bash
 git add -A
 git commit -m "..."
-git checkout main && git merge <branch> --no-edit && git push origin main
+git push -u origin <branch>
 
-ssh anniecushing@208.109.215.51 "cd ~/apps/models-gone-wild && git pull origin main"
+ssh -i ~/.ssh/id_ed25519_imds anniecushing@208.109.215.51 \
+  "set -e; cd ~/apps/staging/models-gone-wild && git fetch origin && git checkout <branch> \
+   && git pull --ff-only origin <branch> && git log --oneline -1"
 ```
 
-That is the whole deploy. There is no service to restart, since nginx reads the file off disk on every request, and the page is served with no-cache headers so a reload shows the change immediately.
+Then run the staging health check. Healthy output is five 200s, then 404 for `DEPLOY.md`, 403 for `.git/config`, and 404 for `no-such-page/`.
+
+```bash
+ssh -i ~/.ssh/id_ed25519_imds anniecushing@208.109.215.51 '
+H="Host: staging.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
+for p in "" methodology/ threat-matrix/ lab-counts/ poster/sol-hugging-face/ DEPLOY.md .git/config no-such-page/; do
+  printf "%-28s %s\n" "/$p" "$(curl -sk -H "$H" -o /dev/null -w "%{http_code}" "$B/$p")"; done'
+```
+
+Give Annie the staging links, which sit behind the staging password: the home page at https://staging.annielytics.com/tools/models-gone-wild/, plus the poster (`poster/<slug>/`), view, or Methodology page the change touched. Then stop. Nothing below runs until she says to ship it.
+
+### Ship to production, only on Annie's word
+
+```bash
+git checkout main && git pull --ff-only origin main
+git merge <branch> --no-edit && git push origin main
+
+ssh -i ~/.ssh/id_ed25519_imds anniecushing@208.109.215.51 \
+  "set -e; cd ~/apps/models-gone-wild && git fetch origin && git checkout main \
+   && git pull --ff-only origin main && git log --oneline -1"
+```
+
+Verify production as "Verifying the deploy" below describes, then switch staging back to `main`.
+
+```bash
+ssh -i ~/.ssh/id_ed25519_imds anniecushing@208.109.215.51 \
+  "set -e; cd ~/apps/staging/models-gone-wild && git fetch origin && git checkout main \
+   && git pull --ff-only origin main"
+```
 
 Nginx only needs touching if a new kind of file is added, for example a new image directory or a stylesheet. The asset rule currently matches `js/vendor/` and `img/` only. See `DEPLOY.md` for that block.
 

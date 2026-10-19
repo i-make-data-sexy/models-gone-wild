@@ -48,7 +48,7 @@ Search Gmail for her replies to earlier scout emails from the last four days: su
 Reply in the same thread with what you applied, the check results, and this line for Annie to paste into Claude Code when she is ready to publish:
 
 ```
-Publish the Models Gone Wild case on branch candidate/<id>, following UPDATE.md: review the diff with me, then merge to main and deploy.
+Publish the Models Gone Wild case on branch candidate/<id>, following UPDATE.md: review the diff with me, deploy the branch to staging, give me the staging links, and stop. Merge to main and deploy to production only when I say so.
 ```
 
 ## Step 2: Search
