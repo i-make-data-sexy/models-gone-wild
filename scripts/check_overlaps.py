@@ -2,8 +2,8 @@
 #   About This File
 # ========================================================================
 
-"""Reports anything on the Threat Matrix that is drawn on top of
-something else.
+"""
+Reports anything on the Threat Matrix that is drawn on top of something else.
 
 The other checks read the case data as text. This one renders the real
 page in headless Chrome, so it sees what a reader sees: where each dot
@@ -157,7 +157,7 @@ def main() -> int:
         int: 1 if anything overlapped or left the plot, 0 if the chart is clean
     """
 
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
     ap.add_argument("--shot", help="Write a PNG of the unfiltered chart to this path")
     ap.add_argument("--width", type=int, default=1300,
                     help="Page width in pixels. The chart fills its column, so check a phone width (390) as well")
