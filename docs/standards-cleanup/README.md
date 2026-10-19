@@ -211,7 +211,7 @@ Answer these before running the steps. Record each answer here because the step 
 | 9B | [09b-inline-code.md](09b-inline-code.md) | The rest of both inline scripts, html2canvas in `<head>`, and the new files' formatting, including `js` on the hook. Moved up under decision 31. | Medium | Done 2026-10-18 (merge 0fcab89) |
 | F3 | [f3-python.md](f3-python.md) | 8 Python files to the rule's spacing, comments, and docstrings, and `check_style.py` to 0. | Small | Done 2026-10-18 (merge b2a02f5) |
 | F4 | [f4-html.md](f4-html.md) | Both pages to AI Strategy's format, Methodology's 5 HTML comments deleted (`index.html`'s 15 went in F2). | Small | Done 2026-10-18 (merges fe881f3 and fe04ea2, the page banners) |
-| F5 | [f5-other-files.md](f5-other-files.md) | The requirements and shell formatting, and the editor settings. | Tiny | Not started |
+| F5 | [f5-other-files.md](f5-other-files.md) | The requirements and shell formatting, and the editor settings. | Tiny | Done 2026-10-18 (merge 16bfe73) |
 | F6 | [f6-quotes.md](f6-quotes.md) | Double quotes in the app's JavaScript files. | Small | Not started |
 | F7 | [f7-python-structure.md](f7-python-structure.md) | `filters.py`'s layout on every Python file, 1 function without type hints. Formerly step 5. | Small | Not started |
 | 4 | [04-root-files.md](04-root-files.md) | No root guard, workflow docs that skip staging, merged branches. | Small | Not started |

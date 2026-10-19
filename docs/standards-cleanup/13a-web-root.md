@@ -19,7 +19,7 @@ The app handled its URLs this way on 2026-10-16:
 
 So the prefix is handled by one mechanism (relative paths through nginx's rewrites), mirrored by two tools. Decision 22a keeps it, so this step adds a test that holds the mirrors in agreement and changes no path.
 
-The web root is the git checkout. Besides the site, it holds `.claude/`, `scout/`, `scripts/`, `tests/`, `deploy/`, `docs/`, `DEPLOY.md`, `UPDATE.md`, `requirements-dev.txt`, and the git hook. An extension denylist keeps most of them private, but `deploy/nginx/headers.conf` (step 2) and `scripts/git-hooks/pre-commit` (step 8) are served today, harmlessly, and any new kind of file would be public until someone extends the denylist.
+The web root is the git checkout. Besides the site, it holds `.claude/`, `scout/`, `scripts/`, `tests/`, `deploy/`, `docs/`, `DEPLOY.md`, `UPDATE.md`, `requirements-dev.txt`, and the git hook. An extension denylist keeps most of them private, but `deploy/nginx/headers.conf` (step 2) and step F1's `scripts/git-hooks/pre-commit`, `scripts/git-hooks/format-languages`, and `scripts/screenshot-diff/run.sh` are served today, harmlessly (confirmed at both origins on 2026-10-18), and any new kind of file would be public until someone extends the denylist.
 
 ## The URL list
 
@@ -28,7 +28,7 @@ Add `scripts/url-list/run.sh <ref>`, which serves the ref from a worktree under 
 - The home page, `/index.html`, `threat-matrix/`, `lab-counts/`, all 21 poster permalinks, `methodology/`, `methodology/index.html`, and the 404 page.
 - The bare prefix, `threat-matrix` and a poster without their slashes, and `?view=matrix` and `?view=labs`.
 - Each stylesheet, script, font, and image, at the root and under one view and one poster permalink.
-- `DEPLOY.md`, `UPDATE.md`, `scripts/serve.py`, `deploy/nginx/headers.conf`, `scripts/git-hooks/pre-commit`, `.claude/skills/models-gone-wild-add-case/SKILL.md`, and `.git/config`.
+- `DEPLOY.md`, `UPDATE.md`, `scripts/serve.py`, `deploy/nginx/headers.conf`, `scripts/git-hooks/pre-commit`, `scripts/git-hooks/format-languages`, `scripts/screenshot-diff/run.sh`, `.claude/skills/models-gone-wild-add-case/SKILL.md`, and `.git/config`.
 
 Add `scripts/url-list/origin.sh <host>`, which runs the same list on the server against nginx at `https://127.0.0.1` with the given `Host` header, so staging and production can be compared with the local run. `diff` of two lists is the proof.
 
@@ -46,7 +46,7 @@ Add `scripts/url-list/origin.sh <host>`, which runs the same list on the server 
 
 ## Done when
 
-The URL list for the branch matches `main` row for row, locally and at the staging origin, except that `deploy/nginx/headers.conf` and `scripts/git-hooks/pre-commit`, which nginx serves today, now return 404. Every remaining difference is shown and approved. Both suites, the CSP walk, the five check scripts, and `check_overlaps.py` pass, and the screenshot diff is pixel-identical.
+The URL list for the branch matches `main` row for row, locally and at the staging origin, except that `deploy/nginx/headers.conf`, `scripts/git-hooks/pre-commit`, `scripts/git-hooks/format-languages`, and `scripts/screenshot-diff/run.sh`, which nginx serves today, now return 404. Every remaining difference is shown and approved. Both suites, the CSP walk, the five check scripts, and `check_overlaps.py` pass, and the screenshot diff is pixel-identical.
 
 Every file the step changes or creates passes `python3 -I ~/.claude/formatting-tools/check_format.py` and `check_style.py`, with the formatter re-run where a change moved a column.
 
