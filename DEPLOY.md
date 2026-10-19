@@ -30,10 +30,13 @@ js/tooltip.js                 the glossary and info-note tooltip
 js/poster.js                  the poster, its permalink, Copy link, and Download poster
 js/menu.js                    the mobile menu, shared with the Methodology page
 js/main.js                    starts the page, and loads last
+js/gtm.js                     loads Google Tag Manager, first in each page's head
 js/vendor/html2canvas.min.js  powers Download poster, loaded on its first press
 DEPLOY.md                     this file
 .gitignore
 ```
+
+Both pages load the site-wide Google Tag Manager container, GTM-5FJGP2, which AI Timeline and AI Strategy share. Its one tag fires GA4 (G-2CGX3KD64R). `js/gtm.js` reads the container ID from its own `data-gtm-id` attribute, and each page carries the `<noscript>` fallback frame right after `<body>`, hidden by `.gtm-noscript-frame` in `css/base.css`.
 
 The case data lives in the `CASES` array in `js/cases.js`, and the glossary in `GLOSSARY` in `js/glossary.js`. Adding an escapee means appending an object to that array and pushing. There is no admin screen and no database, by design.
 
@@ -199,6 +202,8 @@ The `css/` directory and the app's own scripts in `js/` need no rule of their ow
 The clone's `.git` directory and `.gitignore` need no rule here. The config already carries a `location ~ /\.git` block further down, and regex locations outrank the prefix block above.
 
 The security headers come from `deploy/nginx/headers.conf` in the repo, copied to `/etc/nginx/snippets/models-gone-wild-headers.conf` (production) and `/etc/nginx/snippets/models-gone-wild-headers-staging.conf` (staging). Nginx drops inherited `add_header` lines in any block that sets its own, so each serving block includes the snippet itself. When the repo file changes, copy it to the staging snippet during the build and to the production snippet at ship time. `scripts/serve.py` reads the same file, so the local preview sends the same headers.
+
+The same snippet carries the Content Security Policy, enforced on every response. It allows only the app's own files, plus Google Tag Manager and the hosts GA4 sends hits to, which are copied from AI Timeline's policy. `style-src` also names one hash, for the fixed `<style>` block html2canvas adds while it copies a poster (see `js/vendor/VENDORED.md`). A Custom HTML tag added in GTM would be refused, since the policy allows no inline script. `scripts/csp-walk/run.sh <ref>` walks every page and state under a ref's policy, a poster download included, and `tests/test_csp.py` holds the policy's shape.
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
@@ -403,7 +408,13 @@ The page 404s at the prefix but the file is on disk. Check that the `location` a
 
 Download poster shows "The image library didn't load". `js/poster.js` loads the vendored library on the first press, from `APP_BASE` plus `js/vendor/html2canvas.min.js`. Open the browser console, then request that URL directly with curl at the origin. A 404 means the file or the asset block moved.
 
-Fonts fall back to a plain monospace face. The app serves its own fonts, with `css/fonts.css` pointing at the woff2 files in `fonts/`. Request one of those files at the origin with curl. A 404 means a file or the asset block moved. In the browser console, `[...document.fonts].map(f => f.family + ' ' + f.weight + ' ' + f.status)` lists each registered face and whether it loaded.
+Fonts fall back to a plain monospace face. The app serves its own fonts, with `css/fonts.css` pointing at the woff2 files in `fonts/`. Request one of those files at the origin with curl. A 404 means a file or the asset block moved. In the browser console, `[...document.fonts].map(f => f.family + ' ' + f.weight + ' ' + f.status)` lists each registered face and whether it loaded. The policy's `font-src 'self'` refuses a font from any other host, so a Google Fonts link added back would show as a violation in the console, not as a fallback alone.
+
+Something stops working and the console names the Content Security Policy. The message names the directive and the blocked source. Run `scripts/csp-walk/run.sh` on the branch to see every refusal locally. Add a source to the policy only for a request the app needs, never `'unsafe-inline'` or `'unsafe-eval'`, then copy `deploy/nginx/headers.conf` to the snippet, reload nginx, and add a PCI row. Restoring the snippet's backup rolls the policy back with no code deploy.
+
+GA4 Realtime shows no visit. Open GTM's Preview mode (Tag Assistant) on the page and confirm the Google Tag fires. A request the console shows as refused needs its host added to `connect-src` or `img-src`.
+
+With GTM's Preview mode connected, the console shows one refused `data:` font under `font-src 'self'`. It is Tag Assistant's own badge font, not one of the app's, and it loads only during a Preview session, so the policy leaves it refused. The tag still fires, and a visit without Preview mode logs nothing. Google's [Tag Manager CSP guide](https://developers.google.com/tag-platform/security/guides/csp) lists the extra sources a fully clean Preview session would need.
 
 An edit is live on disk but the browser shows the old page. Confirm the git pull actually landed, then hard-refresh. The no-cache headers should make this rare.
 

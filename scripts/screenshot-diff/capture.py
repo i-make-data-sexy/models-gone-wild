@@ -12,6 +12,9 @@ Requests to any host but the local server and Google Fonts are aborted.
 The first side records every font response it downloads, and the second
 side replays them byte for byte, so both sides draw in the same faces.
 
+Each context bypasses the Content Security Policy, which would refuse the
+style tag that freezes animations; scripts/csp-walk/ checks the policy.
+
 Each capture waits for document.fonts.ready, since the Threat Matrix
 measures its labels in Oswald and lays out differently in a fallback
 face. The poster permalink opens its poster on load, so that capture
@@ -178,7 +181,7 @@ def capture_one(
     key = f"{name}@{width}"
     ctx = browser.new_context(viewport={"width": width, "height": height},
                               device_scale_factor=1, reduced_motion="reduce",
-                              timezone_id="UTC", locale="en-US")
+                              timezone_id="UTC", locale="en-US", bypass_csp=True)
     ctx.set_default_timeout(15000)
     ctx.route("**/*", route_filter)
 

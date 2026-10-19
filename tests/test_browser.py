@@ -3,9 +3,9 @@
 # ========================================================================
 
 # Browser tests in Playwright's Chromium against the preview server,
-# run with -m browser. Requests to other hosts, the Google Fonts
-# stylesheets, are answered with an empty stylesheet so the suite runs
-# offline and the same way every time.
+# run with -m browser. Requests to other hosts, the Google Tag Manager
+# container, are answered with an empty body so the suite runs offline,
+# sends no hit to Google Analytics, and runs the same way every time.
 #
 # The last test is the revert-and-fail proof for 8e726b4, which clamped
 # the glossary bubbles inside the reading column. Without the clamp the

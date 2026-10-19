@@ -50,6 +50,11 @@ body::before {
     margin:              0 auto;
 }
 
+.gtm-noscript-frame {
+    display:             none;
+    visibility:          hidden;
+}
+
 
 
 /* ========================================================================

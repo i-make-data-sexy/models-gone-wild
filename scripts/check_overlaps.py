@@ -95,7 +95,7 @@ def serve(root: str) -> tuple:
 
 def chrome(args: list) -> str:
     """
-    Runs headless Chrome with the given flags and a generous time budget for the fonts to arrive
+    Runs headless Chrome offline with the given flags and a generous time budget for the fonts to arrive
 
     Args:
         args (list): Flags and the URL, appended after the fixed flags
@@ -105,7 +105,8 @@ def chrome(args: list) -> str:
     """
 
     base = [CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars",
-            "--window-size=1300,1000", "--virtual-time-budget=20000"]
+            "--window-size=1300,1000", "--virtual-time-budget=20000",
+            "--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1"]
     run  = subprocess.run(base + args, capture_output=True, text=True, timeout=120)
 
     return run.stdout
