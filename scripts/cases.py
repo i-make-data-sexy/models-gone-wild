@@ -29,14 +29,6 @@ from pathlib   import Path
 
 
 # ========================================================================
-#   Global Variables
-# ========================================================================
-
-REPO = Path(__file__).resolve().parent.parent
-
-
-
-# ========================================================================
 #   Loading
 # ========================================================================
 
@@ -52,7 +44,9 @@ def load_cases_js() -> str:
         str: The whole file, About section included
     """
 
-    return (REPO / "js" / "cases.js").read_text(encoding="utf-8")
+    repo = Path(__file__).resolve().parent.parent
+
+    return (repo / "js" / "cases.js").read_text(encoding="utf-8")
 
 
 def case_blocks(js: str) -> dict[str, str]:
