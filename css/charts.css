@@ -1,0 +1,274 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The glossary tooltip bubble, the Threat Matrix scatter, the Cases by Lab
+   chart, and the note a view shows when no case matches */
+
+
+
+/* ========================================================================
+     Tooltip
+   ======================================================================== */
+
+.tip {
+    position:            fixed;
+    top:                 0;
+    left:                0;
+    z-index:             60;
+    background:          var(--ink);
+    color:               var(--paper);
+    border-radius:       2px;
+    padding:             9px 11px;
+    box-shadow:          0 6px 18px rgba(0,0,0,.35);
+    pointer-events:      none;
+    opacity:             0;
+    visibility:          hidden;
+    transition:          opacity .15s ease;
+    text-transform:      none;
+}
+
+.tip.show {
+    opacity:             1;
+    visibility:          visible;
+}
+
+.tip.tip-def {
+    font-family:         'Special Elite',monospace;
+    font-size:           11.5px;
+    line-height:         1.55;
+    text-align:          left;
+    max-width:           280px;
+}
+
+.tip.tip-scores { max-width: 330px; }
+.tip-scores p   { margin:    0;     }
+
+.tip-lede {
+    color:               #c9c2b0;
+    font-size:           11px;
+    line-height:         1.5;
+    padding-bottom:      8px;
+    margin-bottom:       9px !important;
+    border-bottom:       1px solid rgba(230,221,198,.22);
+}
+
+.tip-metric {
+    font-family:         'Oswald',sans-serif;
+    font-weight:         600;
+    font-size:           10.5px;
+    letter-spacing:      .14em;
+    text-transform:      uppercase;
+    color:               #e6ddc6;
+    margin-top:          10px !important;
+    margin-bottom:       3px !important;
+}
+
+.tip-metric:first-of-type { margin-top: 0 !important; }
+
+.tip-row {
+    font-size:           11.5px;
+    line-height:         1.5;
+    margin-bottom:       2px !important;
+}
+
+.tip-row b {
+    color:               var(--paper);
+    font-weight:         700;
+}
+
+.tip.tip-label {
+    font-family:         'Oswald',sans-serif;
+    font-size:           10.5px;
+    font-weight:         500;
+    letter-spacing:      .1em;
+    text-transform:      uppercase;
+    white-space:         nowrap;
+}
+
+.tip::after {
+    content:             "";
+    position:            absolute;
+    left:                var(--arrow,50%);
+    margin-left:         -6px;
+    border:              6px solid transparent;
+}
+
+.tip.above::after {
+    top:                 100%;
+    border-top-color:    var(--ink);
+}
+
+.tip.below::after {
+    bottom:              100%;
+    border-bottom-color: var(--ink);
+}
+
+.empty-note {
+    text-align:          center;
+    font-family:         'Special Elite',monospace;
+    font-size:           14px;
+    color:               var(--ink-soft);
+    padding:             50px 20px;
+}
+
+
+
+/* ========================================================================
+     Scatter
+   ======================================================================== */
+
+.scatter-wrap {
+    margin:              40px auto 0;
+    max-width:           760px;
+}
+
+.scatter-svg {
+    width:               100%;
+    height:              auto;
+    display:             block;
+    margin-top:          10px;
+}
+
+.pt        { cursor:     pointer;                   }
+.pt circle { transition: r .13s, stroke-width .13s; }
+
+.pt:hover circle,
+.pt:focus-visible circle {
+    stroke:              var(--ink);
+    stroke-width:        3;
+}
+
+.scatter-legend {
+    display:             flex;
+    justify-content:     center;
+    flex-wrap:           wrap;
+    gap:                 8px 22px;
+    margin:              14px 0 0;
+    padding-left:        3.43%;
+    font-family:         'Oswald',sans-serif;
+    font-weight:         500;
+    font-size:           11px;
+    letter-spacing:      .1em;
+    text-transform:      uppercase;
+    color:               var(--ink-soft);
+}
+
+@media (min-width:801px) {
+    .scatter-wrap {
+        display:             flex;
+        align-items:         center;
+        gap:                 6px;
+        max-width:           900px;
+    }
+
+    #scatter,
+    #labChart {
+        flex:                1 1 auto;
+        min-width:           0;
+    }
+
+    .scatter-legend {
+        flex:                none;
+        flex-direction:      column;
+        align-items:         flex-start;
+        justify-content:     center;
+        gap:                 12px;
+        margin:              0;
+        padding-left:        0;
+    }
+}
+
+.scatter-wrap.matrix-wrap {
+    display:             block;
+    max-width:           none;
+}
+
+.matrix-wrap .scatter-legend {
+    flex-direction:      row;
+    justify-content:     center;
+    align-items:         center;
+    gap:                 8px 22px;
+    margin:              0 0 4px;
+    padding-left:        min(62px, 8.86%);
+}
+
+.legend-item {
+    display:             inline-flex;
+    align-items:         center;
+    gap:                 7px;
+}
+
+.legend-dot {
+    width:               14px;
+    height:              14px;
+    flex:                none;
+}
+
+.pt:focus { outline: none; }
+
+.axis-note {
+    cursor:              help;
+    outline:             none;
+}
+
+.axis-note:hover circle,
+.axis-note:focus circle {
+    stroke:              var(--stamp-red);
+}
+
+.axis-note:hover text,
+.axis-note:focus text {
+    fill:                var(--stamp-red);
+}
+
+.svg-note {
+    cursor:                    help;
+    outline:                   none;
+    text-decoration:           underline dotted;
+    text-decoration-color:     rgba(58,54,44,.4);
+    text-decoration-color:     color-mix(in srgb, currentColor 40%, transparent);
+    text-decoration-thickness: 1px;
+}
+
+.svg-note:focus { text-decoration-color: var(--stamp-red); }
+
+.pt text {
+    font-family:         'Oswald',sans-serif;
+    font-weight:         400;
+    font-size:           13px;
+    fill:                var(--ink);
+}
+
+
+
+/* ========================================================================
+     Cases by Lab
+   ======================================================================== */
+
+.seg {
+    cursor:              pointer;
+    outline:             none;
+}
+
+.seg rect { transition: stroke-width .13s; }
+
+.seg:hover rect,
+.seg:focus-visible rect {
+    stroke:              var(--ink);
+    stroke-width:        2.5;
+}
+
+.lab-name {
+    font-family:         'Oswald',sans-serif;
+    font-weight:         600;
+    font-size:           13px;
+    fill:                var(--ink);
+}
+
+.lab-total {
+    font-family:         'Oswald',sans-serif;
+    font-weight:         600;
+    font-size:           13px;
+    fill:                var(--ink-soft);
+}

@@ -1,0 +1,90 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The Methodology page's title, back line, and article sections, and its
+   link back to the registry */
+
+
+
+/* ========================================================================
+     Methodology Page
+   ======================================================================== */
+
+.page-title {
+    font-family:     'Oswald',sans-serif;
+    font-weight:     700;
+    text-transform:  uppercase;
+    letter-spacing:  .06em;
+    font-size:       clamp(40px,9vw,72px);
+    line-height:     .95;
+    margin:          0;
+    color:           var(--ink);
+    text-shadow:     2px 2px 0 rgba(0,0,0,.12);
+}
+
+.back-line {
+    margin:          0 0 28px;
+    text-align:      left;
+}
+
+.method         { margin-top: 10px;     }
+.method-section { margin:     0 0 40px; }
+
+.method-section h2 {
+    font-family:     'Oswald',sans-serif;
+    font-weight:     600;
+    letter-spacing:  .14em;
+    text-transform:  uppercase;
+    font-size:       18px;
+    color:           var(--stamp-red);
+    margin:          0 0 12px;
+    padding-bottom:  8px;
+    border-bottom:   1.5px solid var(--ink);
+}
+
+.method-section p {
+    margin:          0 0 14px;
+    font-size:       15px;
+    line-height:     1.65;
+}
+
+.method-section h3 {
+    font-family:     'Oswald',sans-serif;
+    font-weight:     600;
+    letter-spacing:  .1em;
+    text-transform:  uppercase;
+    font-size:       15px;
+    color:           var(--ink);
+    margin:          30px 0 8px;
+}
+
+.method-section a {
+    color:           var(--stamp-red);
+    text-decoration: none;
+}
+
+.method-section a:hover,
+.method-section a:focus-visible {
+    color:           var(--ink);
+}
+
+.back-link {
+    font-family:     'Oswald',sans-serif;
+    font-weight:     500;
+    letter-spacing:  .14em;
+    text-transform:  uppercase;
+    font-size:       12px;
+    color:           var(--ink-soft);
+    text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+    color:           var(--stamp-red);
+}
+
+.back-link:focus-visible {
+    outline:         2px solid var(--stamp-red);
+    outline-offset:  2px;
+}

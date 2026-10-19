@@ -1,0 +1,234 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The page shell both pages share, covering the reset, body and paper
+   texture, page wrapper and content column, site header and menu, and
+   masthead */
+
+
+
+/* ========================================================================
+     Page Shell
+   ======================================================================== */
+
+*    { box-sizing:      border-box; }
+html { scroll-behavior: smooth;     }
+
+body {
+    margin:                 0;
+    background:             radial-gradient(circle at 20% 10%, rgba(0,0,0,.06), transparent 40%),
+                            radial-gradient(circle at 85% 80%, rgba(0,0,0,.08), transparent 45%),
+                            var(--paper);
+    color:                  var(--ink);
+    font-family:            'Courier Prime','Courier New',monospace;
+    line-height:            1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+    content:             "";
+    position:            fixed;
+    inset:               0;
+    pointer-events:      none;
+    z-index:             0;
+    opacity:             .5;
+    mix-blend-mode:      multiply;
+    background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+.wrap {
+    position:            relative;
+    z-index:             1;
+    max-width:           1200px;
+    margin:              0 auto;
+    padding:             0 30px 90px;
+}
+
+.content {
+    max-width:           920px;
+    margin:              0 auto;
+}
+
+
+
+/* ========================================================================
+     Site Header
+   ======================================================================== */
+
+.hidden { display: none; }
+
+.site-header {
+    background-color:    #000;
+    z-index:             999;
+    padding:             15px 0;
+    display:             flex;
+    align-items:         center;
+    justify-content:     space-between;
+    gap:                 16px;
+    box-shadow:          0 0 0 100vmax #000;
+    clip-path:           inset(0 -100vmax);
+}
+
+.title-area {
+    display:             flex;
+    align-items:         center;
+    padding:             0;
+}
+
+.header-logo {
+    display:             block;
+    width:               100%;
+    max-width:           250px;
+    height:              auto;
+}
+
+.nav-primary { position: relative; }
+
+.nav-primary .menu {
+    position:            relative;
+    list-style:          none;
+    padding:             0;
+    margin:              0;
+    display:             flex;
+    gap:                 30px;
+    justify-content:     flex-end;
+    line-height:         1;
+    float:               right;
+}
+
+.nav-primary .menu a {
+    color:               antiquewhite;
+    text-decoration:     none;
+    font-family:         'Oswald',sans-serif;
+    font-size:           14px;
+    letter-spacing:      .08em;
+    text-transform:      uppercase;
+}
+
+@media (min-width:501px) {
+    .nav-primary .menu a {
+        background-image:    linear-gradient(currentColor,currentColor);
+        background-repeat:   no-repeat;
+        background-position: 0 100%;
+        background-size:     0% 1px;
+        background-origin:   content-box;
+        background-clip:     content-box;
+        transition:          background-size .3s ease,color .3s ease;
+    }
+
+    .nav-primary .menu a:hover,
+    .nav-primary .menu a:focus-visible {
+        background-size:     100% 1px;
+        color:               #4ea3e0;
+        text-decoration:     none;
+    }
+}
+
+.menu-toggle {
+    display:             none;
+    font-family:         'Oswald',sans-serif;
+    font-weight:         600;
+    letter-spacing:      .14em;
+    font-size:           14px;
+    color:               antiquewhite;
+    background:          transparent;
+    border:              none;
+    padding:             12px 0;
+    cursor:              pointer;
+    text-align:          center;
+}
+
+.nav-primary .menu.visible { padding: 0 20px 20px 0; }
+
+
+
+/* ========================================================================
+     Masthead
+   ======================================================================== */
+
+header.masthead {
+    text-align:          center;
+    padding:             46px 0 26px;
+}
+
+.bureau-line {
+    font-family:         'Oswald',sans-serif;
+    font-weight:         500;
+    letter-spacing:      .42em;
+    text-transform:      uppercase;
+    font-size:           12px;
+    color:               var(--ink-soft);
+    margin:              0 0 14px;
+    padding-left:        .42em;
+}
+
+.wanted-title {
+    font-family:         'Oswald',sans-serif;
+    font-weight:         700;
+    text-transform:      uppercase;
+    letter-spacing:      .06em;
+    font-size:           clamp(58px,15vw,132px);
+    line-height:         .86;
+    margin:              0;
+    color:               var(--ink);
+    text-shadow:         2px 2px 0 rgba(0,0,0,.12);
+}
+
+.subhead {
+    font-family:         'Special Elite',monospace;
+    font-size:           clamp(15px,3.4vw,20px);
+    letter-spacing:      .02em;
+    margin:              16px auto 0;
+    max-width:           600px;
+    color:               var(--ink-soft);
+}
+
+.horns {
+    font-family:         'Noto Emoji',sans-serif;
+    font-weight:         600;
+    font-size:           .95em;
+    color:               inherit;
+    vertical-align:      -.08em;
+}
+
+.intro {
+    font-family:         'Special Elite',monospace;
+    font-size:           14px;
+    text-align:          left;
+    margin:              26px 0 0;
+    color:               var(--ink-soft);
+    line-height:         1.7;
+}
+
+.intro-cue { margin-top: 14px; }
+
+.intro a {
+    color:               var(--stamp-red);
+    text-decoration:     none;
+}
+
+.intro a:hover,
+.intro a:focus-visible {
+    color:               var(--ink);
+}
+
+.intro a:focus-visible {
+    outline:             2px solid var(--stamp-red);
+    outline-offset:      2px;
+}
+
+.flourish {
+    display:             flex;
+    justify-content:     center;
+    gap:                 15px;
+    margin:              34px 0 0;
+}
+
+.flourish span {
+    width:               5px;
+    height:              5px;
+    border-radius:       50%;
+    background:          var(--stamp-red);
+    opacity:             .7;
+}

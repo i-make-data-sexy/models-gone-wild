@@ -1,0 +1,32 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The custom properties both pages share. Both pages link seven stylesheets
+   in a fixed order, starting with this one, then base, registry, charts,
+   poster, methodology, and responsive, so the cascade runs top to bottom and
+   responsive.css overrides the rules before it. Every link is a relative
+   path since the app lives under /tools/models-gone-wild/ and a leading
+   slash would point at the site root. */
+
+
+
+/* ========================================================================
+     Design Tokens
+   ======================================================================== */
+
+:root {
+    --paper:            #e6ddc6;
+    --paper-deep:       #d8cdb0;
+    --ink:              #1c1a15;
+    --ink-soft:         #3a362c;
+    --stamp-red:        #8f1d16;
+    --stamp-red-bright: #b52d20;
+    --amber:            #9a6a12;
+    --rule:             #4a4438;
+    --card:             #eee6d2;
+    --shadow:           rgba(20,16,8,.35);
+    --class3:           #8f1d16;
+    --class2:           #a35a12;
+    --class1:           #5a6b2a;
+}
