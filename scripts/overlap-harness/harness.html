@@ -1,0 +1,40 @@
+<!-- ========================================================================
+       About This File
+     ======================================================================== -->
+
+<!-- The page check_overlaps.py renders in headless Chrome. It loads the
+     app in an iframe at the production path and runs harness.js against it.
+
+     The script fills in __WIDTH__ and __SUBPATH__ before it serves the page.
+     The #out element holds PENDING until harness.js writes its results. -->
+
+
+
+<!-- ========================================================================
+       Harness Page
+     ======================================================================== -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+
+        iframe {
+            border: 0;
+            width:  __WIDTH__px;
+            height: 1000px;
+        }
+    </style>
+</head>
+
+<body>
+    <iframe id="app" src="__SUBPATH__/"></iframe>
+    <pre id="out">PENDING</pre>
+    <script src="harness.js"></script>
+</body>
+</html>
