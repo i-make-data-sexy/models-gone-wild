@@ -7,7 +7,12 @@
    poster, methodology, and responsive, so the cascade runs top to bottom and
    responsive.css overrides the rules before it. Every link is a relative
    path since the app lives under /tools/models-gone-wild/ and a leading
-   slash would point at the site root. */
+   slash would point at the site root.
+
+   Every color, font size, and line height the stylesheets use is a token
+   here, named for its role, and every other file reads it with var(). A
+   raw value anywhere else fails the pre-commit hook. Two tokens can share a
+   value when they serve different roles, as --stamp-red and --class3 do. */
 
 
 
@@ -16,17 +21,69 @@
    ======================================================================== */
 
 :root {
-    --paper:            #e6ddc6;
-    --paper-deep:       #d8cdb0;
-    --ink:              #1c1a15;
-    --ink-soft:         #3a362c;
-    --stamp-red:        #8f1d16;
-    --stamp-red-bright: #b52d20;
-    --amber:            #9a6a12;
-    --rule:             #4a4438;
-    --card:             #eee6d2;
-    --shadow:           rgba(20,16,8,.35);
-    --class3:           #8f1d16;
-    --class2:           #a35a12;
-    --class1:           #5a6b2a;
+
+    /* ================================================
+         Colors
+       ================================================ */
+
+    /* Palette */
+    --paper:                     #e6ddc6;
+    --paper-deep:                #d8cdb0;
+    --ink:                       #1c1a15;
+    --ink-soft:                  #3a362c;
+    --stamp-red:                 #8f1d16;
+    --stamp-red-bright:          #b52d20;
+    --amber:                     #9a6a12;
+    --rule:                      #4a4438;
+    --card:                      #eee6d2;
+    --shadow:                    rgba(20,16,8,.35);
+    --class3:                    #8f1d16;
+    --class2:                    #a35a12;
+    --class1:                    #5a6b2a;
+
+    /* Poster */
+    --overlay-backdrop:          rgba(18,14,6,.78);
+    --shadow-poster:             rgba(0,0,0,.6);
+    --mug-backdrop:              #211e18;
+    --caution-wash:              rgba(143,29,22,.06);
+    --shadow-close-button:       rgba(0,0,0,.5);
+
+
+    /* ================================================
+         Font Sizes
+       ================================================ */
+
+    /* Poster */
+    --font-size-poster-eyebrow:  10px;
+    --font-size-poster-wanted:   64px;
+    --font-size-poster-for:      13px;
+    --font-size-poster-alias:    30px;
+    --font-size-poster-byline:   12px;
+    --font-size-poster-label:    11px;
+    --font-size-poster-body:     13px;
+    --font-size-poster-matrix:   12px;
+    --font-size-poster-caution:  12.5px;
+    --font-size-poster-button:   12px;
+    --font-size-stamp:           13px;
+    --font-size-stamp-small:     9px;
+    --font-size-close-button:    22px;
+
+    /* Site footer */
+    --font-size-site-footer:     11.5px;
+
+
+    /* ================================================
+         Line Heights
+       ================================================ */
+
+    /* Shared */
+    --line-height-solid:         1;
+
+    /* Poster */
+    --line-height-poster-wanted: .82;
+    --line-height-poster-body:   1.55;
+    --line-height-stamp:         1.1;
+
+    /* Site footer */
+    --line-height-site-footer:   1.7;
 }
