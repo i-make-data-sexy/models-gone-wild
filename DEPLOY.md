@@ -6,12 +6,18 @@ Claude Code: read this entire file before taking any deployment action. Never pr
 
 ## What this app is
 
-Two HTML pages, one stylesheet, the case data in two scripts, the page's behavior in ten more, and one vendored JavaScript library.
+Two HTML pages, seven stylesheets both pages link in the same order, the case data in two scripts, the page's behavior in ten more, and one vendored JavaScript library.
 
 ```
 index.html                    the page's markup, loading the scripts below in order
 methodology/index.html        the Methodology page, explaining each filter
-css/styles.css                the stylesheet both pages share
+css/variables.css             the custom properties, linked first
+css/base.css                  the page shell, site header, and masthead
+css/registry.css              the registry panel, timeline, and case cards
+css/charts.css                the tooltip, Threat Matrix, and Cases by Lab
+css/poster.css                the wanted poster and the site footer
+css/methodology.css           the Methodology page
+css/responsive.css            the breakpoints and reduced motion, linked last
 js/cases.js                   the case registry, CASES
 js/glossary.js                the glossary, GLOSSARY
 js/labels.js                  the labels, notes, and icons the cards and posters show
@@ -120,7 +126,7 @@ location ~ ^/tools/models-gone-wild/(threat-matrix|lab-counts)$ {
 
 # Strip the view segment and match again. That serves index.html for the
 # permalink itself, and it resolves the page's relative asset paths, which
-# the browser requests as /threat-matrix/css/styles.css and so on. `last`
+# the browser requests as /threat-matrix/css/base.css and so on. `last`
 # reruns location matching on the rewritten URI, so the 404, cache, and
 # .git rules all still apply to it. Keep the slug list in step with
 # VIEW_SLUGS in js/views.js and scripts/serve.py.
@@ -188,7 +194,7 @@ The trailing slashes on both the `location` and the `alias` have to match. Dropp
 
 `try_files` is deliberately absent. The `alias` plus `index` pair already serves the page, a missing file 404s on its own, and `try_files` combined with `alias` has a long-standing resolution quirk. Adding it back buys nothing.
 
-The `css/` directory and the app's own scripts in `js/` need no rule of their own. The asset regex above covers `js/vendor/` and `img/` only, so a request for `css/styles.css` or `js/cases.js` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheet changes whenever the design does and the data scripts change with every case, and a hard-cached copy would strand readers on an old one. Do not widen the asset regex to `css` or all of `js` without also solving cache-busting.
+The `css/` directory and the app's own scripts in `js/` need no rule of their own. The asset regex above covers `js/vendor/` and `img/` only, so a request for `css/base.css` or `js/cases.js` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheets change whenever the design does and the data scripts change with every case, and a hard-cached copy would strand readers on an old one. Do not widen the asset regex to `css` or all of `js` without also solving cache-busting.
 
 The clone's `.git` directory and `.gitignore` need no rule here. The config already carries a `location ~ /\.git` block further down, and regex locations outrank the prefix block above.
 
@@ -206,7 +212,7 @@ Run this on the server, which bypasses Cloudflare by talking to nginx directly:
 
 ```bash
 H="Host: www.annielytics.com"; B="https://127.0.0.1/tools/models-gone-wild"
-for f in "" "methodology/" "threat-matrix/" "lab-counts/" "lab-counts/css/styles.css" "poster/sol-hugging-face/" "poster/sol-hugging-face/css/styles.css" "poster/sol-hugging-face/js/vendor/html2canvas.min.js" "poster/sol-hugging-face/DEPLOY.md" "js/vendor/html2canvas.min.js" "js/cases.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
+for f in "" "methodology/" "threat-matrix/" "lab-counts/" "lab-counts/css/registry.css" "poster/sol-hugging-face/" "poster/sol-hugging-face/css/poster.css" "poster/sol-hugging-face/js/vendor/html2canvas.min.js" "poster/sol-hugging-face/DEPLOY.md" "js/vendor/html2canvas.min.js" "js/cases.js" "img/annielytics-logo.png" "DEPLOY.md" ".git/config"; do
   printf "%-28s %s\n" "/$f" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B/$f")"
 done
 printf "%-28s %s\n" "bare path" "$(curl -sk -H "$H" -o /dev/null -w '%{http_code}' "$B")"

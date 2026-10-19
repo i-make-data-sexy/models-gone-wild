@@ -83,7 +83,7 @@ Change:
   [describe what should look or behave differently]
 
 Branch off up-to-date main. The markup lives in index.html, the behavior in
-the scripts in js/ that DEPLOY.md lists, the styles in css/styles.css, and
+the scripts in js/ that DEPLOY.md lists, the styles in the seven files in css/, and
 the case data in js/cases.js and js/glossary.js, so tell me what you plan
 to touch before you touch it. Watch for the traps listed in
 UPDATE.md, especially relative paths and the poster overlay's stacking order.
@@ -267,8 +267,9 @@ Run all of these from the repo root. Each takes seconds.
 ```bash
 # 1. No leading-slash paths. Must print nothing. A path starting with a
 #    slash resolves to the site root and 404s under /tools/models-gone-wild/.
-#    All three files, since the stylesheet carries url() references too.
-grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/styles.css methodology/index.html
+#    Both pages and every stylesheet, since the stylesheets carry url()
+#    references too.
+grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/*.css methodology/index.html
 
 # 2. Every script in js/ still parses structurally, and
 #    every case is well formed.
@@ -380,9 +381,9 @@ Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, wh
 
 ## Where things live
 
-`index.html` carries the markup and the script. `js/cases.js` holds the `CASES` array and `js/glossary.js` the `GLOSSARY` object, both loaded before the page script, and `scripts/cases.py` is the loader every check reads them through. `methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/styles.css`), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. `css/styles.css` carries every style; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
+`index.html` carries the markup and the script. `js/cases.js` holds the `CASES` array and `js/glossary.js` the `GLOSSARY` object, both loaded before the page script, and `scripts/cases.py` is the loader every check reads them through. `methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/base.css` and the rest), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. The seven stylesheets in `css/` carry every style, linked in the order `DEPLOY.md` lists; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
 
-The stylesheet is linked relatively as `css/styles.css`. A leading slash would resolve to the site root and 404, which is what check 1 guards.
+The stylesheets are linked relatively, as `css/base.css` and the rest. A leading slash would resolve to the site root and 404, which is what check 1 guards.
 
 ## Traps
 
