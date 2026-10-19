@@ -221,7 +221,7 @@ Answer these before running the steps. Record each answer here because the step 
 | 8 | [08-design-tokens.md](08-design-tokens.md) | 90 raw values in CSS, 31 colors in `index.html`, no gate. | Medium | Done 2026-10-19 (merge dad279e) |
 | 8B | [08b-token-consolidation.md](08b-token-consolidation.md) | Near-duplicate colors and font sizes. | Medium | Skipped under decision 13a (marked 2026-10-16) |
 | 10A | [10a-self-host-fonts.md](10a-self-host-fonts.md) | Google Fonts, which a policy would block under Cloudflare APO. | Small | Done 2026-10-19 (merge 9df7fb6) |
-| 10B | [10b-csp.md](10b-csp.md) | No Content Security Policy, no walk harness, no analytics tag. | Medium | Not started |
+| 10B | [10b-csp.md](10b-csp.md) | No Content Security Policy, no walk harness, no analytics tag. | Medium | Done 2026-10-19 (merge 64fc1c3) |
 | 11 | [11-layout.md](11-layout.md) | No `<main class="page-body">`, no pinned footer. | Medium | Not started |
 | 12 | [12-design-rules.md](12-design-rules.md) | Default 404 page, soft 404 posters, tooltip and footer gaps. | Medium | Not started |
 | 13A | [13a-web-root.md](13a-web-root.md) | No URL list, the prefix mirrors, repo tooling in the web root. | Medium, highest SEO risk | Not started |
