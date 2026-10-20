@@ -4,12 +4,9 @@
 
 # Shared fixtures for the test suite. The app is static, so there is no
 # Flask test client. Instead a session fixture runs the PreviewHandler
-# from scripts/serve.py, which serves the repo at the real prefix and
-# answers the same redirects nginx does in production.
-#
-# The browser marker and its default deselection live here rather than
-# in a pytest.ini, since the repo root is the web root and nginx would
-# serve a root .ini file to the public.
+# from scripts/serve.py, which serves public/ at the real prefix and
+# answers the same redirects nginx does in production. The browser
+# marker and its default deselection live in pytest.ini.
 
 
 
@@ -31,14 +28,6 @@ from types           import ModuleType
 
 # Third party
 import pytest
-
-
-
-# ========================================================================
-#   Global Variables
-# ========================================================================
-
-BROWSER = "browser"
 
 
 
@@ -69,47 +58,6 @@ def load_script(name: str) -> ModuleType:
 
 serve = load_script("serve")
 cases = load_script("cases")
-
-
-
-# ========================================================================
-#   Markers
-# ========================================================================
-
-def pytest_configure(config: pytest.Config) -> None:
-    """
-    Registers the browser marker
-
-    Args:
-        config (pytest.Config): The pytest configuration
-
-    Returns:
-        None
-    """
-
-    config.addinivalue_line("markers", f"{BROWSER}: needs headless Chrome, run with -m browser")
-
-
-def pytest_collection_modifyitems(config: pytest.Config, items: list) -> None:
-    """
-    Deselects browser tests unless the run names a marker with -m
-
-    Args:
-        config (pytest.Config): The pytest configuration
-        items (list): The collected test items, edited in place
-
-    Returns:
-        None
-    """
-
-    if config.getoption("markexpr"):
-        return
-
-    browser = [item for item in items if item.get_closest_marker(BROWSER)]
-
-    if browser:
-        config.hook.pytest_deselected(items=browser)
-        items[:] = [item for item in items if not item.get_closest_marker(BROWSER)]
 
 
 
@@ -169,8 +117,7 @@ def server_port() -> Iterator[int]:
         Iterator[int]: The port the server listens on
     """
 
-    repo    = Path(__file__).resolve().parent.parent
-    handler = partial(QuietHandler, directory=str(repo))
+    handler = partial(QuietHandler, directory=serve.PUBLIC)
     server  = ThreadingHTTPServer(("127.0.0.1", 0), handler)
     thread  = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()

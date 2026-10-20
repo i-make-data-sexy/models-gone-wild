@@ -28,10 +28,10 @@ import pytest
 #   Global Variables
 # ========================================================================
 
-REPO   = Path(__file__).resolve().parent.parent
+SITE   = Path(__file__).resolve().parent.parent / "public"
 SERVED = subprocess.run(
     ["git", "ls-files", "*.html", "css/*.css", "js/*.js"],
-    cwd            = REPO,
+    cwd            = SITE,
     capture_output = True,
     text           = True,
     check          = True,
@@ -49,13 +49,13 @@ def test_no_google_fonts_hosts(name: str) -> None:
     Checks a served page, stylesheet, or script names neither Google Fonts host
 
     Args:
-        name (str): The file's path from the repo root
+        name (str): The file's path from public/
 
     Returns:
         None
     """
 
-    text = (REPO / name).read_text(encoding="utf-8")
+    text = (SITE / name).read_text(encoding="utf-8")
     assert "fonts.googleapis.com" not in text
     assert "fonts.gstatic.com" not in text
 
@@ -76,7 +76,7 @@ def test_every_font_url_names_a_file() -> None:
         None
     """
 
-    sheet = REPO / "css" / "fonts.css"
+    sheet = SITE / "css" / "fonts.css"
     urls  = re.findall(r"url\(([^)]+)\)", sheet.read_text(encoding="utf-8"))
     assert urls
     assert not [url for url in urls if not (sheet.parent / url).resolve().is_file()]

@@ -29,14 +29,11 @@ import pytest
 #   Global Variables
 # ========================================================================
 
-REPO  = Path(__file__).resolve().parent.parent
+SITE  = Path(__file__).resolve().parent.parent / "public"
 
-PAGES = [
-    page for page in ("index.html", "methodology/index.html", "404.html")
-    if (REPO / page).exists()
-]
+PAGES = ["index.html", "methodology/index.html", "404.html"]
 
-JS_FILES = sorted(path.name for path in (REPO / "js").glob("*.js"))
+JS_FILES = sorted(path.name for path in (SITE / "js").glob("*.js"))
 
 HEX      = re.compile(r"(?<![&\w])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\b")
 
@@ -48,16 +45,16 @@ HEX      = re.compile(r"(?<![&\w])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{
 
 def read(name: str) -> str:
     """
-    Reads a file in the repo as UTF-8 text
+    Reads a file in public/ as UTF-8 text
 
     Args:
-        name (str): The file's path from the repo root
+        name (str): The file's path from public/
 
     Returns:
         str: The file's contents
     """
 
-    return (REPO / name).read_text(encoding="utf-8")
+    return (SITE / name).read_text(encoding="utf-8")
 
 
 def hex_colors(text: str) -> list[str]:
@@ -118,7 +115,7 @@ def test_page_has_no_hex_color(page: str) -> None:
     Checks a page colors its markup through classes, not hex values
 
     Args:
-        page (str): The page's path from the repo root
+        page (str): The page's path from public/
 
     Returns:
         None

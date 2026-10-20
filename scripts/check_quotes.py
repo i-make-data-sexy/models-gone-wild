@@ -86,7 +86,7 @@ def main() -> int:
     max_words = 2
     failed    = 0
 
-    for name in ("js/cases.js", "js/glossary.js"):
+    for name in ("public/js/cases.js", "public/js/glossary.js"):
         for line, span, words in quote_spans((repo / name).read_text(encoding="utf-8")):
             if words > max_words:
                 failed += 1

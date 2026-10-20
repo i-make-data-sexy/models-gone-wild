@@ -29,7 +29,7 @@ import pytest
 #   Global Variables
 # ========================================================================
 
-REPO              = Path(__file__).resolve().parent.parent
+SITE              = Path(__file__).resolve().parent.parent / "public"
 HOME_TITLE        = "<title>Models Gone Wild: AI Containment Registry</title>"
 
 ASSET_BASES       = ["/", "/threat-matrix/", "/poster/sol-hugging-face/"]
@@ -143,7 +143,7 @@ def linked_stylesheets(page: str) -> list:
     Reads the local stylesheet links a page carries, in link order
 
     Args:
-        page (str): The page's path from the repo root
+        page (str): The page's path from public/
 
     Returns:
         list: Each link's href as written
@@ -151,7 +151,7 @@ def linked_stylesheets(page: str) -> list:
 
     link = re.compile(r'<link rel="stylesheet" href="(?!https?:)([^"]+)">')
 
-    return link.findall((REPO / page).read_text())
+    return link.findall((SITE / page).read_text())
 
 
 @pytest.mark.parametrize("page, base", STYLESHEET_PAGES)
@@ -161,7 +161,7 @@ def test_stylesheets_load(fetch: Callable[[str], tuple], page: str, base: str) -
 
     Args:
         fetch (Callable[[str], tuple]): Requests a path on the preview server
-        page (str): The page's path from the repo root
+        page (str): The page's path from public/
         base (str): A path the page is served at, under the prefix
 
     Returns:
@@ -172,7 +172,7 @@ def test_stylesheets_load(fetch: Callable[[str], tuple], page: str, base: str) -
     assert hrefs
 
     for href in hrefs:
-        assert ((REPO / page).parent / href).resolve().is_file(), href
+        assert ((SITE / page).parent / href).resolve().is_file(), href
 
         status, _, body = fetch(urljoin(base, href))
         assert status == 200, href
@@ -194,7 +194,7 @@ def test_pages_link_every_stylesheet_in_one_order() -> None:
     methodology = [Path(href).name for href in linked_stylesheets("methodology/index.html")]
 
     assert home == methodology
-    assert sorted(home) == sorted(path.name for path in (REPO / "css").glob("*.css"))
+    assert sorted(home) == sorted(path.name for path in (SITE / "css").glob("*.css"))
 
 
 

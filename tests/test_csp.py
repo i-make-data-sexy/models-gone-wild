@@ -40,6 +40,7 @@ import pytest
 # ========================================================================
 
 REPO   = Path(__file__).resolve().parent.parent
+SITE   = REPO / "public"
 GTM_ID = "GTM-5FJGP2"
 
 PATHS = [
@@ -87,7 +88,7 @@ def html2canvas_style() -> str:
         str: The block's text, as the library sets it
     """
 
-    js    = (REPO / "js" / "vendor" / "html2canvas.min.js").read_text(encoding="utf-8")
+    js    = (SITE / "js" / "vendor" / "html2canvas.min.js").read_text(encoding="utf-8")
     found = re.search(
         r"\b(\w+)='(\{\\n[^']*\})',\w+=function\(A\)\{\w+\(A,\"\.\"\+(\w+)\+\":before\"\+\1\+\"([^\"]*)\.\"\+(\w+)\+\":after\"\+\1\)\}",
         js,
@@ -173,13 +174,13 @@ def test_page_loads_gtm_first(page: str) -> None:
     Checks a page's first script is js/gtm.js carrying the container ID
 
     Args:
-        page (str): The page's path from the repo root
+        page (str): The page's path from public/
 
     Returns:
         None
     """
 
-    html  = (REPO / page).read_text(encoding="utf-8")
+    html  = (SITE / page).read_text(encoding="utf-8")
     first = re.search(r"<script\b[^>]*>", html).group(0)
 
     assert re.search(r'src="(\.\./)?js/gtm\.js"', first)
@@ -192,13 +193,13 @@ def test_page_carries_the_noscript_frame(page: str) -> None:
     Checks the tag's noscript fallback frame sits right after the body tag
 
     Args:
-        page (str): The page's path from the repo root
+        page (str): The page's path from public/
 
     Returns:
         None
     """
 
-    html  = (REPO / page).read_text(encoding="utf-8")
+    html  = (SITE / page).read_text(encoding="utf-8")
     frame = (
         f'<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={GTM_ID}" '
         'height="0" width="0" class="gtm-noscript-frame"></iframe></noscript>'
