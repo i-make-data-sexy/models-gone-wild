@@ -108,6 +108,12 @@ grep -n "Last updated" public/index.html
 
 Confirm the grep shows the new date, and report the old and new dates in the proposal.
 
+Then redraw the share cards, since the Threat Matrix and Cases by Lab cards are images drawn from the case data and `tests/test_share.py` fails until they match it:
+
+```bash
+venv/bin/python3 scripts/share_cards.py
+```
+
 Run every check from `UPDATE.md` plus:
 
 ```bash

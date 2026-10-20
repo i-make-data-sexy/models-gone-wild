@@ -1,0 +1,66 @@
+<!-- ========================================================================
+       About This File
+     ======================================================================== -->
+
+<!-- The three share cards, opened from disk by scripts/share_cards.py,
+     which screenshots each card into public/img/. It loads the app's own
+     fonts, tokens, case data, and mugshots from public/, and cards.js
+     draws the charts from the live cases. -->
+
+
+
+<!-- ========================================================================
+       Page Layout
+     ======================================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Share Cards: Models Gone Wild</title>
+    <link rel="stylesheet" href="../../public/css/fonts.css">
+    <link rel="stylesheet" href="../../public/css/variables.css">
+    <link rel="stylesheet" href="cards.css">
+</head>
+
+<body>
+    <div class="card" id="lineup">
+        <div class="head">
+            <div class="wanted">Wanted</div>
+            <div class="titles">
+                <div class="bureau">Bureau of Model Containment</div>
+                <div class="elite">Models Gone Wild <span class="horns">🤘</span></div>
+            </div>
+        </div>
+        <div class="row"></div>
+        <div class="foot"><div class="bureau">AI Containment Registry · Field Registry 2026</div></div>
+    </div>
+
+    <div class="card chart-card" id="threat-matrix">
+        <div class="side">
+            <div class="bureau">Bureau of Model Containment</div>
+            <div class="wanted">Threat<br>Matrix</div>
+            <div class="elite">Models Gone Wild <span class="horns">🤘</span></div>
+            <div class="legend"><span><i class="self"></i>Self-reported</span><span><i class="tip"></i>Tipped off</span></div>
+        </div>
+        <svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <div class="card chart-card" id="lab-counts">
+        <div class="side">
+            <div class="bureau">Bureau of Model Containment</div>
+            <div class="wanted">Cases<br>by Lab</div>
+            <div class="elite">Models Gone Wild <span class="horns">🤘</span></div>
+            <div class="legend"><span><i class="self"></i>Self-reported</span><span><i class="tip"></i>Tipped off</span></div>
+        </div>
+        <svg viewBox="0 0 610 470" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <script src="../../public/js/cases.js"></script>
+    <script src="../../public/js/glossary.js"></script>
+    <script src="../../public/js/labels.js"></script>
+    <script src="../../public/js/text.js"></script>
+    <script src="../../public/js/mugshot.js"></script>
+    <script src="cards.js"></script>
+</body>
+</html>
