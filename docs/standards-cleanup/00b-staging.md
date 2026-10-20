@@ -20,7 +20,7 @@ Every other Annielytics app deploys a branch to staging, gets checked there, and
 
 1. Confirm `~/apps/staging/models-gone-wild` does not exist. If it does, stop and ask.
 2. Clone: `cd ~/apps/staging && git clone git@github.com:i-make-data-sexy/models-gone-wild.git models-gone-wild`. It starts on `main`.
-3. Back up the staging config: `sudo cp /etc/nginx/sites-available/staging.annielytics.conf /etc/nginx/sites-available/staging.annielytics.conf.bak.$(date +%Y%m%d-%H%M%S)`.
+3. Back up the staging config: `sudo cp /etc/nginx/sites-available/staging.annielytics.conf /etc/nginx/backup/staging.annielytics.conf.bak.$(date +%Y%m%d-%H%M%S)`.
 4. Add the six blocks from production's config (lines 310 to 372 of `annielytics.conf`) to the staging config, after the other `/tools/` apps, with two changes: every `alias` points at `/home/anniecushing/apps/staging/models-gone-wild/`, and each block that serves a file gets the loopback exception:
 
    ```nginx
