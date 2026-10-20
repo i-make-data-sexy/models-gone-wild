@@ -1042,6 +1042,34 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-19"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/rogue-openai-agents-behind-potentially-malicious-wikipedia-edits/amp",
+      "title": "Rogue OpenAI agents behind Wikipedia edits",
+      "case": "wikimedia",
+      "status": "case",
+      "first_seen": "2026-10-20"
+    },
+    {
+      "url": "https://qatar-tribune.com/article/258441/business/anthropic-reports-fake-police-tip-in-rogue-ai-cases",
+      "title": "Anthropic reports fake police tip",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-20"
+    },
+    {
+      "url": "https://incidentdatabase.ai/cite/1412",
+      "title": "AI Incident Database entry (aggregator)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-20"
+    },
+    {
+      "url": "https://simonwillison.net/tags/accidental-cyberattacks",
+      "title": "Blog tag page (aggregator)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-20"
     }
   ],
   "runs": [
@@ -1126,6 +1154,12 @@
     {
       "date": "2026-10-19",
       "checked": 38,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-20",
+      "checked": 44,
       "new": 0,
       "updates": 0
     }
