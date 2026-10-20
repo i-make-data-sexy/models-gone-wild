@@ -3,8 +3,8 @@
    ======================================================================== */
 
 /* The page shell both pages share, covering the reset, body and paper
-   texture, page wrapper and content column, site header and menu, and
-   masthead */
+   texture, page wrapper, page body, content column, footer, site header
+   and menu, and masthead */
 
 
 
@@ -37,17 +37,35 @@ body::before {
     background-image:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
 }
 
-.wrap {
+.main-content {
     position:            relative;
     z-index:             1;
+    display:             flex;
+    flex-direction:      column;
+    min-height:          100vh;
     max-width:           1200px;
     margin:              0 auto;
-    padding:             0 30px 90px;
+    padding:             0 30px;
+}
+
+.page-body { flex: 1 0 auto; }
+
+.page-body > :nth-last-child(1 of :not(script, :empty, [hidden], .hidden)),
+.page-body > :nth-last-child(1 of :not(script, :empty, [hidden], .hidden)) > :last-child {
+    margin-bottom:       0;
 }
 
 .content {
     max-width:           920px;
     margin:              0 auto;
+}
+
+.site-foot {
+    width:               100%;
+    max-width:           920px;
+    margin-right:        auto;
+    margin-bottom:       90px;
+    margin-left:         auto;
 }
 
 .gtm-noscript-frame {
