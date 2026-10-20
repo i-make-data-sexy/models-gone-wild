@@ -3,7 +3,7 @@
    ======================================================================== */
 
 /* The wanted poster that opens over the home page for a case, with its
-   download, copy, and close buttons, and the site footer both pages share */
+   download, copy, and close buttons */
 
 
 
@@ -309,16 +309,3 @@
     background:      var(--stamp-red);
     outline:         none;
 }
-
-footer.site-foot {
-    margin-top:      60px;
-    padding-top:     26px;
-    border-top:      3px double var(--rule);
-    text-align:      center;
-    font-size:       var(--font-size-site-footer);
-    color:           var(--ink-soft);
-    line-height:     var(--line-height-site-footer);
-    font-family:     'Special Elite',monospace;
-}
-
-footer.site-foot b { color: var(--ink); }

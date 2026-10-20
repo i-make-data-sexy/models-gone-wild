@@ -34,7 +34,7 @@
 }
 
 @media only screen and (max-width:800px) {
-    .wrap { padding: 0 20px 90px; }
+    .main-content { padding: 0 20px; }
 
     .site-header {
         flex-direction:   column;
