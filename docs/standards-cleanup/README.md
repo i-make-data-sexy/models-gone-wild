@@ -229,7 +229,7 @@ Answer these before running the steps. Record each answer here because the step 
 
 Steps F1 and F2 sit right after step 3, the last step done when Annie moved the reformat to the front. Steps 9A and 9B follow F2 under decision 31, so F3 to F7 and every later step work in formatted files, with the JavaScript already in `js/`. Step 0B sits after step 0 because every later step deploys to it. Step 9A comes before 9B so the data move, which touches the most tooling, lands on its own. Step 10A comes before 10B because the policy would block the Google Fonts rewrite. Step 13A builds the URL list that proves 13B's changes, and splits the baseline's URL step so each half fits one session.
 
-After step 13B, one server-wide pass remains outside this app, for the nginx backups and `server_tokens`. Its prompt is in [server-wide-followup.md](server-wide-followup.md).
+After step 13B, one server-wide pass ran outside this app, for the nginx backups and `server_tokens`. It was done on 2026-10-20, and [server-wide-followup.md](server-wide-followup.md) records what changed.
 
 ## Rules every step follows
 
@@ -244,7 +244,7 @@ After step 13B, one server-wide pass remains outside this app, for the nginx bac
 - Formatting is a gate, not a nicety. Every file a step changes or creates ends clean on `python3 -I ~/.claude/formatting-tools/check_format.py` and `python3 ~/.claude/skills/annielytics-comment-style/scripts/check_style.py`, matching AI Strategy, per "Formatting comes first". Run both before committing, fix every finding, and re-run the formatter where a change moved a column. From step F3 on, the expected comment-style count is 0. The one standing exception is the vendored `js/html2canvas.min.js`, which stays as shipped.
 - Every relative path stays relative. Run the leading-slash check from `UPDATE.md` before every deploy. The two exceptions are `404.html`'s `<base href>` (step 12) and the absolute canonical and share URLs (step 13B), each allowed by name in the test.
 - Server `.env` changes are Annie's to make by hand. Claude gives the exact line and file and never edits a `.env` with a command.
-- An nginx, firewall, or server package change gets a row in the PCI Network Security Change Log, which Claude writes into the Google Sheet itself (tab "PCI Compliance Log", read the tab first, write below the last filled row, never use the append call, read it back), as `~/.claude/CLAUDE.md` describes. Back up the config first, run `sudo nginx -t` before every reload, and wait two seconds after a reload before checking.
+- An nginx, firewall, or server package change gets a row in the PCI Network Security Change Log, which Claude writes into the Google Sheet itself (tab "PCI Compliance Log", read the tab first, write below the last filled row, never use the append call, read it back), as `~/.claude/CLAUDE.md` describes. Back up the config into `/etc/nginx/backup/` first, never into `sites-available/`, run `sudo nginx -t` before every reload, and wait two seconds after a reload before checking.
 - Plan and code prose follows `~/.claude/rules/editorial/annielytics-writing-rules.md`.
 - Exporting the prompts to an Evernote file follows `~/.claude/rules/coding/evernote-exports.md`.
 

@@ -10,6 +10,14 @@ Both items were checked on the server on 2026-10-16, read only.
 - `/etc/nginx/sites-available/` holds 53 backups: 23 of `annielytics.conf` and 30 of `staging.annielytics.conf`. Only the two live files are linked from `sites-enabled/`, so the backups do nothing, but they bury the live files. The count will be higher by the time this runs, since every nginx change in the cleanup makes another one.
 - `/etc/nginx/backup/` already exists and holds two old files from May 2025. It sits outside both `sites-available/` and `sites-enabled/`, so nginx never reads it.
 
+## Done on 2026-10-20
+
+- `server_tokens off` is on, at line 24 of `nginx.conf`. The origin now answers with `Server: nginx`, and the public header still reads `cloudflare`. The old file is `/etc/nginx/backup/nginx.conf.bak.20261020-202544`.
+- The 83 backups (37 of `annielytics.conf`, 46 of `staging.annielytics.conf`) moved into `/etc/nginx/backup/sites-available-20261020/`. `sites-available/` holds the two live configs and Ubuntu's unlinked `default`, which stays since it is the package's file, not a backup.
+- `sudo nginx -t` passed before the reload. The production root and all eight apps still return 200 at the origin, and staging matches its baseline.
+- Two rows went into the PCI Network Security Change Log, rows 82 and 83.
+- New backups go flat in `/etc/nginx/backup/` as `<file>.bak.<YYYYMMDD-HHMMSS>`. Rule 17 of `~/.claude/rules/security/server-security.md` says so, and the backup commands in `~/.claude/skills/DEPLOY.md`, the `x-script-name-sweep` skill, the archived Canvas move rule, step 0B, and the README's rules now point there.
+
 ## Paste-ready prompt
 
 ```
