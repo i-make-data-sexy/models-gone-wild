@@ -177,15 +177,23 @@ location ~* ^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:j
 # a return is the one use nginx documents as safe inside a location. The
 # page's script also tidies a ?view= link on arrival, which covers a
 # local preview and anything that slips past these.
+#
+# The third if sends an index.html address to its folder, so a page has
+# one URL. It reads $request_uri, the address as requested, since the
+# index directive's own internal hop to index.html would loop on a plain
+# location. The share snippet adds the canonical Link header and swaps
+# each view's share tags into the page (see below).
 location /tools/models-gone-wild/ {
     if ($arg_view = matrix) { return 301 /tools/models-gone-wild/threat-matrix/; }
     if ($arg_view = labs)   { return 301 /tools/models-gone-wild/lab-counts/; }
+    if ($request_uri ~ "^/tools/models-gone-wild/((?:threat-matrix|lab-counts|poster/[a-z0-9-]+|methodology)/)?index\.html(?:\?.*)?$") { return 301 /tools/models-gone-wild/$1; }
 
     alias /home/anniecushing/apps/models-gone-wild/public/;
     index index.html;
     error_page 404 /tools/models-gone-wild/404.html;
     add_header Cache-Control "no-cache, no-store, must-revalidate" always;
     include snippets/models-gone-wild-headers.conf;
+    include snippets/models-gone-wild-share.conf;
 }
 ```
 
@@ -201,7 +209,9 @@ The rest of the clone needs no rule here. The aliases point into `public/`, so `
 
 The security headers come from `deploy/nginx/headers.conf` in the repo, copied to `/etc/nginx/snippets/models-gone-wild-headers.conf` (production) and `/etc/nginx/snippets/models-gone-wild-headers-staging.conf` (staging). Nginx drops inherited `add_header` lines in any block that sets its own, so each serving block includes the snippet itself. When the repo file changes, copy it to the staging snippet during the build and to the production snippet at ship time. `scripts/serve.py` reads the same file, so the local preview sends the same headers.
 
-The same snippet carries the Content Security Policy, enforced on every response. It allows only the app's own files, plus Google Tag Manager and the hosts GA4 sends hits to, which are copied from AI Timeline's policy. `style-src` also names one hash, for the fixed `<style>` block html2canvas adds while it copies a poster (see `docs/VENDORED.md`). A Custom HTML tag added in GTM would be refused, since the policy allows no inline script. `scripts/csp-walk/run.sh <ref>` walks every page and state under a ref's policy, a poster download included, and `tests/test_csp.py` holds the policy's shape.
+Each page's canonical and its share tags come from two more files in the repo. `deploy/nginx/canonical-map.conf` is installed once as `/etc/nginx/conf.d/models-gone-wild-canonical.conf`, which both servers load, since a `map` can be defined only once in the shared `http` context. It works out each permalink's canonical from `$request_uri`, which keeps the original address through the rewrites, plus each view's share title, descriptions, URL, image, and alt text. It only defines variables, so a server sends nothing new until its page block includes the share snippet. `deploy/nginx/share.conf` is that snippet, copied to `/etc/nginx/snippets/models-gone-wild-share-staging.conf` (staging) and `/etc/nginx/snippets/models-gone-wild-share.conf` (production). It sends the canonical as a `Link: <url>; rel="canonical"` header, empty for assets, the 404 page, and every other address, and its `sub_filter` lines swap the view's values into `index.html` in place of the home page's tags, so the Threat Matrix and Cases by Lab links each share their own card. Every view and poster serves the same HTML, which is why the canonical is a header rather than a tag in the page. Staging's canonicals point at `www`, so staging never claims to be the canonical copy. `scripts/serve.py` reads both files, so the local preview sends the same header and the same tags, and `tests/test_share.py` holds them in agreement. When either file changes, install it on staging during the build and on production at ship time, then reload and add a PCI row.
+
+The headers snippet also carries the Content Security Policy, enforced on every response. It allows only the app's own files, plus Google Tag Manager and the hosts GA4 sends hits to, which are copied from AI Timeline's policy. `style-src` also names one hash, for the fixed `<style>` block html2canvas adds while it copies a poster (see `docs/VENDORED.md`). A Custom HTML tag added in GTM would be refused, since the policy allows no inline script. `scripts/csp-walk/run.sh <ref>` walks every page and state under a ref's policy, a poster download included, and `tests/test_csp.py` holds the policy's shape.
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
@@ -366,15 +376,19 @@ location /tools/models-gone-wild/ {
     allow ::1;
     deny all;
 
-    # Old ?view= links from before the permalinks, moved for good.
+    # Old ?view= links from before the permalinks, moved for good, then
+    # an index.html address to its folder. $request_uri is the address
+    # as requested, so the index directive's own hop cannot loop.
     if ($arg_view = matrix) { return 301 /tools/models-gone-wild/threat-matrix/; }
     if ($arg_view = labs)   { return 301 /tools/models-gone-wild/lab-counts/; }
+    if ($request_uri ~ "^/tools/models-gone-wild/((?:threat-matrix|lab-counts|poster/[a-z0-9-]+|methodology)/)?index\.html(?:\?.*)?$") { return 301 /tools/models-gone-wild/$1; }
 
     alias /home/anniecushing/apps/staging/models-gone-wild/public/;
     index index.html;
     error_page 404 /tools/models-gone-wild/404.html;
     add_header Cache-Control "no-cache, no-store, must-revalidate" always;
     include snippets/models-gone-wild-headers-staging.conf;
+    include snippets/models-gone-wild-share-staging.conf;
 }
 ```
 

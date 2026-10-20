@@ -43,7 +43,7 @@ printf "%s\n" "$SLUGS" | while IFS= read -r slug; do
     echo "$PREFIX/poster/$slug/"
 done
 
-for page in "/methodology/" "/methodology/index.html" "/no-such-page/" "" "/threat-matrix" "/poster/$FIRST" "/?view=matrix" "/?view=labs"; do
+for page in "/methodology/" "/methodology/index.html" "/threat-matrix/index.html" "/poster/$FIRST/index.html" "/no-such-page/" "" "/threat-matrix" "/poster/$FIRST" "/?view=matrix" "/?view=labs"; do
     echo "$PREFIX$page"
 done
 

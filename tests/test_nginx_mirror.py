@@ -51,6 +51,9 @@ PATHS = [
     "/threat-matrix/poster/sol-hugging-face/",
     "/methodology/",
     "/methodology/index.html",
+    "/threat-matrix/index.html",
+    "/poster/sol-hugging-face/index.html",
+    "/index.html?view=matrix",
     "/no-such-page/",
     "/?view=matrix",
     "/?view=labs",
@@ -79,7 +82,7 @@ def deploy_blocks(heading: str) -> list[dict]:
         heading (str): The start of the line the code block follows
 
     Returns:
-        list[dict]: Each block's modifier, pattern, returns, rewrites, view redirects, and whether it serves files
+        list[dict]: Each block's modifier, pattern, returns, rewrites, view and index.html redirects, and whether it serves files
     """
 
     text  = (REPO / "DEPLOY.md").read_text(encoding="utf-8")
@@ -93,6 +96,7 @@ def deploy_blocks(heading: str) -> list[dict]:
             "return":   re.search(r"^\s*return 301 (\S+);", body, re.M),
             "rewrite":  re.search(r"^\s*rewrite (\S+) (\S+) last;", body, re.M),
             "views":    dict(re.findall(r"if \(\$arg_view = (\w+)\)\s*\{\s*return 301 (\S+);", body)),
+            "index":    re.findall(r'if \(\$request_uri ~ "([^"]+)"\)\s*\{\s*return 301 (\S+);', body),
             "serves":   "alias " in body,
         }
         for modifier, pattern, body in re.findall(r"^location\s+(=|~\*|~|)\s*(\S+)\s*\{\n(.*?)^\}", code, re.M | re.S)
@@ -107,7 +111,7 @@ def routing(blocks: list[dict]) -> list[tuple]:
         blocks (list[dict]): The blocks deploy_blocks returns
 
     Returns:
-        list[tuple]: Each block's modifier, pattern, return, rewrite, view redirects, and serving flag
+        list[tuple]: Each block's modifier, pattern, return, rewrite, view and index.html redirects, and serving flag
     """
 
     return [
@@ -117,6 +121,7 @@ def routing(blocks: list[dict]) -> list[tuple]:
             block["return"] and block["return"].group(1),
             block["rewrite"] and block["rewrite"].groups(),
             block["views"],
+            block["index"],
             block["serves"],
         )
         for block in blocks
@@ -169,6 +174,10 @@ def nginx_resolve(blocks: list[dict], path: str) -> tuple[str | None, str | None
 
         if view in block["views"]:
             return block["views"][view], None
+
+        for pattern, target in block["index"]:
+            if found := re.search(pattern, path):
+                return found.expand(target.replace("$", "\\")), None
 
         return None, uri[len(PREFIX):] or "/"
 
