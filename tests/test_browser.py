@@ -11,9 +11,11 @@
 # own top margin on every page, and that a short page pins the footer to
 # the bottom of the window.
 #
-# The last test is the revert-and-fail proof for 8e726b4, which clamped
-# the glossary bubbles inside the reading column. Without the clamp the
-# bubbles spill past the column's edge and the test fails.
+# The tooltip tests hold every bubble 10px inside its box, the reading
+# column on the page or the open poster. The column test is the
+# revert-and-fail proof for 8e726b4, which clamped the glossary bubbles
+# inside the reading column. Without the clamp the bubbles spill past the
+# column's edge and the test fails.
 
 
 
@@ -312,6 +314,72 @@ def test_glossary_bubbles_stay_in_column(
 
     assert checked > 0
     assert not outside, "\n".join(outside)
+
+
+@pytest.mark.parametrize("viewport", [DESKTOP, PHONE], ids=["1440", "375"])
+def test_poster_bubbles_stay_in_poster(
+    open_page: Callable[[dict], tuple],
+    viewport:  dict,
+) -> None:
+    """
+    Checks every bubble in an open poster sits 10px inside the poster on all four sides
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+        viewport (dict): The width and height in pixels
+
+    Returns:
+        None
+    """
+
+    tip_gap     = 10
+    tip_gaps_js = """() => {
+        const tip    = document.getElementById("tip").getBoundingClientRect();
+        const poster = document.querySelector("#overlay .poster").getBoundingClientRect();
+        return {
+            left:   tip.left - poster.left,
+            right:  poster.right - tip.right,
+            top:    tip.top - poster.top,
+            bottom: poster.bottom - tip.bottom,
+        };
+    }"""
+
+    page, _ = open_page(viewport, "poster/sol-hugging-face/")
+    page.wait_for_selector("#overlay.open")
+    checked = 0
+    outside = []
+
+    for trigger in page.locator("#overlay .poster [data-def], #overlay .poster [data-tip]").all():
+        trigger.scroll_into_view_if_needed()
+        page.wait_for_timeout(50)
+        page.mouse.move(0, 0)
+        trigger.hover()
+        page.wait_for_selector("#tip.show")
+
+        gaps     = page.evaluate(tip_gaps_js)
+        checked += 1
+
+        if min(gaps.values()) < tip_gap - 0.5:
+            outside.append(f"{trigger.text_content()!r}: {gaps}")
+
+    assert checked > 0
+    assert not outside, "\n".join(outside)
+
+
+def test_tip_text_is_left_aligned(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks the tooltip bubble computes left-aligned text
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP)
+
+    assert page.evaluate("getComputedStyle(document.getElementById('tip')).textAlign") == "left"
 
 
 
