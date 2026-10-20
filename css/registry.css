@@ -627,9 +627,18 @@
     border:              1px solid var(--icon-btn-border);
     border-radius:       50%;
     color:               var(--ink-soft);
+    text-decoration:     none;
     cursor:              pointer;
     padding:             0;
     transition:          color .13s,border-color .13s;
+}
+
+.icon-btn,
+.icon-btn:hover,
+.icon-btn:focus,
+.icon-btn:active,
+.icon-btn:visited {
+    text-decoration:     none;
 }
 
 .icon-btn svg {

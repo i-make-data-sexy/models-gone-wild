@@ -172,7 +172,7 @@ Answer these before running the steps. Record each answer here because the step 
 19. Footer icon discs (step 12). a) Add a footer nav of discs for Methodology and the announcement post, drawn with inline SVG in the app's line-icon style rather than Font Awesome, with "Last updated" kept beneath (recommended). b) Mark the footer disc rule not applicable since the footer has no links.
     Decision: a, recorded 2026-10-16.
 20. Prose link hover (step 12). a) Keep your 2026-10-14 choice (stamp red at rest, ink on hover, no underline), and mark the sweep rule not applicable to prose links. The nav keeps its sweep (recommended). b) Add the sweep underline on hover to prose links.
-    Decision: a, recorded 2026-10-16.
+    Decision: a, recorded 2026-10-16. Step 12 marked the sweep-underline rule not applicable to prose links on 2026-10-19, keeping the no-underline style from 27ce695 (stamp red at rest, ink on hover). The nav menu keeps its sweep.
 21. An unknown poster slug (step 12). a) The page shows a "no such file" state in place of the poster and adds `<meta name="robots" content="noindex">` (recommended). b) An nginx map of valid slugs that returns a real 404, which needs an nginx change for every new case. c) Leave it.
     Decision: a, recorded 2026-10-16.
 22. The URL prefix mechanism (step 13A). a) Keep relative paths served through nginx's strip-and-rematch as the one mechanism, with `APP_BASE` and `serve.py` as mirrors a test holds in agreement (recommended since no shipped code names the prefix). b) A `<base href>` in each page, retiring the rewrites that serve assets under every permalink. c) Root-relative paths.
