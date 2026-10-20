@@ -5,8 +5,8 @@
 # Canonical and share tag tests. Every row of the URL list gets a Link
 # header naming its own permalink, or none, by the rule DEPLOY.md states;
 # each view gets its own share card; the home and Methodology pages pass
-# through the swap unchanged; and every index.html address 301s to its
-# folder.
+# through the swap unchanged; every index.html address 301s to its
+# folder; and the share cards were drawn from the current case data.
 
 
 
@@ -16,6 +16,7 @@
 
 # Standard library
 import re
+import struct
 import subprocess
 
 from collections.abc import Callable
@@ -25,7 +26,7 @@ from pathlib          import Path
 import pytest
 
 # Local
-from conftest import serve
+from conftest import load_script, serve
 
 
 
@@ -33,9 +34,10 @@ from conftest import serve
 #   Global Variables
 # ========================================================================
 
-REPO = Path(__file__).resolve().parent.parent
-SITE = REPO / "public"
-WWW  = "https://www.annielytics.com/tools/models-gone-wild"
+REPO        = Path(__file__).resolve().parent.parent
+SITE        = REPO / "public"
+WWW         = "https://www.annielytics.com/tools/models-gone-wild"
+share_cards = load_script("share_cards")
 
 VIEWS = [
     ("threat-matrix", "Threat Matrix: Models Gone Wild", "share-threat-matrix.png"),
@@ -283,3 +285,47 @@ def test_deploy_page_blocks_include_the_share_snippet(snippet: str) -> None:
 
     deploy = (REPO / "DEPLOY.md").read_text(encoding="utf-8")
     assert deploy.count(f"include snippets/{snippet};") == 1
+
+
+
+# ========================================================================
+#   Share Cards
+# ========================================================================
+
+@pytest.mark.parametrize("card", ["share.png", "share-threat-matrix.png", "share-lab-counts.png"])
+def test_card_was_drawn_from_the_current_cases(card: str) -> None:
+    """
+    Checks each card carries the current data version, so a new or rescored case fails until the cards are redrawn
+
+    Args:
+        card (str): The card's file name in public/img/
+
+    Returns:
+        None
+    """
+
+    path = SITE / "img" / card
+    data = path.read_bytes()
+
+    assert share_cards.png_version(path) == share_cards.card_data_version(), "Run venv/bin/python3 scripts/share_cards.py"
+    assert struct.unpack(">II", data[16:24]) == (1200, 630)
+    assert len(data) < 5 * 1024 * 1024
+
+
+@pytest.mark.parametrize("page", ["index.html", "methodology/index.html"])
+def test_page_names_the_current_card_version(page: str) -> None:
+    """
+    Checks every share image URL in a page carries the current data version
+
+    Args:
+        page (str): The page's file under public/
+
+    Returns:
+        None
+    """
+
+    text     = (SITE / page).read_text(encoding="utf-8")
+    versions = re.findall(r"img/share[\w-]*\.png\?v=(\w+)", text)
+
+    assert len(versions) == 2
+    assert set(versions) == {share_cards.card_data_version()}, "Run venv/bin/python3 scripts/share_cards.py"
