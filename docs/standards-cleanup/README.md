@@ -225,7 +225,7 @@ Answer these before running the steps. Record each answer here because the step 
 | 11 | [11-layout.md](11-layout.md) | No `<main class="page-body">`, no pinned footer. | Medium | Done 2026-10-19 (merge 7620f00) |
 | 12 | [12-design-rules.md](12-design-rules.md) | Default 404 page, soft 404 posters, tooltip and footer gaps. | Medium | Done 2026-10-20 (merge d787a27) |
 | 13A | [13a-web-root.md](13a-web-root.md) | No URL list, the prefix mirrors, repo tooling in the web root. | Medium, highest SEO risk | Done 2026-10-20 (merge 451fd97) |
-| 13B | [13b-canonicals.md](13b-canonicals.md) | No canonicals, the `/index.html` duplicates, no share tags. | Small, SEO risk | Not started |
+| 13B | [13b-canonicals.md](13b-canonicals.md) | No canonicals, the `/index.html` duplicates, no share tags. | Small, SEO risk | Done 2026-10-20 (merge 50925d7) |
 
 Steps F1 and F2 sit right after step 3, the last step done when Annie moved the reformat to the front. Steps 9A and 9B follow F2 under decision 31, so F3 to F7 and every later step work in formatted files, with the JavaScript already in `js/`. Step 0B sits after step 0 because every later step deploys to it. Step 9A comes before 9B so the data move, which touches the most tooling, lands on its own. Step 10A comes before 10B because the policy would block the Google Fonts rewrite. Step 13A builds the URL list that proves 13B's changes, and splits the baseline's URL step so each half fits one session.
 
