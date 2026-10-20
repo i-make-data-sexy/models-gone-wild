@@ -138,7 +138,7 @@ location ~ ^/tools/models-gone-wild/(threat-matrix|lab-counts)$ {
 # the browser requests as /threat-matrix/css/base.css and so on. `last`
 # reruns location matching on the rewritten URI, so the 404 and cache
 # rules still apply to it. Keep the slug list in step with
-# VIEW_SLUGS in js/views.js and scripts/serve.py.
+# VIEW_SLUGS in public/js/views.js and scripts/serve.py.
 location ~ ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/ {
     rewrite ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/(.*)$ /tools/models-gone-wild/$1 last;
 }
@@ -146,7 +146,7 @@ location ~ ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/ {
 # The wanted-poster permalinks, /poster/<slug>/. Same page again, with
 # the poster read from the URL by the page's script, so they get the same
 # trailing-slash 301 and the same strip-and-rematch as the views. Keep the
-# slug pattern in step with posterFromUrl in js/views.js and scripts/serve.py.
+# slug pattern in step with posterFromUrl in public/js/views.js and scripts/serve.py.
 location ~ ^/tools/models-gone-wild/poster/([a-z0-9-]+)$ {
     return 301 /tools/models-gone-wild/poster/$1/;
 }
