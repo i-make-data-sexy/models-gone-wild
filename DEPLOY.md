@@ -194,7 +194,7 @@ location /tools/models-gone-wild/ {
     alias /home/anniecushing/apps/models-gone-wild/;
     index index.html;
     error_page 404 /tools/models-gone-wild/404.html;
-    add_header Cache-Control "no-cache, no-store, must-revalidate";
+    add_header Cache-Control "no-cache, no-store, must-revalidate" always;
     include snippets/models-gone-wild-headers.conf;
 }
 ```
@@ -203,7 +203,7 @@ The trailing slashes on both the `location` and the `alias` have to match. Dropp
 
 `try_files` is deliberately absent. The `alias` plus `index` pair already serves the page, a missing file 404s on its own, and `try_files` combined with `alias` has a long-standing resolution quirk. Adding it back buys nothing.
 
-The `error_page 404` lines in the page block and the repo-file block answer an unknown path, and a blocked repo file, with `404.html` and a 404 status rather than nginx's built-in page. The redirect to `404.html` is internal, so it lands in the page block and carries that block's headers. `scripts/serve.py` does the same for the local preview.
+The `error_page 404` lines in the page block and the repo-file block answer an unknown path, and a blocked repo file, with `404.html` and a 404 status rather than nginx's built-in page. The redirect to `404.html` is internal, so it lands in the page block and carries that block's headers. The page block's `Cache-Control` carries `always` so the 404 is sent no-cache too, since nginx adds a header without `always` only to 2xx and 3xx responses. `scripts/serve.py` does the same for the local preview.
 
 The `css/` directory and the app's own scripts in `js/` need no rule of their own. The asset regex above covers `js/vendor/` and `img/` only, so a request for `css/base.css` or `js/cases.js` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheets change whenever the design does and the data scripts change with every case, and a hard-cached copy would strand readers on an old one. Do not widen the asset regex to `css` or all of `js` without also solving cache-busting.
 
@@ -388,7 +388,7 @@ location /tools/models-gone-wild/ {
     alias /home/anniecushing/apps/staging/models-gone-wild/;
     index index.html;
     error_page 404 /tools/models-gone-wild/404.html;
-    add_header Cache-Control "no-cache, no-store, must-revalidate";
+    add_header Cache-Control "no-cache, no-store, must-revalidate" always;
     include snippets/models-gone-wild-headers-staging.conf;
 }
 ```
