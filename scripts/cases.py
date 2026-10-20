@@ -5,7 +5,7 @@
 """
 The one loader the check scripts and the tests use to read the cases.
 
-The cases live in the CASES array in js/cases.js, one object per case,
+The cases live in the CASES array in public/js/cases.js, one object per case,
 with the object's braces at four spaces and its keys at eight. A case's
 block runs from its opening brace to the closing brace at four spaces, so
 a nested object or list inside it never ends the block early. Keys on a
@@ -35,7 +35,7 @@ from pathlib   import Path
 @lru_cache(maxsize=1)
 def load_cases_js() -> str:
     """
-    Reads the case source from js/cases.js
+    Reads the case source from public/js/cases.js
 
     Args:
         None
@@ -46,7 +46,7 @@ def load_cases_js() -> str:
 
     repo = Path(__file__).resolve().parent.parent
 
-    return (repo / "js" / "cases.js").read_text(encoding="utf-8")
+    return (repo / "public" / "js" / "cases.js").read_text(encoding="utf-8")
 
 
 def case_blocks(js: str) -> dict[str, str]:

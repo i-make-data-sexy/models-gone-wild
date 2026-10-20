@@ -3,7 +3,7 @@
 # ========================================================================
 
 """
-Checks every case's poster slug in js/cases.js.
+Checks every case's poster slug in public/js/cases.js.
 
 Each slug becomes a public URL, /poster/<slug>/, so every case needs
 one, no two cases may share one, and each must be lowercase letters,

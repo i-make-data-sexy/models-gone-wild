@@ -32,9 +32,9 @@ from conftest import cases
 #   Global Variables
 # ========================================================================
 
-REPO     = Path(__file__).resolve().parent.parent
-PAGES    = [REPO / "index.html", REPO / "methodology" / "index.html", REPO / "404.html"]
-BALANCED = sorted(path.name for path in (REPO / "js").glob("*.js"))
+SITE     = Path(__file__).resolve().parent.parent / "public"
+PAGES    = [SITE / "index.html", SITE / "methodology" / "index.html", SITE / "404.html"]
+BALANCED = sorted(path.name for path in (SITE / "js").glob("*.js"))
 
 
 
@@ -86,15 +86,15 @@ def test_no_leading_slash_paths() -> None:
         None
     """
 
-    slash_files = PAGES + sorted((REPO / "css").glob("*.css"))
+    slash_files = PAGES + sorted((SITE / "css").glob("*.css"))
     leading_re  = re.compile(r"""(href|src|action|url\()\s*=?\s*["']/[^/]""")
     allowed     = {("404.html", '<base href="/tools/models-gone-wild/">')}
 
     hits = [
-        f"{path.relative_to(REPO)}:{number}: {line.strip()}"
+        f"{path.relative_to(SITE)}:{number}: {line.strip()}"
         for path in slash_files
         for number, line in enumerate(read(path).splitlines(), 1)
-        if leading_re.search(line) and (str(path.relative_to(REPO)), line.strip()) not in allowed
+        if leading_re.search(line) and (str(path.relative_to(SITE)), line.strip()) not in allowed
     ]
     assert not hits, "\n".join(hits)
 
@@ -116,7 +116,7 @@ def test_no_stylesheet_over_800_lines() -> None:
     """
 
     limit  = 800
-    sheets = sorted((REPO / "css").glob("*.css"))
+    sheets = sorted((SITE / "css").glob("*.css"))
     long   = [f"{path.name}: {count} lines" for path in sheets if (count := len(read(path).splitlines())) > limit]
 
     assert sheets
@@ -139,7 +139,7 @@ def test_index_html_holds_no_case_data() -> None:
         None
     """
 
-    page = read(REPO / "index.html")
+    page = read(SITE / "index.html")
     assert "CASES = [" not in page
     assert "GLOSSARY = {" not in page
 
@@ -156,7 +156,7 @@ def test_scripts_balance(name: str) -> None:
         None
     """
 
-    js = read(REPO / "js" / name)
+    js = read(SITE / "js" / name)
     assert js.count("{") == js.count("}")
     assert js.count("(") == js.count(")")
     assert js.count("`") % 2 == 0
@@ -236,7 +236,7 @@ def test_site_headers_match() -> None:
     assert home == methodology == not_found
 
 
-@pytest.mark.parametrize("path", PAGES, ids=lambda path: str(path.relative_to(REPO)))
+@pytest.mark.parametrize("path", PAGES, ids=lambda path: str(path.relative_to(SITE)))
 def test_comments_only_above_html(path: Path) -> None:
     """
     Checks a page opens with its About banner and holds no comment inside <html>

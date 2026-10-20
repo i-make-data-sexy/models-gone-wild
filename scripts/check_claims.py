@@ -43,7 +43,7 @@ def load_cases(js: str) -> list:
     Pulls every case out of the case source
 
     Args:
-        js (str): The case source from js/cases.js
+        js (str): The case source from public/js/cases.js
 
     Returns:
         list: One dict per case with its id, alias, lab, dates, charge, caution, scores, and outcome

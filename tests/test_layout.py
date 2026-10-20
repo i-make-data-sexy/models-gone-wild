@@ -29,8 +29,8 @@ import pytest
 #   Global Variables
 # ========================================================================
 
-REPO  = Path(__file__).resolve().parent.parent
-PAGES = [REPO / "index.html", REPO / "methodology" / "index.html", REPO / "404.html"]
+SITE  = Path(__file__).resolve().parent.parent / "public"
+PAGES = [SITE / "index.html", SITE / "methodology" / "index.html", SITE / "404.html"]
 
 
 
@@ -169,10 +169,10 @@ def test_no_page_body_end_or_old_wrapper() -> None:
     """
 
     retired = re.compile(r'page-body-end|class="wrap"|\.wrap\b')
-    files   = PAGES + sorted((REPO / "css").glob("*.css"))
+    files   = PAGES + sorted((SITE / "css").glob("*.css"))
 
     hits = [
-        f"{path.relative_to(REPO)}:{number}: {line.strip()}"
+        f"{path.relative_to(SITE)}:{number}: {line.strip()}"
         for path in files
         for number, line in enumerate(read(path).splitlines(), 1)
         if retired.search(line)

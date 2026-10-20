@@ -82,10 +82,10 @@ Working dir: ~/Dropbox/Annielytics/Code/Python/Models Gone Wild
 Change:
   [describe what should look or behave differently]
 
-Branch off up-to-date main. The markup lives in index.html, the behavior in
-the scripts in js/ that DEPLOY.md lists, the styles in the seven files in css/, and
-the case data in js/cases.js and js/glossary.js, so tell me what you plan
-to touch before you touch it. Watch for the traps listed in
+Branch off up-to-date main. The markup lives in public/index.html, the
+behavior in the scripts in public/js/ that DEPLOY.md lists, the styles in the
+eight files in public/css/, and the case data in public/js/cases.js and
+public/js/glossary.js, so tell me what you plan to touch before you touch it. Watch for the traps listed in
 UPDATE.md, especially relative paths and the poster overlay's stacking order.
 Run the checks, commit, and push the branch. Deploy it to staging as
 "Deploying the change" in UPDATE.md describes, give me the staging links,
@@ -95,7 +95,7 @@ I do, finish the deploy as that section describes and give me the live URL.
 
 ## The case schema
 
-Every case is one object in the `CASES` array in `js/cases.js`, and the table below is the only record of its fields. The object's braces sit at four spaces and its keys at eight. A field on a line of its own lines up on the value column the other cases share (`whyHarm:       "..."`), and fields packed several to a line keep single spacing (`id:"sol", slug:"sol-hugging-face"`). After adding or editing a case, run `python3 -I ~/.claude/formatting-tools/format_js.py js/cases.js js/glossary.js` to set the column, and `scripts/cases.py` is the one loader the checks use to read it.
+Every case is one object in the `CASES` array in `public/js/cases.js`, and the table below is the only record of its fields. The object's braces sit at four spaces and its keys at eight. A field on a line of its own lines up on the value column the other cases share (`whyHarm:       "..."`), and fields packed several to a line keep single spacing (`id:"sol", slug:"sol-hugging-face"`). After adding or editing a case, run `python3 -I ~/.claude/formatting-tools/format_js.py public/js/cases.js public/js/glossary.js` to set the column, and `scripts/cases.py` is the one loader the checks use to read it.
 
 | Field | Where it shows | Constraints |
 |---|---|---|
@@ -230,11 +230,11 @@ Two things are manual. The footer's `Last updated: <date>` line has to be edited
 
 The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry. The Outcome and Kind dropdowns are hard-coded the same way, with a matching `OUTCOME_LABEL` or `KIND_LABEL` entry per value.
 
-The Methodology page at `methodology/index.html` explains the three tabs, the disclosure chip, the card dates, every wanted-poster row, and every filter option by its dropdown name. It is plain markup, so renaming, adding, or removing any of those means editing its entry there too. Its site header is a copy of the one in `index.html`; change one and change the other. Both pages load the mobile menu from `js/menu.js`.
+The Methodology page at `public/methodology/index.html` explains the three tabs, the disclosure chip, the card dates, every wanted-poster row, and every filter option by its dropdown name. It is plain markup, so renaming, adding, or removing any of those means editing its entry there too. Its site header is a copy of the one in `public/index.html`; change one and change the other. Both pages load the mobile menu from `public/js/menu.js`.
 
 ## The glossary
 
-Security jargon gets a dotted underline and a definition on hover, tap, or keyboard focus. The terms live in the `GLOSSARY` object in `js/glossary.js`, not in the case data.
+Security jargon gets a dotted underline and a definition on hover, tap, or keyboard focus. The terms live in the `GLOSSARY` object in `public/js/glossary.js`, not in the case data.
 
 Add a term by adding one line to that object. Every case, present and future, picks it up. A term is wrapped on its FIRST appearance in each passage, so a definition is offered once rather than on every repetition, and matching ignores case while preserving whatever capitalization the prose used.
 
@@ -262,13 +262,13 @@ Nothing on the page tells the reader to tap anything. The controls say what they
 
 ## Checks before committing
 
-The pre-commit hook in `scripts/git-hooks/pre-commit` runs two gates on every commit: the formatting gate, and the design-tokens check, which blocks a raw color, font size, or line height anywhere outside `css/variables.css`. Git does not turn on a repo's hooks by itself, so a fresh clone needs this once:
+The pre-commit hook in `scripts/git-hooks/pre-commit` runs two gates on every commit: the formatting gate, and the design-tokens check, which blocks a raw color, font size, or line height anywhere outside `public/css/variables.css`. Git does not turn on a repo's hooks by itself, so a fresh clone needs this once:
 
 ```bash
 git config core.hooksPath scripts/git-hooks
 ```
 
-A new color, font size, or line height becomes a token in `css/variables.css`, named for its role, and the stylesheet reads it with `var()`. The pages color through classes, and the scripts read a color with `cssToken("--name")` from `js/labels.js`, so `tests/test_design_tokens.py` fails on any hex in the pages or in `js/`.
+A new color, font size, or line height becomes a token in `public/css/variables.css`, named for its role, and the stylesheet reads it with `var()`. The pages color through classes, and the scripts read a color with `cssToken("--name")` from `public/js/labels.js`, so `tests/test_design_tokens.py` fails on any hex in the pages or in `public/js/`.
 
 Run all of these from the repo root. Each takes seconds.
 
@@ -277,17 +277,17 @@ Run all of these from the repo root. Each takes seconds.
 #    slash resolves to the site root and 404s under /tools/models-gone-wild/.
 #    Both pages and every stylesheet, since the stylesheets carry url()
 #    references too.
-grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/*.css methodology/index.html 404.html \
+grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' public/index.html public/css/*.css public/methodology/index.html public/404.html \
   | grep -v '404.html:.*<base href="/tools/models-gone-wild/">'
 
-# 2. Every script in js/ still parses structurally, and
+# 2. Every script in public/js/ still parses structurally, and
 #    every case is well formed.
 python3 - <<'PY'
 import re, sys
 from pathlib import Path
 sys.path.insert(0, "scripts")
 from cases import case_blocks, load_cases_js
-for path in sorted(Path("js").glob("*.js")):
+for path in sorted(Path("public/js").glob("*.js")):
     name, js = str(path), path.read_text(encoding="utf-8")
     ok = js.count("{") == js.count("}") and js.count("(") == js.count(")") and js.count("`") % 2 == 0
     print(f"balance {name}:", "OK" if ok else "MISMATCH")
@@ -313,7 +313,7 @@ for cid, blk in case_blocks(load_cases_js()).items():
 PY
 ```
 
-Then look at it. Serve the repo at the real subpath so relative paths are exercised the way production exercises them, rather than opening the file directly.
+Then look at it. Serve `public/` at the real subpath so relative paths are exercised the way production exercises them, rather than opening the file directly.
 
 ```bash
 python3 scripts/serve.py --port 8899
@@ -372,7 +372,7 @@ ssh -i ~/.ssh/id_ed25519_imds anniecushing@208.109.215.51 \
    && git pull --ff-only origin main"
 ```
 
-Nginx only needs touching if a new kind of file is added, for example a new image directory or a stylesheet. The asset rule currently matches `js/vendor/` and `img/` only. See `DEPLOY.md` for that block.
+Nginx only needs touching if a new kind of file is added, for example a new image directory or a stylesheet. The asset rule matches `js/vendor/`, `img/`, and `fonts/` in `public/` only. See `DEPLOY.md` for that block.
 
 ## Verifying the deploy
 
@@ -390,7 +390,7 @@ Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, wh
 
 ## Where things live
 
-`index.html` carries the markup and the script. `js/cases.js` holds the `CASES` array and `js/glossary.js` the `GLOSSARY` object, both loaded before the page script, and `scripts/cases.py` is the loader every check reads them through. `methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/base.css` and the rest), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. The seven stylesheets in `css/` carry every style, linked in the order `DEPLOY.md` lists; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
+Everything the site serves lives in `public/`, the only folder nginx serves, so the docs, scripts, tests, and skill beside it are never reachable from the web. `public/index.html` carries the markup and the script. `public/js/cases.js` holds the `CASES` array and `public/js/glossary.js` the `GLOSSARY` object, both loaded before the page script, and `scripts/cases.py` is the loader every check reads them through. `public/methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/base.css` and the rest), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. The eight stylesheets in `public/css/` carry every style, linked in the order `DEPLOY.md` lists; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
 
 The stylesheets are linked relatively, as `css/base.css` and the rest. A leading slash would resolve to the site root and 404, which is what check 1 guards.
 
@@ -398,7 +398,7 @@ The stylesheets are linked relatively, as `css/base.css` and the rest. A leading
 
 Paths to local files are relative, never starting with a slash. The app is served at `/tools/models-gone-wild/`, so a leading slash resolves to the site root and 404s. Check 1 above catches this.
 
-The scripts in `js/` are classic scripts that share one global scope and run in the order `index.html` lists them. A file can call a function from a later file inside a function or a listener, but not at its top level, since that runs before the later file loads. Startup calls belong in `js/main.js`, which loads last. A new script also needs its own `<script src>` in the right place.
+The scripts in `public/js/` are classic scripts that share one global scope and run in the order `public/index.html` lists them. A file can call a function from a later file inside a function or a listener, but not at its top level, since that runs before the later file loads. Startup calls belong in `public/js/main.js`, which loads last. A new script also needs its own `<script src>` in the right place.
 
 The poster overlay sits at `z-index: 50` and the page shell at `1`. Giving the site header a stacking context above 50 puts the black band on top of the open poster. If a `position` is ever added to `.site-header`, keep its `z-index` below 50.
 
@@ -410,7 +410,7 @@ The footer's 60px top margin is the only gap above it. Margins no longer merge a
 
 The scatter gridlines step by 2.5 so the dashed quadrant divider at 5 lands on a gridline. Stepping by 2 puts the divider mid-cell and the grid reads as unevenly spaced.
 
-Nginx blocks `.md`, `.txt`, `.json`, `.yml`, and `.lock` under this path, so this file and `DEPLOY.md` are not publicly readable. Adding a data file in one of those formats means it will 404 in production even though it works locally.
+Nginx serves `public/` and nothing else, so this file, `DEPLOY.md`, and the rest of the repo are not publicly readable. Anything placed in `public/` is public, so `tests/test_root.py` fails on any file there that is not a page, stylesheet, script, font, or image. A data file the page fetches, such as a `.json`, needs its extension added to that test on purpose.
 
 After a `systemctl reload nginx`, wait a couple of seconds before checking. Old workers drain on the previous config and can answer with stale results.
 

@@ -7,8 +7,8 @@
 # The pre-commit hook. Runs the shared formatting gate on the staged files
 # of each language listed in format-languages, one per line, then the
 # design-tokens check, which blocks a raw color, font size, or line height
-# outside css/variables.css. Each skips with a printed note on a machine
-# without it.
+# outside public/css/variables.css. Each skips with a printed note on a
+# machine without it.
 
 
 

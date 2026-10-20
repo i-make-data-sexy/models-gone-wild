@@ -19,7 +19,7 @@ Turns a headline and a few links into a sourced, scored, previewable case for th
 
 1. `cd` into the repo. Confirm `git status` is clean and `main` is up to date. Branch off main (`add-<id>`). Never work on main.
 2. Read `UPDATE.md` in full. It has the schema table, the `disclosedBy` test, the escape-date rule, the charge range, and the voice rules, including never praising or grading a lab.
-3. Print the current cases so every score is calibrated against them. The cases live in the `CASES` array in `js/cases.js`, and `scripts/cases.py` is the one loader that reads them:
+3. Print the current cases so every score is calibrated against them. The cases live in the `CASES` array in `public/js/cases.js`, and `scripts/cases.py` is the one loader that reads them:
 
 ```bash
 python3 - <<'PY'
@@ -87,13 +87,13 @@ Set `reach` too, which feeds the Kind filter: `intrusion` when the model went af
 
 ## Step 5: Draft and stage
 
-Write the full case object, including `whyComplexity` and `whyHarm`, then any `GLOSSARY` terms the prose introduces. Insert the case into `CASES` in `js/cases.js` and the terms into `GLOSSARY` in `js/glossary.js` on the branch, renumber `order`, and add any `REVIEW` or `COMPUTABLE` entries. Do NOT commit.
+Write the full case object, including `whyComplexity` and `whyHarm`, then any `GLOSSARY` terms the prose introduces. Insert the case into `CASES` in `public/js/cases.js` and the terms into `GLOSSARY` in `public/js/glossary.js` on the branch, renumber `order`, and add any `REVIEW` or `COMPUTABLE` entries. Do NOT commit.
 
 Write the case the way the others are laid out: the object's braces at four spaces and its keys at eight, the fields that sit on a line of their own aligned on one value column (`whyHarm:       "..."`), and the fields packed several to a line left with single spacing (`id:"sol", slug:"sol-hugging-face"`). Then let the formatter set the column and confirm the gate passes both files:
 
 ```bash
-python3 -I ~/.claude/formatting-tools/format_js.py js/cases.js js/glossary.js
-python3 -I ~/.claude/formatting-tools/check_format.py js/cases.js js/glossary.js
+python3 -I ~/.claude/formatting-tools/format_js.py public/js/cases.js public/js/glossary.js
+python3 -I ~/.claude/formatting-tools/check_format.py public/js/cases.js public/js/glossary.js
 ```
 
 ### Update the footer date
@@ -101,9 +101,9 @@ python3 -I ~/.claude/formatting-tools/check_format.py js/cases.js js/glossary.js
 The `Last updated` line at the bottom of the page is edited by hand; nothing updates it. Set it to today's date in `Month D, YYYY` form, so the preview shows it:
 
 ```bash
-grep -n "Last updated" index.html
-sed -i '' "s/Last updated: [A-Za-z]* [0-9]*, [0-9]*/Last updated: $(date '+%B %-d, %Y')/" index.html
-grep -n "Last updated" index.html
+grep -n "Last updated" public/index.html
+sed -i '' "s/Last updated: [A-Za-z]* [0-9]*, [0-9]*/Last updated: $(date '+%B %-d, %Y')/" public/index.html
+grep -n "Last updated" public/index.html
 ```
 
 Confirm the grep shows the new date, and report the old and new dates in the proposal.
@@ -132,7 +132,7 @@ When it reports an overlap:
 
 - Never change a score to make room. `complexity` and `harm` are editorial judgments, and the layout serves them, not the other way round.
 - Shorten a `scatterLabel` first, since that costs nothing.
-- If the layout itself cannot place the label, fix `placeLabels()` or `jitterDots()` in `index.html` (for example, add a spot to `LABEL_SPOTS`), rerun, and say in the proposal what changed.
+- If the layout itself cannot place the label, fix `placeLabels()` or `jitterDots()` in `public/js/charts.js` (for example, add a spot to `LABEL_SPOTS`), rerun, and say in the proposal what changed.
 - The checker fails on the old layout code as well as the new one, so a change to the chart can be tested against both. Self-check the prose against `~/.claude/rules/editorial/annielytics-writing-rules.md`: no em or en dashes, no comma before because or since, double quotes for anything a person or organization said (single quotes only for a word or two used as a term), punctuation outside closing quotes when it belongs to our sentence, no red-flag words in `caution` (notable, impressive, responsible, transparent, thorough, to their credit).
 
 Serve the preview at the real subpath, in the background:
@@ -150,7 +150,7 @@ Reply in the terminal, in this order. Keep it tight; Annie skims.
 1. TL;DR. Three or four sentences. What happened, the lag, and the recommended scores.
 2. Scores. A three-row table: field, score, one-line rationale naming the neighbors.
 3. The disclosure chain. Dated list with day counts.
-4. The case object, as it sits in `js/cases.js`.
+4. The case object, as it sits in `public/js/cases.js`.
 5. What changed around it: new glossary terms, `order` shifts, new claim entries, checks run and their results, including the overlap check's view count and where each new label landed (for example, "below-right of its dot, since the row is full").
 6. Conflicts and unsourced items. What was resolved and how, and what is still thin.
 7. Decisions for Annie. Numbered questions with a recommendation for each. Ask them directly; do not bury a decision in a sentence.

@@ -10,8 +10,10 @@ permalinks, since /threat-matrix/, /lab-counts/, and /poster/<id>/ are not
 folders on disk. This server does what the nginx rewrite does in production.
 It strips that segment, so /tools/models-gone-wild/lab-counts/ serves
 index.html and /tools/models-gone-wild/lab-counts/css/base.css serves the
-real stylesheet. Old ?view= links get the same 301 to their permalink that
-nginx sends, and every response carries the security headers from
+real stylesheet. Only public/ is served, as nginx's alias serves only
+public/ in production, so the repo's tooling is never reachable. Old
+?view= links get the same 301 to their permalink that nginx sends, and
+every response carries the security headers from
 deploy/nginx/headers.conf. Serving at the subpath also exercises the
 relative asset paths the way production does. A missing path under the
 prefix gets 404.html with a 404, as nginx's error_page sends.
@@ -44,6 +46,7 @@ from urllib.parse import parse_qs, urlsplit
 # ========================================================================
 
 REPO   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PUBLIC = os.path.join(REPO, "public")
 PREFIX = "/tools/models-gone-wild"
 
 
@@ -60,22 +63,23 @@ def resolve_permalink(path: str) -> tuple[str | None, str | None]:
         path (str): The raw request path, query string included
 
     Returns:
-        tuple[str | None, str | None]: The 301 target or None, and the repo path to serve or None
+        tuple[str | None, str | None]: The 301 target or None, and the path under public/ to serve or None
     """
 
     view_slugs   = ("threat-matrix", "lab-counts")
     legacy_views = {"matrix": "threat-matrix", "labs": "lab-counts"}
 
-    bare   = path.split("?", 1)[0]
-    legacy = legacy_views.get(parse_qs(urlsplit(path).query).get("view", [""])[0])
-    root   = re.escape(PREFIX)
-    views  = "|".join(view_slugs)
+    bare      = path.split("?", 1)[0]
+    legacy    = legacy_views.get(parse_qs(urlsplit(path).query).get("view", [""])[0])
+    root      = re.escape(PREFIX)
+    views     = "|".join(view_slugs)
+    permalink = re.compile(rf"^{root}/(?:{views}|poster/[a-z0-9-]+)(/.*)?$")
 
     target = None
 
     if bare.startswith(PREFIX + "/") and legacy:
         target = f"{PREFIX}/{legacy}/"
-    elif bare in (f"{PREFIX}/{slug}" for slug in view_slugs) or re.match(rf"^{root}/poster/[\w-]+$", bare):
+    elif bare in (f"{PREFIX}/{slug}" for slug in view_slugs) or re.match(rf"^{root}/poster/[a-z0-9-]+$", bare):
         target = bare + "/"
 
     served = bare.split("#", 1)[0]
@@ -83,10 +87,7 @@ def resolve_permalink(path: str) -> tuple[str | None, str | None]:
     if served != PREFIX and not served.startswith(PREFIX + "/"):
         return target, None
 
-    segment = (re.match(rf"^{root}/(?:{views})(/.*)?$", served)
-            or re.match(rf"^{root}/poster/[\w-]+(/.*)?$", served))
-
-    if segment:
+    while segment := permalink.match(served):
         served = PREFIX + (segment.group(1) or "/")
 
     return target, served[len(PREFIX):] or "/"
@@ -123,12 +124,12 @@ def read_headers() -> tuple[tuple[str, str], ...]:
 
 class PreviewHandler(SimpleHTTPRequestHandler):
     """
-    Maps the production URL space onto the repo, including the view and poster permalinks
+    Maps the production URL space onto public/, including the view and poster permalinks
     """
 
     def translate_path(self, path: str) -> str:
         """
-        Turns a request path into a file path inside the repo
+        Turns a request path into a file path inside public/
 
         Args:
             path (str): The raw request path, query string included
@@ -140,7 +141,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         _, served = resolve_permalink(path)
 
         if served is None:
-            return os.path.join(REPO, "__outside_prefix__")
+            return os.path.join(PUBLIC, "__outside_prefix__")
 
         return super().translate_path(served)
 
@@ -190,7 +191,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             None
         """
 
-        page      = os.path.join(REPO, "404.html")
+        page      = os.path.join(PUBLIC, "404.html")
         _, served = resolve_permalink(self.path)
 
         if code != 404 or served is None or not os.path.isfile(page):
@@ -231,7 +232,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
 
 def main() -> None:
     """
-    Parses the port and serves the repo until interrupted
+    Parses the port and serves public/ until interrupted
 
     Args:
         None
@@ -244,7 +245,7 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8899)
 
     args    = parser.parse_args()
-    handler = partial(PreviewHandler, directory=REPO)
+    handler = partial(PreviewHandler, directory=PUBLIC)
     server  = ThreadingHTTPServer(("127.0.0.1", args.port), handler)
 
     print(f"Serving http://127.0.0.1:{args.port}{PREFIX}/")

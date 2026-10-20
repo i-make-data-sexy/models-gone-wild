@@ -114,7 +114,7 @@ def chrome(args: list) -> str:
 
 def build_site(width: int) -> str:
     """
-    Lays out a throwaway web root with the repo at its production subpath and the harness at the top
+    Lays out a throwaway web root with public/ at its production subpath and the harness at the top
 
     Args:
         width (int): The page width to render at, in pixels
@@ -124,13 +124,13 @@ def build_site(width: int) -> str:
     """
 
     here    = os.path.dirname(os.path.abspath(__file__))
-    repo    = os.path.dirname(here)
+    site    = os.path.join(os.path.dirname(here), "public")
     harness = os.path.join(here, "overlap-harness")
     subpath = "tools/models-gone-wild"
     root    = tempfile.mkdtemp(prefix="mgw-overlap-")
 
     os.makedirs(os.path.join(root, os.path.dirname(subpath)))
-    os.symlink(repo, os.path.join(root, subpath))
+    os.symlink(site, os.path.join(root, subpath))
     shutil.copy(os.path.join(harness, "harness.js"), root)
 
     with open(os.path.join(harness, "harness.html")) as f:

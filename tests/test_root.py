@@ -2,10 +2,11 @@
 #   About This File
 # ========================================================================
 
-# Tests that keep the repo root to a known set of files. Nginx serves the
-# root, so a stray file there can be public. Also holds the home copy of
-# the add-case skill to the repo's copy, which the cloud scout reads, so
-# the two never drift apart.
+# Tests that keep the repo root to a known set of files and public/ to
+# the kinds of file the site serves. Nginx serves all of public/ and
+# nothing outside it, so a stray file there would be public. Also holds
+# the home copy of the add-case skill to the repo's copy, which the cloud
+# scout reads, so the two never drift apart.
 
 
 
@@ -46,7 +47,7 @@ def test_root_holds_only_allowed_files() -> None:
         None
     """
 
-    allowed = {".gitignore", "404.html", "index.html", "requirements-dev.txt", "DEPLOY.md", "UPDATE.md"}
+    allowed = {".gitignore", "pytest.ini", "requirements-dev.txt", "DEPLOY.md", "UPDATE.md"}
 
     result = subprocess.run(
         ["git", "ls-files"],
@@ -57,6 +58,36 @@ def test_root_holds_only_allowed_files() -> None:
     )
     root_files = {path for path in result.stdout.splitlines() if "/" not in path}
     assert not root_files - allowed, f"Unexpected root files: {sorted(root_files - allowed)}"
+
+
+
+# ========================================================================
+#   Public Files
+# ========================================================================
+
+def test_public_holds_only_served_file_types() -> None:
+    """
+    Checks every tracked file in public/ is a page, stylesheet, script, font, or image
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+
+    served = {".html", ".css", ".js", ".woff2", ".png"}
+
+    result = subprocess.run(
+        ["git", "ls-files", "public"],
+        cwd            = REPO,
+        capture_output = True,
+        text           = True,
+        check          = True,
+    )
+    strays = sorted(path for path in result.stdout.splitlines() if Path(path).suffix not in served)
+    assert result.stdout.strip(), "No tracked files in public/"
+    assert not strays, f"Files in public/ the site does not serve: {strays}"
 
 
 
