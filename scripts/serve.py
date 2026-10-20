@@ -69,16 +69,17 @@ def resolve_permalink(path: str) -> tuple[str | None, str | None]:
     view_slugs   = ("threat-matrix", "lab-counts")
     legacy_views = {"matrix": "threat-matrix", "labs": "lab-counts"}
 
-    bare   = path.split("?", 1)[0]
-    legacy = legacy_views.get(parse_qs(urlsplit(path).query).get("view", [""])[0])
-    root   = re.escape(PREFIX)
-    views  = "|".join(view_slugs)
+    bare      = path.split("?", 1)[0]
+    legacy    = legacy_views.get(parse_qs(urlsplit(path).query).get("view", [""])[0])
+    root      = re.escape(PREFIX)
+    views     = "|".join(view_slugs)
+    permalink = re.compile(rf"^{root}/(?:{views}|poster/[a-z0-9-]+)(/.*)?$")
 
     target = None
 
     if bare.startswith(PREFIX + "/") and legacy:
         target = f"{PREFIX}/{legacy}/"
-    elif bare in (f"{PREFIX}/{slug}" for slug in view_slugs) or re.match(rf"^{root}/poster/[\w-]+$", bare):
+    elif bare in (f"{PREFIX}/{slug}" for slug in view_slugs) or re.match(rf"^{root}/poster/[a-z0-9-]+$", bare):
         target = bare + "/"
 
     served = bare.split("#", 1)[0]
@@ -86,10 +87,7 @@ def resolve_permalink(path: str) -> tuple[str | None, str | None]:
     if served != PREFIX and not served.startswith(PREFIX + "/"):
         return target, None
 
-    segment = (re.match(rf"^{root}/(?:{views})(/.*)?$", served)
-            or re.match(rf"^{root}/poster/[\w-]+(/.*)?$", served))
-
-    if segment:
+    while segment := permalink.match(served):
         served = PREFIX + (segment.group(1) or "/")
 
     return target, served[len(PREFIX):] or "/"

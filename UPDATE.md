@@ -84,7 +84,7 @@ Change:
 
 Branch off up-to-date main. The markup lives in public/index.html, the
 behavior in the scripts in public/js/ that DEPLOY.md lists, the styles in the
-seven files in public/css/, and the case data in public/js/cases.js and
+eight files in public/css/, and the case data in public/js/cases.js and
 public/js/glossary.js, so tell me what you plan to touch before you touch it. Watch for the traps listed in
 UPDATE.md, especially relative paths and the poster overlay's stacking order.
 Run the checks, commit, and push the branch. Deploy it to staging as
@@ -390,7 +390,7 @@ Then open `https://www.annielytics.com/tools/models-gone-wild/` in a browser, wh
 
 ## Where things live
 
-Everything the site serves lives in `public/`, the only folder nginx serves, so the docs, scripts, tests, and skill beside it are never reachable from the web. `public/index.html` carries the markup and the script. `public/js/cases.js` holds the `CASES` array and `public/js/glossary.js` the `GLOSSARY` object, both loaded before the page script, and `scripts/cases.py` is the loader every check reads them through. `public/methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/base.css` and the rest), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. The seven stylesheets in `public/css/` carry every style, linked in the order `DEPLOY.md` lists; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
+Everything the site serves lives in `public/`, the only folder nginx serves, so the docs, scripts, tests, and skill beside it are never reachable from the web. `public/index.html` carries the markup and the script. `public/js/cases.js` holds the `CASES` array and `public/js/glossary.js` the `GLOSSARY` object, both loaded before the page script, and `scripts/cases.py` is the loader every check reads them through. `public/methodology/index.html` is the Methodology page, served at `/methodology/` as a folder index with no nginx rule of its own. Its local paths climb one folder (`../css/base.css` and the rest), and the masthead link to it is pointed at `APP_BASE` by the script so it stays clean on a view or poster permalink. The eight stylesheets in `public/css/` carry every style, linked in the order `DEPLOY.md` lists; there is no inline `<style>` block and no inline `style` attribute worth keeping. `scripts/check_charges.py` reports charge lengths against the range above, `scripts/check_overlaps.py` reports anything drawn on top of something else on the Threat Matrix, and `scripts/check_slugs.py` confirms every poster slug is present, well formed, and unique.
 
 The stylesheets are linked relatively, as `css/base.css` and the rest. A leading slash would resolve to the site root and 404, which is what check 1 guards.
 

@@ -6,40 +6,42 @@ Claude Code: read this entire file before taking any deployment action. Never pr
 
 ## What this app is
 
-Three HTML pages, seven stylesheets all three link in the same order, the case data in two scripts, the page's behavior in ten more, and one vendored JavaScript library.
+Three HTML pages, eight stylesheets all three link in the same order, the case data in two scripts, the page's behavior in ten more, one vendored JavaScript library, and four self-hosted font families. Everything the site serves sits in `public/`, which is the only folder nginx serves. The docs, scripts, tests, and add-case skill beside it are never reachable from the web.
 
 ```
-index.html                    the page's markup, loading the scripts below in order
-methodology/index.html        the Methodology page, explaining each filter
-404.html                      the page nginx serves for any unknown path
-css/variables.css             the custom properties, linked first
-css/base.css                  the page shell, site header, masthead, and footer
-css/registry.css              the registry panel, timeline, and case cards
-css/charts.css                the tooltip, Threat Matrix, and Cases by Lab
-css/poster.css                the wanted poster
-css/methodology.css           the Methodology page
-css/responsive.css            the breakpoints and reduced motion, linked last
-js/cases.js                   the case registry, CASES
-js/glossary.js                the glossary, GLOSSARY
-js/labels.js                  the labels, notes, and icons the cards and posters show
-js/text.js                    the glossary markup and date helpers
-js/mugshot.js                 the booking photos, drawn as SVG
-js/timeline.js                the filters and the timeline view
-js/charts.js                  the Threat Matrix and Cases by Lab charts
-js/views.js                   applying the filters, the options menu, and the tabs
-js/tooltip.js                 the glossary and info-note tooltip
-js/poster.js                  the poster, its permalink, Copy link, and Download poster
-js/menu.js                    the mobile menu, shared with the Methodology page
-js/main.js                    starts the page, and loads last
-js/gtm.js                     loads Google Tag Manager, first in each page's head
-js/vendor/html2canvas.min.js  powers Download poster, loaded on its first press
-DEPLOY.md                     this file
-.gitignore
+public/index.html                    the page's markup, loading the scripts below in order
+public/methodology/index.html        the Methodology page, explaining each filter
+public/404.html                      the page nginx serves for any unknown path
+public/css/fonts.css                 the self-hosted font faces, linked first
+public/css/variables.css             the custom properties
+public/css/base.css                  the page shell, site header, masthead, and footer
+public/css/registry.css              the registry panel, timeline, and case cards
+public/css/charts.css                the tooltip, Threat Matrix, and Cases by Lab
+public/css/poster.css                the wanted poster
+public/css/methodology.css           the Methodology page
+public/css/responsive.css            the breakpoints and reduced motion, linked last
+public/js/cases.js                   the case registry, CASES
+public/js/glossary.js                the glossary, GLOSSARY
+public/js/labels.js                  the labels, notes, and icons the cards and posters show
+public/js/text.js                    the glossary markup and date helpers
+public/js/mugshot.js                 the booking photos, drawn as SVG
+public/js/timeline.js                the filters and the timeline view
+public/js/charts.js                  the Threat Matrix and Cases by Lab charts
+public/js/views.js                   applying the filters, the options menu, and the tabs
+public/js/tooltip.js                 the glossary and info-note tooltip
+public/js/poster.js                  the poster, its permalink, Copy link, and Download poster
+public/js/menu.js                    the mobile menu, shared with the Methodology page
+public/js/main.js                    starts the page, and loads last
+public/js/gtm.js                     loads Google Tag Manager, first in each page's head
+public/js/vendor/html2canvas.min.js  powers Download poster, loaded on its first press
+public/fonts/                        the woff2 files css/fonts.css names, one folder per family
+public/img/annielytics-logo.png      the site header logo
+DEPLOY.md                            this file
 ```
 
-All three pages load the site-wide Google Tag Manager container, GTM-5FJGP2, which AI Timeline and AI Strategy share. Its one tag fires GA4 (G-2CGX3KD64R). `js/gtm.js` reads the container ID from its own `data-gtm-id` attribute, and each page carries the `<noscript>` fallback frame right after `<body>`, hidden by `.gtm-noscript-frame` in `css/base.css`.
+All three pages load the site-wide Google Tag Manager container, GTM-5FJGP2, which AI Timeline and AI Strategy share. Its one tag fires GA4 (G-2CGX3KD64R). `public/js/gtm.js` reads the container ID from its own `data-gtm-id` attribute, and each page carries the `<noscript>` fallback frame right after `<body>`, hidden by `.gtm-noscript-frame` in `public/css/base.css`.
 
-The case data lives in the `CASES` array in `js/cases.js`, and the glossary in `GLOSSARY` in `js/glossary.js`. Adding an escapee means appending an object to that array and pushing. There is no admin screen and no database, by design.
+The case data lives in the `CASES` array in `public/js/cases.js`, and the glossary in `GLOSSARY` in `public/js/glossary.js`. Adding an escapee means appending an object to that array and pushing. There is no admin screen and no database, by design.
 
 ## App variables
 
@@ -79,7 +81,7 @@ None of the Python prefix machinery applies here. There is no `SCRIPT_NAME`, no 
 Run this before every deploy. It must return nothing:
 
 ```bash
-grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html methodology/index.html 404.html css/*.css \
+grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' public/index.html public/methodology/index.html public/404.html public/css/*.css \
   | grep -v '404.html:.*<base href="/tools/models-gone-wild/">'
 ```
 
@@ -113,7 +115,7 @@ CRITICAL: view the current file first, then show Annie the proposed block and wa
 sudo cat /etc/nginx/sites-available/annielytics.conf
 ```
 
-Add all six blocks to `annielytics.conf`, in this order. They live with the other `/tools/` apps, after the `model-safety` blocks:
+Add all seven blocks to `annielytics.conf`, in this order. They live with the other `/tools/` apps, after the `model-safety` blocks:
 
 ```nginx
 # Send the bare path to the trailing-slash form. Without this, a request
@@ -134,8 +136,8 @@ location ~ ^/tools/models-gone-wild/(threat-matrix|lab-counts)$ {
 # Strip the view segment and match again. That serves index.html for the
 # permalink itself, and it resolves the page's relative asset paths, which
 # the browser requests as /threat-matrix/css/base.css and so on. `last`
-# reruns location matching on the rewritten URI, so the 404, cache, and
-# .git rules all still apply to it. Keep the slug list in step with
+# reruns location matching on the rewritten URI, so the 404 and cache
+# rules still apply to it. Keep the slug list in step with
 # VIEW_SLUGS in js/views.js and scripts/serve.py.
 location ~ ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/ {
     rewrite ^/tools/models-gone-wild/(?:threat-matrix|lab-counts)/(.*)$ /tools/models-gone-wild/$1 last;
@@ -153,34 +155,22 @@ location ~ ^/tools/models-gone-wild/poster/[a-z0-9-]+/ {
     rewrite ^/tools/models-gone-wild/poster/[a-z0-9-]+/(.*)$ /tools/models-gone-wild/$1 last;
 }
 
-# Repo files that ship with the clone but are not site content. Without
-# this, DEPLOY.md is served publicly and it carries the server path and
-# the host IP. Nginx picks regex locations over prefix ones, so this
-# intercepts before the page block below.
-#
-# .py is in the list because scripts/ ships with the clone. Add the
-# extension here whenever a new kind of tooling file joins the repo,
-# or it will be readable on the live site.
-location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
-    include snippets/models-gone-wild-headers.conf;
-    error_page 404 /tools/models-gone-wild/404.html;
-    return 404;
-}
-
-# Unchanging assets cache hard: the vendored library and the images.
-# The app's own scripts in js/ change with every case, so they are left
-# to the page block below. Also a regex, so it beats the prefix block,
-# and the filename character class cannot express ".." so it cannot be
-# walked out of the directory.
+# Unchanging assets cache hard: the vendored library, the images, and
+# the fonts. The app's own scripts in js/ change with every case, so they
+# are left to the page block below. Also a regex, so it beats the prefix
+# block, and the filename character class cannot express ".." so it
+# cannot be walked out of the directory. Each font family folder is one
+# [\w-]+ segment, which cannot express ".." either.
 location ~* ^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico|woff2))$ {
-    alias /home/anniecushing/apps/models-gone-wild/$1/$2;
+    alias /home/anniecushing/apps/models-gone-wild/public/$1/$2;
     add_header Cache-Control "public, max-age=2592000, no-transform";
     include snippets/models-gone-wild-headers.conf;
 }
 
 # The page itself, its stylesheet, and the app's own scripts, which
 # carry the case data, so a stale copy is a wrong copy and none of them
-# may be cached.
+# may be cached. The alias is public/, so nothing else in the clone can
+# be reached.
 #
 # The two ifs move links shared before the permalinks, when a view was a
 # ?view= parameter, to their permalink for good. An if whose only job is
@@ -191,7 +181,7 @@ location /tools/models-gone-wild/ {
     if ($arg_view = matrix) { return 301 /tools/models-gone-wild/threat-matrix/; }
     if ($arg_view = labs)   { return 301 /tools/models-gone-wild/lab-counts/; }
 
-    alias /home/anniecushing/apps/models-gone-wild/;
+    alias /home/anniecushing/apps/models-gone-wild/public/;
     index index.html;
     error_page 404 /tools/models-gone-wild/404.html;
     add_header Cache-Control "no-cache, no-store, must-revalidate" always;
@@ -203,15 +193,15 @@ The trailing slashes on both the `location` and the `alias` have to match. Dropp
 
 `try_files` is deliberately absent. The `alias` plus `index` pair already serves the page, a missing file 404s on its own, and `try_files` combined with `alias` has a long-standing resolution quirk. Adding it back buys nothing.
 
-The `error_page 404` lines in the page block and the repo-file block answer an unknown path, and a blocked repo file, with `404.html` and a 404 status rather than nginx's built-in page. The redirect to `404.html` is internal, so it lands in the page block and carries that block's headers. The page block's `Cache-Control` carries `always` so the 404 is sent no-cache too, since nginx adds a header without `always` only to 2xx and 3xx responses. `scripts/serve.py` does the same for the local preview.
+The `error_page 404` line in the page block answers an unknown path, a repo file outside `public/` included, with `404.html` and a 404 status rather than nginx's built-in page. The redirect to `404.html` is internal, so it lands in the page block and carries that block's headers. The page block's `Cache-Control` carries `always` so the 404 is sent no-cache too, since nginx adds a header without `always` only to 2xx and 3xx responses. `scripts/serve.py` does the same for the local preview.
 
-The `css/` directory and the app's own scripts in `js/` need no rule of their own. The asset regex above covers `js/vendor/` and `img/` only, so a request for `css/base.css` or `js/cases.js` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheets change whenever the design does and the data scripts change with every case, and a hard-cached copy would strand readers on an old one. Do not widen the asset regex to `css` or all of `js` without also solving cache-busting.
+The `css/` directory and the app's own scripts in `js/` need no rule of their own. The asset regex above covers `js/vendor/`, `img/`, and `fonts/` only, so a request for `css/base.css` or `js/cases.js` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheets change whenever the design does and the data scripts change with every case, and a hard-cached copy would strand readers on an old one. Do not widen the asset regex to `css` or all of `js` without also solving cache-busting.
 
-The clone's `.git` directory and `.gitignore` need no rule here. The config already carries a `location ~ /\.git` block further down, and regex locations outrank the prefix block above.
+The rest of the clone needs no rule here. The aliases point into `public/`, so `.git`, `DEPLOY.md`, `scripts/`, and the other repo files are outside anything nginx serves, and a request for one gets the 404 page. `tests/test_root.py` keeps `public/` to pages, stylesheets, scripts, fonts, and images, so a stray file cannot land there unnoticed. The config's server-wide `location ~ /\.git` and `.env` rules stay as a second line.
 
 The security headers come from `deploy/nginx/headers.conf` in the repo, copied to `/etc/nginx/snippets/models-gone-wild-headers.conf` (production) and `/etc/nginx/snippets/models-gone-wild-headers-staging.conf` (staging). Nginx drops inherited `add_header` lines in any block that sets its own, so each serving block includes the snippet itself. When the repo file changes, copy it to the staging snippet during the build and to the production snippet at ship time. `scripts/serve.py` reads the same file, so the local preview sends the same headers.
 
-The same snippet carries the Content Security Policy, enforced on every response. It allows only the app's own files, plus Google Tag Manager and the hosts GA4 sends hits to, which are copied from AI Timeline's policy. `style-src` also names one hash, for the fixed `<style>` block html2canvas adds while it copies a poster (see `js/vendor/VENDORED.md`). A Custom HTML tag added in GTM would be refused, since the policy allows no inline script. `scripts/csp-walk/run.sh <ref>` walks every page and state under a ref's policy, a poster download included, and `tests/test_csp.py` holds the policy's shape.
+The same snippet carries the Content Security Policy, enforced on every response. It allows only the app's own files, plus Google Tag Manager and the hosts GA4 sends hits to, which are copied from AI Timeline's policy. `style-src` also names one hash, for the fixed `<style>` block html2canvas adds while it copies a poster (see `docs/VENDORED.md`). A Custom HTML tag added in GTM would be refused, since the policy allows no inline script. `scripts/csp-walk/run.sh <ref>` walks every page and state under a ref's policy, a poster download included, and `tests/test_csp.py` holds the policy's shape.
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
@@ -293,7 +283,7 @@ deny all;
 
 With `satisfy any`, a request passes if it comes from loopback or carries the password. Nginx takes the client address only from Cloudflare's ranges (`/etc/nginx/conf.d/cloudflare-real-ip.conf`), and UFW lets only Cloudflare reach ports 80 and 443, so no outside request can arrive as `127.0.0.1`. A browser on the public URL still gets the password prompt.
 
-The redirect, rewrite, and repo-file blocks need no exception. A `return` or a `rewrite` runs before the access check, and each rewrite hands off to the page or asset block, which applies it. The staging config's server-wide `location ~ /\.git` and `.env` rules cover the clone, as they do in production.
+The redirect and rewrite blocks need no exception. A `return` or a `rewrite` runs before the access check, and each rewrite hands off to the page or asset block, which applies it. The staging config's server-wide `location ~ /\.git` and `.env` rules cover the clone, as they do in production.
 
 Run the staging health check on the server. It needs no password:
 
@@ -307,7 +297,7 @@ Healthy output is five 200s, then 404 for `DEPLOY.md`, 403 for `.git/config`, an
 
 ### The staging blocks
 
-These sit in `staging.annielytics.conf` after the Treks and the City blocks and before Vinspire, added 2026-10-16. They match the production blocks above line for line, apart from the staging aliases and the loopback exception.
+These sit in `staging.annielytics.conf` after the Treks and the City blocks and before Vinspire, added 2026-10-16. They match the production blocks above, apart from the staging aliases, the loopback exception, and shorter comments, and the server holds this text exactly.
 
 ```nginx
 # ===============================================================
@@ -350,15 +340,9 @@ location ~ ^/tools/models-gone-wild/poster/[a-z0-9-]+/ {
     rewrite ^/tools/models-gone-wild/poster/[a-z0-9-]+/(.*)$ /tools/models-gone-wild/$1 last;
 }
 
-# Repo files that ship with the clone but are not site content.
-# DEPLOY.md in particular carries the server path and host IP.
-location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
-    include snippets/models-gone-wild-headers-staging.conf;
-    error_page 404 /tools/models-gone-wild/404.html;
-    return 404;
-}
-
-# Unchanging assets cache hard: the vendored library and the images.
+# Unchanging assets cache hard: the vendored library, the images, and
+# the fonts. Each font family folder is one [\w-]+ segment, which
+# cannot express "..", so the alias cannot climb out of fonts/.
 # A regex beats the prefix block below, and the extension whitelist
 # keeps it to real assets.
 location ~* ^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico|woff2))$ {
@@ -367,14 +351,15 @@ location ~* ^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:j
     allow ::1;
     deny all;
 
-    alias /home/anniecushing/apps/staging/models-gone-wild/$1/$2;
+    alias /home/anniecushing/apps/staging/models-gone-wild/public/$1/$2;
     add_header Cache-Control "public, max-age=2592000, no-transform";
     include snippets/models-gone-wild-headers-staging.conf;
 }
 
 # The page itself, its stylesheet, and the app's own scripts, which
 # carry the case data, so a stale copy is a wrong copy and none of them
-# may be cached.
+# may be cached. The alias is public/, so nothing else in the clone can
+# be reached.
 location /tools/models-gone-wild/ {
     satisfy any;
     allow 127.0.0.1;
@@ -385,7 +370,7 @@ location /tools/models-gone-wild/ {
     if ($arg_view = matrix) { return 301 /tools/models-gone-wild/threat-matrix/; }
     if ($arg_view = labs)   { return 301 /tools/models-gone-wild/lab-counts/; }
 
-    alias /home/anniecushing/apps/staging/models-gone-wild/;
+    alias /home/anniecushing/apps/staging/models-gone-wild/public/;
     index index.html;
     error_page 404 /tools/models-gone-wild/404.html;
     add_header Cache-Control "no-cache, no-store, must-revalidate" always;
@@ -414,11 +399,11 @@ If the current branch holds work Annie has not signed off on, stop and ask.
 
 ## Troubleshooting
 
-The page 404s at the prefix but the file is on disk. Check that the `location` and `alias` trailing slashes match, then confirm nginx can traverse into `/home/anniecushing/apps/models-gone-wild/`.
+The page 404s at the prefix but the file is on disk. Check that the `location` and `alias` trailing slashes match, then confirm nginx can traverse into `/home/anniecushing/apps/models-gone-wild/public/`.
 
-Download poster shows "The image library didn't load". `js/poster.js` loads the vendored library on the first press, from `APP_BASE` plus `js/vendor/html2canvas.min.js`. Open the browser console, then request that URL directly with curl at the origin. A 404 means the file or the asset block moved.
+Download poster shows "The image library didn't load". `public/js/poster.js` loads the vendored library on the first press, from `APP_BASE` plus `js/vendor/html2canvas.min.js`. Open the browser console, then request that URL directly with curl at the origin. A 404 means the file or the asset block moved.
 
-Fonts fall back to a plain monospace face. The app serves its own fonts, with `css/fonts.css` pointing at the woff2 files in `fonts/`. Request one of those files at the origin with curl. A 404 means a file or the asset block moved. In the browser console, `[...document.fonts].map(f => f.family + ' ' + f.weight + ' ' + f.status)` lists each registered face and whether it loaded. The policy's `font-src 'self'` refuses a font from any other host, so a Google Fonts link added back would show as a violation in the console, not as a fallback alone.
+Fonts fall back to a plain monospace face. The app serves its own fonts, with `public/css/fonts.css` pointing at the woff2 files in `public/fonts/`. Request one of those files at the origin with curl. A 404 means a file or the asset block moved. In the browser console, `[...document.fonts].map(f => f.family + ' ' + f.weight + ' ' + f.status)` lists each registered face and whether it loaded. The policy's `font-src 'self'` refuses a font from any other host, so a Google Fonts link added back would show as a violation in the console, not as a fallback alone.
 
 Something stops working and the console names the Content Security Policy. The message names the directive and the blocked source. Run `scripts/csp-walk/run.sh` on the branch to see every refusal locally. Add a source to the policy only for a request the app needs, never `'unsafe-inline'` or `'unsafe-eval'`, then copy `deploy/nginx/headers.conf` to the snippet, reload nginx, and add a PCI row. Restoring the snippet's backup rolls the policy back with no code deploy.
 
