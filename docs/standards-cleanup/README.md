@@ -223,7 +223,7 @@ Answer these before running the steps. Record each answer here because the step 
 | 10A | [10a-self-host-fonts.md](10a-self-host-fonts.md) | Google Fonts, which a policy would block under Cloudflare APO. | Small | Done 2026-10-19 (merge 9df7fb6) |
 | 10B | [10b-csp.md](10b-csp.md) | No Content Security Policy, no walk harness, no analytics tag. | Medium | Done 2026-10-19 (merge 64fc1c3) |
 | 11 | [11-layout.md](11-layout.md) | No `<main class="page-body">`, no pinned footer. | Medium | Done 2026-10-19 (merge 7620f00) |
-| 12 | [12-design-rules.md](12-design-rules.md) | Default 404 page, soft 404 posters, tooltip and footer gaps. | Medium | Not started |
+| 12 | [12-design-rules.md](12-design-rules.md) | Default 404 page, soft 404 posters, tooltip and footer gaps. | Medium | Done 2026-10-20 (merge d787a27) |
 | 13A | [13a-web-root.md](13a-web-root.md) | No URL list, the prefix mirrors, repo tooling in the web root. | Medium, highest SEO risk | Not started |
 | 13B | [13b-canonicals.md](13b-canonicals.md) | No canonicals, the `/index.html` duplicates, no share tags. | Small, SEO risk | Not started |
 
