@@ -1,0 +1,243 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The three 1200 by 630 share cards scripts/share_cards.py draws: the
+   lineup the home page, Methodology, and posters share, and the Threat
+   Matrix and Cases by Lab cards for those two views. The colors and
+   fonts are the app's own, read from public/css/variables.css and
+   public/css/fonts.css, so the cards match the page. */
+
+
+
+/* ========================================================================
+     Card Tokens
+   ======================================================================== */
+
+:root {
+
+    /* Card */
+    --card-width:                 1200px;
+    --card-height:                630px;
+
+    /* Font sizes */
+    --font-size-card-bureau:      17px;
+    --font-size-card-footer:      19px;
+    --font-size-card-legend:      16px;
+    --font-size-card-subhead:     36px;
+    --font-size-card-lineup-sub:  38px;
+    --font-size-card-wanted:      124px;
+    --font-size-card-matrix:      132px;
+    --font-size-card-labs:        118px;
+
+    /* Line heights */
+    --line-height-card-wanted:    .92;
+    --line-height-card-lineup:    .9;
+}
+
+
+
+/* ========================================================================
+     Shared
+   ======================================================================== */
+
+body {
+    margin:              0;
+    background:          var(--paper);
+}
+
+.card {
+    position:            relative;
+    box-sizing:          border-box;
+    width:               var(--card-width);
+    height:              var(--card-height);
+    overflow:            hidden;
+    color:               var(--ink);
+    background:          radial-gradient(circle at 20% 10%, var(--paper-vignette-light), transparent 40%),
+                         radial-gradient(circle at 85% 80%, var(--paper-vignette), transparent 45%),
+                         var(--paper);
+}
+
+.bureau {
+    font-family:         'Oswald',sans-serif;
+    font-weight:         500;
+    font-size:           var(--font-size-card-bureau);
+    letter-spacing:      .42em;
+    text-transform:      uppercase;
+    color:               var(--ink-soft);
+}
+
+.wanted {
+    font-family:         'Oswald',sans-serif;
+    font-weight:         700;
+    line-height:         var(--line-height-card-wanted);
+    letter-spacing:      .06em;
+    text-transform:      uppercase;
+    color:               var(--ink);
+    text-shadow:         3px 3px 0 var(--shadow-title);
+}
+
+.elite {
+    font-family:         'Special Elite',monospace;
+    font-size:           var(--font-size-card-subhead);
+    color:               var(--ink-soft);
+}
+
+.horns {
+    font-family:         'Noto Emoji',sans-serif;
+}
+
+
+
+/* ========================================================================
+     Lineup
+   ======================================================================== */
+
+#lineup {
+    padding:             44px 60px 0;
+}
+
+#lineup .head {
+    display:             flex;
+    align-items:         baseline;
+    justify-content:     space-between;
+}
+
+#lineup .wanted {
+    font-size:           var(--font-size-card-wanted);
+    line-height:         var(--line-height-card-lineup);
+}
+
+#lineup .titles {
+    text-align:          right;
+}
+
+#lineup .elite {
+    margin-top:          6px;
+    font-size:           var(--font-size-card-lineup-sub);
+}
+
+#lineup .row {
+    display:             flex;
+    gap:                 22px;
+    justify-content:     center;
+    margin-top:          30px;
+}
+
+#lineup .mug {
+    width:               196px;
+    height:              237px;
+    border:              3px solid var(--ink);
+    background:          var(--mug-backdrop);
+    box-shadow:          6px 6px 0 var(--shadow);
+}
+
+#lineup .mug svg {
+    display:             block;
+    width:               100%;
+    height:              100%;
+}
+
+#lineup .foot {
+    position:            absolute;
+    right:               0;
+    bottom:              0;
+    left:                0;
+    display:             flex;
+    align-items:         center;
+    justify-content:     center;
+    height:              64px;
+    background:          var(--ink);
+}
+
+#lineup .foot .bureau {
+    font-size:           var(--font-size-card-footer);
+    color:               var(--paper);
+}
+
+
+
+/* ========================================================================
+     Chart Cards
+   ======================================================================== */
+
+.chart-card {
+    display:             flex;
+    align-items:         center;
+    padding:             0 64px;
+}
+
+.chart-card svg {
+    flex:                none;
+}
+
+.chart-card .wanted {
+    margin:              12px 0 8px;
+}
+
+#threat-matrix {
+    gap:                 56px;
+}
+
+#threat-matrix .side {
+    flex:                1;
+}
+
+#threat-matrix .wanted {
+    font-size:           var(--font-size-card-matrix);
+}
+
+#threat-matrix svg {
+    width:               520px;
+    height:              520px;
+}
+
+#lab-counts {
+    gap:                 40px;
+}
+
+#lab-counts .side {
+    flex:                none;
+    width:               430px;
+}
+
+#lab-counts .wanted {
+    font-size:           var(--font-size-card-labs);
+}
+
+#lab-counts svg {
+    width:               610px;
+    height:              470px;
+}
+
+.legend {
+    display:             flex;
+    gap:                 26px;
+    margin-top:          34px;
+    font-family:         'Oswald',sans-serif;
+    font-weight:         500;
+    font-size:           var(--font-size-card-legend);
+    letter-spacing:      .12em;
+    text-transform:      uppercase;
+    color:               var(--ink-soft);
+}
+
+.legend i {
+    display:             inline-block;
+    width:               13px;
+    height:              13px;
+    margin-right:        8px;
+    vertical-align:      -1px;
+}
+
+#threat-matrix .legend i {
+    border-radius:       50%;
+}
+
+.legend .self {
+    background:          var(--disc-self);
+}
+
+.legend .tip {
+    background:          var(--disc-tip);
+}
