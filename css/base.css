@@ -132,6 +132,11 @@ body::before {
                          opacity   .3s ease;
 }
 
+.footer-link[aria-current="page"] {
+    color:               var(--stamp-red);
+    border-color:        var(--stamp-red);
+}
+
 .footer-link:hover,
 .footer-link:focus-visible {
     color:               var(--paper);
@@ -143,7 +148,6 @@ body::before {
     outline:             2px solid var(--stamp-red);
     outline-offset:      2px;
 }
-
 .footer-link:hover .footer-icon,
 .footer-link:focus-visible .footer-icon {
     opacity:             0;
