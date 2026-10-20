@@ -28,8 +28,13 @@
     text-align:      left;
 }
 
-.method         { margin-top: 10px;     }
-.method-section { margin:     0 0 40px; }
+.method          { margin-top: 10px;     }
+.method-section  { margin:     0 0 40px; }
+
+.method-section:last-child,
+.method-section:last-child > :last-child {
+    margin-bottom:   0;
+}
 
 .method-section h2 {
     font-family:     'Oswald',sans-serif;

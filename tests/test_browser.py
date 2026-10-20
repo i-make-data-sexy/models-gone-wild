@@ -7,6 +7,10 @@
 # container, are answered with an empty body so the suite runs offline,
 # sends no hit to Google Analytics, and runs the same way every time.
 #
+# The pinned footer tests check the gap above the footer is the footer's
+# own top margin on every page, and that a short page pins the footer to
+# the bottom of the window.
+#
 # The last test is the revert-and-fail proof for 8e726b4, which clamped
 # the glossary bubbles inside the reading column. Without the clamp the
 # bubbles spill past the column's edge and the test fails.
@@ -31,16 +35,25 @@ sync_api = pytest.importorskip("playwright.sync_api")
 #   Global Variables
 # ========================================================================
 
-pytestmark = pytest.mark.browser
+pytestmark    = pytest.mark.browser
 
-DESKTOP    = {"width": 1440, "height": 900}
-PHONE      = {"width": 375,  "height": 812}
+DESKTOP       = {"width": 1440, "height": 900}
+PHONE         = {"width": 375,  "height": 812}
 
-TABS       = [
+TABS          = [
     ("timeline", ""),
     ("matrix",   "threat-matrix/"),
     ("labs",     "lab-counts/"),
 ]
+
+FOOTER_PAGES  = [
+    ("home",        ""),
+    ("matrix",      "threat-matrix/"),
+    ("labs",        "lab-counts/"),
+    ("poster",      "poster/sol-hugging-face/"),
+    ("methodology", "methodology/"),
+]
+FOOTER_WIDTHS = [375, 768, 1024, 1440]
 
 
 
@@ -69,24 +82,25 @@ def browser() -> Iterator["sync_api.Browser"]:
 @pytest.fixture
 def open_page(browser: "sync_api.Browser", base_url: str) -> Iterator[Callable[[dict], tuple]]:
     """
-    Gives a helper that opens the home page at a viewport and records its errors
+    Gives a helper that opens a page at a viewport and records its errors
 
     Args:
         browser (sync_api.Browser): The running browser
         base_url (str): The home page URL on the preview server
 
     Returns:
-        Iterator[Callable[[dict], tuple]]: Takes a viewport dict and returns the loaded page and its error list
+        Iterator[Callable[[dict], tuple]]: Takes a viewport dict and an optional path, and returns the loaded page and its error list
     """
 
     pages = []
 
-    def load(viewport: dict) -> tuple:
+    def load(viewport: dict, path: str = "") -> tuple:
         """
-        Opens the home page at one viewport size
+        Opens a page at one viewport size
 
         Args:
             viewport (dict): The width and height in pixels
+            path (str): The path after the home page URL, or "" for the home page
 
         Returns:
             tuple: The page, and a list that collects console errors and page errors
@@ -100,7 +114,7 @@ def open_page(browser: "sync_api.Browser", base_url: str) -> Iterator[Callable[[
             lambda url: not url.startswith(base_url),
             lambda route: route.fulfill(status=200, body="", content_type="text/css"),
         )
-        page.goto(base_url)
+        page.goto(base_url + path)
         pages.append(page)
 
         return page, errors
@@ -298,3 +312,92 @@ def test_glossary_bubbles_stay_in_column(
 
     assert checked > 0
     assert not outside, "\n".join(outside)
+
+
+
+# ========================================================================
+#   Pinned Footer
+# ========================================================================
+
+@pytest.mark.parametrize("width", FOOTER_WIDTHS)
+@pytest.mark.parametrize("name, path", FOOTER_PAGES)
+def test_gap_above_footer_is_its_margin(
+    open_page: Callable[[dict], tuple],
+    name:      str,
+    path:      str,
+    width:     int,
+) -> None:
+    """
+    Checks the gap above the footer equals the footer's top margin, in a short window
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens a page at a viewport
+        name (str): The page or view name, for the test id
+        path (str): The path after the home page URL
+        width (int): The window width in pixels
+
+    Returns:
+        None
+    """
+
+    gap_js = """() => {
+        const foot  = document.querySelector(".site-foot");
+        const shown = el => {
+            const style = getComputedStyle(el);
+            return el.tagName !== "SCRIPT" && !el.hidden && style.display !== "none"
+                && !["absolute", "fixed"].includes(style.position)
+                && el.getBoundingClientRect().height > 0;
+        };
+        const last  = [...document.querySelector(".page-body").children].filter(shown).pop();
+        return {
+            gap:    foot.getBoundingClientRect().top - last.getBoundingClientRect().bottom,
+            margin: parseFloat(getComputedStyle(foot).marginTop),
+        };
+    }"""
+
+    page, _ = open_page({"width": width, "height": 500}, path)
+
+    if name == "poster":
+        page.wait_for_selector("#overlay.open")
+
+    page.evaluate("document.fonts.ready")
+    measured = page.evaluate(gap_js)
+
+    assert measured["margin"] > 0
+    assert abs(measured["gap"] - measured["margin"]) < 0.5, measured
+
+
+@pytest.mark.parametrize("width", [375, 1440])
+@pytest.mark.parametrize("path", ["", "methodology/"], ids=["home", "methodology"])
+def test_footer_pins_to_bottom_of_short_page(
+    open_page: Callable[[dict], tuple],
+    path:      str,
+    width:     int,
+) -> None:
+    """
+    Checks the footer ends its bottom margin above the window's edge once the page is short
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens a page at a viewport
+        path (str): The path after the home page URL
+        width (int): The window width in pixels
+
+    Returns:
+        None
+    """
+
+    pin_js = """() => {
+        document.querySelectorAll(".content > :not(.masthead)").forEach(el => el.hidden = true);
+        const foot = document.querySelector(".site-foot");
+        return {
+            bottom: foot.getBoundingClientRect().bottom + parseFloat(getComputedStyle(foot).marginBottom),
+            inner:  innerHeight,
+            scroll: document.documentElement.scrollHeight,
+        };
+    }"""
+
+    page, _  = open_page({"width": width, "height": 1400}, path)
+    measured = page.evaluate(pin_js)
+
+    assert measured["scroll"] == measured["inner"], measured
+    assert abs(measured["bottom"] - measured["inner"]) < 0.5, measured

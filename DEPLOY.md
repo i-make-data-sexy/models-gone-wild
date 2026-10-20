@@ -12,10 +12,10 @@ Two HTML pages, seven stylesheets both pages link in the same order, the case da
 index.html                    the page's markup, loading the scripts below in order
 methodology/index.html        the Methodology page, explaining each filter
 css/variables.css             the custom properties, linked first
-css/base.css                  the page shell, site header, and masthead
+css/base.css                  the page shell, site header, masthead, and footer
 css/registry.css              the registry panel, timeline, and case cards
 css/charts.css                the tooltip, Threat Matrix, and Cases by Lab
-css/poster.css                the wanted poster and the site footer
+css/poster.css                the wanted poster
 css/methodology.css           the Methodology page
 css/responsive.css            the breakpoints and reduced motion, linked last
 js/cases.js                   the case registry, CASES
