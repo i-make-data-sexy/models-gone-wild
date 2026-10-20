@@ -401,7 +401,11 @@ The scripts in `js/` are classic scripts that share one global scope and run in 
 
 The poster overlay sits at `z-index: 50` and the page shell at `1`. Giving the site header a stacking context above 50 puts the black band on top of the open poster. If a `position` is ever added to `.site-header`, keep its `z-index` below 50.
 
-The page shell is 1200px and the content column inside it is 920px. The header spans the wider one on purpose, matching AI Timeline. Widening `.content` widens the prose and the posters too.
+The page shell, `.main-content`, is a flex column at least as tall as the window, holding three siblings: the site header, `<main class="page-body">`, and the footer. The page body takes the spare height, so the footer stays at the bottom of the window on a short page. Keep all three as direct children of the shell, keep the footer out of `.content`, and give no page a second `<main>`.
+
+The page shell is 1200px and the content column inside it is 920px. The header spans the wider one on purpose, matching AI Timeline. The footer sits outside `.content`, so `.site-foot` carries its own 920px width; widening `.content` widens the prose and the posters but not the footer, so change both together.
+
+The footer's 60px top margin is the only gap above it. Margins no longer merge across the edge of the page body, so the last block on a page and its own last child drop their bottom margins. `base.css` strips them for the page body's last child, and `methodology.css` strips them for the last method section. A new block that ends a page with a bottom margin of its own needs the same, or the gap above the footer grows.
 
 The scatter gridlines step by 2.5 so the dashed quadrant divider at 5 lands on a gridline. Stepping by 2 puts the divider mid-cell and the grid reads as unevenly spaced.
 
