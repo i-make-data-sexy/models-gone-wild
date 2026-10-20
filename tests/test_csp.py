@@ -51,7 +51,7 @@ PATHS = [
     "/no-such-page/",
 ]
 
-PAGES = ["index.html", "methodology/index.html"]
+PAGES = ["index.html", "methodology/index.html", "404.html"]
 
 
 

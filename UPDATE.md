@@ -277,7 +277,8 @@ Run all of these from the repo root. Each takes seconds.
 #    slash resolves to the site root and 404s under /tools/models-gone-wild/.
 #    Both pages and every stylesheet, since the stylesheets carry url()
 #    references too.
-grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/*.css methodology/index.html
+grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html css/*.css methodology/index.html 404.html \
+  | grep -v '404.html:.*<base href="/tools/models-gone-wild/">'
 
 # 2. Every script in js/ still parses structurally, and
 #    every case is well formed.

@@ -6,11 +6,12 @@ Claude Code: read this entire file before taking any deployment action. Never pr
 
 ## What this app is
 
-Two HTML pages, seven stylesheets both pages link in the same order, the case data in two scripts, the page's behavior in ten more, and one vendored JavaScript library.
+Three HTML pages, seven stylesheets all three link in the same order, the case data in two scripts, the page's behavior in ten more, and one vendored JavaScript library.
 
 ```
 index.html                    the page's markup, loading the scripts below in order
 methodology/index.html        the Methodology page, explaining each filter
+404.html                      the page nginx serves for any unknown path
 css/variables.css             the custom properties, linked first
 css/base.css                  the page shell, site header, masthead, and footer
 css/registry.css              the registry panel, timeline, and case cards
@@ -36,7 +37,7 @@ DEPLOY.md                     this file
 .gitignore
 ```
 
-Both pages load the site-wide Google Tag Manager container, GTM-5FJGP2, which AI Timeline and AI Strategy share. Its one tag fires GA4 (G-2CGX3KD64R). `js/gtm.js` reads the container ID from its own `data-gtm-id` attribute, and each page carries the `<noscript>` fallback frame right after `<body>`, hidden by `.gtm-noscript-frame` in `css/base.css`.
+All three pages load the site-wide Google Tag Manager container, GTM-5FJGP2, which AI Timeline and AI Strategy share. Its one tag fires GA4 (G-2CGX3KD64R). `js/gtm.js` reads the container ID from its own `data-gtm-id` attribute, and each page carries the `<noscript>` fallback frame right after `<body>`, hidden by `.gtm-noscript-frame` in `css/base.css`.
 
 The case data lives in the `CASES` array in `js/cases.js`, and the glossary in `GLOSSARY` in `js/glossary.js`. Adding an escapee means appending an object to that array and pushing. There is no admin screen and no database, by design.
 
@@ -64,7 +65,7 @@ Do not create a systemd service for this app. There is no process to supervise.
 
 Four things have to be true before a deploy:
 
-- Every path to a local file in the two pages is relative, never starting with a slash. See the next section.
+- Every path to a local file in the three pages is relative, never starting with a slash. See the next section.
 - The page opens correctly from a local web server, not just by double-clicking the file.
 - `git status` is clean and the work is committed on a branch.
 - For production, the branch has been checked on staging and merged to main on Annie's word, since production pulls main.
@@ -78,8 +79,11 @@ None of the Python prefix machinery applies here. There is no `SCRIPT_NAME`, no 
 Run this before every deploy. It must return nothing:
 
 ```bash
-grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html
+grep -nE '(href|src|action|url\()\s*=?\s*["'"'"']/[^/]' index.html methodology/index.html 404.html css/*.css \
+  | grep -v '404.html:.*<base href="/tools/models-gone-wild/">'
 ```
+
+The one exception is the `<base href>` in `404.html`. Nginx serves that page at whatever depth the unknown URL had, so its relative paths resolve from the app folder only through the base tag.
 
 A leading double slash is fine, since `//fonts.googleapis.com` is an absolute external URL and not a site-root path.
 
@@ -159,6 +163,7 @@ location ~ ^/tools/models-gone-wild/poster/[a-z0-9-]+/ {
 # or it will be readable on the live site.
 location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
     include snippets/models-gone-wild-headers.conf;
+    error_page 404 /tools/models-gone-wild/404.html;
     return 404;
 }
 
@@ -167,7 +172,7 @@ location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
 # to the page block below. Also a regex, so it beats the prefix block,
 # and the filename character class cannot express ".." so it cannot be
 # walked out of the directory.
-location ~* ^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
+location ~* ^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico|woff2))$ {
     alias /home/anniecushing/apps/models-gone-wild/$1/$2;
     add_header Cache-Control "public, max-age=2592000, no-transform";
     include snippets/models-gone-wild-headers.conf;
@@ -188,6 +193,7 @@ location /tools/models-gone-wild/ {
 
     alias /home/anniecushing/apps/models-gone-wild/;
     index index.html;
+    error_page 404 /tools/models-gone-wild/404.html;
     add_header Cache-Control "no-cache, no-store, must-revalidate";
     include snippets/models-gone-wild-headers.conf;
 }
@@ -196,6 +202,8 @@ location /tools/models-gone-wild/ {
 The trailing slashes on both the `location` and the `alias` have to match. Dropping either one produces paths that silently resolve to the wrong place.
 
 `try_files` is deliberately absent. The `alias` plus `index` pair already serves the page, a missing file 404s on its own, and `try_files` combined with `alias` has a long-standing resolution quirk. Adding it back buys nothing.
+
+The `error_page 404` lines in the page block and the repo-file block answer an unknown path, and a blocked repo file, with `404.html` and a 404 status rather than nginx's built-in page. The redirect to `404.html` is internal, so it lands in the page block and carries that block's headers. `scripts/serve.py` does the same for the local preview.
 
 The `css/` directory and the app's own scripts in `js/` need no rule of their own. The asset regex above covers `js/vendor/` and `img/` only, so a request for `css/base.css` or `js/cases.js` falls through to the page block and is served with the page's no-cache headers. That is the right outcome: the stylesheets change whenever the design does and the data scripts change with every case, and a hard-cached copy would strand readers on an old one. Do not widen the asset regex to `css` or all of `js` without also solving cache-busting.
 
@@ -346,13 +354,14 @@ location ~ ^/tools/models-gone-wild/poster/[a-z0-9-]+/ {
 # DEPLOY.md in particular carries the server path and host IP.
 location ~* ^/tools/models-gone-wild/.+\.(md|txt|json|ya?ml|lock|py)$ {
     include snippets/models-gone-wild-headers-staging.conf;
+    error_page 404 /tools/models-gone-wild/404.html;
     return 404;
 }
 
 # Unchanging assets cache hard: the vendored library and the images.
 # A regex beats the prefix block below, and the extension whitelist
 # keeps it to real assets.
-location ~* ^/tools/models-gone-wild/(js/vendor|img)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico))$ {
+location ~* ^/tools/models-gone-wild/(js/vendor|img|fonts/[\w-]+)/([\w.-]+\.(?:js|png|jpe?g|svg|webp|ico|woff2))$ {
     satisfy any;
     allow 127.0.0.1;
     allow ::1;
@@ -378,6 +387,7 @@ location /tools/models-gone-wild/ {
 
     alias /home/anniecushing/apps/staging/models-gone-wild/;
     index index.html;
+    error_page 404 /tools/models-gone-wild/404.html;
     add_header Cache-Control "no-cache, no-store, must-revalidate";
     include snippets/models-gone-wild-headers-staging.conf;
 }

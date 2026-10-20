@@ -46,7 +46,7 @@ def test_root_holds_only_allowed_files() -> None:
         None
     """
 
-    allowed = {".gitignore", "index.html", "requirements-dev.txt", "DEPLOY.md", "UPDATE.md"}
+    allowed = {".gitignore", "404.html", "index.html", "requirements-dev.txt", "DEPLOY.md", "UPDATE.md"}
 
     result = subprocess.run(
         ["git", "ls-files"],

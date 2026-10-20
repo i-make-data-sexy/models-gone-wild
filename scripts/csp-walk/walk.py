@@ -402,14 +402,15 @@ def build_visits(base: str, folder: Path) -> list[tuple]:
     """
 
     pages = [
-        ("home",          "/",               None),
-        ("threat-matrix", "/threat-matrix/", None),
-        ("lab-counts",    "/lab-counts/",    None),
+        ("home",           "/",                     None),
+        ("threat-matrix",  "/threat-matrix/",       None),
+        ("lab-counts",     "/lab-counts/",          None),
     ]
     pages += [(f"poster {slug}", f"/poster/{slug}/", None) for slug in poster_slugs(base)]
     pages += [
-        ("methodology",   "/methodology/",   None),
-        ("404",           "/no-such-page/",  None),
+        ("methodology",    "/methodology/",         None),
+        ("404",            "/no-such-page/",        None),
+        ("poster-unknown", "/poster/no-such-slug/", None),
     ]
 
     states = [
