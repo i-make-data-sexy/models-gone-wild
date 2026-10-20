@@ -75,6 +75,93 @@ body::before {
 
 .site-foot b { color: var(--ink); }
 
+.footer-nav {
+    display:             flex;
+    flex-wrap:           wrap;
+    justify-content:     center;
+    align-items:         center;
+    gap:                 14px;
+    margin-bottom:       18px;
+}
+
+.footer-link {
+    position:            relative;
+    display:             inline-flex;
+    align-items:         center;
+    justify-content:     center;
+    min-width:           44px;
+    height:              44px;
+    box-sizing:          border-box;
+    border:              1px solid var(--icon-btn-border);
+    border-radius:       999px;
+    overflow:            hidden;
+    white-space:         nowrap;
+    color:               var(--ink-soft);
+    text-decoration:     none;
+    background-color:    var(--card);
+    background-image:    linear-gradient(var(--stamp-red),var(--stamp-red));
+    background-repeat:   no-repeat;
+    background-position: left center;
+    background-size:     0% 100%;
+    transition:          background-size .4s ease,
+                         color           .4s ease,
+                         border-color    .4s ease;
+}
+
+.footer-icon {
+    position:            absolute;
+    top:                 50%;
+    left:                50%;
+    width:               20px;
+    height:              20px;
+    transform:           translate(-50%,-50%);
+    transition:          opacity .25s ease;
+}
+
+.footer-label {
+    max-width:           0;
+    overflow:            hidden;
+    opacity:             0;
+    font-family:         'Oswald',sans-serif;
+    font-weight:         500;
+    font-size:           var(--font-size-footer-label);
+    letter-spacing:      .14em;
+    text-transform:      uppercase;
+    transition:          max-width .4s ease,
+                         padding   .4s ease,
+                         opacity   .3s ease;
+}
+
+.footer-link[aria-current="page"] {
+    color:               var(--stamp-red);
+    border-color:        var(--stamp-red);
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+    color:               var(--paper);
+    border-color:        var(--stamp-red);
+    background-size:     100% 100%;
+}
+
+.footer-link:focus-visible {
+    outline:             2px solid var(--stamp-red);
+    outline-offset:      2px;
+}
+.footer-link:hover .footer-icon,
+.footer-link:focus-visible .footer-icon {
+    opacity:             0;
+}
+
+.footer-link:hover .footer-label,
+.footer-link:focus-visible .footer-label {
+    max-width:           220px;
+    padding:             0 20px;
+    opacity:             1;
+}
+
+.footer-date { margin: 0; }
+
 .gtm-noscript-frame {
     display:             none;
     visibility:          hidden;

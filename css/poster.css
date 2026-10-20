@@ -256,6 +256,29 @@
     color:           var(--paper);
 }
 
+.poster-message {
+    margin:          12px 24px 0;
+    text-align:      center;
+    font-family:     'Special Elite',monospace;
+    font-size:       var(--font-size-poster-body);
+    line-height:     var(--line-height-poster-body);
+    color:           var(--stamp-red);
+}
+
+.poster-missing-note {
+    margin:          22px 34px 0;
+    text-align:      center;
+    font-family:     'Special Elite',monospace;
+    font-size:       var(--font-size-poster-body);
+    line-height:     var(--line-height-poster-body);
+    color:           var(--ink-soft);
+}
+
+.poster-missing-back {
+    margin:          18px 24px 0;
+    text-align:      center;
+}
+
 .stamp {
     position:        absolute;
     top:             70px;

@@ -221,16 +221,22 @@ def test_redirect(fetch: Callable[[str], tuple], path: str, location: str) -> No
     assert headers["Location"] == location
 
 
-def test_unknown_path_is_404(fetch: Callable[[str], tuple]) -> None:
+@pytest.mark.parametrize("path", ["/no-such-page/", "/case/files/no-such-page"])
+def test_unknown_path_is_404(fetch: Callable[[str], tuple], path: str) -> None:
     """
-    Checks a path that matches no page returns 404
+    Checks a path that matches no page returns 404 with the app's own 404 page
 
     Args:
         fetch (Callable[[str], tuple]): Requests a path on the preview server
+        path (str): The unknown path, one folder deep or several
 
     Returns:
         None
     """
 
-    status, _, _ = fetch("/no-such-page/")
+    title           = "<title>File Not Found: Models Gone Wild</title>"
+    status, _, body = fetch(path)
+
     assert status == 404
+    assert title in body
+    assert '<meta name="robots" content="noindex">' in body

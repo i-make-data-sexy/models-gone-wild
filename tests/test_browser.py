@@ -9,11 +9,15 @@
 #
 # The pinned footer tests check the gap above the footer is the footer's
 # own top margin on every page, and that a short page pins the footer to
-# the bottom of the window.
+# the bottom of the window. The not-found tests cover the 404 page's
+# footer discs, the notice an unknown poster link opens, and the message
+# a failed poster download shows in place of a dialog.
 #
-# The last test is the revert-and-fail proof for 8e726b4, which clamped
-# the glossary bubbles inside the reading column. Without the clamp the
-# bubbles spill past the column's edge and the test fails.
+# The tooltip tests hold every bubble 10px inside its box, the reading
+# column on the page or the open poster. The column test is the
+# revert-and-fail proof for 8e726b4, which clamped the glossary bubbles
+# inside the reading column. Without the clamp the bubbles spill past the
+# column's edge and the test fails.
 
 
 
@@ -52,6 +56,7 @@ FOOTER_PAGES  = [
     ("labs",        "lab-counts/"),
     ("poster",      "poster/sol-hugging-face/"),
     ("methodology", "methodology/"),
+    ("404",         "no-such-page/"),
 ]
 FOOTER_WIDTHS = [375, 768, 1024, 1440]
 
@@ -314,6 +319,72 @@ def test_glossary_bubbles_stay_in_column(
     assert not outside, "\n".join(outside)
 
 
+@pytest.mark.parametrize("viewport", [DESKTOP, PHONE], ids=["1440", "375"])
+def test_poster_bubbles_stay_in_poster(
+    open_page: Callable[[dict], tuple],
+    viewport:  dict,
+) -> None:
+    """
+    Checks every bubble in an open poster sits 10px inside the poster on all four sides
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+        viewport (dict): The width and height in pixels
+
+    Returns:
+        None
+    """
+
+    tip_gap     = 10
+    tip_gaps_js = """() => {
+        const tip    = document.getElementById("tip").getBoundingClientRect();
+        const poster = document.querySelector("#overlay .poster").getBoundingClientRect();
+        return {
+            left:   tip.left - poster.left,
+            right:  poster.right - tip.right,
+            top:    tip.top - poster.top,
+            bottom: poster.bottom - tip.bottom,
+        };
+    }"""
+
+    page, _ = open_page(viewport, "poster/sol-hugging-face/")
+    page.wait_for_selector("#overlay.open")
+    checked = 0
+    outside = []
+
+    for trigger in page.locator("#overlay .poster [data-def], #overlay .poster [data-tip]").all():
+        trigger.scroll_into_view_if_needed()
+        page.wait_for_timeout(50)
+        page.mouse.move(0, 0)
+        trigger.hover()
+        page.wait_for_selector("#tip.show")
+
+        gaps     = page.evaluate(tip_gaps_js)
+        checked += 1
+
+        if min(gaps.values()) < tip_gap - 0.5:
+            outside.append(f"{trigger.text_content()!r}: {gaps}")
+
+    assert checked > 0
+    assert not outside, "\n".join(outside)
+
+
+def test_tip_text_is_left_aligned(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks the tooltip bubble computes left-aligned text
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP)
+
+    assert page.evaluate("getComputedStyle(document.getElementById('tip')).textAlign") == "left"
+
+
 
 # ========================================================================
 #   Pinned Footer
@@ -368,7 +439,7 @@ def test_gap_above_footer_is_its_margin(
 
 
 @pytest.mark.parametrize("width", [375, 1440])
-@pytest.mark.parametrize("path", ["", "methodology/"], ids=["home", "methodology"])
+@pytest.mark.parametrize("path", ["", "methodology/", "no-such-page/"], ids=["home", "methodology", "404"])
 def test_footer_pins_to_bottom_of_short_page(
     open_page: Callable[[dict], tuple],
     path:      str,
@@ -401,3 +472,99 @@ def test_footer_pins_to_bottom_of_short_page(
 
     assert measured["scroll"] == measured["inner"], measured
     assert abs(measured["bottom"] - measured["inner"]) < 0.5, measured
+
+
+
+# ========================================================================
+#   Not Found
+# ========================================================================
+
+def test_unknown_poster_shows_notice(open_page: Callable[[dict], tuple], base_url: str) -> None:
+    """
+    Checks a poster link that names no case opens the notice, keeps its URL, and marks the page noindex
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens a page at a viewport
+        base_url (str): The home page URL on the preview server
+
+    Returns:
+        None
+    """
+
+    page, errors = open_page(DESKTOP, "poster/no-such-slug/")
+    page.wait_for_selector("#overlay.open .poster-missing")
+
+    assert page.locator("#posterAlias").text_content() == "No File"
+    assert page.locator('meta[name="robots"]').get_attribute("content") == "noindex"
+    assert page.url == f"{base_url}poster/no-such-slug/"
+    assert page.locator(".poster-missing .back-link").evaluate("a => a.href") == base_url
+    assert not errors
+
+    page.keyboard.press("Escape")
+    page.wait_for_url(base_url)
+    assert page.locator("#overlay.open").count() == 0
+
+
+def test_failed_download_shows_message_in_poster(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a Download poster press with html2canvas blocked shows a message in the poster, not a dialog
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens a page at a viewport
+
+    Returns:
+        None
+    """
+
+    library = "**/js/vendor/html2canvas.min.js"
+    dialogs = []
+
+    page, _ = open_page(DESKTOP)
+    page.on("dialog", lambda dialog: (dialogs.append(dialog.message), dialog.dismiss()))
+    page.route(library, lambda route: route.abort())
+
+    page.locator("#timeline [data-open]").first.click()
+    page.locator("#dlBtn").click()
+    page.wait_for_selector("#poster #posterMessage:not([hidden])")
+
+    assert "didn't load" in page.locator("#posterMessage").text_content()
+    assert not dialogs
+
+    page.unroute(library)
+
+    with page.expect_download():
+        page.locator("#dlBtn").click()
+
+    assert page.locator("#posterMessage").is_hidden()
+    assert not dialogs
+
+
+def test_footer_disc_opens_on_hover(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a footer disc grows into its labeled pill on hover, with no underline
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens a page at a viewport
+
+    Returns:
+        None
+    """
+
+    disc_js = """a => ({
+        width:      a.getBoundingClientRect().width,
+        label:      getComputedStyle(a.querySelector(".footer-label")).opacity,
+        decoration: getComputedStyle(a).textDecorationLine,
+    })"""
+
+    page, _ = open_page(DESKTOP, "no-such-page/")
+    disc    = page.locator(".footer-link").first
+    disc.scroll_into_view_if_needed()
+    rest    = disc.evaluate(disc_js)
+
+    disc.hover()
+    page.wait_for_timeout(600)
+    hover   = disc.evaluate(disc_js)
+
+    assert rest["width"] == 44 and rest["label"] == "0"
+    assert hover["width"] > 100 and hover["label"] == "1"
+    assert rest["decoration"] == hover["decoration"] == "none"

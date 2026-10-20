@@ -13,7 +13,8 @@ index.html and /tools/models-gone-wild/lab-counts/css/base.css serves the
 real stylesheet. Old ?view= links get the same 301 to their permalink that
 nginx sends, and every response carries the security headers from
 deploy/nginx/headers.conf. Serving at the subpath also exercises the
-relative asset paths the way production does.
+relative asset paths the way production does. A missing path under the
+prefix gets 404.html with a 404, as nginx's error_page sends.
 
 Usage:
     python3 scripts/serve.py [--port 8899]
@@ -175,6 +176,36 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         self.send_response(301)
         self.send_header("Location", location)
         self.end_headers()
+
+    def send_error(self, code: int, message: str | None = None, explain: str | None = None) -> None:
+        """
+        Serves 404.html for a missing path under the prefix, as nginx's error_page does
+
+        Args:
+            code (int): The HTTP status code
+            message (str | None): The short reason, used only for other errors
+            explain (str | None): The longer reason, used only for other errors
+
+        Returns:
+            None
+        """
+
+        page      = os.path.join(REPO, "404.html")
+        _, served = resolve_permalink(self.path)
+
+        if code != 404 or served is None or not os.path.isfile(page):
+            return super().send_error(code, message, explain)
+
+        with open(page, "rb") as handle:
+            body = handle.read()
+
+        self.send_response(404)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+
+        if self.command != "HEAD":
+            self.wfile.write(body)
 
     def end_headers(self) -> None:
         """

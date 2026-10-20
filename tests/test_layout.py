@@ -30,7 +30,7 @@ import pytest
 # ========================================================================
 
 REPO  = Path(__file__).resolve().parent.parent
-PAGES = [REPO / "index.html", REPO / "methodology" / "index.html"]
+PAGES = [REPO / "index.html", REPO / "methodology" / "index.html", REPO / "404.html"]
 
 
 
@@ -123,7 +123,7 @@ class ShellParser(HTMLParser):
 #   Page Shell
 # ========================================================================
 
-@pytest.mark.parametrize("path", PAGES, ids=["home", "methodology"])
+@pytest.mark.parametrize("path", PAGES, ids=["home", "methodology", "404"])
 def test_one_main_and_it_is_the_page_body(path: Path) -> None:
     """
     Checks each page holds exactly one <main>, the page body
@@ -138,7 +138,7 @@ def test_one_main_and_it_is_the_page_body(path: Path) -> None:
     assert re.findall(r"<main\b[^>]*>", read(path)) == ['<main class="page-body">']
 
 
-@pytest.mark.parametrize("path", PAGES, ids=["home", "methodology"])
+@pytest.mark.parametrize("path", PAGES, ids=["home", "methodology", "404"])
 def test_shell_holds_header_body_and_footer(path: Path) -> None:
     """
     Checks the header, the page body, and the footer are the shell's only children, in that order

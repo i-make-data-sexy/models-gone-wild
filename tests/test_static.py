@@ -33,7 +33,7 @@ from conftest import cases
 # ========================================================================
 
 REPO     = Path(__file__).resolve().parent.parent
-PAGES    = [REPO / "index.html", REPO / "methodology" / "index.html"]
+PAGES    = [REPO / "index.html", REPO / "methodology" / "index.html", REPO / "404.html"]
 BALANCED = sorted(path.name for path in (REPO / "js").glob("*.js"))
 
 
@@ -88,12 +88,13 @@ def test_no_leading_slash_paths() -> None:
 
     slash_files = PAGES + sorted((REPO / "css").glob("*.css"))
     leading_re  = re.compile(r"""(href|src|action|url\()\s*=?\s*["']/[^/]""")
+    allowed     = {("404.html", '<base href="/tools/models-gone-wild/">')}
 
     hits = [
         f"{path.relative_to(REPO)}:{number}: {line.strip()}"
         for path in slash_files
         for number, line in enumerate(read(path).splitlines(), 1)
-        if leading_re.search(line)
+        if leading_re.search(line) and (str(path.relative_to(REPO)), line.strip()) not in allowed
     ]
     assert not hits, "\n".join(hits)
 
@@ -220,7 +221,7 @@ def test_poster_footer_fits_one_line() -> None:
 
 def test_site_headers_match() -> None:
     """
-    Checks the Methodology page's site header matches the home page's
+    Checks the Methodology and 404 pages' site headers match the home page's
 
     Args:
         None
@@ -231,7 +232,8 @@ def test_site_headers_match() -> None:
 
     home        = site_header(PAGES[0])
     methodology = site_header(PAGES[1]).replace('src="../img/', 'src="img/')
-    assert home == methodology
+    not_found   = site_header(PAGES[2])
+    assert home == methodology == not_found
 
 
 @pytest.mark.parametrize("path", PAGES, ids=lambda path: str(path.relative_to(REPO)))
