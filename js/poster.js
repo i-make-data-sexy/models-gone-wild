@@ -5,8 +5,11 @@
 /* The case poster, the WANTED file that opens over the page. It builds a
    case's poster, keeps the poster's permalink in the address bar, copies
    that link, and downloads the poster as a PNG, loading html2canvas on
-   the first Download poster press. Needs APP_BASE, gloss(), mug(), and
-   hideTip() from the scripts that load before it. */
+   the first Download poster press. A poster link that names no case
+   opens a "no file" notice instead and marks the page noindex. A failed
+   download shows its message inside the poster, beneath the buttons.
+   Needs APP_BASE, gloss(), mug(), and hideTip() from the scripts that
+   load before it. */
 
 
 
@@ -95,7 +98,8 @@ function openCase(id, opts={}){
         <div class="poster-actions">
             <button class="dl-btn" id="dlBtn" data-alias="${c.alias.replace(/[^a-z0-9]+/gi,"-").toLowerCase()}">Download poster</button>
             <button class="dl-btn copy-btn" id="copyBtn" data-slug="${c.slug}">Copy link</button>
-        </div>`;
+        </div>
+        <p class="poster-message" id="posterMessage" role="status" hidden></p>`;
     poster.appendChild(div);
     overlay.classList.add("open");
     document.body.style.overflow="hidden";
@@ -110,6 +114,34 @@ function openCase(id, opts={}){
     }
 }
 
+function openMissing(){
+    lastFocus=document.activeElement;
+    poster.querySelector(".poster-content")?.remove();
+    const div=document.createElement("div");
+    div.className="poster-content poster-missing";
+    div.innerHTML=`
+        <div class="poster-top">
+            <p class="poster-eyebrow">Bureau of Model Containment</p>
+            <h2 class="poster-wanted" id="posterAlias">No File</h2>
+            <p class="poster-for">on record</p>
+        </div>
+        <p class="poster-missing-note">The bureau has no case filed under this link. It may be mistyped, or the case may have been renamed.</p>
+        <p class="poster-missing-back"><a class="back-link" href="${APP_BASE}">Back to the registry</a></p>`;
+    poster.appendChild(div);
+    overlay.classList.add("open");
+    document.body.style.overflow="hidden";
+    closeBtn.focus();
+    markNoindex();
+}
+
+function markNoindex(){
+    if(document.querySelector('meta[name="robots"]')) return;
+    const meta=document.createElement("meta");
+    meta.name="robots";
+    meta.content="noindex";
+    document.head.appendChild(meta);
+}
+
 function hidePoster(){
     overlay.classList.remove("open");
     document.body.style.overflow="";
@@ -122,13 +154,6 @@ function closeCase(){
     if(posterPushed){ posterPushed=false; history.back(); }
     else syncViewUrl();
 }
-
-window.addEventListener("popstate",()=>{
-    const linked=caseBySlug(posterFromUrl());
-    posterPushed=false;
-    if(linked) openCase(linked.id,{push:false});
-    else if(overlay.classList.contains("open")) hidePoster();
-});
 
 
 /* ================================================
@@ -176,16 +201,24 @@ function loadHtml2canvas(){
     return html2canvasLoading;
 }
 
+function showPosterMessage(text){
+    const note=document.getElementById("posterMessage");
+    if(!note) return;
+    note.textContent=text;
+    note.hidden=!text;
+}
+
 async function downloadPoster(e){
     const btn      = e.currentTarget;
     const label    = btn.dataset.alias||"model";
     const original = btn.innerHTML;
+    showPosterMessage("");
     btn.disabled=true; btn.innerHTML="Rendering&hellip;";
     try{
         await loadHtml2canvas();
     }catch(err){
         btn.disabled=false; btn.innerHTML=original;
-        alert("The image library didn't load. Check your connection and try again.");
+        showPosterMessage("The image library didn't load. Check your connection and try again.");
         return;
     }
     const copyBtn=document.getElementById("copyBtn");
@@ -206,7 +239,8 @@ async function downloadPoster(e){
         link.href=canvas.toDataURL("image/png");
         link.click();
     }catch(err){
-        alert("Couldn't generate the image: "+err.message);
+        console.error(err);
+        showPosterMessage("The poster image couldn't be generated. Try again in a moment.");
     }finally{
         poster.classList.remove("exporting");
         closeBtn.style.visibility="";
@@ -216,6 +250,22 @@ async function downloadPoster(e){
     }
 }
 
-closeBtn.addEventListener("click",closeCase);
-overlay.addEventListener("click",e=>{ if(e.target===overlay) closeCase(); });
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&overlay.classList.contains("open")) closeCase(); });
+
+
+/* ========================================================================
+     Init
+   ======================================================================== */
+
+function bindPosterEvents(){
+    window.addEventListener("popstate",()=>{
+        const linked=caseBySlug(posterFromUrl());
+        posterPushed=false;
+        if(linked) openCase(linked.id,{push:false});
+        else if(overlay.classList.contains("open")) hidePoster();
+    });
+    closeBtn.addEventListener("click",closeCase);
+    overlay.addEventListener("click",e=>{ if(e.target===overlay) closeCase(); });
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&overlay.classList.contains("open")) closeCase(); });
+}
+
+bindPosterEvents();
