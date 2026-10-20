@@ -136,9 +136,9 @@ Repo root: /Users/anniecushing/Dropbox/Annielytics/Code/Python/Models Gone Wild
    and the merge commit, commit, and push to main.
 7. Give me the production links to spot-check, and the Facebook Sharing
    Debugger (https://developers.facebook.com/tools/debug/) to check the
-   share cards for the home page, /threat-matrix/, and /lab-counts/. Then tell me the standards cleanup is finished,
-   and that prompts 5 to 7 in
-   ~/.claude/skills/app-refactor-audit/prompts.md (formatting, quotes, and
-   comment length) come next, and paste prompt 5 from that file in full,
-   so I can start the next session with it.
+   share cards for the home page, /threat-matrix/, and /lab-counts/. Then
+   tell me the standards cleanup is finished, that the server-wide nginx
+   follow-up in docs/standards-cleanup/server-wide-followup.md comes next,
+   and paste its prompt from that file in full, so I can start the next
+   session with it.
 ```
