@@ -37,8 +37,6 @@
     transition:          border-color .13s;
 }
 
-.search-input::placeholder { color: var(--ink-soft); }
-
 .search-input:hover { border-color: var(--ink); }
 
 .search-input:focus {
