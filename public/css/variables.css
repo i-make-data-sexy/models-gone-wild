@@ -99,6 +99,8 @@
     --font-size-card-alias:       19px;
     --font-size-card-charge:      12.5px;
     --font-size-card-badge:       10px;
+    --font-size-card-excerpt:     11px;
+    --font-size-hit-count:        9px;
 
     /* Charts and tooltips */
     --font-size-tip:              11.5px;

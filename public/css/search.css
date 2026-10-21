@@ -4,7 +4,9 @@
 
 /* The search at the top of the options menu, covering the search box and
    its button, the regex error line, the Advanced switches, the clear
-   button beside the count line, and the highlight on matched words */
+   button beside the count line, the highlight on matched words, the
+   poster match count and excerpt on each card, and the poster's match
+   strip, which Download poster leaves out of the saved image */
 
 
 
@@ -13,153 +15,153 @@
    ======================================================================== */
 
 .options-heading-section {
-    margin-top:          18px;
-    padding-top:         14px;
-    border-top:          1.5px dashed var(--rule);
+    margin-top:      18px;
+    padding-top:     14px;
+    border-top:      1.5px dashed var(--rule);
 }
 
 .search-row {
-    display:             flex;
-    gap:                 6px;
+    display:         flex;
+    gap:             6px;
 }
 
 .search-input {
-    flex:                1;
-    min-width:           0;
-    height:              36px;
-    box-sizing:          border-box;
-    padding:             0 10px;
-    font-family:         'Courier Prime','Courier New',monospace;
-    font-size:           var(--font-size-search-input);
-    color:               var(--ink);
-    background:          var(--paper);
-    border:              1.5px solid var(--rule);
-    border-radius:       2px;
-    transition:          border-color .13s;
+    flex:            1;
+    min-width:       0;
+    height:          36px;
+    box-sizing:      border-box;
+    padding:         0 10px;
+    font-family:     'Courier Prime','Courier New',monospace;
+    font-size:       var(--font-size-search-input);
+    color:           var(--ink);
+    background:      var(--paper);
+    border:          1.5px solid var(--rule);
+    border-radius:   2px;
+    transition:      border-color .13s;
 }
 
 .search-input:hover { border-color: var(--ink); }
 
 .search-input:focus {
-    border-color:        var(--ink);
-    outline:             none;
+    border-color:    var(--ink);
+    outline:         none;
 }
 
 .search-input:focus-visible {
-    outline:             2px solid var(--ink);
-    outline-offset:      2px;
+    outline:         2px solid var(--ink);
+    outline-offset:  2px;
 }
 
 .search-input[aria-invalid="true"] { border-color: var(--stamp-red); }
 
 .search-button {
-    display:             flex;
-    flex:                none;
-    align-items:         center;
-    justify-content:     center;
-    width:               36px;
-    height:              36px;
-    padding:             0;
-    border:              1.5px solid var(--ink);
-    border-radius:       2px;
-    background:          var(--ink);
-    color:               var(--paper);
-    cursor:              pointer;
-    transition:          background-color .15s,border-color .15s;
+    display:         flex;
+    flex:            none;
+    align-items:     center;
+    justify-content: center;
+    width:           36px;
+    height:          36px;
+    padding:         0;
+    border:          1.5px solid var(--ink);
+    border-radius:   2px;
+    background:      var(--ink);
+    color:           var(--paper);
+    cursor:          pointer;
+    transition:      background-color .15s,border-color .15s;
 }
 
 .search-button svg {
-    width:               18px;
-    height:              18px;
+    width:           18px;
+    height:          18px;
 }
 
 .search-button:hover {
-    background:          var(--stamp-red);
-    border-color:        var(--stamp-red);
+    background:      var(--stamp-red);
+    border-color:    var(--stamp-red);
 }
 
 .search-button:focus-visible {
-    outline:             2px solid var(--ink);
-    outline-offset:      2px;
+    outline:         2px solid var(--ink);
+    outline-offset:  2px;
 }
 
 .search-error {
-    margin:              6px 0 0;
-    font-family:         'Special Elite',monospace;
-    font-size:           var(--font-size-options-label);
-    color:               var(--stamp-red);
+    margin:          6px 0 0;
+    font-family:     'Special Elite',monospace;
+    font-size:       var(--font-size-options-label);
+    color:           var(--stamp-red);
 }
 
 .search-error[hidden] { display: none; }
 
 .toggle-switch {
-    position:            relative;
-    display:             flex;
-    align-items:         center;
-    gap:                 9px;
-    margin:              12px 0 0;
-    font-family:         'Oswald',sans-serif;
-    font-weight:         500;
-    letter-spacing:      .08em;
-    text-transform:      uppercase;
-    font-size:           var(--font-size-filter-control);
-    color:               var(--ink-soft);
-    cursor:              pointer;
+    position:        relative;
+    display:         flex;
+    align-items:     center;
+    gap:             9px;
+    margin:          12px 0 0;
+    font-family:     'Oswald',sans-serif;
+    font-weight:     500;
+    letter-spacing:  .08em;
+    text-transform:  uppercase;
+    font-size:       var(--font-size-filter-control);
+    color:           var(--ink-soft);
+    cursor:          pointer;
 }
 
 .toggle-switch input {
-    position:            absolute;
-    width:               1px;
-    height:              1px;
-    margin:              0;
-    opacity:             0;
-    pointer-events:      none;
+    position:        absolute;
+    width:           1px;
+    height:          1px;
+    margin:          0;
+    opacity:         0;
+    pointer-events:  none;
 }
 
 .toggle-track {
-    position:            relative;
-    flex:                none;
-    width:               34px;
-    height:              20px;
-    box-sizing:          border-box;
-    border:              1.5px solid var(--rule);
-    border-radius:       999px;
-    background:          var(--paper-deep);
-    transition:          background-color .25s,border-color .25s;
+    position:        relative;
+    flex:            none;
+    width:           34px;
+    height:          20px;
+    box-sizing:      border-box;
+    border:          1.5px solid var(--rule);
+    border-radius:   999px;
+    background:      var(--paper-deep);
+    transition:      background-color .25s,border-color .25s;
 }
 
 .toggle-thumb {
-    position:            absolute;
-    top:                 2px;
-    left:                2px;
-    width:               13px;
-    height:              13px;
-    border-radius:       50%;
-    background:          var(--card);
-    box-shadow:          0 1px 2px var(--shadow);
-    transition:          transform .25s cubic-bezier(.34,1.4,.5,1),background-color .25s;
+    position:        absolute;
+    top:             2px;
+    left:            2px;
+    width:           13px;
+    height:          13px;
+    border-radius:   50%;
+    background:      var(--card);
+    box-shadow:      0 1px 2px var(--shadow);
+    transition:      transform .25s cubic-bezier(.34,1.4,.5,1),background-color .25s;
 }
 
 .toggle-switch:hover { color: var(--ink); }
 
 .toggle-switch input:checked + .toggle-track {
-    border-color:        var(--stamp-red);
-    background:          var(--stamp-red);
+    border-color:    var(--stamp-red);
+    background:      var(--stamp-red);
 }
 
 .toggle-switch input:checked + .toggle-track .toggle-thumb {
-    background:          var(--paper);
-    transform:           translateX(14px);
+    background:      var(--paper);
+    transform:       translateX(14px);
 }
 
 .toggle-switch:has(input:checked) {
-    color:               var(--ink);
-    font-weight:         600;
+    color:           var(--ink);
+    font-weight:     600;
 }
 
 .toggle-switch input:focus-visible + .toggle-track {
-    outline:             2px solid var(--ink);
-    outline-offset:      2px;
+    outline:         2px solid var(--ink);
+    outline-offset:  2px;
 }
 
 .advanced-modes { padding-left: 14px; }
@@ -169,43 +171,154 @@
 .advanced-modes .toggle-switch { margin-top: 10px; }
 
 .search-hit {
-    padding:             0 1px;
-    border-radius:       1px;
-    background:          var(--search-hit-fill);
-    color:               inherit;
+    padding:         0 1px;
+    border-radius:   1px;
+    background:      var(--search-hit-fill);
+    color:           inherit;
 }
 
 .search-clear {
-    display:             inline-flex;
-    align-items:         center;
-    justify-content:     center;
-    width:               20px;
-    height:              20px;
-    margin-left:         6px;
-    padding:             0;
-    vertical-align:      middle;
-    border:              none;
-    border-radius:       50%;
-    background:          var(--paper-deep);
-    color:               var(--ink-soft);
-    cursor:              pointer;
-    transition:          background-color .15s,color .15s;
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    width:           20px;
+    height:          20px;
+    margin-left:     6px;
+    padding:         0;
+    vertical-align:  middle;
+    border:          none;
+    border-radius:   50%;
+    background:      var(--paper-deep);
+    color:           var(--ink-soft);
+    cursor:          pointer;
+    transition:      background-color .15s,color .15s;
 }
 
 .search-clear svg {
-    width:               10px;
-    height:              10px;
+    width:           10px;
+    height:          10px;
 }
 
 .search-clear:hover,
 .search-clear:focus-visible {
-    background:          var(--stamp-red);
-    color:               var(--paper);
+    background:      var(--stamp-red);
+    color:           var(--paper);
 }
 
 .search-clear:focus-visible {
-    outline:             2px solid var(--ink);
-    outline-offset:      2px;
+    outline:         2px solid var(--ink);
+    outline-offset:  2px;
 }
 
 .search-clear[hidden] { display: none; }
+
+.search-hit.is-current {
+    outline:         2px solid var(--stamp-red);
+    outline-offset:  1px;
+}
+
+.icon-btn.has-hits {
+    border-color:    var(--stamp-red);
+    color:           var(--stamp-red);
+    box-shadow:      0 0 0 2px var(--search-hit-fill);
+}
+
+.hit-count {
+    position:        absolute;
+    top:             -7px;
+    right:           -8px;
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    min-width:       15px;
+    height:          15px;
+    box-sizing:      border-box;
+    padding:         0 3px;
+    border:          1.5px solid var(--card);
+    border-radius:   8px;
+    background:      var(--stamp-red);
+    color:           var(--badge-text);
+    font-family:     'Oswald',sans-serif;
+    font-weight:     600;
+    font-size:       var(--font-size-hit-count);
+    line-height:     var(--line-height-solid);
+}
+
+.card-excerpt {
+    margin:          8px 0 0;
+    padding:         6px 8px;
+    font-family:     'Special Elite',monospace;
+    font-size:       var(--font-size-card-excerpt);
+    line-height:     var(--line-height-tip);
+    color:           var(--ink-soft);
+    background:      var(--caution-wash);
+    border-left:     3px solid var(--stamp-red);
+}
+
+.card-excerpt-label {
+    margin-right:    6px;
+    font-family:     'Oswald',sans-serif;
+    font-weight:     600;
+    letter-spacing:  .1em;
+    text-transform:  uppercase;
+    font-size:       var(--font-size-card-badge);
+    color:           var(--stamp-red);
+}
+
+.poster-matches {
+    position:        sticky;
+    top:             0;
+    z-index:         2;
+    display:         flex;
+    align-items:     center;
+    justify-content: space-between;
+    gap:             10px;
+    height:          36px;
+    box-sizing:      border-box;
+    padding:         0 36px 0 12px;
+    background:      var(--stamp-red);
+    color:           var(--badge-text);
+    font-family:     'Oswald',sans-serif;
+    font-weight:     600;
+    letter-spacing:  .1em;
+    text-transform:  uppercase;
+    font-size:       var(--font-size-poster-button);
+}
+
+.poster-matches-count {
+    min-width:       0;
+    overflow:        hidden;
+    white-space:     nowrap;
+    text-overflow:   ellipsis;
+}
+
+.poster-jump {
+    flex:                  none;
+    padding:               4px 0;
+    border:                none;
+    background:            none;
+    color:                 inherit;
+    font:                  inherit;
+    letter-spacing:        inherit;
+    text-transform:        inherit;
+    text-decoration:       underline;
+    text-underline-offset: 3px;
+    cursor:                pointer;
+}
+
+.poster-jump:focus-visible {
+    outline:         2px solid var(--badge-text);
+    outline-offset:  2px;
+}
+
+.poster-content.has-matches .stamp { top: 106px; }
+
+.poster.exporting .poster-matches { display: none; }
+
+.poster.exporting .has-matches .stamp { top: 70px; }
+
+.poster.exporting .search-hit {
+    padding:         0;
+    background:      none;
+    outline:         none;
+}

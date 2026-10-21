@@ -32,13 +32,8 @@ function posterPath(slug){ return APP_BASE+"poster/"+slug+"/"; }
 
 function caseBySlug(slug){ return CASES.find(c=>c.slug===slug); }
 
-function openCase(id, opts={}){
-    const c=CASES.find(x=>x.id===id); if(!c) return;
-    lastFocus=document.activeElement;
-    poster.querySelector(".poster-content")?.remove();
-    const div=document.createElement("div");
-    div.className="poster-content";
-    div.innerHTML=`
+function posterHtml(c){
+    return `
         <div class="stamp">Escaped<small>${c.escapedFrom}</small></div>
         <div class="poster-top">
             <p class="poster-eyebrow">Bureau of Model Containment</p>
@@ -100,7 +95,17 @@ function openCase(id, opts={}){
             <button class="dl-btn copy-btn" id="copyBtn" data-slug="${c.slug}">Copy link</button>
         </div>
         <p class="poster-message" id="posterMessage" role="status" hidden></p>`;
+}
+
+function openCase(id, opts={}){
+    const c=CASES.find(x=>x.id===id); if(!c) return;
+    lastFocus=document.activeElement;
+    poster.querySelector(".poster-content")?.remove();
+    const div=document.createElement("div");
+    div.className="poster-content";
+    div.innerHTML=posterHtml(c);
     poster.appendChild(div);
+    markPoster(div);
     overlay.classList.add("open");
     document.body.style.overflow="hidden";
     document.getElementById("dlBtn").addEventListener("click",downloadPoster);

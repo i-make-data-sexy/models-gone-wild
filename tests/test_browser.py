@@ -399,7 +399,7 @@ def test_search_highlights_matches_on_cards(open_page: Callable[[dict], tuple]) 
     marks = page.locator("#timeline mark.search-hit")
     texts = {text.lower() for text in marks.all_text_contents()}
     assert texts == {"hugging face"}
-    assert page.locator("#timeline mark.search-hit").count() == page.locator(".card-alias mark, .card-charge mark").count()
+    assert page.locator("#timeline mark.search-hit").count() == page.locator(".card-alias mark, .card-charge mark, .card-excerpt mark").count()
 
     page.click("#optionsClear")
     assert marks.count() == 0
@@ -433,6 +433,88 @@ def test_clear_button_beside_count_clears_search(open_page: Callable[[dict], tup
     assert page.url == base_url
     assert 0 < page.locator("#timeline .card").count() < total
     assert not page.locator("#searchClear").is_visible()
+
+
+def test_poster_match_shows_count_and_excerpt(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a card that matched only on its poster shows a count on the poster button and a quote
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, errors = open_page(DESKTOP, "?q=hugging+face")
+    rid          = page.evaluate("CASES.find(c => c.slug === 'openai-rubygems').id")
+    card         = page.locator(f'.card[data-id="{rid}"]')
+
+    assert card.locator(".card-alias mark, .card-charge mark").count() == 0
+    assert card.locator("[data-open].has-hits .hit-count").text_content() == "1"
+    assert "Hugging Face" in card.locator(".card-excerpt mark").text_content()
+    assert not errors
+
+
+def test_card_with_own_match_skips_excerpt(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a card whose charge holds the match shows no poster quote
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP, "?q=hugging+face")
+    card    = page.locator('.card[data-id="sol"]')
+    assert card.locator(".card-charge mark").count() == 1
+    assert card.locator(".card-excerpt").count() == 0
+
+
+def test_poster_strip_jumps_to_match(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks an open poster highlights its matches under a strip whose button jumps to each
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, errors = open_page(DESKTOP, "?q=hugging+face")
+    page.locator('.card[data-id="sol"] [data-open]').click()
+
+    marks = page.locator(".poster-content mark.search-hit")
+    count = marks.count()
+    assert count > 1
+    assert page.text_content(".poster-matches-count") == f'{count} matches for "hugging face"'
+    assert page.text_content(".poster-jump") == f"Jump to 1 of {count}"
+
+    page.click(".poster-jump")
+    assert page.locator(".poster-content mark.is-current").count() == 1
+    assert page.text_content(".poster-jump") == f"Jump to 2 of {count}"
+    assert page.locator(".poster-mug mark").count() == 0
+    assert not errors
+
+
+def test_poster_without_search_has_no_strip(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a poster opened with no search carries no strip and no marks
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP, "poster/sol-hugging-face/")
+    assert page.locator("#overlay.open").count() == 1
+    assert page.locator(".poster-matches").count() == 0
+    assert page.locator(".poster-content mark").count() == 0
 
 
 def test_clear_all_resets_search(open_page: Callable[[dict], tuple], base_url: str) -> None:
