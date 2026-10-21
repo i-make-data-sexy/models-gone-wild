@@ -34,7 +34,8 @@ function filtered(){
         (!classSelect.value   || String(c.cls)===classSelect.value) &&
         (!labs.length         || labs.includes(c.lab)) &&
         (!outcomeSelect.value || c.outcome===outcomeSelect.value) &&
-        (!kindSelect.value    || c.reach===kindSelect.value)
+        (!kindSelect.value    || c.reach===kindSelect.value) &&
+        matchesSearch(c)
     ).sort((a,b)=>a.order-b.order);
 }
 
@@ -74,7 +75,7 @@ function discChip(c){
 const tl = document.getElementById("timeline");
 function renderTimeline(list){
     tl.innerHTML="";
-    if(!list.length){ tl.innerHTML='<p class="empty-note">No files match the current filters.</p>'; return; }
+    if(!list.length){ tl.innerHTML=emptyNote(); return; }
     list.forEach((c,i)=>{
         const side = i%2===0 ? "left":"right";
         const el   = document.createElement("div");

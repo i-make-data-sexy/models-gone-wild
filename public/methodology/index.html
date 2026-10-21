@@ -40,6 +40,7 @@
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/registry.css">
+    <link rel="stylesheet" href="../css/search.css">
     <link rel="stylesheet" href="../css/charts.css">
     <link rel="stylesheet" href="../css/poster.css">
     <link rel="stylesheet" href="../css/methodology.css">
@@ -125,9 +126,15 @@
                     </section>
 
                     <section class="method-section">
-                        <h2>The filters</h2>
-                        <p>The sliders button in the corner of the registry opens four filters. They narrow the Case Timeline, the Threat Matrix, and the Cases by Lab chart all at once.</p>
-                        <p>When you set more than one filter, a case has to match all of them to stay on the page. While a filter is narrowing the list, a red dot sits on the button and a line under the tabs says how many files are showing. A Clear filters button appears once any filter is set and resets all four.</p>
+                        <h2>The search and filters</h2>
+                        <p>The sliders button in the corner of the registry opens a search box and four filters. They narrow the Case Timeline, the Threat Matrix, and the Cases by Lab chart all at once.</p>
+                        <p>When you search and set filters together, a case has to match all of them to stay on the page. While the search or a filter is narrowing the list, a red dot sits on the button and a line under the tabs says how many files are showing. A Clear all button appears once the search or any filter is set and resets them all.</p>
+
+                        <h3 id="search">Search</h3>
+                        <p>The search box looks through each case's text, from its alias, lab, and charge to the rap sheet and the notes on its wanted poster. Press Enter or select the magnifying glass to run it. The search also goes into the page's address, so copying the link shares the same search.</p>
+                        <p>A plain search keeps the cases that contain every word you type, in any case and anywhere in their text. Searching 'Hugging Face' keeps the cases that mention both words.</p>
+                        <p>Turning on 'Advanced' opens three switches, and any of them reads the whole box as one phrase or pattern rather than as separate words. 'Match case' keeps only text with the same capital letters you typed. 'Match whole word' skips matches inside longer words, so 'sol' finds Sol but not sold or unsolved. 'Regex match' reads the box as a regular expression (e.g., Anthropic|OpenAI). If the pattern has an error, a note under the box says so, and the search waits until it's fixed.</p>
+                        <p>Turning 'Advanced' back off switches all three off with it, so the box goes back to a plain search.</p>
 
                         <h3 id="class">Class</h3>
                         <p>Class sorts cases by how far the model got into somebody else's systems. It's the colored badge on each card and the color down the card's left edge.</p>

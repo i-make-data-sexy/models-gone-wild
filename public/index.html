@@ -3,7 +3,7 @@
      ======================================================================== -->
 
 <!-- The registry's home page. It holds the site header, the masthead, the
-     three views and their filter menu, the tooltip, and the poster overlay,
+     three views and their search and filter menu, the tooltip, and the poster overlay,
      which the scripts in js/ fill in.
 
      Paths stay relative since nginx serves the page under a prefix.
@@ -40,6 +40,7 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/registry.css">
+    <link rel="stylesheet" href="css/search.css">
     <link rel="stylesheet" href="css/charts.css">
     <link rel="stylesheet" href="css/poster.css">
     <link rel="stylesheet" href="css/methodology.css">
@@ -100,7 +101,7 @@
                         </div>
 
                         <details class="options-menu" id="optionsMenu">
-                            <summary class="options-button" aria-label="Filter options" title="Filter options">
+                            <summary class="options-button" aria-label="Search and filter options" title="Search and filter options">
                                 <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M3 6h18M3 12h18M3 18h18"/>
                                     <circle cx="8" cy="6" r="2.5" class="line-icon-knob"/>
@@ -112,11 +113,46 @@
 
                             <div class="options-panel">
                                 <div class="options-panel-header">
-                                    <p class="options-heading">Filters</p>
-                                    <button type="button" class="options-close" id="optionsClose" aria-label="Close filter options">
+                                    <p class="options-heading">Search</p>
+                                    <button type="button" class="options-close" id="optionsClose" aria-label="Close search and filter options">
                                         <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                                     </button>
                                 </div>
+
+                                <form class="search-form" id="searchForm" role="search">
+                                    <div class="search-row">
+                                        <input type="search" class="search-input" id="searchInput" name="q" aria-label="Search the registry" autocomplete="off" spellcheck="false" enterkeyhint="search">
+                                        <button type="submit" class="search-button" aria-label="Search" title="Search">
+                                            <svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>
+                                        </button>
+                                    </div>
+                                    <p class="search-error" id="searchError" role="alert" hidden></p>
+
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="advancedToggle">
+                                        <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+                                        <span class="toggle-label">Advanced</span>
+                                    </label>
+                                    <div class="advanced-modes" id="advancedModes" hidden>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="matchCase" name="case" value="1">
+                                            <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+                                            <span class="toggle-label">Match case</span>
+                                        </label>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="matchWord" name="word" value="1">
+                                            <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+                                            <span class="toggle-label">Match whole word</span>
+                                        </label>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="matchRegex" name="re" value="1">
+                                            <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+                                            <span class="toggle-label">Regex match</span>
+                                        </label>
+                                    </div>
+                                </form>
+
+                                <p class="options-heading options-heading-section">Filters</p>
 
                                 <label class="options-field">
                                     <span class="options-label">Class</span>
@@ -152,7 +188,7 @@
                                     </select>
                                 </label>
 
-                                <button type="button" class="options-clear" id="optionsClear" hidden>Clear filters</button>
+                                <button type="button" class="options-clear" id="optionsClear" hidden>Clear all</button>
                             </div>
                         </details>
                     </div>
@@ -210,6 +246,7 @@
     <script src="js/text.js"></script>
     <script src="js/mugshot.js"></script>
     <script src="js/timeline.js"></script>
+    <script src="js/search.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/views.js"></script>
     <script src="js/tooltip.js"></script>

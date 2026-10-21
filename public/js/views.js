@@ -2,10 +2,10 @@
      About This File
    ======================================================================== */
 
-/* Applies the filters to every view, runs the options menu, and
-   switches between the timeline, Threat Matrix, and Cases by Lab tabs,
-   keeping each view's permalink in the address bar. It also works out
-   APP_BASE, the app's own path, which the other scripts build their
+/* Applies the search and filters to every view, runs the options menu,
+   and switches between the timeline, Threat Matrix, and Cases by Lab
+   tabs, keeping each view's permalink in the address bar. It also works
+   out APP_BASE, the app's own path, which the other scripts build their
    links from. */
 
 
@@ -27,9 +27,11 @@ function applyFilters(){
     [classSelect,outcomeSelect,kindSelect].forEach(s=>s.classList.toggle("is-active", !!s.value));
     const labs = selectedLabs();
     updateLabSummary(labs);
-    const narrowed = !!(classSelect.value || labs.length || outcomeSelect.value || kindSelect.value);
+    const narrowed = !!(classSelect.value || labs.length || outcomeSelect.value || kindSelect.value || searchQuery);
     filterCount.hidden = !narrowed;
-    filterCount.textContent = `Showing ${list.length} of ${CASES.length} files on record.`;
+    filterCount.textContent = searchQuery
+        ? `Showing ${list.length} of ${CASES.length} files on record matching "${searchQuery}".`
+        : `Showing ${list.length} of ${CASES.length} files on record.`;
 
     optionsDot.hidden = !narrowed;
     optionsClear.hidden = !narrowed;
@@ -56,7 +58,7 @@ document.addEventListener("click", e=>{
 });
 
 document.addEventListener("keydown", e=>{
-    if(e.key!=="Escape" || !optionsMenu.open || overlay.classList.contains("open")) return;
+    if(e.key!=="Escape" || e.defaultPrevented || !optionsMenu.open || overlay.classList.contains("open")) return;
 
     if(labPicker.open){ labPicker.open=false; labSummary.focus(); return; }
     closeOptions(true);
@@ -66,9 +68,10 @@ document.getElementById("optionsClear").addEventListener("click", ()=>{
     [classSelect,outcomeSelect,kindSelect].forEach(s=>{ s.value=""; });
     labList.querySelectorAll("input").forEach(b=>{ b.checked=false; });
     labPicker.open = false;
+    clearSearch();
     applyFilters();
 
-    classSelect.focus();
+    searchInput.focus();
 });
 
 document.getElementById("optionsClose").addEventListener("click", ()=>closeOptions(true));

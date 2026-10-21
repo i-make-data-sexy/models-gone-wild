@@ -2,10 +2,11 @@
      About This File
    ======================================================================== */
 
-/* Starts the page once every other script has loaded. It applies the
-   filters, opens the view the address names and any poster it links to,
-   or the "no file" notice when the poster link names no case, and redraws
-   both charts once the fonts load so their labels measure correctly. */
+/* Starts the page once every other script has loaded. It reads the
+   search from the address, applies it and the filters, opens the view
+   the address names and any poster it links to, or the "no file" notice
+   when the poster link names no case, and redraws both charts once the
+   fonts load so their labels measure correctly. */
 
 
 
@@ -14,6 +15,7 @@
    ======================================================================== */
 
 function init(){
+    readSearchUrl();
     applyFilters();
 
     const startSlug=posterFromUrl();

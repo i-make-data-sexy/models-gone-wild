@@ -340,7 +340,7 @@ function renderScatter(list){
                 <rect x="${padL}" y="${padT}" width="${pw}" height="${ph}" fill="none" stroke="${CHART_COLOR.ink}" stroke-width="1.5"/>
                 ${grid.join("")}${mid}${ql}${axes}${pts}
             </svg>`
-        : '<p class="empty-note">No files match the current filters.</p>';
+        : emptyNote();
 
     placeAxisIcons();
 
@@ -398,7 +398,7 @@ const labHost = document.getElementById("labChart");
 
 function renderLabChart(list){
     if(!list.length){
-        labHost.innerHTML = '<p class="empty-note">No files match the current filters.</p>';
+        labHost.innerHTML = emptyNote();
         return;
     }
 
