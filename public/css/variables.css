@@ -55,6 +55,7 @@
     --icon-btn-border:            rgba(74,68,56,.5);
     --dotted-underline:           rgba(58,54,44,.4);
     --search-hit-fill:            rgba(143,29,22,.22);
+    --search-hit-strong-text:     #fff;
 
     /* Tooltips */
     --shadow-tip:                 rgba(0,0,0,.35);

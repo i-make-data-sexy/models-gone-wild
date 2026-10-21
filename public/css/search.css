@@ -255,6 +255,11 @@
     border-left:     3px solid var(--stamp-red);
 }
 
+.card-excerpt .search-hit {
+    background:      var(--stamp-red);
+    color:           var(--search-hit-strong-text);
+}
+
 .card-excerpt-label {
     margin-right:    6px;
     font-family:     'Oswald',sans-serif;
