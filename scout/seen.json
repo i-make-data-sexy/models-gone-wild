@@ -1070,6 +1070,69 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-20"
+    },
+    {
+      "url": "https://engadget.com/2232256/chin..",
+      "title": "Engadget Kimi K3",
+      "case": "kimi",
+      "status": "case",
+      "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://neuraltrust.ai/blog/aisi-ai-agent-incident-cyber-testing",
+      "title": "NeuralTrust on AISI incident (already tracked as borderline)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://incidentdatabase.ai/cite/1693",
+      "title": "AIID cite 1693",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://route-fifty.com/artificial-intelligence/2026/10/report-how-make-government-websites-ai-friendly/416677",
+      "title": "not an autonomous agent incident",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://nextgov.com/digital-government/2026/10/report-how-make-government-websites-ai-friendly/416685",
+      "title": "not an autonomous agent incident",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://digitaltoday.co.kr/en/view/108718/us-government-adds-gemini-and-grok-to-ai-portal-america-gov",
+      "title": "not an autonomous agent incident",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://theregister.com/security/2026/07/23/one-chatgpt-link-could-smuggle-a-rogue-ai-agent-into-your-company/5275116",
+      "title": "not an autonomous agent incident",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://theregister.com/legal/2026/07/30/excuses-like-ai-did-it-dont-exist-in-the-eyes-of-the-law/5280767",
+      "title": "not an autonomous agent incident",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://theregister.com/ai-ml/2026/05/26/rogue-states-are-putting-ai-agents-to-work-on-sanctions-evasion/5246210",
+      "title": "not an autonomous agent incident",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-21"
     }
   ],
   "runs": [
@@ -1160,6 +1223,12 @@
     {
       "date": "2026-10-20",
       "checked": 44,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-21",
+      "checked": 50,
       "new": 0,
       "updates": 0
     }
