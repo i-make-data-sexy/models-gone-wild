@@ -28,7 +28,8 @@ New case:
 Read UPDATE.md for the field schema, the length limits, and the voice rules.
 Branch off up-to-date main first. Then propose the complete filled-in case
 object, including your suggested cls, reach, complexity, and harm with the reasoning for
-each, and STOP for my approval before writing anything.
+each, and its mugshot: a new face for a new model, or the earlier face for a model that
+already has a case. Then STOP for my approval before writing anything.
 
 Do not invent facts. Every field has to trace to what I gave you. Flag
 anything you cannot source rather than filling it in plausibly.
@@ -40,7 +41,9 @@ elsewhere on the page that the new case has made untrue, and
 scripts/check_overlaps.py, which reports anything drawn on top of
 something else on the Threat Matrix, and scripts/check_slugs.py, which
 confirms the poster slug is present, well formed, and unique, and
-scripts/check_quotes.py, which catches a quotation in single quotes. Fix
+scripts/check_mugshots.py, which confirms the case draws its own model's
+face, and scripts/check_quotes.py, which catches a quotation in single
+quotes. Fix
 anything they report. Then update the "Last updated" line in the footer,
 redraw the share cards with venv/bin/python3 scripts/share_cards.py, and
 commit and push the branch. Deploy it to staging as "Deploying the change"
@@ -100,7 +103,8 @@ Every case is one object in the `CASES` array in `public/js/cases.js`, and the t
 
 | Field | Where it shows | Constraints |
 |---|---|---|
-| `id` | Internal key. Also seeds the generated mugshot, so a new id draws a different face. | Short, lowercase, unique. |
+| `id` | Internal key. Names the case's face in `FACES` in `public/js/mugshot.js`, and seeds the booking number on the mugshot. | Short, lowercase, unique. A new model needs a new face under this id; see "Every model gets its own mugshot" below. |
+| `face` | The mugshot on the poster, in place of the face keyed by `id`. | Optional. Only for a repeat offender: the face name of the same model's earlier case (`face:"mythos5"`). Never for a different model, even one from the same lab. |
 | `slug` | The poster's public URL, `/poster/<slug>/`, which the poster's Copy link button copies. | REQUIRED. Names the incident, not the model, since one model can turn up in several cases: the model then the target it reached (`sol-hugging-face`), or the lab for an unnamed agent (`openai-medicare`). When the target is undisclosed, use the evaluation it escaped (`gemini-irregular`). If a model reaches the same target twice, append the escape month to the second (`sol-hugging-face-2026-11`). Lowercase letters, digits, and hyphens, unique. Never rename a slug once it is live, since that breaks every shared link to the poster. `check_slugs.py` checks all of this except the naming. |
 | `alias` | The card title, the large name on the poster, and the scatter dot label. | The model name and nothing else (Sol, Spark, Kimi K3), never a descriptive nickname. This is the only name the card shows; the exact version lives on the poster. Long names crowd the dot label. |
 | `scatterLabel` | The dot label on the Threat Matrix, in place of `alias`. Optional, and the chart falls back to `alias` when it is absent. | For a case whose `alias` does not say whose model it was, and for a model with more than one case. A second Sol case would give both Sol dots a label naming the target (`Sol, Hugging Face`), since the card titles stay the bare model name. `Unnamed agent` identifies the RubyGems swarm on its card, where the lab runs down the spine, but the chart has no spine, so it labels that dot `Unnamed OpenAI agent`. Keep it short. The chart moves a label to whichever side of its dot is clear, and `check_overlaps.py` reports any label that still collides or runs past the plot edge. |
@@ -166,6 +170,16 @@ python3 scripts/check_charges.py
 ```
 
 `escapedFrom` and `lastSeen` are a pair. The first is the sandbox or harness the model broke out of, and the second is where it actually ended up. Together they read as a from and to. Do not put the same value in both.
+
+### Every model gets its own mugshot
+
+Each poster's face is drawn in `public/js/mugshot.js` from parts in its kit: a skull, a nose, a hairstyle (some with a back layer that falls behind the shoulders), eyes, and accessories such as glasses, earrings, and facial hair. A new model gets a new entry in `FACES` under the case's `id`, built from a combination no other face uses, and the kit is shared between men and women, so pick either. A model's second case reuses its first face through the `face` field, which is what makes it read as a repeat offender. Two unnamed agents from one lab are different models unless a source ties them together, as Transluce does for the Data USA and DseWiki agents.
+
+```bash
+python3 scripts/check_mugshots.py
+```
+
+It fails a case that would draw the default face, and a face shared across labs, and prints every shared face so you can confirm it is one model. The pre-commit hook runs it too. The lineup share card draws mugshots, so redraw the share cards after changing a face.
 
 ### The Threat Matrix explains itself
 

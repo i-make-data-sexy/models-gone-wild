@@ -7,8 +7,9 @@
 # The pre-commit hook. Runs the shared formatting gate on the staged files
 # of each language listed in format-languages, one per line, then the
 # design-tokens check, which blocks a raw color, font size, or line height
-# outside public/css/variables.css. Each skips with a printed note on a
-# machine without it.
+# outside public/css/variables.css, then the mugshot check, which blocks a
+# case that draws the default face. The first two skip with a printed
+# note on a machine without them.
 
 
 
@@ -37,3 +38,11 @@ if [ -f "$tokens" ]; then
 else
     echo "Design tokens gate skipped: $tokens not found on this machine"
 fi
+
+
+
+# ========================================================================
+#   Mugshot Gate
+# ========================================================================
+
+python3 scripts/check_mugshots.py > /dev/null || { python3 scripts/check_mugshots.py; exit 1; }

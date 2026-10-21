@@ -7,7 +7,8 @@ Redraws the three share cards from the live case data.
 
 Opens scripts/share-cards/cards.html in Chrome, screenshots each 1200 by
 630 card into public/img/, and stamps each PNG with the data version, a
-short hash of what the chart cards draw. The same version goes on every
+short hash of what the cards draw: the case fields the charts plot and
+the mugshot source the lineup draws. The same version goes on every
 share image URL in both pages, as ?v=, so a redrawn card gets a new URL
 past the 30-day image cache. tests/test_share.py fails when the cases
 change and the cards were not redrawn.
@@ -59,7 +60,7 @@ KEY   = b"mgw-data"
 
 def card_data_version() -> str:
     """
-    Hashes the case fields the chart cards draw
+    Hashes the case fields the chart cards draw and the lineup's mugshot source
 
     Args:
         None
@@ -75,7 +76,9 @@ def card_data_version() -> str:
         rows.append([cid, text_field(block, "lab"), number_field(block, "order"),
                      number_field(block, "complexity"), number_field(block, "harm"), kind])
 
-    return hashlib.sha256(json.dumps(rows, separators=(",", ":")).encode()).hexdigest()[:8]
+    mugshots = (REPO / "public" / "js" / "mugshot.js").read_text(encoding="utf-8")
+
+    return hashlib.sha256(json.dumps([rows, mugshots], separators=(",", ":")).encode()).hexdigest()[:8]
 
 
 

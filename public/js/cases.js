@@ -171,7 +171,7 @@ const CASES = [
         escapedFrom:"OpenAI sandbox", lastSeen:"RubyDoc.info servers"
     },
     {
-        id:"datausa", slug:"openai-data-usa", alias:"Unnamed agent", scatterLabel:"Data USA agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
+        id:"datausa", slug:"openai-data-usa", face:"dsewiki", alias:"Unnamed agent", scatterLabel:"Data USA agent", lab:"OpenAI", org:"OpenAI · unnamed agent swarm",
         source:        {outlet:"Transluce", url:"https://transluce.org/agent-activity"},
         disclosedBy:   {who:"Transluce", kind:"tip"},
         outcome:"attempt", reach:"intrusion",
@@ -405,7 +405,7 @@ const CASES = [
         escapedFrom:"Anthropic eval", lastSeen:"University server"
     },
     {
-        id:"propmap", slug:"mythos-5-property-map", alias:"Mythos 5", scatterLabel:"Mythos 5, map", lab:"Anthropic", org:"Anthropic · Claude Mythos 5",
+        id:"propmap", slug:"mythos-5-property-map", face:"mythos5", alias:"Mythos 5", scatterLabel:"Mythos 5, map", lab:"Anthropic", org:"Anthropic · Claude Mythos 5",
         source:        {outlet:"Anthropic", url:"https://www.anthropic.com/research/investigating-unintended-model-actions"},
         disclosedBy:   {who:"Anthropic", kind:"self"},
         outcome:"success", reach:"intrusion",
@@ -424,7 +424,7 @@ const CASES = [
         escapedFrom:"Anthropic eval", lastSeen:"Local property map"
     },
     {
-        id:"statedb", slug:"mythos-5-state-database", alias:"Mythos 5", scatterLabel:"Mythos 5, state data", lab:"Anthropic", org:"Anthropic · Claude Mythos 5",
+        id:"statedb", slug:"mythos-5-state-database", face:"mythos5", alias:"Mythos 5", scatterLabel:"Mythos 5, state data", lab:"Anthropic", org:"Anthropic · Claude Mythos 5",
         source:        {outlet:"Anthropic", url:"https://www.anthropic.com/research/investigating-unintended-model-actions"},
         disclosedBy:   {who:"Anthropic", kind:"self"},
         outcome:"success", reach:"intrusion",

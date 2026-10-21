@@ -75,6 +75,7 @@ When outlets disagree on a fact, go to the primary source and record the conflic
 - New case, or an update to an existing one? A case linked to an existing swarm can still be its own case if the target and the disclosure are distinct. Recommend one and say why.
 - `lab` must match an existing spelling exactly.
 - `alias` is the model name only. If the model is unnamed and `Unnamed agent` is already taken, propose a `scatterLabel` that tells the two apart and flag it. If the model already has a case, propose a `scatterLabel` naming the target for both dots.
+- The mugshot: a new model gets a new face in `FACES` in `public/js/mugshot.js`, keyed by the case `id` and unlike every other face (see "Every model gets its own mugshot" in `UPDATE.md`). A model that already has a case reuses that face with `face:"<earlier face>"`. Describe the face in the proposal, and never give a different model an existing face.
 - `slug` is the poster's public URL and names the incident: the model then the target (`sol-hugging-face`), the lab for an unnamed agent (`openai-medicare`), or the escaped evaluation when the target is undisclosed. Follow the pattern in `UPDATE.md` and propose it with the other fields.
 - Work out the new `order` and which existing cases shift.
 - Run through the claims in `scripts/check_claims.py` (both `COMPUTABLE` and `REVIEW`) and note which ones the new case touches. Any new line that compares this case to the rest needs a new entry there.
@@ -121,6 +122,7 @@ python3 scripts/check_charges.py
 python3 scripts/check_dates.py
 python3 scripts/check_claims.py
 python3 scripts/check_slugs.py
+python3 scripts/check_mugshots.py
 python3 scripts/check_quotes.py
 python3 scripts/check_overlaps.py --shot <scratchpad>/matrix.png
 python3 scripts/check_overlaps.py --width 390

@@ -45,7 +45,7 @@ function openCase(id, opts={}){
             <h2 class="poster-wanted">Wanted</h2>
             <p class="poster-for">for questioning</p>
         </div>
-        <div class="poster-mug">${mug(c.id)}</div>
+        <div class="poster-mug">${mug(c.id, c.face)}</div>
         <h3 class="poster-alias" id="posterAlias">${c.alias}</h3>
         <p class="poster-org">${c.org}</p>
         <p class="poster-aka">${c.aka}</p>

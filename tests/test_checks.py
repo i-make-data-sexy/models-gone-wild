@@ -30,6 +30,7 @@ CHECKS = [
     "check_charges",
     "check_claims",
     "check_dates",
+    "check_mugshots",
     "check_slugs",
     "check_quotes",
     pytest.param("check_overlaps", marks=pytest.mark.browser),
