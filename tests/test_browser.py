@@ -382,6 +382,30 @@ def test_bad_regex_shows_error_and_keeps_cases(open_page: Callable[[dict], tuple
     assert page.locator("#timeline .card").count() == total
 
 
+def test_search_highlights_matches_on_cards(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a search marks the matched words in the card text and Clear all removes the marks
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, errors = open_page(DESKTOP)
+    search_for(page, "hugging face")
+
+    marks = page.locator("#timeline mark.search-hit")
+    texts = {text.lower() for text in marks.all_text_contents()}
+    assert texts == {"hugging", "face"}
+    assert page.locator("#timeline mark.search-hit").count() == page.locator(".card-alias mark, .card-charge mark").count()
+
+    page.click("#optionsClear")
+    assert marks.count() == 0
+    assert not errors
+
+
 def test_clear_all_resets_search(open_page: Callable[[dict], tuple], base_url: str) -> None:
     """
     Checks Clear all empties the search and takes q out of the address bar

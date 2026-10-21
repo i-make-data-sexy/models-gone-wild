@@ -6,7 +6,8 @@
    the cases whose text holds every word typed, in any case. Advanced
    opens Match case, Match whole word, and Regex match, and any of them
    reads the whole box as one pattern. The search rides in the address
-   as q, with case, word, and re for the three switches. */
+   as q, with case, word, and re for the three switches, and each card
+   highlights what matched in its alias and charge. */
 
 
 
@@ -31,8 +32,9 @@ const SEARCH_MODES   = [["case",matchCase],["word",matchWord],["re",matchRegex]]
 const ADVANCED_KEY   = "mgw:advanced-search";
 const SEARCH_FIELDS  = ["alias","aka","lab","org","charge","wantedFor","mo","caution","escapedFrom","lastSeen","whyComplexity","whyHarm","date","disclosed"];
 
-let searchQuery   = "";
-let searchMatcher = null;
+let searchQuery       = "";
+let searchMatcher     = null;
+let searchHighlighter = null;
 
 function anyModeOn(){
     return SEARCH_MODES.some(([,box])=>box.checked);
@@ -72,10 +74,21 @@ function buildMatcher(query){
         };
     }
 
-    let pattern = matchRegex.checked ? query : escapeRegex(query);
-    if(matchWord.checked) pattern = "\\b(?:"+pattern+")\\b";
-    const rx = new RegExp(pattern, matchCase.checked ? "" : "i");
+    const rx = new RegExp(literalPattern(query), matchCase.checked ? "" : "i");
     return texts=>texts.some(t=>rx.test(t));
+}
+
+function literalPattern(query){
+    const pattern = matchRegex.checked ? query : escapeRegex(query);
+    return matchWord.checked ? "\\b(?:"+pattern+")\\b" : pattern;
+}
+
+function buildHighlighter(query){
+    if(anyModeOn()) return new RegExp(literalPattern(query), matchCase.checked ? "g" : "gi");
+    const words = [...new Set(query.toLowerCase().split(/\s+/).filter(Boolean))]
+        .sort((a,b)=>b.length-a.length)
+        .map(escapeRegex);
+    return new RegExp(words.join("|"),"gi");
 }
 
 function matchesSearch(c){
@@ -84,22 +97,66 @@ function matchesSearch(c){
 
 function updateMatcher(){
     const query = searchInput.value.trim();
-    searchQuery   = "";
-    searchMatcher = null;
+    searchQuery       = "";
+    searchMatcher     = null;
+    searchHighlighter = null;
 
     searchError.hidden = true;
     searchInput.removeAttribute("aria-invalid");
     if(!query) return;
 
     try{
-        searchMatcher = buildMatcher(query);
-        searchQuery   = query;
+        searchMatcher     = buildMatcher(query);
+        searchHighlighter = buildHighlighter(query);
+        searchQuery       = query;
     }catch(_){
         searchError.textContent = "That regex has an error in it, so the search isn't applied yet.";
         searchError.hidden = false;
         searchInput.setAttribute("aria-invalid","true");
     }
 }
+
+
+/* ================================================
+     Highlighting
+   ================================================ */
+
+function markText(node){
+    const text = node.nodeValue;
+    const rx   = searchHighlighter;
+    const frag = document.createDocumentFragment();
+    let last   = 0;
+    let match;
+
+    rx.lastIndex = 0;
+    while((match = rx.exec(text))){
+        if(!match[0]){ rx.lastIndex++; continue; }
+        const mark = document.createElement("mark");
+        mark.className   = "search-hit";
+        mark.textContent = match[0];
+        frag.append(text.slice(last,match.index), mark);
+        last = match.index+match[0].length;
+    }
+    if(!last) return;
+
+    frag.append(text.slice(last));
+    node.replaceWith(frag);
+}
+
+function highlightMatches(root){
+    if(!searchHighlighter) return;
+    root.querySelectorAll(".card-alias, .card-charge").forEach(el=>{
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        const nodes  = [];
+        while(walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(markText);
+    });
+}
+
+
+/* ================================================
+     Empty Note
+   ================================================ */
 
 function emptyNote(){
     const filtersOn = !!(classSelect.value || selectedLabs().length || outcomeSelect.value || kindSelect.value);

@@ -3,7 +3,8 @@
    ======================================================================== */
 
 /* The search at the top of the options menu, covering the search box and
-   its button, the regex error line, and the Advanced switches */
+   its button, the regex error line, the Advanced switches, and the
+   highlight on the words a search matched */
 
 
 
@@ -166,3 +167,10 @@
 .advanced-modes[hidden] { display: none; }
 
 .advanced-modes .toggle-switch { margin-top: 10px; }
+
+.search-hit {
+    padding:             0 1px;
+    border-radius:       1px;
+    background:          var(--search-hit-fill);
+    color:               inherit;
+}
