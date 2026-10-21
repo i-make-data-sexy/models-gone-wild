@@ -121,24 +121,37 @@ function updateMatcher(){
      Highlighting
    ================================================ */
 
-function markText(node){
-    const text = node.nodeValue;
-    const rx   = searchHighlighter;
-    const frag = document.createDocumentFragment();
-    let last   = 0;
+function matchRanges(text){
+    const rx     = searchHighlighter;
+    const ranges = [];
     let match;
 
     rx.lastIndex = 0;
     while((match = rx.exec(text))){
         if(!match[0]){ rx.lastIndex++; continue; }
+        const start = match.index;
+        const end   = start+match[0].length;
+        const prev  = ranges[ranges.length-1];
+        if(prev && /^\s*$/.test(text.slice(prev[1],start))) prev[1] = end;
+        else ranges.push([start,end]);
+    }
+    return ranges;
+}
+
+function markText(node){
+    const text   = node.nodeValue;
+    const ranges = matchRanges(text);
+    if(!ranges.length) return;
+
+    const frag = document.createDocumentFragment();
+    let last   = 0;
+    ranges.forEach(([start,end])=>{
         const mark = document.createElement("mark");
         mark.className   = "search-hit";
-        mark.textContent = match[0];
-        frag.append(text.slice(last,match.index), mark);
-        last = match.index+match[0].length;
-    }
-    if(!last) return;
-
+        mark.textContent = text.slice(start,end);
+        frag.append(text.slice(last,start), mark);
+        last = end;
+    });
     frag.append(text.slice(last));
     node.replaceWith(frag);
 }

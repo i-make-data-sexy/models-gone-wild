@@ -18,7 +18,9 @@
      Apply Filters
    ================================================ */
 
-const filterCount=document.getElementById("filterCount");
+const filterCount     = document.getElementById("filterCount");
+const filterCountText = document.getElementById("filterCountText");
+const searchClear     = document.getElementById("searchClear");
 function applyFilters(){
     const list=filtered();
     renderTimeline(list);
@@ -29,7 +31,8 @@ function applyFilters(){
     updateLabSummary(labs);
     const narrowed = !!(classSelect.value || labs.length || outcomeSelect.value || kindSelect.value || searchQuery);
     filterCount.hidden = !narrowed;
-    filterCount.textContent = searchQuery
+    searchClear.hidden = !searchQuery;
+    filterCountText.textContent = searchQuery
         ? `Showing ${list.length} of ${CASES.length} files on record matching "${searchQuery}".`
         : `Showing ${list.length} of ${CASES.length} files on record.`;
 
@@ -75,6 +78,12 @@ document.getElementById("optionsClear").addEventListener("click", ()=>{
 });
 
 document.getElementById("optionsClose").addEventListener("click", ()=>closeOptions(true));
+
+searchClear.addEventListener("click", ()=>{
+    clearSearch();
+    applyFilters();
+    optionsMenu.querySelector("summary").focus();
+});
 
 
 /* ================================================

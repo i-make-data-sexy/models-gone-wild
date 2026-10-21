@@ -384,7 +384,7 @@ def test_bad_regex_shows_error_and_keeps_cases(open_page: Callable[[dict], tuple
 
 def test_search_highlights_matches_on_cards(open_page: Callable[[dict], tuple]) -> None:
     """
-    Checks a search marks the matched words in the card text and Clear all removes the marks
+    Checks a search marks matched words as one run in the card text and Clear all removes the marks
 
     Args:
         open_page (Callable[[dict], tuple]): Opens the home page at a viewport
@@ -398,12 +398,41 @@ def test_search_highlights_matches_on_cards(open_page: Callable[[dict], tuple]) 
 
     marks = page.locator("#timeline mark.search-hit")
     texts = {text.lower() for text in marks.all_text_contents()}
-    assert texts == {"hugging", "face"}
+    assert texts == {"hugging face"}
     assert page.locator("#timeline mark.search-hit").count() == page.locator(".card-alias mark, .card-charge mark").count()
 
     page.click("#optionsClear")
     assert marks.count() == 0
     assert not errors
+
+
+def test_clear_button_beside_count_clears_search(open_page: Callable[[dict], tuple], base_url: str) -> None:
+    """
+    Checks the clear button beside the count line shows only for a search and clears it
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+        base_url (str): The home page URL on the preview server
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP)
+    total   = page.evaluate("CASES.length")
+    page.click("#optionsMenu summary")
+    page.select_option("#classFilter", "3")
+    assert not page.locator("#searchClear").is_visible()
+
+    search_for(page, "Hugging Face")
+    page.click("#optionsClose")
+    assert page.locator("#searchClear").is_visible()
+
+    page.click("#searchClear")
+    assert page.input_value("#searchInput") == ""
+    assert page.url == base_url
+    assert 0 < page.locator("#timeline .card").count() < total
+    assert not page.locator("#searchClear").is_visible()
 
 
 def test_clear_all_resets_search(open_page: Callable[[dict], tuple], base_url: str) -> None:

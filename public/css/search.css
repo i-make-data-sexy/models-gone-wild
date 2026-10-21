@@ -3,8 +3,8 @@
    ======================================================================== */
 
 /* The search at the top of the options menu, covering the search box and
-   its button, the regex error line, the Advanced switches, and the
-   highlight on the words a search matched */
+   its button, the regex error line, the Advanced switches, the clear
+   button beside the count line, and the highlight on matched words */
 
 
 
@@ -174,3 +174,38 @@
     background:          var(--search-hit-fill);
     color:               inherit;
 }
+
+.search-clear {
+    display:             inline-flex;
+    align-items:         center;
+    justify-content:     center;
+    width:               20px;
+    height:              20px;
+    margin-left:         6px;
+    padding:             0;
+    vertical-align:      middle;
+    border:              none;
+    border-radius:       50%;
+    background:          var(--paper-deep);
+    color:               var(--ink-soft);
+    cursor:              pointer;
+    transition:          background-color .15s,color .15s;
+}
+
+.search-clear svg {
+    width:               10px;
+    height:              10px;
+}
+
+.search-clear:hover,
+.search-clear:focus-visible {
+    background:          var(--stamp-red);
+    color:               var(--paper);
+}
+
+.search-clear:focus-visible {
+    outline:             2px solid var(--ink);
+    outline-offset:      2px;
+}
+
+.search-clear[hidden] { display: none; }
