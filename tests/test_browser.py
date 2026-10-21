@@ -241,6 +241,171 @@ def test_class_filter_narrows_timeline(open_page: Callable[[dict], tuple]) -> No
 
 
 # ========================================================================
+#   Search
+# ========================================================================
+
+def search_for(page: "sync_api.Page", query: str) -> None:
+    """
+    Opens the options menu if needed, types a search, and presses Enter
+
+    Args:
+        page (sync_api.Page): The loaded home page
+        query (str): The text to search for
+
+    Returns:
+        None
+    """
+
+    if not page.locator("#optionsMenu[open]").count():
+        page.click("#optionsMenu summary")
+
+    page.fill("#searchInput", query)
+    page.press("#searchInput", "Enter")
+
+
+def test_search_narrows_and_writes_q(open_page: Callable[[dict], tuple], base_url: str) -> None:
+    """
+    Checks a search narrows the timeline and puts q in the address bar
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+        base_url (str): The home page URL on the preview server
+
+    Returns:
+        None
+    """
+
+    page, errors = open_page(DESKTOP)
+    cards        = page.locator("#timeline .card")
+    total        = cards.count()
+    search_for(page, "Hugging Face")
+
+    shown = cards.count()
+    assert 0 < shown < total
+    assert page.url == base_url + "?q=Hugging+Face"
+    assert page.text_content("#filterCount") == f'Showing {shown} of {total} files on record matching "Hugging Face".'
+    assert page.locator("#optionsDot").is_visible()
+    assert not errors
+
+
+def test_search_reads_q_from_address(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a link carrying q opens with that search applied
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP, "?q=zero-day")
+    total   = page.evaluate("CASES.length")
+    shown   = page.locator("#timeline .card").count()
+    assert 0 < shown < total
+    assert page.input_value("#searchInput") == "zero-day"
+
+
+def test_plain_search_needs_every_word(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a plain search keeps only the cases holding every word typed
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP)
+    search_for(page, "OpenAI")
+    one_word = page.locator("#timeline .card").count()
+
+    search_for(page, "OpenAI qqqxyz")
+    assert one_word > 0
+    assert page.locator("#timeline .card").count() == 0
+    assert page.text_content("#timeline .empty-note") == "No files match this search."
+
+
+def test_advanced_switches_and_whole_word(open_page: Callable[[dict], tuple], base_url: str) -> None:
+    """
+    Checks Advanced opens the three switches and Match whole word narrows a search
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+        base_url (str): The home page URL on the preview server
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP)
+    page.click("#optionsMenu summary")
+    assert not page.locator("#advancedModes").is_visible()
+
+    page.click("label:has(#advancedToggle)")
+    assert page.locator("#advancedModes").is_visible()
+
+    search_for(page, "sol")
+    partial = page.locator("#timeline .card").count()
+
+    page.click("label:has(#matchWord)")
+    whole = page.locator("#timeline .card").count()
+    assert 0 < whole < partial
+    assert page.url == base_url + "?q=sol&word=1"
+
+    page.click("label:has(#advancedToggle)")
+    assert not page.locator("#advancedModes").is_visible()
+    assert page.url == base_url + "?q=sol"
+    assert page.locator("#timeline .card").count() == partial
+
+
+def test_bad_regex_shows_error_and_keeps_cases(open_page: Callable[[dict], tuple]) -> None:
+    """
+    Checks a regex that fails to compile shows the error line rather than an empty registry
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP)
+    total   = page.evaluate("CASES.length")
+    page.click("#optionsMenu summary")
+    page.click("label:has(#advancedToggle)")
+    page.click("label:has(#matchRegex)")
+    search_for(page, "(unclosed")
+
+    assert page.locator("#searchError").is_visible()
+    assert page.locator("#timeline .card").count() == total
+
+
+def test_clear_all_resets_search(open_page: Callable[[dict], tuple], base_url: str) -> None:
+    """
+    Checks Clear all empties the search and takes q out of the address bar
+
+    Args:
+        open_page (Callable[[dict], tuple]): Opens the home page at a viewport
+        base_url (str): The home page URL on the preview server
+
+    Returns:
+        None
+    """
+
+    page, _ = open_page(DESKTOP)
+    total   = page.evaluate("CASES.length")
+    search_for(page, "Hugging Face")
+    page.click("#optionsClear")
+
+    assert page.input_value("#searchInput") == ""
+    assert page.locator("#timeline .card").count() == total
+    assert page.url == base_url
+
+
+
+# ========================================================================
 #   Mobile Menu
 # ========================================================================
 

@@ -16,6 +16,7 @@ public/css/fonts.css                 the self-hosted font faces, linked first
 public/css/variables.css             the custom properties
 public/css/base.css                  the page shell, site header, masthead, and footer
 public/css/registry.css              the registry panel, timeline, and case cards
+public/css/search.css                the search and its Advanced switches in the options menu
 public/css/charts.css                the tooltip, Threat Matrix, and Cases by Lab
 public/css/poster.css                the wanted poster
 public/css/methodology.css           the Methodology page
@@ -26,8 +27,9 @@ public/js/labels.js                  the labels, notes, and icons the cards and 
 public/js/text.js                    the glossary markup and date helpers
 public/js/mugshot.js                 the booking photos, drawn as SVG
 public/js/timeline.js                the filters and the timeline view
+public/js/search.js                  the search box, its Advanced switches, and its address bar link
 public/js/charts.js                  the Threat Matrix and Cases by Lab charts
-public/js/views.js                   applying the filters, the options menu, and the tabs
+public/js/views.js                   applying the search and filters, the options menu, and the tabs
 public/js/tooltip.js                 the glossary and info-note tooltip
 public/js/poster.js                  the poster, its permalink, Copy link, and Download poster
 public/js/menu.js                    the mobile menu, shared with the Methodology page

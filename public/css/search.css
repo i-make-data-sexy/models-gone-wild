@@ -1,0 +1,170 @@
+/* ========================================================================
+     About This File
+   ======================================================================== */
+
+/* The search at the top of the options menu, covering the search box and
+   its button, the regex error line, and the Advanced switches */
+
+
+
+/* ========================================================================
+     Search
+   ======================================================================== */
+
+.options-heading-section {
+    margin-top:          18px;
+    padding-top:         14px;
+    border-top:          1.5px dashed var(--rule);
+}
+
+.search-row {
+    display:             flex;
+    gap:                 6px;
+}
+
+.search-input {
+    flex:                1;
+    min-width:           0;
+    height:              36px;
+    box-sizing:          border-box;
+    padding:             0 10px;
+    font-family:         'Courier Prime','Courier New',monospace;
+    font-size:           var(--font-size-search-input);
+    color:               var(--ink);
+    background:          var(--paper);
+    border:              1.5px solid var(--rule);
+    border-radius:       2px;
+    transition:          border-color .13s;
+}
+
+.search-input::placeholder { color: var(--ink-soft); }
+
+.search-input:hover { border-color: var(--ink); }
+
+.search-input:focus {
+    border-color:        var(--ink);
+    outline:             none;
+}
+
+.search-input:focus-visible {
+    outline:             2px solid var(--ink);
+    outline-offset:      2px;
+}
+
+.search-input[aria-invalid="true"] { border-color: var(--stamp-red); }
+
+.search-button {
+    display:             flex;
+    flex:                none;
+    align-items:         center;
+    justify-content:     center;
+    width:               36px;
+    height:              36px;
+    padding:             0;
+    border:              1.5px solid var(--ink);
+    border-radius:       2px;
+    background:          var(--ink);
+    color:               var(--paper);
+    cursor:              pointer;
+    transition:          background-color .15s,border-color .15s;
+}
+
+.search-button svg {
+    width:               18px;
+    height:              18px;
+}
+
+.search-button:hover {
+    background:          var(--stamp-red);
+    border-color:        var(--stamp-red);
+}
+
+.search-button:focus-visible {
+    outline:             2px solid var(--ink);
+    outline-offset:      2px;
+}
+
+.search-error {
+    margin:              6px 0 0;
+    font-family:         'Special Elite',monospace;
+    font-size:           var(--font-size-options-label);
+    color:               var(--stamp-red);
+}
+
+.search-error[hidden] { display: none; }
+
+.toggle-switch {
+    position:            relative;
+    display:             flex;
+    align-items:         center;
+    gap:                 9px;
+    margin:              12px 0 0;
+    font-family:         'Oswald',sans-serif;
+    font-weight:         500;
+    letter-spacing:      .08em;
+    text-transform:      uppercase;
+    font-size:           var(--font-size-filter-control);
+    color:               var(--ink-soft);
+    cursor:              pointer;
+}
+
+.toggle-switch input {
+    position:            absolute;
+    width:               1px;
+    height:              1px;
+    margin:              0;
+    opacity:             0;
+    pointer-events:      none;
+}
+
+.toggle-track {
+    position:            relative;
+    flex:                none;
+    width:               34px;
+    height:              20px;
+    box-sizing:          border-box;
+    border:              1.5px solid var(--rule);
+    border-radius:       999px;
+    background:          var(--paper-deep);
+    transition:          background-color .25s,border-color .25s;
+}
+
+.toggle-thumb {
+    position:            absolute;
+    top:                 2px;
+    left:                2px;
+    width:               13px;
+    height:              13px;
+    border-radius:       50%;
+    background:          var(--card);
+    box-shadow:          0 1px 2px var(--shadow);
+    transition:          transform .25s cubic-bezier(.34,1.4,.5,1),background-color .25s;
+}
+
+.toggle-switch:hover { color: var(--ink); }
+
+.toggle-switch input:checked + .toggle-track {
+    border-color:        var(--stamp-red);
+    background:          var(--stamp-red);
+}
+
+.toggle-switch input:checked + .toggle-track .toggle-thumb {
+    background:          var(--paper);
+    transform:           translateX(14px);
+}
+
+.toggle-switch:has(input:checked) {
+    color:               var(--ink);
+    font-weight:         600;
+}
+
+.toggle-switch input:focus-visible + .toggle-track {
+    outline:             2px solid var(--ink);
+    outline-offset:      2px;
+}
+
+.advanced-modes { padding-left: 14px; }
+
+.advanced-modes[hidden] { display: none; }
+
+.advanced-modes .toggle-switch { margin-top: 10px; }
