@@ -117,9 +117,17 @@ def png_version(path: Path) -> str | None:
         str | None: The version, or None when the PNG carries no stamp
     """
 
-    found = re.search(rb"tEXt" + KEY + rb"\x00(\w+)", path.read_bytes())
+    data  = path.read_bytes()
+    found = re.search(rb"tEXt" + KEY + rb"\x00", data)
 
-    return found.group(1).decode() if found else None
+    if not found:
+        return None
+
+    # Stop at the chunk's end, before its CRC
+    start  = found.start()
+    length = struct.unpack(">I", data[start - 4:start])[0]
+
+    return data[start + 4:start + 4 + length].split(b"\x00", 1)[1].decode()
 
 
 

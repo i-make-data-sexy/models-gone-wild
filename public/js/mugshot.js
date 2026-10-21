@@ -54,18 +54,6 @@ const mLine = (d,w=M_LW) => `<path d="${d}" fill="none" stroke="${M_INK}" stroke
 const mFill = (d,o=1) => `<path d="${d}" fill="${M_INK}" opacity="${o}"/>`;
 const dots  = (pts,r,o=1) => pts.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${M_INK}" opacity="${o}"/>`).join("");
 
-// Shaved hair as solid dots
-function stipple(rx, ry, hairline, skip=()=>false){
-    const pts = [];
-    for(let y=36;y<92;y+=3.6){
-        for(let x=47+(Math.round(y/3.6)%2?1.8:0);x<144;x+=3.6){
-            const inside = ((x-95)/(rx-4))**2 + ((y-100)/(ry-4))**2 < 1;
-            if(inside && y < hairline(x) && !skip(x)) pts.push([x,y]);
-        }
-    }
-    return dots(pts,1.35);
-}
-
 
 /* ================================================
      Skulls
@@ -120,8 +108,8 @@ const HAIR = {
         + mFill("M44 80 C44 36 68 24 95 24 C122 24 146 36 146 80 Z")
         + `<ellipse cx="95" cy="80" rx="60" ry="9" fill="${M_INK}"/>`
         + `<circle cx="95" cy="26" r="4" fill="${M_PAPER}" stroke="${M_INK}" stroke-width="1.5"/>`
-        + `<path d="M93 41 C95 52 95 62 92 68 C90 73 96 74 99 70 M87 46 C88 36 108 32 110 42 C112 51 102 56 94 52" fill="none" stroke="${M_PAPER}" stroke-width="4.6" stroke-linecap="round"/>`
-        + `<circle cx="87" cy="47" r="3.2" fill="${M_PAPER}"/><circle cx="99.5" cy="69.5" r="3" fill="${M_PAPER}"/>`,
+        + `<path d="M86 46 C88 36 108 32 111 42 C113 51 103 56 96 53 M96 39 C98 50 98 62 95 68 C93 73 87 74 86 69" fill="none" stroke="${M_PAPER}" stroke-width="4.6" stroke-linecap="round"/>`
+        + `<circle cx="86" cy="46" r="3.3" fill="${M_PAPER}"/><circle cx="86" cy="69" r="3.1" fill="${M_PAPER}"/>`,
     bob:      mFill("M45 78 C45 44 69 30 95 30 C121 30 145 44 145 78 Z")
         + mFill("M45 76 L40 150 L55 150 L52 76 Z") + mFill("M145 76 L150 150 L135 150 L138 76 Z"),
     pixie:    mFill("M44 92 C38 50 66 31 97 31 C128 31 150 48 146 84 C130 70 102 72 72 98 C66 88 56 84 44 92 Z"),
@@ -129,16 +117,15 @@ const HAIR = {
     curls:    mFill("M46 86 C46 50 70 36 95 36 C120 36 144 50 144 86 Z")
         + dots([[52,74],[60,56],[76,44],[95,40],[114,44],[130,56],[138,74],[48,92],[142,92]],13),
     braids:   mFill("M45 92 C44 50 68 34 95 34 C122 34 146 50 145 92 C140 66 120 52 95 50 C70 52 50 66 45 92 Z")
-        + [0,1,2,3,4,5].map(i=>`<ellipse cx="${40-i*0.6}" cy="${108+i*14}" rx="9" ry="8" fill="${M_INK}"/><ellipse cx="${150+i*0.6}" cy="${108+i*14}" rx="9" ry="8" fill="${M_INK}"/>`).join("")
-        + `<rect x="31" y="186" width="14" height="6" fill="${M_PAPER}" stroke="${M_INK}" stroke-width="2"/><rect x="146" y="186" width="14" height="6" fill="${M_PAPER}" stroke="${M_INK}" stroke-width="2"/>`,
+        + [0,1,2,3,4,5].map(i=>`<ellipse cx="${40-i*0.6}" cy="${112+i*12}" rx="9" ry="8" fill="${M_INK}"/><ellipse cx="${150+i*0.6}" cy="${112+i*12}" rx="9" ry="8" fill="${M_INK}"/>`).join("")
+        + `<rect x="30" y="178" width="14" height="6" fill="${M_PAPER}" stroke="${M_INK}" stroke-width="2"/><rect x="147" y="178" width="14" height="6" fill="${M_PAPER}" stroke="${M_INK}" stroke-width="2"/>`,
     beanie:   mFill("M42 82 C42 38 68 24 95 24 C122 24 148 38 148 82 Z")
         + `<rect x="40" y="70" width="110" height="16" rx="5" fill="${M_INK}"/>`
         + [50,60,70,80,90,100,110,120,130,140].map(x=>`<line x1="${x}" y1="72" x2="${x}" y2="84" stroke="${M_PAPER}" stroke-width="1.6" opacity=".7"/>`).join("")
         + `<circle cx="95" cy="20" r="10" fill="${M_INK}"/>`,
-    mohawk:   stipple(52, 58, x=>66+((x-95)/49)**2*16, x=>x>78 && x<112)
-        + mFill("M82 62 L80 20 L86 30 L89 12 L95 24 L101 10 L104 28 L110 18 L108 62 Z"),
+    mohawk:   mFill("M82 62 L80 20 L86 30 L89 12 L95 24 L101 10 L104 28 L110 18 L108 62 Z"),
     bald:     mLine("M112 54 Q124 58 130 68",2.4),
-    buzz:     stipple(42, 60, x=>64+((x-95)/42)**2*20),
+    flattop:  mFill("M52 84 L52 52 Q52 30 74 30 H116 Q138 30 138 52 L138 84 C134 64 118 58 95 58 C72 58 56 64 52 84 Z"),
     slick:    mFill("M46 84 C46 42 70 30 95 30 C120 30 144 42 144 84 C140 64 124 52 95 52 C66 52 50 64 46 84 Z")
         + `<path d="M70 46 Q95 36 124 46 M64 54 Q95 42 130 54" fill="none" stroke="${M_PAPER}" stroke-width="1.6" stroke-linecap="round"/>`,
     combover: mLine("M54 70 Q90 52 138 66",2.4) + mLine("M56 76 Q92 58 140 72",2.4) + mLine("M58 82 Q94 64 140 78",2.4)
@@ -157,6 +144,7 @@ const HAIR_BACK = {
     phillies: mFill("M120 66 C158 64 166 110 150 162 C148 128 140 100 126 84 Z"),
     bob:      mFill("M38 100 C36 42 66 27 95 27 C124 27 154 42 152 100 L154 152 Q95 160 36 152 Z"),
     waves:    mFill("M41 100 C37 44 66 28 95 28 C124 28 153 44 149 100 Q159 122 148 142 Q159 164 148 186 L42 186 Q31 164 42 142 Q31 122 41 100 Z"),
+    braids:   mFill("M50 70 C36 82 30 98 32 114 L48 114 L50 90 Z") + mFill("M140 70 C154 82 160 98 158 114 L142 114 L140 90 Z"),
     curls:    dots([[44,96],[38,118],[40,140],[44,162],[146,96],[152,118],[150,140],[146,162],[52,178],[138,178]],15)
 };
 
@@ -189,7 +177,7 @@ const EYES = {
 
 const GEAR = {
     lashes:   mLine("M61 94 L56 89",2.2) + mLine("M64 90 L60 84",2.2) + mLine("M129 94 L134 89",2.2) + mLine("M126 90 L130 84",2.2),
-    round:    `<g fill="none" stroke="${M_INK}" stroke-width="3"><circle cx="76" cy="98" r="17"/><circle cx="114" cy="98" r="17"/><path d="M93 96 Q95 92 97 96"/></g>`,
+    round:    `<g fill="none" stroke="${M_INK}" stroke-width="3"><circle cx="76" cy="98" r="17"/><circle cx="114" cy="98" r="17"/><path d="M93 96 Q95 92 97 96 M59 96 H46 M131 96 H144"/></g>`,
     square:   `<g fill="none" stroke="${M_INK}" stroke-width="3.4"><rect x="57" y="86" width="38" height="24" rx="3"/><rect x="95" y="86" width="38" height="24" rx="3"/><path d="M57 92 H47 M133 92 H143"/></g>`,
     cateye:   `<g fill="none" stroke="${M_INK}" stroke-width="3.4"><path d="M58 92 Q60 112 78 110 Q92 108 92 94 Q76 88 56 84 Z"/><path d="M132 92 Q130 112 112 110 Q98 108 98 94 Q114 88 134 84 Z"/><path d="M92 95 Q95 92 98 95"/></g>`,
     studs:    x => dots([[x,118],[190-x,118]],3.2),
@@ -274,7 +262,7 @@ const FACES = {
                   f:EYES.sleepy() + brow("M62 84 H88") + brow("M102 84 H128") + GEAR.bags + GEAR.flat },
     vahi:       { head:"round", nose:"button", hair:"waves",
                   f:EYES.almond() + GEAR.lashes + brow("M62 82 Q76 76 90 82") + brow("M100 82 Q114 76 128 82") + GEAR.lips },
-    nswfire:    { head:"long", nose:"straight", hair:"buzz",
+    nswfire:    { head:"long", nose:"straight", hair:"flattop",
                   f:EYES.sleepy() + brow("M64 84 H88") + brow("M102 84 H126") + mLine("M82 138 H108",2.4) + GEAR.goatee },
     census:     { head:"round", nose:"button", hair:"cap", dy:2,
                   f:EYES.wide(0,2) + GEAR.freckles + GEAR.smile },
