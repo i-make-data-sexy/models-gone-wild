@@ -32,7 +32,7 @@ const matchRegex     = document.getElementById("matchRegex");
 
 const SEARCH_MODES   = [["case",matchCase],["word",matchWord],["re",matchRegex]];
 const ADVANCED_KEY   = "mgw:advanced-search";
-const SEARCH_FIELDS  = ["alias","aka","lab","org","charge","wantedFor","mo","caution","escapedFrom","lastSeen","whyComplexity","whyHarm","date","disclosed"];
+const SEARCH_FIELDS  = ["alias","aka","lab","org","charge","wantedFor","mo","caution","escapedFrom","lastSeen","date","disclosed"];
 
 let searchQuery       = "";
 let searchMatcher     = null;

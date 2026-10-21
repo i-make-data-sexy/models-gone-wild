@@ -171,10 +171,13 @@
 .advanced-modes .toggle-switch { margin-top: 10px; }
 
 .search-hit {
-    padding:         0 1px;
-    border-radius:   1px;
-    background:      var(--search-hit-fill);
-    color:           inherit;
+    padding:                      2px 3px;
+    border-radius:                1px;
+    background:                   var(--stamp-red);
+    color:                        var(--search-hit-strong-text);
+    font-weight:                  700;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break:         clone;
 }
 
 .search-clear {
@@ -213,7 +216,7 @@
 .search-clear[hidden] { display: none; }
 
 .search-hit.is-current {
-    outline:         2px solid var(--stamp-red);
+    outline:         2px solid var(--ink);
     outline-offset:  1px;
 }
 
@@ -255,11 +258,6 @@
     border-left:     3px solid var(--stamp-red);
 }
 
-.card-excerpt .search-hit {
-    background:      var(--stamp-red);
-    color:           var(--search-hit-strong-text);
-}
-
 .card-excerpt-label {
     margin-right:    6px;
     font-family:     'Oswald',sans-serif;
@@ -298,17 +296,17 @@
 }
 
 .poster-jump {
-    flex:                  none;
-    padding:               4px 0;
-    border:                none;
-    background:            none;
-    color:                 inherit;
-    font:                  inherit;
-    letter-spacing:        inherit;
-    text-transform:        inherit;
-    text-decoration:       underline;
-    text-underline-offset: 3px;
-    cursor:                pointer;
+    flex:                         none;
+    padding:                      4px 0;
+    border:                       none;
+    background:                   none;
+    color:                        inherit;
+    font:                         inherit;
+    letter-spacing:               inherit;
+    text-transform:               inherit;
+    text-decoration:              underline;
+    text-underline-offset:        3px;
+    cursor:                       pointer;
 }
 
 .poster-jump:focus-visible {
@@ -325,5 +323,7 @@
 .poster.exporting .search-hit {
     padding:         0;
     background:      none;
+    color:           inherit;
+    font-weight:     inherit;
     outline:         none;
 }
