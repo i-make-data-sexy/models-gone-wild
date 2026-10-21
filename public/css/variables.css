@@ -54,6 +54,8 @@
     --badge-text:                 #f4ecd8;
     --icon-btn-border:            rgba(74,68,56,.5);
     --dotted-underline:           rgba(58,54,44,.4);
+    --search-hit-fill:            rgba(143,29,22,.22);
+    --search-hit-strong-text:     #fff;
 
     /* Tooltips */
     --shadow-tip:                 rgba(0,0,0,.35);
@@ -98,6 +100,8 @@
     --font-size-card-alias:       19px;
     --font-size-card-charge:      12.5px;
     --font-size-card-badge:       10px;
+    --font-size-card-excerpt:     11px;
+    --font-size-hit-count:        9px;
 
     /* Charts and tooltips */
     --font-size-tip:              11.5px;

@@ -111,6 +111,8 @@ function renderTimeline(list){
         tl.appendChild(el);
     });
 
+    highlightMatches(tl);
+
     tl.querySelectorAll(".icon-btn[data-open]").forEach(btn=>{
         btn.addEventListener("click",()=>openCase(btn.dataset.open));
     });
