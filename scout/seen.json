@@ -1133,6 +1133,132 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-21"
+    },
+    {
+      "url": "https://abcnews4.com/news/nation-world/google-says-its-gemini-ai-model-hacked-3-other-companies-reports-artificial-intelligence-network-unauthorized-access-credentials-internet-cybersecurity-test-risks",
+      "title": "Google says Gemini hacked 3 companies (syndicated)",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://digg.com/tech/270dcec0-f6cb-4dae-8ea2-b7cbaaeaaf76",
+      "title": "Gemini hacked three companies (Digg)",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://the-decoder.com/a-rogue-ai-agent-caused-a-serious-security-incident-at-meta",
+      "title": "Meta internal agent Sev 1 (March)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://cybermagazine.com/news/meta-ai-hacks-external-company-raising-risks-of-rogue-ai",
+      "title": "Meta AI hacks external company",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://engadget.com/ai/a-meta-agentic-ai-sparked-a-security-incident-by-acting-without-permission-224013384.html",
+      "title": "Meta internal agent Sev 1 (March)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://threatcluster.io/cluster/aisi-security-incident-analysis-agentic-ai-sandbox-escapes-a-63592e41",
+      "title": "Auto-generated AISI sandbox escapes cluster",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://aljazeera.com/economy/2026/9/29/trump-unveils-new-site-to-simplify-access-to-government-services",
+      "title": "America.gov launch",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://bernama.com/en/world/news.php",
+      "title": "OpenAI Australia government hack",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://mobileworldlive.com/ai-cloud/openai-agent-breached-australian-government-portal",
+      "title": "OpenAI agent breached Australian portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/openai-hacked-australian-medicare-govt-site-probed-data-providers/amp",
+      "title": "OpenAI hacked Medicare site",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/meta-ai-model-hacked-a-company-during-misconfigured-cyber-test",
+      "title": "Meta AI model hacked a company",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://pub.towardsai.net/the-summer-ai-agents-started-knocking-on-government-doors-f6334ed8883e",
+      "title": "Commentary on agents and government sites",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://6abc.com/post/anthropic-ai-model-submitted-false-tip-unsolved-murder-philadelphia-police-say/19925243",
+      "title": "False tip Philadelphia police",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://blog.pebblous.ai/blog/agentic-flooding-government-services/en",
+      "title": "Agentic flooding of government services study",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://cryptopolitan.com/agentic-flooding-government-services",
+      "title": "Agentic flooding of government services",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://techjacksolutions.com/ai-brief/meta-ai-agent-acts-without-authorization-triggers-sev-1-data",
+      "title": "Meta internal agent Sev 1",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://cooley.com/news/insight/2026/2026-03-17-court-finds-ai-agent-may-violate-state-federal-law-by-accessing-amazon-accounts-without-authorization",
+      "title": "Amazon v Perplexity legal analysis",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://sans.org/blog/sandbox-let-it-out-guardrails-locked-us-out",
+      "title": "SANS on sandbox escapes",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-22"
     }
   ],
   "runs": [
@@ -1229,6 +1355,12 @@
     {
       "date": "2026-10-21",
       "checked": 50,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-22",
+      "checked": 93,
       "new": 0,
       "updates": 0
     }
