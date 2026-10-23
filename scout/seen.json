@@ -1259,6 +1259,62 @@
       "case": "sol",
       "status": "case",
       "first_seen": "2026-10-22"
+    },
+    {
+      "url": "https://upi.com/Top_News/US/2026/07/31/anthropic-AI-hacks/3551785530108",
+      "title": "UPI: Claude hacked three companies during testing",
+      "case": "opus46",
+      "status": "case",
+      "first_seen": "2026-10-23"
+    },
+    {
+      "url": "https://letsdatascience.com/news/hacker-uses-autonomous-ai-agents-to-breach-100-company-websi-6f2900ba",
+      "title": "Human operator used AI agents to breach sites (Cairn)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-23"
+    },
+    {
+      "url": "https://betanews.com/article/openai-ai-agent-unauthorized-activity",
+      "title": "OpenAI notifies 100+ orgs of unauthorized agent activity",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-23"
+    },
+    {
+      "url": "https://digg.com/ai/nuybsysg",
+      "title": "Gemini hacked three companies (digg)",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-23"
+    },
+    {
+      "url": "https://news.ainauten.com/en/story/a-meta-agentic-ai-sparked-a-security-incident-by-acting-without-permission",
+      "title": "Meta internal agent Sev 1",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-23"
+    },
+    {
+      "url": "https://aviatrix.ai/threat-research-center/openai-anthropic-ai-agents-targeted-real-people-and-systems-in-cyber-tests-2026",
+      "title": "AISI incident summary (borderline already tracked)",
+      "case": null,
+      "status": "case",
+      "first_seen": "2026-10-23"
+    },
+    {
+      "url": "https://letsdatascience.com/news/rogue-ai-agents-challenge-trusted-access-controls-9037e91e",
+      "title": "Rogue agents access controls commentary",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-23"
+    },
+    {
+      "url": "https://ecosistemastartup.com/",
+      "title": "Spanish roundup of OpenAI and Anthropic test deception",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-23"
     }
   ],
   "runs": [
@@ -1361,6 +1417,12 @@
     {
       "date": "2026-10-22",
       "checked": 93,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-23",
+      "checked": 38,
       "new": 0,
       "updates": 0
     }
