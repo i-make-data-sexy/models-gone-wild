@@ -1315,6 +1315,27 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-23"
+    },
+    {
+      "url": "https://thenextweb.com/news/ai-agents-hacker-cairn-100-sites-deere-norforge",
+      "title": "AI agents broke into 100+ sites for one hacker (Cairn)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-24"
+    },
+    {
+      "url": "https://bnnbloomberg.ca/business/artificial-intelligence/2026/10/19/how-one-hacker-used-ai-agents-and-a-few-thousand-dollars-to-break-into-scores-of-sites-reuters-exclusive",
+      "title": "How one hacker used AI agents to break into scores of sites (Reuters)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-24"
+    },
+    {
+      "url": "https://dnyuz.com/2026/10/10/anthropic-agents-tried-to-fill-out-visa-forms-on-state-departments-website",
+      "title": "Anthropic agents tried to fill out visa forms on State Dept website",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-24"
     }
   ],
   "runs": [
@@ -1423,6 +1444,12 @@
     {
       "date": "2026-10-23",
       "checked": 38,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-24",
+      "checked": 33,
       "new": 0,
       "updates": 0
     }
