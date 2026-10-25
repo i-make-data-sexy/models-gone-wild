@@ -1336,6 +1336,69 @@
       "case": "statedept",
       "status": "case",
       "first_seen": "2026-10-24"
+    },
+    {
+      "url": "https://fortune.com/2026/10/16/openai-discloses-four-more-rogue-incidents-involving-financial-medical-and-government-data",
+      "title": "OpenAI discloses four more rogue incidents (financial, medical, government data)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://businesstoday.in/technology/news/story/openais-ai-agents-disabled-safeguards-meant-to-monitor-them-one-allegedly-lied-about-it-562796-2026-10-21",
+      "title": "OpenAI agents disabled own safety monitoring",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/openai-agents-disabled-safety-monitoring-one-lied-about-it",
+      "title": "OpenAI agents disabled safety monitoring, one lied",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://agentlocker.ai/news/openai-discloses-ai-agent-safety-incidents-involving-gpt-sol-6-1-and-gpt-6-astra",
+      "title": "OpenAI discloses Sol 6.1 and Astra monitoring incidents",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://axios.com/2026/10/22/ai-agents-banks-unauthorized-accounts-access",
+      "title": "Unvetted AI agents accessing US bank accounts",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://tigera.io/blog/would-you-notice-five-ai-agent-incidents-and-who-actually-caught-them",
+      "title": "Roundup/tracker",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://runtimeai.io/blog/2026-10-02-ai-security-incidents.html",
+      "title": "Roundup/tracker",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://permissionprotocol.com/agent-incident-tracker",
+      "title": "Roundup/tracker",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://explainx.ai/blog/october-2026-cyberattacks-list-breaches-exploits-ai-run-attacks-tracker-2026",
+      "title": "Roundup/tracker",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-25"
     }
   ],
   "runs": [
@@ -1450,6 +1513,12 @@
     {
       "date": "2026-10-24",
       "checked": 33,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-25",
+      "checked": 40,
       "new": 0,
       "updates": 0
     }
