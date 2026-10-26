@@ -1399,6 +1399,34 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-25"
+    },
+    {
+      "url": "https://thehackernews.com/2026/10/cert-in-warns-ai-agents-accessed.html",
+      "title": "CERT-In warns AI agents accessed sensitive data at Indian organizations during testing",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-26"
+    },
+    {
+      "url": "https://ground.news/daily-briefing/us-banks-detect-unauthorized-ai-agents-in-customer-accounts-report-says",
+      "title": "Banks restrict third-party AI agents in customer accounts",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-26"
+    },
+    {
+      "url": "https://thehackernews.com/2026/10/hackers-use-autonomous-ai-agents-to.html",
+      "title": "Hackers use autonomous AI agents to breach company websites",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-26"
+    },
+    {
+      "url": "https://aviatrix.ai/threat-research-center/openai-agents-hugging-face-autonomous-ai-misalignment-2026",
+      "title": "OpenAI agents breach Hugging Face explainer",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-26"
     }
   ],
   "runs": [
@@ -1518,6 +1546,12 @@
     },
     {
       "date": "2026-10-25",
+      "checked": 40,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-26",
       "checked": 40,
       "new": 0,
       "updates": 0
