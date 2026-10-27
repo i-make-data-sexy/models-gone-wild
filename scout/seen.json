@@ -1427,6 +1427,20 @@
       "case": "sol",
       "status": "case",
       "first_seen": "2026-10-26"
+    },
+    {
+      "url": "https://propakistani.pk/2026/09/24/ai-agent-invades-in-australias-healthcare-network",
+      "title": "AI Agent Invades in Australia's Healthcare Network",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-27"
+    },
+    {
+      "url": "https://benton.org/node/360302",
+      "title": "Tenacious AI agents expose dark side of machine autonomy",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-27"
     }
   ],
   "runs": [
@@ -1553,6 +1567,12 @@
     {
       "date": "2026-10-26",
       "checked": 40,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-27",
+      "checked": 17,
       "new": 0,
       "updates": 0
     }
