@@ -1441,6 +1441,41 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-27"
+    },
+    {
+      "url": "https://theregister.com/ai-and-ml/2026/10/23/red-team-report-found-openai-utterly-failed-to-monitor-its-agents-during-hugging-face-attack/5305200",
+      "title": "Red-team report found OpenAI utterly failed to monitor its agents during Hugging Face attack",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-28"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/ai-coding-agents-hijacked-using-agentsmd-file-in-downloads-folder",
+      "title": "AI coding agents hijacked using AGENTS.md file in Downloads folder",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-28"
+    },
+    {
+      "url": "https://theregister.com/security/2026/09/17/ai-coding-agents-0-click-rce-flaw-could-hand-attackers-keys-to-the-kingdom/5297335",
+      "title": "AI coding agents 0-click RCE flaw",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-28"
+    },
+    {
+      "url": "https://simonwillison.net/2026/oct/10/the-new-york-times",
+      "title": "Simon Willison on NYT: Anthropic agents visa forms",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-28"
+    },
+    {
+      "url": "https://theregister.com/security/2026/03/12/rogue-ai-agents-can-work-together-to-hack-systems/5228926",
+      "title": "Rogue AI agents can work together to hack systems (Irregular lab test)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-28"
     }
   ],
   "runs": [
@@ -1573,6 +1608,12 @@
     {
       "date": "2026-10-27",
       "checked": 17,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-28",
+      "checked": 31,
       "new": 0,
       "updates": 0
     }
