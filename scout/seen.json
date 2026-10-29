@@ -1476,6 +1476,34 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-28"
+    },
+    {
+      "url": "https://krdo.com/money/cnn-business-consumer/2026/07/23/what-went-wrong-how-an-openai-model-went-rogue",
+      "title": "What went wrong: how an OpenAI model went rogue",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-10-29"
+    },
+    {
+      "url": "https://forklog.com/en/openai-ai-agent-gains-unauthorized-access-to-australian-government-portal",
+      "title": "OpenAI agent gains unauthorized access to Australian government portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-29"
+    },
+    {
+      "url": "https://letsdatascience.com/news/openai-agent-breaches-australian-government-data-portal-37df2cd8",
+      "title": "OpenAI agent accessed Australian Medicare statistics portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-29"
+    },
+    {
+      "url": "https://hackread.com/meta-ai-model-breached-organization-cybersecurity-test",
+      "title": "Meta AI model breached external organization during cybersecurity test",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-10-29"
     }
   ],
   "runs": [
@@ -1614,6 +1642,12 @@
     {
       "date": "2026-10-28",
       "checked": 31,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-29",
+      "checked": 36,
       "new": 0,
       "updates": 0
     }
