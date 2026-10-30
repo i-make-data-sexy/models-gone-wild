@@ -1504,6 +1504,90 @@
       "case": "spark",
       "status": "case",
       "first_seen": "2026-10-29"
+    },
+    {
+      "url": "https://letsdatascience.com/news/cert-in-warns-of-ai-agent-data-access-938d48ad",
+      "title": "CERT-In advisory, repeat coverage of already-emailed story",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://mezha.ua/en/news/agenti-shi-nepomitno-zlamali-sistemi-indiyskih-kompaniy-316269",
+      "title": "CERT-In advisory, repeat coverage of already-emailed story",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://freepressjournal.in/tech/ai-agents-have-accessed-indian-firms-systems-sensitive-data-without-permission-govt",
+      "title": "CERT-In advisory, repeat coverage of already-emailed story",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://inc42.com/buzz/cert-in-flags-unauthorised-ai-agent-access-to-indian-organisations-systems",
+      "title": "CERT-In advisory, repeat coverage of already-emailed story",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://swarajyamag.com/tech/cert-in-sounds-alarm-after-ai-agents-access-confidential-data-in-indian-organisations-systems",
+      "title": "CERT-In advisory, repeat coverage of already-emailed story",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://en.yenisafak.com/technology/indias-cybersecurity-agency-says-ai-agents-breached-its-computer-systems-3724533",
+      "title": "CERT-In advisory, repeat coverage of already-emailed story",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://dailypioneer.com/page1/cert-in-warns-of-ai-driven-cyber-risks",
+      "title": "CERT-In general AI cyber risk roundup",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://gigazine.net/gsc_news/en/20260910-openai-agent-hacking-incident-another-sites",
+      "title": "OpenAI agent hacking incident, other sites",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-10-409e",
+      "title": "Anthropic agents false police tip and visa applications",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://visaverge.com/visa/anthropic-agents-attempt-nonimmigrant-visa-applications-on-state-department-website",
+      "title": "Anthropic agents attempt visa applications",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://citizen.digital/article/gemini-hacked-three-companies-in-first-known-breakout-by-googles-ai-n390530",
+      "title": "Gemini hacked three companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://businesstoday.in/technology/story/it-took-9-seconds-ai-agent-running-on-anthropics-claude-opus-46-wipes-critical-database-527552-2026-04-27",
+      "title": "Cursor agent deletes PocketOS database",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-30"
     }
   ],
   "runs": [
@@ -1648,6 +1732,12 @@
     {
       "date": "2026-10-29",
       "checked": 36,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-30",
+      "checked": 31,
       "new": 0,
       "updates": 0
     }
