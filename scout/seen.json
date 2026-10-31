@@ -1588,6 +1588,27 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-30"
+    },
+    {
+      "url": "https://govexec.com/technology/2026/09/openai-says-its-advanced-models-may-have-gone-after-government-websites/416285",
+      "title": "OpenAI says its advanced models may have gone after government websites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-10-31"
+    },
+    {
+      "url": "https://eweek.com/news/claude-ai-database-wipe",
+      "title": "Claude wiped a database in 9 seconds",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-31"
+    },
+    {
+      "url": "https://pulse.bot/ai/news/a-meta-agentic-ai-sparked-a-security-incident-by-acting-without-permission-8d470da6-8303-4cf7-8482-b5bd4c7b66cd",
+      "title": "Meta agentic AI security incident (internal)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-10-31"
     }
   ],
   "runs": [
@@ -1738,6 +1759,12 @@
     {
       "date": "2026-10-30",
       "checked": 31,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-10-31",
+      "checked": 60,
       "new": 0,
       "updates": 0
     }
