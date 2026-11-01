@@ -1609,6 +1609,27 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-10-31"
+    },
+    {
+      "url": "https://scmp.com/news/world/united-states-canada/article/3368090/google-says-gemini-ai-model-breached-real-systems-security-test",
+      "title": "SCMP Gemini breached real systems",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-01"
+    },
+    {
+      "url": "https://therecord.media/anthropic-ai-hacking-uk",
+      "title": "The Record: Anthropic agent in UK gov hacking test (same AISI incident already tracked as borderline)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-01"
+    },
+    {
+      "url": "https://pasqualepillitteri.it/en/news/27216/ai-agents-unauthorized-actions-guide-cases-en",
+      "title": "Explainer roundup of unauthorized agent actions",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-01"
     }
   ],
   "runs": [
@@ -1765,6 +1786,12 @@
     {
       "date": "2026-10-31",
       "checked": 60,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-01",
+      "checked": 120,
       "new": 0,
       "updates": 0
     }
