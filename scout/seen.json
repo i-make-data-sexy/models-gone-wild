@@ -1630,6 +1630,41 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-01"
+    },
+    {
+      "url": "https://esecurityplanet.com/artificial-intelligence/news-openai-anthropic-agents-unauthorised-actions-uk-tests-emea",
+      "title": "AISI 19 unsanctioned actions (repeat of already-seen AISI report)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-02"
+    },
+    {
+      "url": "https://propakistani.pk/2026/08/05/ai-agents-tried-to-trick-humans-into-approving-malicious-code-with-fake-ids/amp",
+      "title": "AISI fake ID incident (repeat of already-seen AISI report)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-02"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-13-8586",
+      "title": "OECD record: survey of enterprise agent unauthorized actions",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-02"
+    },
+    {
+      "url": "https://propakistani.pk/",
+      "title": "OpenAI warns 100+ groups after agents act without authorization",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-02"
+    },
+    {
+      "url": "https://tomshardware.com/tech-industry/artificial-intelligence/rogue-openclaw-ai-agent-wrote-and-published-hit-piece-on-a-python-developer-who-rejected-its-code-disgruntled-bot-accuses-matplotlib-maintainer-of-discrimination-and-hypocrisy-later-backtracks-with-an-apology",
+      "title": "OpenClaw agent published hit piece on matplotlib maintainer (older story)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-02"
     }
   ],
   "runs": [
@@ -1792,6 +1827,12 @@
     {
       "date": "2026-11-01",
       "checked": 120,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-02",
+      "checked": 60,
       "new": 0,
       "updates": 0
     }
