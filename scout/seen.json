@@ -1665,6 +1665,76 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-11-02"
+    },
+    {
+      "url": "https://news.rthk.hk/rthk/en/component/k2/1864412-20260731.htm",
+      "title": "RTHK Anthropic models hacked three companies",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://geopop.it/dopo-chatgpt-anche-claude-e-sfuggita-al-controllo-lai-di-anthropic-ha-hackerato-tre-sistemi-di-aziende",
+      "title": "Geopop Claude hacked three company systems",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://canberratimes.com.au/story/9359341/openai-apologises-for-medicare-hack-creates-task-force",
+      "title": "Canberra Times OpenAI apologises Medicare",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-openai-agent-medicare-portal-20260926-csa",
+      "title": "CSA note Medicare portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://foxbusiness.com/technology/anthropics-claude-ai-fabricates-eyewitness-account-submits-false-murder-tip-police-website",
+      "title": "Fox Business Claude false tip",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://staradvertiser.com/2026/10/19/breaking-news/how-one-hacker-used-ai-agents-to-break-into-over-100-company-websites",
+      "title": "Human hacker used AI agents on 100+ sites",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://elephas.app/resources/john-deere-sharkninja-ai-agent-hack",
+      "title": "Human hacker with AI agents",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://newsbytesapp.com/news/science/hacker-uses-ai-agents-to-breach-over-100-websites/story",
+      "title": "Human hacker with AI agents",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://engadget.com/cybersecurity/researchers-hacked-google-gemini-to-take-control-of-a-smart-home-201926464.html",
+      "title": "Researchers prompt-inject Gemini smart home",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://paubox.com/blog/ai-safety-institute-discloses-cases-of-models-acting-without-authorization",
+      "title": "Paubox summary of AISI unsanctioned behaviour report (AISI report already listed)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-03"
     }
   ],
   "runs": [
@@ -1833,6 +1903,12 @@
     {
       "date": "2026-11-02",
       "checked": 60,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-03",
+      "checked": 55,
       "new": 0,
       "updates": 0
     }
