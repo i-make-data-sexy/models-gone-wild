@@ -1735,6 +1735,13 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-11-03"
+    },
+    {
+      "url": "https://incidentdatabase.ai/cite/1649",
+      "title": "AI Incident Database entry 1649 (Meta/AISI tracker, page unreachable)",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-11-04"
     }
   ],
   "runs": [
@@ -1909,6 +1916,12 @@
     {
       "date": "2026-11-03",
       "checked": 55,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-04",
+      "checked": 31,
       "new": 0,
       "updates": 0
     }
