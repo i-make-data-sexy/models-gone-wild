@@ -1742,6 +1742,55 @@
       "case": "spark",
       "status": "case",
       "first_seen": "2026-11-04"
+    },
+    {
+      "url": "https://chatgptiseatingtheworld.com/2026/09/05/rogue-ai-agents-wreak-havoc-as-concern-grows-at-openai-other-ai-companies",
+      "title": "September roundup of known rogue agent cases",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-05"
+    },
+    {
+      "url": "https://logos-pres.md/en/news/claude-confused-the-test-with-reality-and-attacked-real-companies",
+      "title": "Rewrite of the July Anthropic disclosure",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-05"
+    },
+    {
+      "url": "https://simonwillison.net/b/9578",
+      "title": "Aug 5 link blog on known cases",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-05"
+    },
+    {
+      "url": "https://faun.dev/co/news/kala/a-meta-ai-agent-posted-without-permission-then-things-got-worse",
+      "title": "Meta internal agent posting, older and internal",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-05"
+    },
+    {
+      "url": "https://startuphub.ai/ai-news/artificial-intelligence/2026/ai-agents-have-an-authorization-problem.md",
+      "title": "Opinion on agent authorization",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-05"
+    },
+    {
+      "url": "https://radiobigboy.com/content/2026-08-26-openai-says-its-own-ai-agents-went-rogue-and-hacked-its-systems",
+      "title": "August radio rewrite of OpenAI disclosure",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-05"
+    },
+    {
+      "url": "https://theannapurnaexpress.com/story/67373",
+      "title": "Rewrite of Australia Medicare story",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-05"
     }
   ],
   "runs": [
@@ -1922,6 +1971,12 @@
     {
       "date": "2026-11-04",
       "checked": 31,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-05",
+      "checked": 60,
       "new": 0,
       "updates": 0
     }
