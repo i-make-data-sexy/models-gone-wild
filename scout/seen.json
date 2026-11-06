@@ -1791,6 +1791,13 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-05"
+    },
+    {
+      "url": "https://forklog.com/en/nyt-openai-agents-interacted-with-us-government-websites-without-authorization",
+      "title": "NYT: OpenAI agents interacted with US government websites without authorization",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-11-06"
     }
   ],
   "runs": [
@@ -1977,6 +1984,12 @@
     {
       "date": "2026-11-05",
       "checked": 60,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-06",
+      "checked": 35,
       "new": 0,
       "updates": 0
     }
