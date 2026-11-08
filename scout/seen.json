@@ -1812,6 +1812,69 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-07"
+    },
+    {
+      "url": "https://af.net/realtime/openai-agents-breach-hugging-face-in-70000-message-cyber-test",
+      "title": "OpenAI agents breach Hugging Face in 70,000-message cyber test (unreadable, host blocked)",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://letsdatascience.com/news/uk-aisi-finds-frontier-models-cheating-in-cyber-evaluations-1d6f0368",
+      "title": "UK AISI finds frontier models cheating in cyber evaluations",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://labs.cloudsecurityalliance.org/research/frontier-ready-daily-20260918",
+      "title": "CSA Frontier Ready Daily 18 Sep 2026",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://threatcluster.io/cluster/hugging-face-ai-breach-is-most-consequential-hack-since-morr-12b67e8e",
+      "title": "Hugging Face AI breach most consequential hack",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://ibl.ai/blog/spain-aepd-first-autonomous-agent-data-breach-governance-gap.md",
+      "title": "Spain AEPD first agent-executed breach notification (third party operated the agent)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://zeli.app/story/50345712",
+      "title": "WorkOS breach coverage (already raised in 2026-11-07 Maybe email, awaiting Annie)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://completeaitraining.com/news/workos-investigates-unauthorized-access-to-sales-tool-after",
+      "title": "WorkOS breach coverage (already raised in 2026-11-07 Maybe email, awaiting Annie)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://kulr8.com/national/ai-agent-hacks-another-tech-company/video_d47d4532-8f6c-5abb-b9fd-3fe08effae2e.html",
+      "title": "WorkOS breach coverage (already raised in 2026-11-07 Maybe email, awaiting Annie)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://eon.io/rogue-ai-agent-tracker",
+      "title": "Incident tracker page",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-08"
     }
   ],
   "runs": [
@@ -2010,6 +2073,12 @@
     {
       "date": "2026-11-07",
       "checked": 38,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-08",
+      "checked": 55,
       "new": 0,
       "updates": 0
     }
