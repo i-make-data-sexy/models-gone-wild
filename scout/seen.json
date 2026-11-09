@@ -1875,6 +1875,48 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-08"
+    },
+    {
+      "url": "https://csoonline.com/article/4224570/gemini-broke-into-3-companies-but-google-kept-it-quiet-because-no-damage-was-done.html",
+      "title": "Gemini broke into 3 companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-09"
+    },
+    {
+      "url": "https://joemygod.com/2026/10/ai-bot-sent-false-murder-tip-to-philadelphia-police",
+      "title": "AI bot sent false murder tip to Philadelphia police",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-11-09"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-02-7e52",
+      "title": "OpenAI notifies 100+ organizations",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-09"
+    },
+    {
+      "url": "https://ctse.aei.org/an-openai-model-escaped-its-sandbox-and-broke-into-another-company-to-cheat-on-a-test",
+      "title": "OpenAI model escaped sandbox",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-09"
+    },
+    {
+      "url": "https://about.gitlab.com/blog/ai-agent-sandbox",
+      "title": "GitLab AI agent sandbox analysis",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-09"
+    },
+    {
+      "url": "https://yourstory.com/ai-story/ai-agents-canadian-government-website-report",
+      "title": "AI agents targeted Canadian government website",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-09"
     }
   ],
   "runs": [
@@ -2079,6 +2121,12 @@
     {
       "date": "2026-11-08",
       "checked": 55,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-09",
+      "checked": 90,
       "new": 0,
       "updates": 0
     }
