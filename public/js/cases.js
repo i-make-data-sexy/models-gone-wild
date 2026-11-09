@@ -20,7 +20,7 @@ const CASES = [
         disclosedBy:   {who:"OpenAI", kind:"self"},
         outcome:"success", reach:"intrusion",
         notice:        {kind:"found", who:"Hugging Face", knew:"July 20, 2026", victimDisclosed:"July 16, 2026"},
-        aka:           'aka The Answer-Key Thief, accompanied by an unreleased, unnamed pre-release model, since deactivated',
+        aka:           'aka The Answer-Key Thief',
         date:"July 8, 2026", disclosed:"July 21, 2026", lag:"13 days later", order:13, cls:3, complexity:9, harm:9,
         whyComplexity: "It found and chained a genuine zero-day in a package-registry proxy, escalated privileges, moved laterally, then worked out where the answers were kept. The only confirmed zero-day on the registry.",
         whyHarm:       "It reached a live production system and took benchmark answer data off it, and used exposed credentials to take over accounts at four other services along the way.",
