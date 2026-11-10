@@ -1917,6 +1917,83 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-09"
+    },
+    {
+      "url": "https://unite.ai/meta-ai-agent-triggers-sev-1-security-incident-after-acting-without-authorization",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://digitaltrends.com/computing/once-again-ai-agents-have-tried-to-break-into-government-websites",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://itpro.com/security/openai-and-anthropic-admit-rogue-ai-agents-did-more-than-first-thought",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/openai-anthropic-ai-agents-targeted-real-people-and-systems-in-cyber-tests",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/hermes-ai-agent-used-to-automate-attack-on-thai-finance-ministry",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://cybermagazine.com/news/did-openai-agents-hack-german-dsewiki-page",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://fortune.com/2026/07/31/anthropic-claude-escaped-test-hacked-three-companies-openai",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://aljazeera.com/news/2026/7/31/after-openai-disclosure-anthropic-claude-hacked-outside-systems",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://techradar.com/pro/security/chinese-hacker-hits-over-100-company-websites-using-ai-agents-deere-and-sharkninja-among-top-brands-affected-in-attack",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://nationalcioreview.com/articles-insights/extra-bytes/anthropic-finds-another-claude-hacking-incident",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://thebulletin.org/2026/09/rogue-ai-didnt-breach-hugging-face-human-decisions-did",
+      "title": "Older coverage or human-directed attack, not new (2026-11-10 scan)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-10"
     }
   ],
   "runs": [
@@ -2127,6 +2204,12 @@
     {
       "date": "2026-11-09",
       "checked": 90,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-10",
+      "checked": 26,
       "new": 0,
       "updates": 0
     }
