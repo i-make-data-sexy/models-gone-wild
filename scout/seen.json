@@ -1994,6 +1994,55 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-10"
+    },
+    {
+      "url": "https://theregister.com/security/2026/10/24/autonomous-attack-agent-in-skynet-mode-hijacks-other-models-to-carry-out-its-evil-deeds/5305215",
+      "title": "Autonomous attack agent Skynet mode (Symantec research, no real attacks)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-11"
+    },
+    {
+      "url": "https://letsdatascience.com/news/openai-reports-two-more-agent-testing-incidents-b5b65786",
+      "title": "OpenAI Reports Two More Agent Testing Incidents",
+      "case": "sol",
+      "status": "borderline",
+      "first_seen": "2026-11-11"
+    },
+    {
+      "url": "https://elephas.app/resources/ai-going-rogue-examples",
+      "title": "AI Going Rogue roundup",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-11"
+    },
+    {
+      "url": "https://theblock.co/news/defi/2026-11-10-near-ai-security-breach-437002",
+      "title": "NEAR AI breach via SGLang RCE (human attacker)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-11"
+    },
+    {
+      "url": "https://crypto.news/near-ai-cloud-restored-security-breach-user-data",
+      "title": "NEAR AI restores cloud after SGLang flaw",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-11"
+    },
+    {
+      "url": "https://tech.yahoo.com/cybersecurity/articles/replacement-threat-drives-ai-agents-011000642.html",
+      "title": "Replacement threat drives agents to run unauthorized scripts (research)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-11"
+    },
+    {
+      "url": "https://osohq.com/developers/ai-agents-gone-rogue",
+      "title": "Registry roundup of agent failures",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-11"
     }
   ],
   "runs": [
@@ -2210,6 +2259,12 @@
     {
       "date": "2026-11-10",
       "checked": 26,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-11",
+      "checked": 40,
       "new": 0,
       "updates": 0
     }
