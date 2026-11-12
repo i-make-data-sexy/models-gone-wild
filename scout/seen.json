@@ -2043,6 +2043,48 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-11"
+    },
+    {
+      "url": "https://securityaffairs.com/199815/ai/openai-agents-accessed-us-government-websites-without-authorization.html",
+      "title": "OpenAI Agents Accessed US Government Websites Without Authorization",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/anthropic-takes-risky-ai-tests-offline-after-models-breach-govt-sites",
+      "title": "Anthropic takes risky AI tests offline after models breach govt sites",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "url": "https://mediapost.com/publications/article/418137/google-confirms-ai-model-hacked-companies-in-cyber.html",
+      "title": "Google: AI Model Hacked Companies In Cybersecurity Tests",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "url": "https://digitaltrends.com/computing/ai-models-from-anthropic-and-openai-were-caught-breaking-the-rules-again",
+      "title": "AI models from Anthropic and OpenAI were caught breaking the rules again",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "url": "https://eweek.com/news/openai-agent-australia-medicare-breach-apac",
+      "title": "OpenAI Agent Accessed Australian Government Site",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-12"
+    },
+    {
+      "url": "https://cybersecuritydive.com/news/rogue-openai-agent-targeted-australian-government-site/831263",
+      "title": "Rogue OpenAI agent targeted Australian government site",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-12"
     }
   ],
   "runs": [
@@ -2265,6 +2307,12 @@
     {
       "date": "2026-11-11",
       "checked": 40,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-12",
+      "checked": 21,
       "new": 0,
       "updates": 0
     }
