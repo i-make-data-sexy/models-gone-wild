@@ -2085,6 +2085,181 @@
       "case": "medicare",
       "status": "case",
       "first_seen": "2026-11-12"
+    },
+    {
+      "url": "https://malwarebytes.com/blog/news/2026/07/openais-agent-escaped-its-sandbox-during-a-security-test",
+      "title": "Malwarebytes: OpenAI agent escaped sandbox",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-09-08-b6ca",
+      "title": "OECD incident aggregator entry",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://cyera.com/research/agent-inflicted-damage-inside-the-real-world-failures-of-enterprise-ai-systems",
+      "title": "Cyera enterprise agent failures roundup",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://ibtimes.co.uk/openai-ai-agents-government-system-access-1822656",
+      "title": "IBTimes government website probes",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://runtimewire.com/article/anthropic-metr-independent-claude-agent-incident-investigation",
+      "title": "Anthropic brings in METR",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://axios.com/2026/09/19/google-safety-incidents-testing-hacks",
+      "title": "Axios Google AI hacked three companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://securityweek.com/gemini-agent-to-agent-attack-exposed-secrets-enabled-pull-request-tampering",
+      "title": "Gemini ADK agent-to-agent flaw (research)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://aiweekly.co/alerts/gemini-web-agent-follows-honeypot-injection-attack",
+      "title": "Gemini web agent honeypot injection (research)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://sheppnews.com.au/world/metas-ai-model-hacked-another-company-during-testing",
+      "title": "Meta AI model hacked another company",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://complexdiscovery.com/recent-ai-evaluation-incidents-expose-gaps-in-containment-configuration-and-evidence",
+      "title": "Eval containment commentary",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-frontier-evaluation-containment-systemic-r",
+      "title": "CSA containment research note",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://techradar.com/pro/security/ai-agents-aggressively-tried-to-hack-us-and-canadian-government-websites",
+      "title": "TechRadar Transluce US/Canada probes (same story as earlier borderline)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://insurancebusinessmag.com/au/news/cyber/the-notification-gap-that-could-void-a-claim-592305.aspx",
+      "title": "Insurance Business notification gap",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://mcdonaldhopkins.com/insights/news/when-ai-acts-alone-australian-government-breach",
+      "title": "McDonald Hopkins law note on Medicare",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://aiweekly.co/alerts/openai-agents-scanned-un-data-hub-16000-times-bypassed-filters",
+      "title": "WSJ via AI Weekly: OpenAI bots hit UNCTAD data hub 16,000+ times",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://thehackernews.com/2026/09/openai-agent-bypassed-australian.html",
+      "title": "Hacker News Medicare",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://therecord.media/kazakhstan-hackers-central-asia",
+      "title": "Human hackers using Hermes agent",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/malicious-ai-agents-steal-600k-credit-cards-infect-100-plus-sites-with-skimmers",
+      "title": "Criminal agent skimmer campaign",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/chinese-hackers-use-artex-ai-in-automated-attacks-against-200-orgs",
+      "title": "Chinese hackers using ARTEX",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://pjmedia.com/david-manney/2026/10/10/ai-filed-20-visa-applications-trumps-white-house-wants-answers-n4958199",
+      "title": "PJ Media visa applications",
+      "case": "statedept",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://aiweekly.co/alerts/schmitz-documents-84-cases-of-agentic-flooding-in-11-nations",
+      "title": "Agentic flooding study",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://ibtimes.co.uk/anthropic-ai-model-submitted-false-homicide-tip-1824849",
+      "title": "IBTimes Anthropic tip and visas",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://techcrunch.com/2026/10/09/an-anthropic-ai-model-sent-a-false-homicide-tip-to-philadelphia-police",
+      "title": "TechCrunch Philly tip",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://atlantanewsfirst.com/2026/10/14/an-ai-chatbot-tipped-off-police-about-an-unsolved-murder-tip-wasnt-real",
+      "title": "Atlanta News First Philly tip",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://abcnews4.com/news/nation-world/ai-safety-warnings-mount-as-frontier-models-test-new-limits-artificial-intelligence-model-testing-safety-guidelines-regulations-congress",
+      "title": "AP roundup AI safety warnings",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-13"
     }
   ],
   "runs": [
@@ -2313,6 +2488,12 @@
     {
       "date": "2026-11-12",
       "checked": 21,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-13",
+      "checked": 150,
       "new": 0,
       "updates": 0
     }
