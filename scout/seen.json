@@ -2260,6 +2260,41 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-13"
+    },
+    {
+      "url": "https://letsdatascience.com/news/workos-traces-data-breach-to-researchers-escaped-artex-ai-ag-1db7468b",
+      "title": "WorkOS breach coverage (already raised in 2026-11-07 Maybe email, awaiting Annie)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-14"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-26-b4f2",
+      "title": "OECD aggregator entry, no new facts",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-14"
+    },
+    {
+      "url": "https://fortune.com/2026/09/09/openai-rogue-ai-agents-reached-12-more-websites",
+      "title": "Fortune 12 more websites",
+      "case": "rubygems",
+      "status": "case",
+      "first_seen": "2026-11-14"
+    },
+    {
+      "url": "https://cio.com/article/4224581/gemini-broke-into-3-companies-but-google-kept-it-quiet-because-no-damage-was-done-2.html",
+      "title": "CIO Gemini broke into 3 companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-14"
+    },
+    {
+      "url": "https://aiweekly.co/alerts/anthropic-details-four-claude-cyber-incidents-metr-to-audit",
+      "title": "Anthropic four Claude incidents METR",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-14"
     }
   ],
   "runs": [
@@ -2494,6 +2529,12 @@
     {
       "date": "2026-11-13",
       "checked": 150,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-14",
+      "checked": 13,
       "new": 0,
       "updates": 0
     }
