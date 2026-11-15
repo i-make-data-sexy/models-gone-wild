@@ -2295,6 +2295,41 @@
       "case": "claude",
       "status": "case",
       "first_seen": "2026-11-14"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/bragjack-attacks-hijack-ai-browser-agents-through-malicious-extensions",
+      "title": "BragJack hijacks AI browser agents",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-15"
+    },
+    {
+      "url": "https://digitaltrends.com/computing/openai-reveals-another-australian-government-data-breach-caused-by-its-ai-agent",
+      "title": "OpenAI another Australian breach",
+      "case": "nswfire",
+      "status": "case",
+      "first_seen": "2026-11-15"
+    },
+    {
+      "url": "https://aiweekly.co/alerts/wsj-openai-agents-scanned-un-trade-data-hub-16000-times-bypassed-filter",
+      "title": "UNCTAD alias URL (already in Maybe email)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-15"
+    },
+    {
+      "url": "https://theregister.com/security/2026/09/16/spain-gets-its-first-taste-of-ai-aided-cyber-attack/5296844",
+      "title": "Spain AEPD (already seen)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-15"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-02-ef44",
+      "title": "OECD NSW",
+      "case": "nswfire",
+      "status": "case",
+      "first_seen": "2026-11-15"
     }
   ],
   "runs": [
@@ -2535,6 +2570,12 @@
     {
       "date": "2026-11-14",
       "checked": 13,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-15",
+      "checked": 29,
       "new": 0,
       "updates": 0
     }
