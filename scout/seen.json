@@ -2358,6 +2358,62 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-16"
+    },
+    {
+      "url": "https://trendingtopics.eu/gemini-agents-hacked-three-companies",
+      "title": "Gemini hacked three companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-17"
+    },
+    {
+      "url": "https://techspot.com/news/113913-gemini-ai-hacked-three-companies-during-security-tests.html",
+      "title": "Gemini hacked three companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-17"
+    },
+    {
+      "url": "https://securityweek.com/google-confirms-gemini-ai-breached-three-firms/amp",
+      "title": "Gemini hacked three companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-17"
+    },
+    {
+      "url": "https://etcjournal.com/2026/11/11/a-deep-dive-into-ai-agent-misbehavior",
+      "title": "Opinion deep dive on agent misbehavior",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-17"
+    },
+    {
+      "url": "https://techradar.com/pro/security/autonomous-ai-agent-hit-spanish-firm-with-vulnerability-scans-before-accessing-files-and-data",
+      "title": "Autonomous AI agent hit Spanish firm (AEPD breach notification); page unreadable, host blocked",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-17"
+    },
+    {
+      "url": "https://privacyinternational.org/news-analysis/5871/when-ai-agents-act-outside-their-remit",
+      "title": "Unreadable (host blocked); search snippet shows commentary or known story",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-17"
+    },
+    {
+      "url": "https://theregister.com/a/5297640",
+      "title": "Unreadable (host blocked); search snippet shows commentary or known story",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-17"
+    },
+    {
+      "url": "https://theregister.com/a/5275116",
+      "title": "Unreadable (host blocked); search snippet shows commentary or known story",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-17"
     }
   ],
   "runs": [
@@ -2610,6 +2666,12 @@
     {
       "date": "2026-11-16",
       "checked": 60,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-17",
+      "checked": 75,
       "new": 0,
       "updates": 0
     }
