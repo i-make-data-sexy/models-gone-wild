@@ -99,15 +99,7 @@ python3 -I ~/.claude/formatting-tools/check_format.py public/js/cases.js public/
 
 ### Add a line to the change log
 
-The Methodology page ends with a change log, newest first, edited by hand. Add an `<h3>` with today's date in `Month D, YYYY` form and a `<p>` naming the case (or, if today already has an entry, add a sentence to it). Name anything new the reader can see, such as a new lab, a new filter option, or a new glossary term only when it changes how the page reads:
-
-```bash
-grep -n 'id="changes"' -A6 public/methodology/index.html
-```
-
-### Add a line to the change log
-
-The Methodology page ends with a change log, newest first, edited by hand. Add an `<h3>` with today's date in `Month D, YYYY` form and a `<p>` naming the case (or, if today already has an entry, add a sentence to it). Name anything new the reader can see, such as a new lab, a new filter option, or a new glossary term only when it changes how the page reads:
+The Methodology page ends with a change log, newest first, edited by hand. Add an `<h3>` with today's date as a three-letter month with no period (`Nov 17, 2026`) and a `<p>` naming the case (or, if today already has an entry, add a sentence to it). Name anything new the reader can see, such as a new lab, a new filter option, or a new glossary term only when it changes how the page reads:
 
 ```bash
 grep -n 'id="changes"' -A6 public/methodology/index.html
