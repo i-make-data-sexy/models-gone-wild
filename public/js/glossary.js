@@ -45,5 +45,7 @@ const GLOSSARY = {
     "Wikidata Query Service":       "Wikimedia's public service for running database-style queries against Wikidata, the structured-data project that supplies facts to Wikipedia and other sites.",
     "proxy":                        "A server that fetches web pages on someone else's behalf, so the request appears to come from the proxy rather than from whoever asked for it.",
     "IP address":                   "The number that identifies a machine on a network, so other machines can find it and send it traffic.",
-    "Tor":                          "A network that routes traffic through several volunteer relays so the origin of a request is hidden. Used here as a way to keep reaching the wiki from addresses not tied to the sandbox."
+    "Tor":                          "A network that routes traffic through several volunteer relays so the origin of a request is hidden. Used here as a way to keep reaching the wiki from addresses not tied to the sandbox.",
+    "background check-ins":         "Turns that xAI's servers start on their own schedule, so Grok Bot works with no message from its owner. xAI support says the bot looks at its connected apps during each one.",
+    "MCP gateway":                  "A layer between an AI agent and the apps it uses that logs each request and can hold it until a person allows or denies it. MCP, the Model Context Protocol, is a standard agents use to call outside tools."
 };

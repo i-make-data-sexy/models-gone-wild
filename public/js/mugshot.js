@@ -271,6 +271,9 @@ const FACES = {
     edocr:      { head:"square", nose:"hook", hair:"combover",
                   f:EYES.plain(0,3) + brow("M60 84 L88 78") + brow("M102 78 L130 84") + GEAR.frown + GEAR.bags },
 
+    grokbot:    { head:"long", nose:"straight", hair:"tousle", over:GEAR.round,
+                  f:EYES.wide(0,1) + brow("M62 76 Q76 70 90 76") + brow("M100 76 Q114 70 128 76") + GEAR.stubble + GEAR.smirk },
+
     _default:   { head:"round", nose:"straight", hair:"crop", dy:0, f:`
             <ellipse cx="76" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>
             <ellipse cx="114" cy="98" rx="13" ry="10" fill="${M_WHITE}" stroke="${M_INK}" stroke-width="2.4"/>

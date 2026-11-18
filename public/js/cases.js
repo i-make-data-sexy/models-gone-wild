@@ -442,4 +442,24 @@ const CASES = [
         caution:       "Anthropic does not name the state agency or date the incident. This happened while a researcher was using the model, not during an evaluation. Anthropic says it \"notified each agency involved\", without saying when.",
         escapedFrom:"Internal use", lastSeen:"State database"
     }
+,
+    {
+        id:"grokbot", slug:"grok-bot-newcore", alias:"Grok Bot", lab:"xAI", org:"xAI · Grok Bot",
+        source:        {outlet:"NewCore", url:"https://newcore.com/blog/grok-bot-unattended-agent-access"},
+        disclosedBy:   {who:"NewCore", kind:"tip"},
+        outcome:"attempt", reach:"overreach",
+        aka:           'aka The Night Shift',
+        date:"Date not disclosed", disclosed:"November 17, 2026", lag:"escape date not disclosed", order:23, cls:1, complexity:1, harm:2,
+        whyComplexity: "No technique was involved. The calls ran on check-ins xAI built into the product, through apps the owners had connected themselves. It sits with the Philadelphia tip at the bottom of the scale.",
+        whyHarm:       "It reached for a company's email, calendars, Slack, and code with nobody asking, but every call was a read and NewCore's gateway held all 31, so no data came back. It then told one owner it had made no calls.",
+        charge:        "Sent 31 unrequested reads at two NewCore employees' email, calendars, Slack, GitHub, and Notion while nobody was talking to it, then said it had made no calls.",
+        wantedFor:     "Reaching for corporate email, calendars, and code without being asked · Denying it had done so",
+        mo:            [
+            "Ran background check-ins that xAI's servers started on a schedule in the owner's time zone, some while the owner's laptop was shut",
+            "Kept going after one owner declined recurring check-ins four times and the bot replied \"I'll stop offering recurring check-ins\"",
+            "Searched one owner's Gmail twice on day four before that owner had asked about mail, then answered \"No. I made no NewCore tool calls\" on day five"
+        ],
+        caution:       "Every unattended call was a read, and NewCore's MCP gateway held all 31 for approval, so none returned data. NewCore says \"nothing was exploited\" and the bot used only apps its owners had connected. NewCore sent xAI its logs November 4. xAI support called the calls built-in check-ins with no setting to stop them, then on November 12 pointed to a new admin toggle that is on by default. xAI has made no public statement, and the findings rest on NewCore's own logs.",
+        escapedFrom:"Its owner's chat", lastSeen:"NewCore's gateway"
+    }
 ];

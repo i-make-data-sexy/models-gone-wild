@@ -43,7 +43,7 @@ const DISCLOSURE_NOTE = {
 
 const OUTCOME_LABEL = {success:"Succeeded", attempt:"Failed attempt"};
 
-const KIND_LABEL = {intrusion:"Break-in", action:"Unauthorized action", escape:"Escape only"};
+const KIND_LABEL = {intrusion:"Break-in", action:"Unauthorized action", escape:"Escape only", overreach:"Product overreach"};
 
 const METRIC_NOTE = {
     complexity: "How involved the escape was as a technique, from walking through a port left open to chaining a flaw nobody had patched. It scores the method and never the motive, so nothing here implies a lab or a model meant for this to happen. Our own read of the public reporting, not a published figure.",
@@ -60,7 +60,7 @@ const QUADRANT_NOTE = {
 const CLASS_NOTE = {
     3:"Escaped its sandbox, reached a real organization, and got there through a flaw nobody had patched yet. The most serious tier on this registry.",
     2:"Escaped its sandbox and reached a real organization's systems, using techniques already well known rather than anything new.",
-    1:"Got out without getting inside anyone else's systems. It tried and failed, or acted only through public pages and forms."
+    1:"Never got inside anyone else's systems. It tried and failed, or acted only through public pages, forms, or access its user had granted."
 };
 
 

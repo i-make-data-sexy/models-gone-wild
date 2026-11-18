@@ -27,14 +27,14 @@
     <meta property="og:title" content="Methodology: Models Gone Wild">
     <meta property="og:description" content="How the registry plots each case by date, threat, and lab, and what the dates, posters, and filters mean.">
     <meta property="og:url" content="https://www.annielytics.com/tools/models-gone-wild/methodology/">
-    <meta property="og:image" content="https://www.annielytics.com/tools/models-gone-wild/img/share.png?v=7a2a7e35">
+    <meta property="og:image" content="https://www.annielytics.com/tools/models-gone-wild/img/share.png?v=79372209">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Five cartoon mugshots of AI models in a police lineup under the word Wanted, with the title Models Gone Wild.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Methodology: Models Gone Wild">
     <meta name="twitter:description" content="How the registry plots each case by date, threat, and lab, and what the dates, posters, and filters mean.">
-    <meta name="twitter:image" content="https://www.annielytics.com/tools/models-gone-wild/img/share.png?v=7a2a7e35">
+    <meta name="twitter:image" content="https://www.annielytics.com/tools/models-gone-wild/img/share.png?v=79372209">
     <meta name="twitter:image:alt" content="Five cartoon mugshots of AI models in a police lineup under the word Wanted, with the title Models Gone Wild.">
     <link rel="stylesheet" href="../css/fonts.css">
     <link rel="stylesheet" href="../css/variables.css">
@@ -139,7 +139,7 @@
 
                         <h3 id="class">Class</h3>
                         <p>Class sorts cases by how far the model got into somebody else's systems. It's the colored badge on each card and the color down the card's left edge.</p>
-                        <p>'Class I · No intrusion' means the model got out but never got inside anyone else's systems. It tried and failed, or it acted only through public pages and forms, such as filing a tip with a government agency.</p>
+                        <p>'Class I · No intrusion' means the model never got inside anyone else's systems. It tried and failed, or it acted only through public pages and forms, such as filing a tip with a government agency.</p>
                         <p>'Class II · Intrusion' means the model got into a real organization's systems using techniques that were already well known.</p>
                         <p>'Class III · Severe' means the model got into a real organization's systems through a security flaw nobody had patched yet. This is the most serious tier in the registry.</p>
 
@@ -153,10 +153,11 @@
                         <p>'Failed' means it tried and didn't get it. Outcome judges the break-in rather than the escape, so a model that got out of its sandbox but couldn't get into its target counts as failed.</p>
 
                         <h3 id="kind">Kind</h3>
-                        <p>Kind describes what the model reached for once it was loose.</p>
+                        <p>Kind describes what the model reached for once it was loose, or once it was running on its own.</p>
                         <p>'Break-ins' are cases where the model went after somebody else's systems, whether or not it got in.</p>
                         <p>'Unauthorized actions' are cases where the model used a public page or form to do something nobody asked it to do, such as filing a tip, submitting a form, or editing a public wiki.</p>
                         <p>'Escapes only' are cases where the model got out of its sandbox but didn't go after anyone else's systems or act through a public page.</p>
+                        <p>'Product overreaches' are cases where a model released to customers, rather than one under test, reached for data or acted on its own without its user asking, through access the user had granted it. Nothing was escaped, so these cases record the date the behavior was disclosed rather than an escape date when the sources don't give one.</p>
 
                         <h3>How Class, Outcome, and Kind differ</h3>
                         <p>The three filters answer different questions about the same case. Kind says what the model went after, Outcome says whether it got it, and Class says how far into somebody else's systems it ended up. A failed break-in, for example, is a break-in by kind and failed by outcome. It lands in Class I because it got inside nobody's systems.</p>
