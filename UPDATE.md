@@ -44,7 +44,8 @@ confirms the poster slug is present, well formed, and unique, and
 scripts/check_mugshots.py, which confirms the case draws its own model's
 face, and scripts/check_quotes.py, which catches a quotation in single
 quotes. Fix
-anything they report. Then update the "Last updated" line in the footer,
+anything they report. Then update the "Last updated" line in the footer, add a
+line to the change log at the end of the Methodology page,
 redraw the share cards with venv/bin/python3 scripts/share_cards.py, and
 commit and push the branch. Deploy it to staging as "Deploying the change"
 in UPDATE.md describes, give me the staging links, including the new case's
@@ -241,7 +242,7 @@ Add a claim by adding an entry to `COMPUTABLE` or `REVIEW` in that script. Anyth
 
 Adding a case updates most of the app automatically. The Lab dropdown's options are generated from the data, the scatter plots the dot from `complexity` and `harm`, the timeline sorts by `order` and prints the lag line from `lag`, the class badge and colors follow `cls`, and the "Showing N of N files" count recalculates. That count only appears while a filter is narrowing the list, so an unfiltered page shows nothing there.
 
-Three things are manual. The footer's `Last updated: <date>` line has to be edited by hand, and the page `<title>` only changes if the app is renamed. The share cards that show when a link is posted on social media are images, so the Threat Matrix and Cases by Lab cards keep the old dots and counts until they are redrawn. Run `venv/bin/python3 scripts/share_cards.py` after adding a case or changing any case's lab, order, complexity, harm, or disclosure. It redraws all three cards from the case data into `public/img/` and gives their URLs a new `?v=` in both pages, so caches fetch the new images. `tests/test_share.py` fails until it has run.
+Four things are manual. The footer's `Last updated: <date>` line has to be edited by hand, and so does the change log at the end of the Methodology page, which gets a dated line for every new case and every change a reader can see, and the page `<title>` only changes if the app is renamed. The share cards that show when a link is posted on social media are images, so the Threat Matrix and Cases by Lab cards keep the old dots and counts until they are redrawn. Run `venv/bin/python3 scripts/share_cards.py` after adding a case or changing any case's lab, order, complexity, harm, or disclosure. It redraws all three cards from the case data into `public/img/` and gives their URLs a new `?v=` in both pages, so caches fetch the new images. `tests/test_share.py` fails until it has run.
 
 The Class dropdown is hard-coded in the markup rather than generated, since the three classes are fixed. A new class would mean a new `<option>`, a new `--classN` color, and a new `CLASS_LABEL` entry. The Outcome and Kind dropdowns are hard-coded the same way, with a matching `OUTCOME_LABEL` or `KIND_LABEL` entry per value.
 
