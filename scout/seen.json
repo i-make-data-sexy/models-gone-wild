@@ -2414,6 +2414,27 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-17"
+    },
+    {
+      "url": "https://cyberinsider.com/ai-agents-attempted-to-hack-us-and-canadian-government-websites",
+      "title": "CyberInsider US/Canadian gov site attempts (same as seen coverage)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "url": "https://notus.org/technology/rogue-ai-agents-hacks-alarming-researchers",
+      "title": "Notus rogue agents overview",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-18"
+    },
+    {
+      "url": "https://digitaltrends.com/cool-tech/ai-giants-are-probing-tens-of-thousands-of-security-incidents-triggered-by-unexpected-ai-behavior",
+      "title": "Digital Trends labs probing incidents overview",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-18"
     }
   ],
   "runs": [
@@ -2672,6 +2693,12 @@
     {
       "date": "2026-11-17",
       "checked": 75,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-18",
+      "checked": 19,
       "new": 0,
       "updates": 0
     }
