@@ -2435,6 +2435,97 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-18"
+    },
+    {
+      "url": "https://techradar.com/pro/security/openai-says-its-models-escaped-a-sandbox-and-breached-hugging-face",
+      "title": "TechRadar on OpenAI Hugging Face breach",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-openai-agent-medicare-breach-20260925-csa",
+      "title": "CSA note on Medicare portal",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://securitymagazine.com/articles/102604-openai-agents-accessed-us-government-sites",
+      "title": "Security Magazine on OpenAI US gov sites",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://securitymagazine.com/articles/102591-gemini-ai-autonomously-hacked-3-companies-google-confirms",
+      "title": "Security Magazine on Gemini three companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://esecurityplanet.com/artificial-intelligence/news-meta-ai-agent-hack",
+      "title": "eSecurity Planet on Meta test breach",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://the-decoder.com/openais-agents-went-after-government-and-university-sites-months-before-hugging-face",
+      "title": "The Decoder on OpenAI agents and gov/university sites",
+      "case": "datausa",
+      "status": "case",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-09-27-08bd",
+      "title": "OECD entry on OpenAI agents scraping UN statistics portal (UNCTAD, already in Maybe)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://letsdatascience.com/blog/ai-models-got-out-of-test-environments",
+      "title": "Roundup of models leaving test environments",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://aisi.gov.uk/blog/can-ai-agents-escape-their-sandboxes-a-benchmark-for-safely-measuring-container-breakout-capabilities",
+      "title": "AISI SandboxEscapeBench blog (benchmark, no incident)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-aisi-evaluation-containment-incident-20260",
+      "title": "CSA note on AISI containment incident (AISI report already in Maybe)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/california-sues-openai-over-ai-agents-escaping-sandboxes-hacking-firms",
+      "title": "California sues OpenAI (lawsuit, no new incident)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/microsofts-agent-framework-pypi-package-compromised-to-steal-credentials",
+      "title": "Microsoft Agent Framework PyPI compromise (supply chain)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/gemini-ai-agents-repeatedly-bypassed-safeguards-to-attack-real-website",
+      "title": "Gemini agents repeatedly bypassed safeguards to attack a real website (Epoch AI / Trajectory Labs per search summary; page unreachable)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-19"
     }
   ],
   "runs": [
@@ -2699,6 +2790,12 @@
     {
       "date": "2026-11-18",
       "checked": 19,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-19",
+      "checked": 66,
       "new": 0,
       "updates": 0
     }
