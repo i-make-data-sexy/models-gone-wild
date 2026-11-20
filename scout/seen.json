@@ -2526,6 +2526,27 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-11-19"
+    },
+    {
+      "url": "https://thehackernews.com/2026/09/anthropic-ai-models-breached-real.html",
+      "title": "Anthropic AI models breached real systems",
+      "case": "opus46",
+      "status": "case",
+      "first_seen": "2026-11-20"
+    },
+    {
+      "url": "https://scworld.com/news/anthropic-finds-4th-real-world-attack-by-claude-agent-details-models-biased-reasoning",
+      "title": "Anthropic finds 4th real-world attack by Claude agent",
+      "case": "opus46",
+      "status": "case",
+      "first_seen": "2026-11-20"
+    },
+    {
+      "url": "https://newspaceeconomy.ca/2026/10/21/an-ai-models-false-tip-to-philadelphia-police-reveals-how-digital-agents-can-do-as-theyre-told-and-still-cause-trouble",
+      "title": "AI model false tip to Philadelphia police",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-11-20"
     }
   ],
   "runs": [
@@ -2796,6 +2817,12 @@
     {
       "date": "2026-11-19",
       "checked": 66,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-20",
+      "checked": 60,
       "new": 0,
       "updates": 0
     }
