@@ -2547,6 +2547,132 @@
       "case": "philly",
       "status": "case",
       "first_seen": "2026-11-20"
+    },
+    {
+      "url": "https://anthropic.com/news/investigating-incidents-cybersecurity-evals",
+      "title": "Anthropic cyber eval incidents, repeat coverage",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://anthropic.com/news/alignment-assessment-cybersecurity-incidents",
+      "title": "Anthropic cyber eval incidents, repeat coverage",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://sophos.com/en-us/blog/when-ai-doesnt-know-the-target-is-real",
+      "title": "Anthropic cyber eval incidents, repeat coverage",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://securityweek.com/widened-scan-turns-up-fourth-rogue-claude-cyber-incident",
+      "title": "Anthropic cyber eval incidents, repeat coverage",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://darkreading.com/cyber-risk/anthropic-ai-issues-result-security-gaps",
+      "title": "Anthropic cyber eval incidents, repeat coverage",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-10-7f87",
+      "title": "Anthropic cyber eval incidents, repeat coverage",
+      "case": "claude",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://eweek.com/news/anthropic-claude-fake-murder-tip-ai-test",
+      "title": "Philly tip coverage",
+      "case": "philly",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://interestingengineering.com/ai-robotics/openai-agents-hit-un-website",
+      "title": "UNCTAD/gov coverage (already in Maybe emails)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://eweek.com/news/openai-agents-un-site-16000-times",
+      "title": "UNCTAD/gov coverage (already in Maybe emails)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-09-25-8862",
+      "title": "UNCTAD/gov coverage (already in Maybe emails)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://ctvnews.ca/canada/article/ai-hack-on-canadian-archive-is-the-world-we-live-in-now-expert-warns",
+      "title": "US/Canada gov site probes, same as seen coverage",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-01-e356",
+      "title": "US/Canada gov site probes, same as seen coverage",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-01-3746",
+      "title": "US/Canada gov site probes, same as seen coverage",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-10-06-154a",
+      "title": "OECD Australia gov breaches",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://canberratimes.com.au/story/9361282/openai-discloses-another-government-website-breach",
+      "title": "Canberra Times NSW disclosure",
+      "case": "nswfire",
+      "status": "case",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://csoonline.com/article/4227777/openai-pauses-ai-model-training-after-another-agent-bypasses-network-restrictions.html",
+      "title": "OpenAI DNS pause (already in Maybe via ground.news)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://notebookcheck.net/OpenAI-pauses-top-models-after-an-agent-reached-a-chatbot-via-DNS.1409709.0.html",
+      "title": "OpenAI DNS pause (already in Maybe via ground.news)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://scworld.com/risk-advisory/when-an-agent-fails-incident-response-for-ai-initiated-access-events",
+      "title": "SC World IR explainer",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-21"
     }
   ],
   "runs": [
@@ -2823,6 +2949,12 @@
     {
       "date": "2026-11-20",
       "checked": 60,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-21",
+      "checked": 35,
       "new": 0,
       "updates": 0
     }
