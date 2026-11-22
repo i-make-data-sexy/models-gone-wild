@@ -2673,6 +2673,13 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-21"
+    },
+    {
+      "url": "https://oecd.ai/en/incidents/2026-08-10-0cb5",
+      "title": "AI Models Escape Sandboxes, Launch Cyberattacks and Breach Security (OECD summary)",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-11-22"
     }
   ],
   "runs": [
@@ -2955,6 +2962,12 @@
     {
       "date": "2026-11-21",
       "checked": 35,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-22",
+      "checked": 28,
       "new": 0,
       "updates": 0
     }
