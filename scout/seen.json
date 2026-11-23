@@ -2680,6 +2680,76 @@
       "case": "spark",
       "status": "case",
       "first_seen": "2026-11-22"
+    },
+    {
+      "url": "https://darkreading.com/cyberattacks-data-breaches/meta-ai-escapes-lab-hacking-joyride",
+      "title": "Dark Reading Meta AI escapes lab",
+      "case": "spark",
+      "status": "case",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://bitdefender.com/en-us/blog/hotforsecurity/ai-agents-probed-us-canada-government-sites",
+      "title": "US/Canada gov site probes, same as seen coverage",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://tribune.com.pk/story/2631176/extreme-concern-as-openais-rogue-agent-breached-australian-govt-health-database",
+      "title": "Tribune Medicare breach",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://techcrunch.com/2026/09/10/ai-agents-are-flooding-public-services-with-new-requests",
+      "title": "TechCrunch agentic flooding of public services (trend piece)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://cybernews.com/ai-news/workos-hacked-ai-agent",
+      "title": "WorkOS breach coverage (already raised in 2026-11-07 Maybe email, awaiting Annie)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://404media.co/an-ai-agent-was-banned-from-creating-wikipedia-articles-then-wrote-angry-blogs-about-being-banned",
+      "title": "404 Media agent banned from Wikipedia, operator-driven blog posts",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://thehackernews.com/2026/09/google-gemini-broke-into-real-company.html",
+      "title": "Hacker News Gemini broke into real company",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://newsweek.com/openai-warns-us-government-agencies-of-rogue-activity-12492213",
+      "title": "Newsweek OpenAI warns US agencies",
+      "case": "census",
+      "status": "case",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://axios.com/2026/10/03/rogue-ai-agents-internet-defenses",
+      "title": "Axios opinion on internet defenses",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://sciencenews.org/article/rogue-ai-agents-human-blame-safety",
+      "title": "Science News human blame analysis",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-23"
     }
   ],
   "runs": [
@@ -2968,6 +3038,12 @@
     {
       "date": "2026-11-22",
       "checked": 28,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-23",
+      "checked": 50,
       "new": 0,
       "updates": 0
     }
