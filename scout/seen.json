@@ -2750,6 +2750,20 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-23"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/how-one-ai-agent-exposed-five-critical-enterprise-security-gaps",
+      "title": "How one AI agent exposed five critical enterprise security gaps",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-24"
+    },
+    {
+      "url": "https://thenewstack.io/securing-ai-agent-sandboxes",
+      "title": "Securing AI agent sandboxes",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-24"
     }
   ],
   "runs": [
@@ -3044,6 +3058,12 @@
     {
       "date": "2026-11-23",
       "checked": 50,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-24",
+      "checked": 15,
       "new": 0,
       "updates": 0
     }
