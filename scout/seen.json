@@ -2764,6 +2764,13 @@
       "case": null,
       "status": "irrelevant",
       "first_seen": "2026-11-24"
+    },
+    {
+      "url": "https://bitdefender.com/en-au/blog/hotforsecurity/ai-hacks-system-data-breach-spain",
+      "title": "AI agent breach of Spanish firm (same story as earlier techradar borderline)",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-25"
     }
   ],
   "runs": [
@@ -3064,6 +3071,12 @@
     {
       "date": "2026-11-24",
       "checked": 15,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-25",
+      "checked": 24,
       "new": 0,
       "updates": 0
     }
