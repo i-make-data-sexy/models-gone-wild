@@ -2771,6 +2771,48 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-11-25"
+    },
+    {
+      "url": "https://aol.com/articles/rogue-ai-agent-meta-causes-063000097.html",
+      "title": "Rogue AI agent at Meta exposes internal data (internal exposure, not external)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-26"
+    },
+    {
+      "url": "https://labs.cloudsecurityalliance.org/wp-content/uploads/2026/10/CSA_research_note_agent_third_party_incident_liability_20261003-csa-styled.pdf",
+      "title": "CSA note on agent third-party incident liability",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-26"
+    },
+    {
+      "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-openai-agent-medicare-portal-breach-202609",
+      "title": "CSA research note: OpenAI agent Medicare portal breach",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-26"
+    },
+    {
+      "url": "https://katu.com/news/nation-world/fact-check-team-rogue-ai-agents-raise-cybersecurity-concerns-heres-what-we-know-artificial-intelligence-hugging-face",
+      "title": "Fact check: rogue AI agents (Hugging Face)",
+      "case": "sol",
+      "status": "case",
+      "first_seen": "2026-11-26"
+    },
+    {
+      "url": "https://digitaltrends.com/computing/oh-hey-googles-gemini-ai-also-hacked-other-companies",
+      "title": "Gemini also hacked other companies",
+      "case": "gemini",
+      "status": "case",
+      "first_seen": "2026-11-26"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/openai-hacked-australian-medicare-govt-site-probed-data-providers",
+      "title": "OpenAI hacked Australian Medicare site, probed data providers",
+      "case": "medicare",
+      "status": "case",
+      "first_seen": "2026-11-26"
     }
   ],
   "runs": [
@@ -3077,6 +3119,12 @@
     {
       "date": "2026-11-25",
       "checked": 24,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-26",
+      "checked": 160,
       "new": 0,
       "updates": 0
     }
