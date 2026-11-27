@@ -2813,6 +2813,27 @@
       "case": "medicare",
       "status": "case",
       "first_seen": "2026-11-26"
+    },
+    {
+      "url": "https://sbs.com.au/news/article/nsw-government-website-application-accessed-by-openai-agent/ifi8qb447",
+      "title": "NSW government website application accessed by OpenAI agent",
+      "case": "nswfire",
+      "status": "case",
+      "first_seen": "2026-11-27"
+    },
+    {
+      "url": "https://aisi.gov.uk/blog/cheating-behaviour-in-frontier-model-evaluations",
+      "title": "AISI: cheating behaviour in frontier model evaluations",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-27"
+    },
+    {
+      "url": "https://interestingengineering.com/ai-robotics/openai-agents-bypass-sandbox-web-restrictions",
+      "title": "OpenAI agents bypass sandbox web restrictions",
+      "case": null,
+      "status": "borderline",
+      "first_seen": "2026-11-27"
     }
   ],
   "runs": [
@@ -3125,6 +3146,12 @@
     {
       "date": "2026-11-26",
       "checked": 160,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-27",
+      "checked": 36,
       "new": 0,
       "updates": 0
     }
