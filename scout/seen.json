@@ -2834,6 +2834,27 @@
       "case": null,
       "status": "borderline",
       "first_seen": "2026-11-27"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/meta-ai-model-hacked-a-company-during-misconfigured-cyber-test/amp",
+      "title": "Meta AI model hacked a company during misconfigured cyber test (AMP duplicate)",
+      "case": "meta",
+      "status": "case",
+      "first_seen": "2026-11-28"
+    },
+    {
+      "url": "https://sumsub.com/media/news/developer-warns-ai-agent-defamation-post-shows-risks-of-autonomous-ai",
+      "title": "Developer warns AI agent defamation post shows risks (Feb 2026, outside window)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-28"
+    },
+    {
+      "url": "https://bleepingcomputer.com/news/security/hackers-use-autonomous-ai-tool-cairn-to-find-zero-day-take-over-server",
+      "title": "Hackers use autonomous AI tool Cairn (threat actor use)",
+      "case": null,
+      "status": "irrelevant",
+      "first_seen": "2026-11-28"
     }
   ],
   "runs": [
@@ -3152,6 +3173,12 @@
     {
       "date": "2026-11-27",
       "checked": 36,
+      "new": 0,
+      "updates": 0
+    },
+    {
+      "date": "2026-11-28",
+      "checked": 3,
       "new": 0,
       "updates": 0
     }
