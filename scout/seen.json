@@ -2838,7 +2838,7 @@
     {
       "url": "https://bleepingcomputer.com/news/security/meta-ai-model-hacked-a-company-during-misconfigured-cyber-test/amp",
       "title": "Meta AI model hacked a company during misconfigured cyber test (AMP duplicate)",
-      "case": "meta",
+      "case": "spark",
       "status": "case",
       "first_seen": "2026-11-28"
     },
